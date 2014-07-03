@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlets -->
+  <servlet>
+  	<servlet-name>GWTServiceCurso</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceCursoImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceCurso</servlet-name>
+  	<url-pattern>/jornada/GWTServiceCurso</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+  	<servlet-name>GWTServicePeriodo</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServicePeriodoImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServicePeriodo</servlet-name>
+  	<url-pattern>/jornada/GWTServicePeriodo</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+  	<servlet-name>GWTServiceDisciplina</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceDisciplinaImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceDisciplina</servlet-name>
+  	<url-pattern>/jornada/GWTServiceDisciplina</url-pattern>
+  </servlet-mapping>  
+  
+    <servlet>
+  	<servlet-name>GWTServiceConteudoProgramatico</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceConteudoProgramaticoImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceConteudoProgramatico</servlet-name>
+  	<url-pattern>/jornada/GWTServiceConteudoProgramatico</url-pattern>
+  </servlet-mapping>    
+  
+    <servlet>
+  	<servlet-name>GWTServiceTopico</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceTopicoImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceTopico</servlet-name>
+  	<url-pattern>/jornada/GWTServiceTopico</url-pattern>
+  </servlet-mapping>    
+  
+    <servlet>
+  	<servlet-name>GWTServiceUsuario</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceUsuarioImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceUsuario</servlet-name>
+  	<url-pattern>/jornada/GWTServiceUsuario</url-pattern>
+  </servlet-mapping>     
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>Jornada.html</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>GWTServiceTipoComunicado</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceTipoComunicadoImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceTipoComunicado</servlet-name>
+  	<url-pattern>/jornada/GWTServiceTipoComunicado</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceComunicado</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceComunicadoImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceComunicado</servlet-name>
+  	<url-pattern>/jornada/GWTServiceComunicado</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceAvaliacao</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceAvaliacaoImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceAvaliacao</servlet-name>
+  	<url-pattern>/jornada/GWTServiceAvaliacao</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceNota</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceNotaImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceNota</servlet-name>
+  	<url-pattern>/jornada/GWTServiceNota</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceLogin</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceLoginImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceLogin</servlet-name>
+  	<url-pattern>/jornada/GWTServiceLogin</url-pattern>
+  </servlet-mapping>
+
+  
+ <servlet>
+    <servlet-name>uploadServlet</servlet-name>
+    <servlet-class>com.jornada.server.servlet.UploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>*.gupld</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceHierarquiaCurso</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceHierarquiaCursoImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceHierarquiaCurso</servlet-name>
+  	<url-pattern>/jornada/GWTServiceHierarquiaCurso</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceOcorrencia</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceOcorrenciaImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceOcorrencia</servlet-name>
+  	<url-pattern>/jornada/GWTServiceOcorrencia</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceIdioma</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceIdiomaImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceIdioma</servlet-name>
+  	<url-pattern>/jornada/GWTServiceIdioma</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServicePresenca</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServicePresencaImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServicePresenca</servlet-name>
+  	<url-pattern>/jornada/GWTServicePresenca</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceAula</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceAulaImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceAula</servlet-name>
+  	<url-pattern>/jornada/GWTServiceAula</url-pattern>
+  </servlet-mapping>  
+  
+
+</web-app>

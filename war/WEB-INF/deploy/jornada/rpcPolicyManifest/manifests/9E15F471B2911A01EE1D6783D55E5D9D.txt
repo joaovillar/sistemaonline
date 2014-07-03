@@ -1,0 +1,2 @@
+serviceClass: com.jornada.client.service.GWTServiceOcorrencia
+path: F162E218785402813090D8C6564F1992.gwt.rpc

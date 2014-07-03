@@ -1,0 +1,2 @@
+serviceClass: com.jornada.client.service.GWTServicePeriodo
+path: 7345231AEFAE22303BD6049B7F471DA5.gwt.rpc

@@ -1,0 +1,2 @@
+serviceClass: com.jornada.client.service.GWTServiceConteudoProgramatico
+path: 93E70A0901627D5AA2C837DBDA778C90.gwt.rpc

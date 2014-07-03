@@ -1,0 +1,156 @@
+@CHARSET "ISO-8859-1";
+
+
+@def selectionBorderWidth 0px;
+.cellTableWidget {
+    border: 1px solid #95B3D7;
+}
+
+.cellTableFirstColumn {
+
+}
+
+.cellTableLastColumn {
+
+}
+
+.cellTableFooter {
+    text-align: left;
+    color: #4b4a4a;
+    overflow: hidden;
+}
+
+ .cellTableHeader { 
+
+color: #000000;
+font-family: Arial,Verdana,sans-serif;
+font-size: 11px;
+text-align:left;
+color: black;
+height:15px;
+border: 1px solid #ababab;
+background-color:#95B3D7;
+padding: 2px 6px;
+background-image: url(./images/header.png);
+background-repeat: repeat-x;
+background-position: bottom left;
+background-attachment: scroll;
+background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZhZmFmYSIvPjxzdG9wIG9mZnNldD0iOTYlIiBzdG9wLWNvbG9yPSIjZDZkNmQ2Ii8+PHN0b3Agb2Zmc2V0PSI5NiUiIHN0b3AtY29sb3I9IiNjOWI2YjYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjOWI2YjYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+background-size: 100%;
+background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(96%, #d6d6d6), color-stop(96%, #c9b6b6), color-stop(100%, #c9b6b6));
+background-image: -webkit-linear-gradient(top, #fafafa 0%, #d6d6d6 96%, #c9b6b6 96%, #c9b6b6 100%);
+background-image: -moz-linear-gradient(top, #fafafa 0%, #d6d6d6 96%, #c9b6b6 96%, #c9b6b6 100%);
+background-image: -o-linear-gradient(top, #fafafa 0%, #d6d6d6 96%, #c9b6b6 96%, #c9b6b6 100%);
+background-image: linear-gradient(top, #fafafa 0%, #d6d6d6 96%, #c9b6b6 96%, #c9b6b6 100%);
+}
+
+.cellTableCell {
+    overflow: hidden;
+    padding-left: 10px;
+    height: 10px !important;  
+    font-family: Arial;
+    font-size: 11px;
+    font-weight: normal;
+    border-bottom: #e6e6e6 0.2px solid;
+    border-left: #a6a6af 0.2px solid;
+    border-right: #e6e6e6 0.2px solid;  
+    border-top: #a6a6af 0.2px solid;
+}
+
+.cellTableCell tbody tr td{
+    height: 10px;
+}
+
+.cellTableFirstColumnFooter {
+
+}
+
+.cellTableFirstColumnHeader {
+
+}
+
+.cellTableLastColumnFooter {
+
+}
+
+.cellTableLastColumnHeader {
+
+}
+
+.cellTableSortableHeader {
+    cursor: pointer;
+    cursor: hand;
+}
+
+.cellTableSortableHeader:hover {
+/*     color: #6c6b6b; */
+ color: blue; 
+}
+
+.cellTableSortedHeaderAscending {
+
+}
+
+.cellTableSortedHeaderDescending {
+
+}
+
+.cellTableEvenRow {
+    background: #ffffff;
+    height: 10px;
+}
+
+.cellTableEvenRowCell {
+
+}
+
+.cellTableOddRow {
+    background: #f8f8f8;
+}
+
+.cellTableOddRowCell {
+
+}
+
+.cellTableHoveredRow { 
+/* 	background: #ff6; */
+background: rgb(155, 155, 255);
+}
+
+.cellTableHoveredRowCell {
+/*     border: selectionBorderWidth solid #eee; */
+
+}
+
+.cellTableKeyboardSelectedRow {
+    background: #95B3D7;
+}
+
+.cellTableKeyboardSelectedRowCell {
+}
+
+.cellTableSelectedRow {
+    background-image: url("images/row_Highlight.jpg");
+    color :   black;
+    height: auto;
+    overflow: auto;
+}
+
+.cellTableSelectedRowCell {
+
+}
+
+/**
+ * The keyboard selected cell is visible over selection.
+ */
+.cellTableKeyboardSelectedCell {
+
+}
+
+
+
+
+/* @sprite .cellTableLoading { */
+/*     gwt-image: 'cellTableLoading'; */
+/*     margin: 20px; */
+/* }   */

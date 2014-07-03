@@ -1,0 +1,2 @@
+serviceClass: com.jornada.client.service.GWTServiceAvaliacao
+path: 959C7BCF9A40239C40CA254B3D53CBAF.gwt.rpc

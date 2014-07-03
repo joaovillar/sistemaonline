@@ -1,0 +1,2 @@
+serviceClass: com.jornada.client.service.GWTServicePresenca
+path: 812C1B3EC5C7FFA6AFCFE6C1949837CC.gwt.rpc

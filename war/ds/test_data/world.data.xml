@@ -1,0 +1,88 @@
+<List>
+
+<curso>
+    <ementa>Para Crianças de 6 Anos</ementa>
+    <courseName>1 Ano - Ensino Fundamental 1</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar AAA</descricao>
+</curso>
+<curso>
+    <ementa>Para Crianças de 7 Anos</ementa>
+    <courseName>2 Ano - Ensino Fundamental 1</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar BBB</descricao>
+</curso>
+<curso>
+    <ementa>Para Crianças de 8 Anos</ementa>
+    <courseName>3 Ano - Ensino Fundamental 1</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar CCC</descricao>
+</curso>
+<curso>
+    <ementa>Para Crianças de 9 Anos</ementa>
+    <courseName>4 Ano - Ensino Fundamental 1</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar DDD</descricao>
+</curso>
+<curso>
+    <ementa>Para Crianças de 10 Anos</ementa>
+    <courseName>5 Ano - Ensino Fundamental 1</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar EEE</descricao>
+</curso>
+<curso>
+    <ementa>Para Crianças de 11 Anos</ementa>
+    <courseName>6 Ano - Ensino Fundamental 2</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar FFF</descricao>
+</curso>
+<curso>
+    <ementa>Para Crianças de 12 Anos</ementa>
+    <courseName>7 Ano - Ensino Fundamental 2</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar GGG</descricao>
+</curso>
+<curso>
+    <ementa>Para Crianças de 13 Anos</ementa>
+    <courseName>8 Ano - Ensino Fundamental 2</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar HHH</descricao>
+</curso>
+<curso>
+    <ementa>Para Crianças de 14 Anos</ementa>
+    <courseName>9 Ano - Ensino Fundamental 2</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar III</descricao>
+</curso>
+<curso>
+    <ementa>Para adolescentes de 15 Anos</ementa>
+    <courseName>1 Ano - Ensino Media</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar JJJ</descricao>
+</curso>
+<curso>
+    <ementa>Para adolescentes de 16 Anos</ementa>
+    <courseName>2 Ano - Ensino Media</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar LLL</descricao>
+</curso>
+<curso>
+    <ementa>Para adolescentes de 17 Anos</ementa>
+    <courseName>3 Ano - Ensino Media</courseName>
+    <dataInicial>01-Fev-2013</dataInicial>
+    <dataFinal>21-Dez-2013</dataFinal>
+    <descricao>Objetivo de ensinar MMM</descricao>
+</curso>
+
+</List>

@@ -1,0 +1,2 @@
+serviceClass: com.jornada.client.service.GWTServiceAula
+path: 45392EBFB1D1ABA704BD49F428A463B7.gwt.rpc
