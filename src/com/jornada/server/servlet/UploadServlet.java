@@ -89,7 +89,7 @@ public class UploadServlet extends UploadAction {
 //			        ImageIO.write(new_img, "JPG", new File("images/download/compressed-"+file.getName()+""));   
 					
 //					ImageCompressor.Thumbnail("images/download/", file.getName(), 0.5f);
-					
+//					ImageCompressor imageCompressor = new ImageCompressor();
 					if(isImageFile(sufix)){
 						ImageCompressor.compressAndSave(strDestinationFolder, file.getName(), 0.1f);						
 					}

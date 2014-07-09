@@ -94,11 +94,7 @@ public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServ
     }
 
 
-	@Override
-	public boolean changePassword(String name, String newPassword) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 	
 	
 }

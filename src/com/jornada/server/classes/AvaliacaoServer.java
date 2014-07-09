@@ -23,7 +23,7 @@ public class AvaliacaoServer {
 	public static String DB_SELECT_TIPO_AVALIACAO_ALL = "SELECT * FROM tipo_avaliacao order by nome_tipo_avaliacao asc;";
 	public static String DB_SELECT_TIPO_AVALIACAO = "SELECT * FROM tipo_avaliacao where id_tipo_avaliacao=? order by nome_tipo_avaliacao asc;";
 	public static String DB_SELECT_AVALIACAO_PELO_CURSO=
-			"select  c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.descricao, a.assunto, a.data, a.hora, a.id_tipo_avaliacao  "+
+			"select  c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.nome_conteudo_programatico, a.assunto, a.data, a.hora, a.id_tipo_avaliacao  "+
 //			"from usuario u "+
 //			"inner join rel_curso_usuario rcu on u.id_usuario=rcu.id_usuario "+
 //			"inner join curso c on c.id_curso = rcu.id_curso "+
@@ -34,7 +34,7 @@ public class AvaliacaoServer {
 			"inner join avaliacao a on cp.id_conteudo_programatico = a.id_conteudo_programatico "+
 			"where  "+
 			"c.id_curso=? "+ 
-			"group by c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.descricao, a.assunto, a.data, a.hora, a.id_tipo_avaliacao  "+
+			"group by c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.nome_conteudo_programatico, a.assunto, a.data, a.hora, a.id_tipo_avaliacao  "+
 			"order by a.data, a.hora asc ";		
 		
 	
@@ -233,7 +233,7 @@ public class AvaliacaoServer {
 				current.setNomeCurso(rs.getString("nome_curso"));
 				current.setNomePeriodo(rs.getString("nome_periodo"));
 				current.setNomeDisciplina(rs.getString("nome_disciplina"));
-				current.setNomeConteudoProgramatico(rs.getString("descricao"));
+				current.setNomeConteudoProgramatico(rs.getString("nome_conteudo_programatico"));
 				current.setNomeAvaliacao(rs.getString("assunto"));
 //				current.setDataAvaliacao(MpUtilServer.convertDateToString(rs.getDate("data"), locale));
 				current.setDataAvaliacao(rs.getDate("data"));

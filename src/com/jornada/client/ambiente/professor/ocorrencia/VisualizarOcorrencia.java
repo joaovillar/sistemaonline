@@ -3,18 +3,11 @@ package com.jornada.client.ambiente.professor.ocorrencia;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Set;
 
+import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.DatePickerCell;
-import com.google.gwt.cell.client.EditTextCell;
-import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.ImageCell;
-import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,20 +15,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -50,35 +37,32 @@ import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriod
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
-import com.jornada.client.classes.widgets.cells.MpStyledSelectionCell;
-import com.jornada.client.classes.widgets.cells.MpTextAreaEditCell;
-import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpacePanel;
-import com.jornada.client.classes.widgets.timepicker.MpTimePicker;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceOcorrencia;
-import com.jornada.shared.FieldVerifier;
-import com.jornada.shared.classes.Ocorrencia;
+import com.jornada.shared.classes.OcorrenciaAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
-public class EditarOcorrencia extends VerticalPanel {
+public class VisualizarOcorrencia extends VerticalPanel {
 	
 	static TextConstants txtConstants = GWT.create(TextConstants.class);
 
-	private AsyncCallback<Boolean> callbackUpdateRow;
-	private AsyncCallback<Boolean> callbackDelete;
+//	private AsyncCallback<Boolean> callbackUpdateRow;
+//	private AsyncCallback<Boolean> callbackDelete;
 
-	private CellTable<Ocorrencia> cellTable;
-	private Column<Ocorrencia, String> assuntoColumn;
-	private Column<Ocorrencia, String> descricaoColumn;
-	private Column<Ocorrencia, Date> dataColumn;
-	private Column<Ocorrencia, String> horaColumn;
-	private ListDataProvider<Ocorrencia> dataProvider = new ListDataProvider<Ocorrencia>();	
+	private CellTable<OcorrenciaAluno> cellTable;
+	private Column<OcorrenciaAluno, Boolean> paiCienteColumn;
+	private Column<OcorrenciaAluno, String> nomeAlunoColumn;
+	private Column<OcorrenciaAluno, String> assuntoColumn;
+	private Column<OcorrenciaAluno, String> descricaoColumn;
+	private Column<OcorrenciaAluno, Date> dataColumn;
+	private Column<OcorrenciaAluno, String> horaColumn;
+	private ListDataProvider<OcorrenciaAluno> dataProvider = new ListDataProvider<OcorrenciaAluno>();	
 	
 	private TextBox txtSearch;
-	ArrayList<Ocorrencia> arrayListBackup = new ArrayList<Ocorrencia>();
+	ArrayList<OcorrenciaAluno> arrayListBackup = new ArrayList<OcorrenciaAluno>();
 
 	private MpSelectionCursoAmbienteProfessor listBoxCurso;
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;	
@@ -90,17 +74,17 @@ public class EditarOcorrencia extends VerticalPanel {
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	
-	private LinkedHashMap<String, String> listaHora = new LinkedHashMap<String, String>();
+//	private LinkedHashMap<String, String> listaHora = new LinkedHashMap<String, String>();
 	
 	VerticalPanel vPanelEditarOcorrencia;
-	VerticalPanel vPanelEditarTabela;
-	VerticalPanel vPanelEditarDetalhes;
-	AdicionarOcorrencia adicionarOcorrencia;
+	VerticalPanel vPanelVisualizarTabela;
+//	VerticalPanel vPanelEditarDetalhes;
+//	AdicionarOcorrencia adicionarOcorrencia;
 	
 	
 	private TelaInicialProfessorOcorrencia telaInicialProfessorOcorrencia;
 
-	public EditarOcorrencia(TelaInicialProfessorOcorrencia telaInicialProfessorOcorrencia) {
+	public VisualizarOcorrencia(TelaInicialProfessorOcorrencia telaInicialProfessorOcorrencia) {
 		
 		this.telaInicialProfessorOcorrencia=telaInicialProfessorOcorrencia;
 
@@ -112,19 +96,19 @@ public class EditarOcorrencia extends VerticalPanel {
 		
 		vPanelEditarOcorrencia = new VerticalPanel();
 		
-		vPanelEditarTabela = new VerticalPanel();
-		vPanelEditarTabela.add(abrirTelaEditar());
+		vPanelVisualizarTabela = new VerticalPanel();
+		vPanelVisualizarTabela.add(abrirTelaVisualizar());
 
 		
-		adicionarOcorrencia = new AdicionarOcorrencia(this.telaInicialProfessorOcorrencia, EnumOcorrencia.EDITAR);
-		adicionarOcorrencia.criarTelaEditar(EditarOcorrencia.this);
-		vPanelEditarDetalhes = new VerticalPanel();		
-		vPanelEditarDetalhes.add(adicionarOcorrencia);
-		vPanelEditarDetalhes.setVisible(false);
+//		adicionarOcorrencia = new AdicionarOcorrencia(this.telaInicialProfessorOcorrencia, EnumOcorrencia.EDITAR);
+//		adicionarOcorrencia.criarTelaEditar(VisualizarOcorrencia.this);
+//		vPanelEditarDetalhes = new VerticalPanel();		
+//		vPanelEditarDetalhes.add(adicionarOcorrencia);
+//		vPanelEditarDetalhes.setVisible(false);
 		
 		
-		vPanelEditarOcorrencia.add(vPanelEditarTabela);
-		vPanelEditarOcorrencia.add(vPanelEditarDetalhes);
+		vPanelEditarOcorrencia.add(vPanelVisualizarTabela);
+//		vPanelEditarOcorrencia.add(vPanelEditarDetalhes);
 //		
 
 
@@ -132,7 +116,7 @@ public class EditarOcorrencia extends VerticalPanel {
 		
 	}
 	
-	public VerticalPanel abrirTelaEditar(){
+	public VerticalPanel abrirTelaVisualizar(){
 		Label lblCurso = new Label(txtConstants.curso());
 		Label lblPeriodo = new Label(txtConstants.periodo());
 		Label lblDisciplina = new Label(txtConstants.disciplina());
@@ -171,15 +155,15 @@ public class EditarOcorrencia extends VerticalPanel {
 //		Label lblEmpty1 = new Label("Nenhum Tópico associado a este Conteúdo Programático.");
 		Label lblEmpty = new Label(txtConstants.ocorrenciaSelecionarConteudo());
 
-		cellTable = new CellTable<Ocorrencia>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
+		cellTable = new CellTable<OcorrenciaAluno>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
 		cellTable.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+ "px");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setLoadingIndicator(lblEmpty);
 
 		// Add a selection model so we can select cells.
-		final SelectionModel<Ocorrencia> selectionModel = new MultiSelectionModel<Ocorrencia>();
-		cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<Ocorrencia> createCheckboxManager());
+		final SelectionModel<OcorrenciaAluno> selectionModel = new MultiSelectionModel<OcorrenciaAluno>();
+		cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<OcorrenciaAluno> createCheckboxManager());
 		initTableColumns(selectionModel);
 
 		dataProvider.addDataDisplay(cellTable);	
@@ -187,6 +171,7 @@ public class EditarOcorrencia extends VerticalPanel {
 		MpSimplePager mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
 		mpPager.setPageSize(15);
+		
 		
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
 		
@@ -206,7 +191,7 @@ public class EditarOcorrencia extends VerticalPanel {
 		flexTableFiltrar.setWidget(0, 0, mpPager);
 		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
 		flexTableFiltrar.setWidget(0, 2, txtSearch);
-		flexTableFiltrar.setWidget(0, 3, btnFiltrar);		
+		flexTableFiltrar.setWidget(0, 3, btnFiltrar);					
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
 		scrollPanel.setSize(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable-180)+"px");
@@ -223,40 +208,40 @@ public class EditarOcorrencia extends VerticalPanel {
 
 		/************************* Begin Callback's *************************/
 
-		callbackUpdateRow = new AsyncCallback<Boolean>() {
+//		callbackUpdateRow = new AsyncCallback<Boolean>() {
+//
+//			public void onSuccess(Boolean success) {
+//
+//			}
+//
+//			public void onFailure(Throwable caught) {
+//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
+//				mpDialogBoxWarning.showDialog();
+//			}
+//		};
 
-			public void onSuccess(Boolean success) {
-
-			}
-
-			public void onFailure(Throwable caught) {
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
-				mpDialogBoxWarning.showDialog();
-			}
-		};
-
-		callbackDelete = new AsyncCallback<Boolean>() {
-
-			public void onSuccess(Boolean success) {
-
-				if (success == true) {
-					populateGridOcorrencia();
-				} else {
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
-					mpDialogBoxWarning.showDialog();
-				}
-
-			}
-
-			public void onFailure(Throwable caught) {
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
-				mpDialogBoxWarning.showDialog();
-
-			}
-		};
+//		callbackDelete = new AsyncCallback<Boolean>() {
+//
+//			public void onSuccess(Boolean success) {
+//
+//				if (success == true) {
+//					populateGridOcorrencia();
+//				} else {
+//					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//					mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
+//					mpDialogBoxWarning.showDialog();
+//				}
+//
+//			}
+//
+//			public void onFailure(Throwable caught) {
+//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
+//				mpDialogBoxWarning.showDialog();
+//
+//			}
+//		};
 		/*********************** End Callbacks **********************/
 
 		//vPanelEditGrid.add(vPanelTelaEditar);
@@ -325,9 +310,9 @@ public class EditarOcorrencia extends VerticalPanel {
 		else{			
 			int idConteudoProgramatico = Integer.parseInt(listBoxConteudoProgramatico.getValue(indexConteudoProgramatico));
 //			GWTServiceTopico.Util.getInstance().getTopicoPeloConteudoProgramatico(idConteudoProgramatico,
-			GWTServiceOcorrencia.Util.getInstance().getOcorrenciasPeloConteudoProgramatico(idConteudoProgramatico,
+			GWTServiceOcorrencia.Util.getInstance().getTodasAsOcorrenciasDosAlunos(idConteudoProgramatico,
 					
-					new AsyncCallback<ArrayList<Ocorrencia>>() {
+					new AsyncCallback<ArrayList<OcorrenciaAluno>>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
@@ -337,7 +322,7 @@ public class EditarOcorrencia extends VerticalPanel {
 						}
 
 						@Override
-						public void onSuccess(ArrayList<Ocorrencia> list) {
+						public void onSuccess(ArrayList<OcorrenciaAluno> list) {
 
 							mpPanelLoading.setVisible(false);
 							dataProvider.getList().clear();
@@ -354,96 +339,96 @@ public class EditarOcorrencia extends VerticalPanel {
 		}
 	}
 	
-	/**************** End Populate methods*****************/
-		
-	private class MyImageCellEdit extends ImageCell {
-
-		@Override
-		public Set<String> getConsumedEvents() {
-			Set<String> consumedEvents = new HashSet<String>();
-			consumedEvents.add("click");
-			return consumedEvents;
-		}
-
-		@Override
-		public void onBrowserEvent(Context context, Element parent, String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
-			
-			switch (DOM.eventGetType((Event) event)) {
-			case Event.ONCLICK:
-				final Ocorrencia object = (Ocorrencia) context.getKey();
-								
-//				telaInicialComunicado.openFormularioComunicadoParaAtualizar(object);
-				vPanelEditarTabela.setVisible(false);
-				
-				//AdicionarOcorrencia add = new AdicionarOcorrencia(null); 				
-				OcorrenciaAux ocorrenciaAux = new OcorrenciaAux();
-				ocorrenciaAux.setIdCurso(Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex())));
-				ocorrenciaAux.setIdPeriodo(Integer.parseInt(listBoxPeriodo.getValue(listBoxPeriodo.getSelectedIndex())));
-				ocorrenciaAux.setIdDisciplina(Integer.parseInt(listBoxDisciplina.getValue(listBoxDisciplina.getSelectedIndex())));
-				ocorrenciaAux.setIdConteudoProgramatico(Integer.parseInt(listBoxConteudoProgramatico.getValue(listBoxConteudoProgramatico.getSelectedIndex())));
-				ocorrenciaAux.setOcorrencia(object);
-
-				adicionarOcorrencia.popularCampos(ocorrenciaAux);
-				
-				vPanelEditarDetalhes.setVisible(true);
-				break;
-
-			default:
-				Window.alert("Test default");
-				break;
-			}
-		}
-
-	}	
+//	/**************** End Populate methods*****************/
+//		
+//	private class MyImageCellEdit extends ImageCell {
+//
+//		@Override
+//		public Set<String> getConsumedEvents() {
+//			Set<String> consumedEvents = new HashSet<String>();
+//			consumedEvents.add("click");
+//			return consumedEvents;
+//		}
+//
+//		@Override
+//		public void onBrowserEvent(Context context, Element parent, String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
+//			
+//			switch (DOM.eventGetType((Event) event)) {
+//			case Event.ONCLICK:
+//				final Ocorrencia object = (Ocorrencia) context.getKey();
+//								
+////				telaInicialComunicado.openFormularioComunicadoParaAtualizar(object);
+//				vPanelVisualizarTabela.setVisible(false);
+//				
+//				//AdicionarOcorrencia add = new AdicionarOcorrencia(null); 				
+//				OcorrenciaAux ocorrenciaAux = new OcorrenciaAux();
+//				ocorrenciaAux.setIdCurso(Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex())));
+//				ocorrenciaAux.setIdPeriodo(Integer.parseInt(listBoxPeriodo.getValue(listBoxPeriodo.getSelectedIndex())));
+//				ocorrenciaAux.setIdDisciplina(Integer.parseInt(listBoxDisciplina.getValue(listBoxDisciplina.getSelectedIndex())));
+//				ocorrenciaAux.setIdConteudoProgramatico(Integer.parseInt(listBoxConteudoProgramatico.getValue(listBoxConteudoProgramatico.getSelectedIndex())));
+//				ocorrenciaAux.setOcorrencia(object);
+//
+//				adicionarOcorrencia.popularCampos(ocorrenciaAux);
+//				
+//				vPanelEditarDetalhes.setVisible(true);
+//				break;
+//
+//			default:
+//				Window.alert("Test default");
+//				break;
+//			}
+//		}
+//
+//	}	
 	
-	private class MyImageCell extends ImageCell {
-
-		@Override
-		public Set<String> getConsumedEvents() {
-			Set<String> consumedEvents = new HashSet<String>();
-			consumedEvents.add("click");
-			return consumedEvents;
-		}
-
-		@Override
-		public void onBrowserEvent(Context context, Element parent,
-				String value, NativeEvent event,
-				ValueUpdater<String> valueUpdater) {
-			switch (DOM.eventGetType((Event) event)) {
-			case Event.ONCLICK:
-				final Ocorrencia object = (Ocorrencia) context.getKey();
-				@SuppressWarnings("unused")
-				CloseHandler<PopupPanel> closeHandler;
-
-				MpConfirmDialogBox confirmationDialog = new MpConfirmDialogBox(
-						txtConstants.geralRemover(), txtConstants.ocorrenciaDesejaRemover(object.getAssunto()), txtConstants.geralSim(), txtConstants.geralNao(),
-
-						closeHandler = new CloseHandler<PopupPanel>() {
-
-							public void onClose(CloseEvent<PopupPanel> event) {
-
-								MpConfirmDialogBox x = (MpConfirmDialogBox) event.getSource();
-
-								if (x.primaryActionFired()) {
-
-//									GWTServiceTopico.Util.getInstance().deleteTopicoRow(object.getIdTopico(), callbackDelete);
-									GWTServiceOcorrencia.Util.getInstance().deleteOcorrenciaRow(object.getIdOcorrencia(), callbackDelete);
-
-								}
-							}
-						}
-
-				);
-				confirmationDialog.paint();
-				break;
-
-			default:
-				Window.alert("Test default");
-				break;
-			}
-		}
-
-	}	
+//	private class MyImageCell extends ImageCell {
+//
+//		@Override
+//		public Set<String> getConsumedEvents() {
+//			Set<String> consumedEvents = new HashSet<String>();
+//			consumedEvents.add("click");
+//			return consumedEvents;
+//		}
+//
+//		@Override
+//		public void onBrowserEvent(Context context, Element parent,
+//				String value, NativeEvent event,
+//				ValueUpdater<String> valueUpdater) {
+//			switch (DOM.eventGetType((Event) event)) {
+//			case Event.ONCLICK:
+//				final Ocorrencia object = (Ocorrencia) context.getKey();
+//				@SuppressWarnings("unused")
+//				CloseHandler<PopupPanel> closeHandler;
+//
+//				MpConfirmDialogBox confirmationDialog = new MpConfirmDialogBox(
+//						txtConstants.geralRemover(), txtConstants.ocorrenciaDesejaRemover(object.getAssunto()), txtConstants.geralSim(), txtConstants.geralNao(),
+//
+//						closeHandler = new CloseHandler<PopupPanel>() {
+//
+//							public void onClose(CloseEvent<PopupPanel> event) {
+//
+//								MpConfirmDialogBox x = (MpConfirmDialogBox) event.getSource();
+//
+//								if (x.primaryActionFired()) {
+//
+////									GWTServiceTopico.Util.getInstance().deleteTopicoRow(object.getIdTopico(), callbackDelete);
+//									GWTServiceOcorrencia.Util.getInstance().deleteOcorrenciaRow(object.getIdOcorrencia(), callbackDelete);
+//
+//								}
+//							}
+//						}
+//
+//				);
+//				confirmationDialog.paint();
+//				break;
+//
+//			default:
+//				Window.alert("Test default");
+//				break;
+//			}
+//		}
+//
+//	}	
 	
 	
 	public void updateClientData(){
@@ -452,9 +437,9 @@ public class EditarOcorrencia extends VerticalPanel {
 	
 	
 	
-	private void addCellTableData(ListDataProvider<Ocorrencia> dataProvider){
+	private void addCellTableData(ListDataProvider<OcorrenciaAluno> dataProvider){
 		
-		 ListHandler<Ocorrencia> sortHandler = new ListHandler<Ocorrencia>(dataProvider.getList());
+		 ListHandler<OcorrenciaAluno> sortHandler = new ListHandler<OcorrenciaAluno>(dataProvider.getList());
 		 
 		 cellTable.addColumnSortHandler(sortHandler);	
 
@@ -463,151 +448,191 @@ public class EditarOcorrencia extends VerticalPanel {
 	}
 
 
-	private void initTableColumns(final SelectionModel<Ocorrencia> selectionModel) {
+	private void initTableColumns(final SelectionModel<OcorrenciaAluno> selectionModel) {
 		
 		
-		assuntoColumn = new Column<Ocorrencia, String>(new EditTextCell()) {
+		
+		paiCienteColumn = new Column<OcorrenciaAluno, Boolean>(new CheckboxCell(true, false)) {
 			@Override
-			public String getValue(Ocorrencia object) {
+			public Boolean getValue(OcorrenciaAluno object) {
+				return object.isPaiCiente();
+			}
+		};
+		
+		
+		nomeAlunoColumn = new Column<OcorrenciaAluno, String>(new TextCell()) {
+			@Override
+			public String getValue(OcorrenciaAluno object) {
+				return object.getUsuario().getPrimeiroNome() + " " + object.getUsuario().getSobreNome(); 
+			}
+
+		};
+
+		
+		assuntoColumn = new Column<OcorrenciaAluno, String>(new TextCell()) {
+			@Override
+			public String getValue(OcorrenciaAluno object) {
 				return object.getAssunto();
 			}
 
 		};
-		assuntoColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, String>() {
-			@Override
-			public void update(int index, Ocorrencia object, String value) {
-				// Called when the user changes the value.
-
-				if (FieldVerifier.isValidName(value)) {					
-					object.setAssunto(value);
-					GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
-				}else{
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.ocorrencia()));
-					mpDialogBoxWarning.showDialog();
-				}					
-			}
-		});
+//		assuntoColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, String>() {
+//			@Override
+//			public void update(int index, Ocorrencia object, String value) {
+//				// Called when the user changes the value.
+//
+//				if (FieldVerifier.isValidName(value)) {					
+//					object.setAssunto(value);
+//					GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
+//				}else{
+//					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//					mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.ocorrencia()));
+//					mpDialogBoxWarning.showDialog();
+//				}					
+//			}
+//		});
 		
 
-		descricaoColumn = new Column<Ocorrencia, String>(new MpTextAreaEditCell(5,150)) {
+		descricaoColumn = new Column<OcorrenciaAluno, String>(new TextCell()) {
 			@Override
-			public String getValue(Ocorrencia object) {
+			public String getValue(OcorrenciaAluno object) {
 				return object.getDescricao();
 			}
 		};
-		descricaoColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, String>() {
-			@Override
-			public void update(int index, Ocorrencia object, String value) {
-				// Called when the user changes the value.
-				object.setDescricao(value);
-				GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
-			}
-		});
+//		descricaoColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, String>() {
+//			@Override
+//			public void update(int index, Ocorrencia object, String value) {
+//				// Called when the user changes the value.
+//				object.setDescricao(value);
+//				GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
+//			}
+//		});
 		
-		dataColumn = new Column<Ocorrencia, Date>(new DatePickerCell()) {
+		dataColumn = new Column<OcorrenciaAluno, Date>(new DatePickerCell()) {
 			@Override
-			public Date getValue(Ocorrencia object) {
+			public Date getValue(OcorrenciaAluno object) {
 				return MpUtilClient.convertStringToDate(object.getData());
 			}
 		};
-		dataColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, Date>() {
-			@Override
-			public void update(int index, Ocorrencia object, Date value) {
-				// Called when the user changes the value.
-				object.setData(MpUtilClient.convertDateToString(value));
-//				GWTServiceAvaliacao.Util.getInstance().updateRow(object,callbackUpdateRow);
-				GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
-			}
-		});	
+//		dataColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, Date>() {
+//			@Override
+//			public void update(int index, Ocorrencia object, Date value) {
+//				// Called when the user changes the value.
+//				object.setData(value);
+////				GWTServiceAvaliacao.Util.getInstance().updateRow(object,callbackUpdateRow);
+//				GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
+//			}
+//		});	
 		
-		MpTimePicker mpTimePicker = new MpTimePicker(7, 24);
-		for(int i=0;i<mpTimePicker.getItemCount();i++){
-			listaHora.put(mpTimePicker.getValue(i), mpTimePicker.getItemText(i));
-		}	
-		
-	    MpStyledSelectionCell horaCell = new MpStyledSelectionCell(listaHora,"design_text_boxes");
+//		MpTimePicker mpTimePicker = new MpTimePicker(7, 24);
+//		for(int i=0;i<mpTimePicker.getItemCount();i++){
+//			listaHora.put(mpTimePicker.getValue(i), mpTimePicker.getItemText(i));
+//		}	
+//		
+//	    MpStyledSelectionCell horaCell = new MpStyledSelectionCell(listaHora,"design_text_boxes");
 	    
-	    horaColumn = new Column<Ocorrencia, String>(horaCell) {
+	    horaColumn = new Column<OcorrenciaAluno, String>(new TextCell()) {
 	      @Override
-			public String getValue(Ocorrencia object) {
+			public String getValue(OcorrenciaAluno object) {
 //				String strHora = MpUtilClient.convertTimeToString(object.getHora());
-//				return strHora;
-	    	  return object.getHora();
+				return object.getHora();
 			}
 	    };
-	    horaColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, String>() {
-			@Override
-			public void update(int index, Ocorrencia object, String value) {
+//	    horaColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, String>() {
+//			@Override
+//			public void update(int index, Ocorrencia object, String value) {
 //				object.setHora(MpUtilClient.convertStringToTime(value));
-				object.setHora(value);
-				GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
-			}
-		});		
+//				GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
+//			}
+//		});		
 
-		Column<Ocorrencia, String> editColumn = new Column<Ocorrencia, String>(new MyImageCellEdit()) {
-			@Override
-			public String getValue(Ocorrencia object) {
-				return "images/comment_edit.png";
-			}
-		};		    
+//		Column<Ocorrencia, String> editColumn = new Column<Ocorrencia, String>(new MyImageCellEdit()) {
+//			@Override
+//			public String getValue(Ocorrencia object) {
+//				return "images/comment_edit.png";
+//			}
+//		};		    
+//
+//		Column<Ocorrencia, String> removeColumn = new Column<Ocorrencia, String>(new MyImageCell()) {
+//			@Override
+//			public String getValue(Ocorrencia object) {
+//				return "images/delete.png";
+//			}
+//		};
 
-		Column<Ocorrencia, String> removeColumn = new Column<Ocorrencia, String>(new MyImageCell()) {
-			@Override
-			public String getValue(Ocorrencia object) {
-				return "images/delete.png";
-			}
-		};
 
-
+	    cellTable.addColumn(paiCienteColumn, txtConstants.ocorrenciaPaiCiente());
+	    cellTable.addColumn(nomeAlunoColumn, txtConstants.alunoNome());
 		cellTable.addColumn(assuntoColumn, txtConstants.ocorrencia());
 		cellTable.addColumn(descricaoColumn, txtConstants.ocorrenciaDescricao());
 		cellTable.addColumn(dataColumn, txtConstants.ocorrenciaData());
 		cellTable.addColumn(horaColumn, txtConstants.ocorrenciaHora());
-		cellTable.addColumn(editColumn, txtConstants.ocorrenciaEditarDetalhes());
-		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
-		cellTable.setColumnWidth(editColumn, "100px");
-		cellTable.setColumnWidth(removeColumn, "70px");
+//		cellTable.addColumn(editColumn, txtConstants.ocorrenciaEditarDetalhes());
+//		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
+//		cellTable.setColumnWidth(editColumn, "100px");
+//		cellTable.setColumnWidth(removeColumn, "70px");
 
+		cellTable.getColumn(cellTable.getColumnIndex(paiCienteColumn)).setCellStyleNames("css-checkbox");
 		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("edit-cell");
-		cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");		
-		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");		
+//		cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");		
+//		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");		
 		
 		
 	}
 
-	public void initSortHandler(ListHandler<Ocorrencia> sortHandler) {
+	public void initSortHandler(ListHandler<OcorrenciaAluno> sortHandler) {
 		
+		
+		paiCienteColumn.setSortable(true);
+		sortHandler.setComparator(paiCienteColumn,new Comparator<OcorrenciaAluno>() {
+			@Override
+			public int compare(OcorrenciaAluno o1, OcorrenciaAluno o2) {
+				Boolean booO1 = o1.isPaiCiente();
+				Boolean booO2 = o2.isPaiCiente();
+				return booO1.compareTo(booO2);
+			}
+		});			
+		
+		nomeAlunoColumn.setSortable(true);
+	    sortHandler.setComparator(nomeAlunoColumn, new Comparator<OcorrenciaAluno>() {
+	      @Override
+	      public int compare(OcorrenciaAluno o1, OcorrenciaAluno o2) {
+	    	  String nomeO1 = o1.getUsuario().getPrimeiroNome() + " " +o1.getUsuario().getSobreNome();
+	    	  String nomeO2 = o2.getUsuario().getPrimeiroNome() + " " +o2.getUsuario().getSobreNome();
+	    	  
+	        return nomeO1.compareTo(nomeO2);
+	      }
+	    });			
 		
 		assuntoColumn.setSortable(true);
-	    sortHandler.setComparator(assuntoColumn, new Comparator<Ocorrencia>() {
+	    sortHandler.setComparator(assuntoColumn, new Comparator<OcorrenciaAluno>() {
 	      @Override
-	      public int compare(Ocorrencia o1, Ocorrencia o2) {
+	      public int compare(OcorrenciaAluno o1, OcorrenciaAluno o2) {
 	        return o1.getAssunto().compareTo(o2.getAssunto());
 	      }
 	    });	
 	    
 	    descricaoColumn.setSortable(true);
-	    sortHandler.setComparator(descricaoColumn, new Comparator<Ocorrencia>() {
+	    sortHandler.setComparator(descricaoColumn, new Comparator<OcorrenciaAluno>() {
 	      @Override
-	      public int compare(Ocorrencia o1, Ocorrencia o2) {
+	      public int compare(OcorrenciaAluno o1, OcorrenciaAluno o2) {
 	        return o1.getDescricao().compareTo(o2.getDescricao());
 	      }
 	    });		  
 	    
 	    dataColumn.setSortable(true);
-	    sortHandler.setComparator(dataColumn, new Comparator<Ocorrencia>() {
+	    sortHandler.setComparator(dataColumn, new Comparator<OcorrenciaAluno>() {
 	      @Override
-	      public int compare(Ocorrencia o1, Ocorrencia o2) {
+	      public int compare(OcorrenciaAluno o1, OcorrenciaAluno o2) {
 	        return o1.getData().compareTo(o2.getData());
 	      }
 	    });	
 	    
 	    horaColumn.setSortable(true);
-	    sortHandler.setComparator(horaColumn, new Comparator<Ocorrencia>() {
+	    sortHandler.setComparator(horaColumn, new Comparator<OcorrenciaAluno>() {
 	      @Override
-	      public int compare(Ocorrencia o1, Ocorrencia o2) {
+	      public int compare(OcorrenciaAluno o1, OcorrenciaAluno o2) {
 	        return o1.getHora().compareTo(o2.getHora());
 	      }
 	    });	
@@ -647,15 +672,19 @@ public class EditarOcorrencia extends VerticalPanel {
 				int i = 0;
 				while (i < dataProvider.getList().size()) {
 
-					String strAssunto = dataProvider.getList().get(i).getAssunto();			
+					String strNomeAluno = dataProvider.getList().get(i).getUsuario().getPrimeiroNome() + " " + dataProvider.getList().get(i).getUsuario().getSobreNome();
+					String strOcorrencia = dataProvider.getList().get(i).getAssunto();
 					String strDescricao = dataProvider.getList().get(i).getDescricao();
+//					String strData = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getData(), "EEEE, MMMM dd, yyyy");
+//					String strData = dataProvider.getList().get(i).getData();
 					
 					Date date = MpUtilClient.convertStringToDate(dataProvider.getList().get(i).getData());					
-					String strData = MpUtilClient.convertDateToString(date, "EEEE, MMMM dd, yyyy");
-
+					String strData = MpUtilClient.convertDateToString(date, "EEEE, MMMM dd, yyyy");					
+					
 					String strHora = dataProvider.getList().get(i).getHora();
-					String strJuntaTexto = strAssunto.toUpperCase() + " " + strDescricao.toUpperCase() ;
-					strJuntaTexto +=  " " + strData.toUpperCase() + " " + strHora.toUpperCase();
+
+					String strJuntaTexto = strNomeAluno.toUpperCase() + " " + strOcorrencia.toUpperCase() + " " + strDescricao.toUpperCase() + " " + strData.toUpperCase() + " " + strHora.toUpperCase();
+
 
 					if (!strJuntaTexto.contains(strFiltro)) {
 						dataProvider.getList().remove(i);
@@ -679,8 +708,7 @@ public class EditarOcorrencia extends VerticalPanel {
 			}
 			cellTable.setPageStart(0);
 		}
-	/***************************************BEGIN Filterting CellTable***************************************/	
-	
+	/***************************************BEGIN Filterting CellTable***************************************/		
 
 }
 

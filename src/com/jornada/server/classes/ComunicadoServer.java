@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Comunicado;
+import com.jornada.shared.classes.TipoComunicado;
 
 public class ComunicadoServer {
 	
@@ -18,6 +19,15 @@ public class ComunicadoServer {
 	public static String DB_DELETE_COMUNICADO = "delete from comunicado where id_comunicado=?";	
 	public static String DB_SELECT_TIPO_COMUNICADO_ALL = "SELECT * FROM comunicado order by data, hora asc;";
 	public static String DB_SELECT_TIPO_COMUNICADO_ILIKE = "SELECT * FROM comunicado where (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
+	public static String DB_SELECT_TIPO_COMUNICADO_EXTERNO_ILIKE = 
+			"SELECT * FROM comunicado where id_tipo_comunicado="+Integer.toString(TipoComunicado.EXTERNO)+" "+
+			"and (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
+	
+	public static String DB_SELECT_TIPO_COMUNICADO_INTERNO_ILIKE = 
+			"SELECT * FROM comunicado where " +
+			"(id_tipo_comunicado="+Integer.toString(TipoComunicado.EXTERNO)+" or id_tipo_comunicado="+Integer.toString(TipoComunicado.INTERNO)+" ) " +
+			"and (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
+	
 
 	
 	
@@ -234,8 +244,96 @@ public class ComunicadoServer {
 
 		return data;
 
-	}	
+	}
 	
+	public static ArrayList<Comunicado> getComunicadosExterno(String strFilter) {
+
+		ArrayList<Comunicado> data = new ArrayList<Comunicado>();
+//		JornadaDataBase dataBase = new JornadaDataBase();
+		Connection conn = ConnectionManager.getConnection();
+		try 
+		{
+
+//			dataBase.createConnection();
+
+			PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_SELECT_TIPO_COMUNICADO_EXTERNO_ILIKE);
+			int count=0;
+			ps.setString(++count, strFilter);
+			ps.setString(++count, strFilter);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) 
+			{
+
+				Comunicado currentObject = new Comunicado();
+				
+				currentObject.setIdComunicado(rs.getInt("id_comunicado"));				
+				currentObject.setIdTipoComunicado(rs.getInt("id_tipo_comunicado"));
+				currentObject.setIdEscola(rs.getInt("id_escola"));
+				currentObject.setAssunto(rs.getString("assunto"));
+				currentObject.setDescricao(rs.getString("descricao"));
+				currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+				currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+				currentObject.setNomeImagem(rs.getString("nome_imagem"));
+
+				data.add(currentObject);
+			}
+
+		} catch (SQLException sqlex) {
+			System.err.println(sqlex.getMessage());
+		} finally {
+//			dataBase.close();
+			ConnectionManager.closeConnection(conn);
+		}
+
+		return data;
+
+	}		
+	
+	public static ArrayList<Comunicado> getComunicadosInterno(String strFilter) {
+
+		ArrayList<Comunicado> data = new ArrayList<Comunicado>();
+//		JornadaDataBase dataBase = new JornadaDataBase();
+		Connection conn = ConnectionManager.getConnection();
+		try 
+		{
+
+//			dataBase.createConnection();
+
+			PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_SELECT_TIPO_COMUNICADO_INTERNO_ILIKE);
+			int count=0;
+			ps.setString(++count, strFilter);
+			ps.setString(++count, strFilter);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) 
+			{
+
+				Comunicado currentObject = new Comunicado();
+				
+				currentObject.setIdComunicado(rs.getInt("id_comunicado"));				
+				currentObject.setIdTipoComunicado(rs.getInt("id_tipo_comunicado"));
+				currentObject.setIdEscola(rs.getInt("id_escola"));
+				currentObject.setAssunto(rs.getString("assunto"));
+				currentObject.setDescricao(rs.getString("descricao"));
+				currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+				currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+				currentObject.setNomeImagem(rs.getString("nome_imagem"));
+
+				data.add(currentObject);
+			}
+
+		} catch (SQLException sqlex) {
+			System.err.println(sqlex.getMessage());
+		} finally {
+//			dataBase.close();
+			ConnectionManager.closeConnection(conn);
+		}
+
+		return data;
+
+	}		
+
 	
 	
 

@@ -11,7 +11,7 @@ public interface GWTServiceLoginAsync {
 
 	public void loginServer(String login, String password, AsyncCallback<Usuario> callBack);    
 	public void loginFromSessionServer(AsyncCallback<Usuario> callBack);     
-	public void changePassword(String name, String newPassword, AsyncCallback<Boolean> callBack); 
+//	public void changePassword(String name, String newPassword, AsyncCallback<Boolean> callBack); 
 	@SuppressWarnings("rawtypes")
 	public void logout(AsyncCallback callBack);	
 	

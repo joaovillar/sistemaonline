@@ -29,7 +29,7 @@ public interface GWTServiceLogin extends RemoteService {
 	
 	Usuario loginServer(String login, String password);    
 	Usuario loginFromSessionServer();     
-    boolean changePassword(String name, String newPassword); 
+//    boolean changePassword(String name, String newPassword); 
     void logout();	
 	
 	public static class Util {

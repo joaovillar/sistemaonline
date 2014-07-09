@@ -57,8 +57,13 @@ public class GWTServiceOcorrenciaImpl extends RemoteServiceServlet implements GW
 		return OcorrenciaServer.getOcorrenciasPeloConteudoProgramatico(idConteudoProgramatico);
 	}	
 	
-	public ArrayList<OcorrenciaAluno> getOcorrenciasPeloAluno(int idAluno,String locale){
-		return OcorrenciaServer.getOcorrenciasPeloAluno(idAluno,locale);
+	public ArrayList<OcorrenciaAluno> getOcorrenciasPeloAluno(int idAluno){
+		return OcorrenciaServer.getOcorrenciasPeloAluno(idAluno);
+	}
+	
+	
+	public ArrayList<OcorrenciaAluno> getTodasAsOcorrenciasDosAlunos(int idConteudoProgramatico){
+		return OcorrenciaServer.getTodasAsOcorrenciasDosAlunos(idConteudoProgramatico);
 	}	
 	
 	

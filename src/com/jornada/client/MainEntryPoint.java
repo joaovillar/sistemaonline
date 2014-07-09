@@ -1,6 +1,5 @@
 package com.jornada.client;
 
-/**GitHub**/
 import java.util.Date;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -10,12 +9,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.ClosingEvent;
-import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -24,7 +19,6 @@ import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.jornada.client.classes.BrowserCloseDetector;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
@@ -56,28 +50,15 @@ public class MainEntryPoint implements EntryPoint {
 	public void onModuleLoad() {	
 		
 		
-//		Window.addWindowClosingHandler(new ClosingHandler(){
-//		    @Override 
-//		    public void onWindowClosing(ClosingEvent event) {
-//		    	System.out.println("If you leave, you may lose data. Continue?");
-//		        event.setMessage("If you leave, you may lose data. Continue?");
-//		    }
-//		});
-		
-
-		
-//		if (BrowserCloseDetector.get().wasClosed()) {
-//			System.out.println("Browser was closed.");
-//	    }
-//	    else {
-//	    	System.out.println("Refreshing or returning from another page.");
-//	    }
-		
 		txtConstants = GWT.create(TextConstants.class);
 	    
 		vPanelPage = new VerticalPanel();
 		vPanelPage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		vPanelPage.setSize("100%", "100%");
+		
+		
+//		Label label = new Label("Testing");		
+//		vPanelPage.add(label);
 		
 
 		String sessionID;
@@ -87,52 +68,25 @@ public class MainEntryPoint implements EntryPoint {
 			sessionID = null;
 		}
 		
-	    if (sessionID == null)
-	    {
-	    	displayLoginPage();
-	    } else
-	    {
-//	    	verifyWindowsClose();
-	        checkWithServerIfSessionIdIsStillLegal();
-	    }
-//		
-//		vPanelPage.add(mainView);
+		if (sessionID == null) {
+			displayLoginPage();
+		} else {
+
+			checkWithServerIfSessionIdIsStillLegal();
+		}
+		
+
+
 		RootPanel.get().add(vPanelPage);		
 
 	    
 	  }
 	
 	
-	public void verifyWindowsClose(){
-//        Window.addWindowClosingHandler(new Window.ClosingHandler() {
-//            @Override
-//            public void onWindowClosing(ClosingEvent event) {
-//
-//                event.setMessage("You sure?");
-//            }
-//        });
-//
-//        Window.addCloseHandler(new CloseHandler<Window>() {
-//            @Override
-//            public void onClose(CloseEvent<Window> event) {
-//            	System.out.println("Execute code when window closes!");
-//            }
-//        });
-		
-	if (BrowserCloseDetector.get().wasClosed()) {
-		System.out.println("Browser was closed.");
-    }
-    else {
-    	System.out.println("Refreshing or returning from another page.");
-    }
-	}
-	
-	
 	
 	private void createMainView(Usuario usuarioLogado){
 
-		verifyWindowsClose();
-		
+	
 		mainView = new MainView(usuarioLogado);		
 		mainView.initHistorySupport();
     	vPanelPage.clear();

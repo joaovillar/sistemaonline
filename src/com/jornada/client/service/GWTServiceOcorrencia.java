@@ -32,7 +32,8 @@ public interface GWTServiceOcorrencia extends RemoteService {
 	public ArrayList<Ocorrencia> getOcorrencias();
 	public ArrayList<Ocorrencia> getOcorrencias(String strFilter);	
 	public ArrayList<Ocorrencia> getOcorrenciasPeloConteudoProgramatico(int idConteudoProgramatico);
-	public ArrayList<OcorrenciaAluno> getOcorrenciasPeloAluno(int idAluno, String locale);
+	public ArrayList<OcorrenciaAluno> getOcorrenciasPeloAluno(int idAluno);
+	public ArrayList<OcorrenciaAluno> getTodasAsOcorrenciasDosAlunos(int idConteudoProgramatico);
 	
 	
 	public static class Util {

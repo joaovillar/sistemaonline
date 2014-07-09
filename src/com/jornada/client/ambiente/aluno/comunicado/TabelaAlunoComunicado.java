@@ -140,16 +140,6 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		flexTableFiltrar.setWidget(0, 4, btnFiltrar);
 		flexTableFiltrar.setWidget(0, 5, mpPanelLoading);	
 		
-		
-
-		
-
-		
-//		cellTable.setColumnWidth(removeColumn, "65px");
-		
-//		vPanelBody.add(btnAdicionarComunicado);	
-//		vPanelBody.add(flexTableFiltrar);	
-//		vPanelBody.add(cellTable);	
 		openTabelaComunicados();
 		
 		
@@ -190,7 +180,7 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 	private class ClickHandlerFiltrar implements ClickHandler {
 		public void onClick(ClickEvent event) {
 				mpPanelLoading.setVisible(true);
-				GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
+				GWTServiceComunicado.Util.getInstance().getComunicadosExterno("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
 				//GWTServiceUsuario.Util.getInstance().getUsuarios("%" + txtSearch.getText() + "%", callbackGetUsuariosFiltro);
 		}
 	}	
@@ -200,7 +190,7 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		public void onKeyPress(KeyPressEvent event){
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelLoading.setVisible(true);					
-				GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
+				GWTServiceComunicado.Util.getInstance().getComunicadosExterno("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
 			}
 		}
 	}
@@ -215,7 +205,7 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 	
 	protected void populateGrid() {
 		
-		GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%",
+		GWTServiceComunicado.Util.getInstance().getComunicadosExterno("%" + txtSearch.getText() + "%",
 		
 				new AsyncCallback<ArrayList<Comunicado>>() {
 
@@ -244,7 +234,7 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 	}	
 	
 	
-	private class MyImageCellEdit extends ImageCell {
+	private class MpTextCell extends TextCell {
 
 		@Override
 		public Set<String> getConsumedEvents() {
@@ -258,16 +248,9 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 			
 			switch (DOM.eventGetType((Event) event)) {
 			case Event.ONCLICK:
-				final Comunicado object = (Comunicado) context.getKey();
-								
-//				paginaComunicado.openFormularioComunicadoParaAtualizar(object);
-				
+				final Comunicado object = (Comunicado) context.getKey();				
 				openComunicadoDetalhe(object);
-				
-
-
 				break;
-
 			default:
 				Window.alert("Test default");
 				break;
@@ -276,16 +259,108 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 
 	}
 	
-	private class MyImageCellView extends ImageCell{
-		    @Override
-		    public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
-		        super.render(context, value, sb);
-		        final Comunicado object = (Comunicado) context.getKey();
-		        String imagePath = "images/download/compressed-"+object.getNomeImagem();
-		        sb.appendHtmlConstant("<img src = '"+imagePath+"' height = '64px' width = '64px' />");
+	
+	private class MpSafeHtmlCell extends SafeHtmlCell {
 
-		    }
-	}	
+		@Override
+		public Set<String> getConsumedEvents() {
+			Set<String> consumedEvents = new HashSet<String>();
+			consumedEvents.add("click");
+			return consumedEvents;
+		}
+		
+		@Override
+		public void onBrowserEvent(Context context, Element parent, SafeHtml value, NativeEvent event, ValueUpdater<SafeHtml> valueUpdater) {
+
+			super.onBrowserEvent(context, parent, value, event, valueUpdater);
+			switch (DOM.eventGetType((Event) event)) {
+			case Event.ONCLICK:
+				final Comunicado object = (Comunicado) context.getKey();
+				openComunicadoDetalhe(object);
+				break;
+			default:
+				Window.alert("Test default");
+				break;
+			}
+		}
+		
+
+
+//		@Override
+//		public void onBrowserEvent(Context context, Element parent, SafeHtmlCell value, NativeEvent event, ValueUpdater<SafeHtmlCell> valueUpdater) {
+//			
+//			switch (DOM.eventGetType((Event) event)) {
+//			case Event.ONCLICK:
+//				final Comunicado object = (Comunicado) context.getKey();				
+//				openComunicadoDetalhe(object);
+//				break;
+//			default:
+//				Window.alert("Test default");
+//				break;
+//			}
+//		}
+
+	}
+	
+//	private class MyImageCellEdit extends ImageCell {
+//
+//		@Override
+//		public Set<String> getConsumedEvents() {
+//			Set<String> consumedEvents = new HashSet<String>();
+//			consumedEvents.add("click");
+//			return consumedEvents;
+//		}
+//
+//		@Override
+//		public void onBrowserEvent(Context context, Element parent, String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
+//			
+//			switch (DOM.eventGetType((Event) event)) {
+//			case Event.ONCLICK:
+//				final Comunicado object = (Comunicado) context.getKey();
+//				openComunicadoDetalhe(object);
+//				break;
+//			default:
+//				Window.alert("Test default");
+//				break;
+//			}
+//		}
+//
+//	}
+	
+	private class MyImageCellView extends ImageCell {
+
+		@Override
+		public Set<String> getConsumedEvents() {
+			Set<String> consumedEvents = new HashSet<String>();
+			consumedEvents.add("click");
+			return consumedEvents;
+		}
+
+		@Override
+		public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
+			super.render(context, value, sb);
+			final Comunicado object = (Comunicado) context.getKey();
+			String imagePath = "images/download/compressed-"+ object.getNomeImagem();
+			sb.appendHtmlConstant("<img src = '" + imagePath+ "' height = '64px' width = '64px' />");
+
+		}
+
+		@Override
+		public void onBrowserEvent(Context context, Element parent,
+				String value, NativeEvent event,
+				ValueUpdater<String> valueUpdater) {
+
+			switch (DOM.eventGetType((Event) event)) {
+			case Event.ONCLICK:
+				final Comunicado object = (Comunicado) context.getKey();
+				openComunicadoDetalhe(object);
+				break;
+			default:
+				Window.alert("Test default");
+				break;
+			}
+		}
+	}
 	
 	public void openComunicadoDetalhe(Comunicado object){
 		detalhesComunicado = new DetalhesComunicado(object);
@@ -338,14 +413,14 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 				return "";
 			}
 		};					
-		assuntoColumn = new Column<Comunicado, String>(new TextCell()) {
+		assuntoColumn = new Column<Comunicado, String>(new MpTextCell()) {
 			@Override
 			public String getValue(Comunicado object) {
 				return object.getAssunto();
 			}
 
 		};
-		descricaoColumn = new Column<Comunicado, SafeHtml>(new SafeHtmlCell()) {
+		descricaoColumn = new Column<Comunicado, SafeHtml>(new MpSafeHtmlCell()) {
 			@Override
 			public SafeHtml  getValue(Comunicado object) {		
 				SafeHtmlBuilder sb = new SafeHtmlBuilder();
@@ -354,25 +429,25 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 			}
 
 		};	
-		dataColumn = new Column<Comunicado, String>(new TextCell()) {
+		dataColumn = new Column<Comunicado, String>(new MpTextCell()) {
 			@Override
 			public String getValue(Comunicado object) {			    
 //				String strDate = ((object.getData()!=null)?DateTimeFormat.getFormat(FORMAT_DATE).format(object.getData()):null);
 				return object.getData();
 			}
 		};	
-		horaColumn = new Column<Comunicado, String>(new TextCell()) {
+		horaColumn = new Column<Comunicado, String>(new MpTextCell()) {
 			@Override
 			public String getValue(Comunicado object) {
 				return object.getHora();
 			}
 		};	
-		Column<Comunicado, String> editColumn = new Column<Comunicado, String>(new MyImageCellEdit()) {
-			@Override
-			public String getValue(Comunicado object) {
-				return "images/magnifier.png";
-			}
-		};			
+//		Column<Comunicado, String> editColumn = new Column<Comunicado, String>(new MyImageCellEdit()) {
+//			@Override
+//			public String getValue(Comunicado object) {
+//				return "images/magnifier.png";
+//			}
+//		};			
 //		
 //		Column<Comunicado, String> removeColumn = new Column<Comunicado, String>(new MyImageCellDelete()) {
 //			@Override
@@ -388,19 +463,19 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		cellTable.addColumn(descricaoColumn, txtConstants.comunicadoDetalhes());
 		cellTable.addColumn(dataColumn, txtConstants.comunicadoData());
 		cellTable.addColumn(horaColumn, txtConstants.comunicadoHora());
-		cellTable.addColumn(editColumn, txtConstants.comunicadoVerDetalhes());
+//		cellTable.addColumn(editColumn, txtConstants.comunicadoVerDetalhes());
 //		cellTable.addColumn(removeColumn, "Remover");
 		
-		cellTable.getColumn(cellTable.getColumnIndex(imageColumn)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(dataColumn)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(horaColumn)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");
+		cellTable.getColumn(cellTable.getColumnIndex(imageColumn)).setCellStyleNames("hand-over");
+		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("hand-over");
+		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("hand-over");
+		cellTable.getColumn(cellTable.getColumnIndex(dataColumn)).setCellStyleNames("hand-over");
+		cellTable.getColumn(cellTable.getColumnIndex(horaColumn)).setCellStyleNames("hand-over");
+//		cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");
 //		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");
 		
 		cellTable.setColumnWidth(imageColumn, "65px");
-		cellTable.setColumnWidth(editColumn, "70px");
+//		cellTable.setColumnWidth(editColumn, "70px");
 		
 		
 	}

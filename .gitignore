@@ -216,3 +216,13 @@ pip-log.txt
 gwt-unitCache
 *.class
 *.rpc
+
+#########################
+##PaisOnLine
+#########################
+
+*.orig
+*.txt
+war/
+##war/WEB-INF/deploy/*
+##war/WEB-INF/classes/*

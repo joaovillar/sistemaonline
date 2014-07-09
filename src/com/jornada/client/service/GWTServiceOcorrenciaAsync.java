@@ -16,6 +16,7 @@ public interface GWTServiceOcorrenciaAsync {
 	public void getOcorrencias(AsyncCallback<ArrayList<Ocorrencia>> callback);	
 	public void getOcorrencias(String strFilter, AsyncCallback<ArrayList<Ocorrencia>> callback);
 	public void getOcorrenciasPeloConteudoProgramatico(int idConteudoProgramatico, AsyncCallback<ArrayList<Ocorrencia>> callback);
-	public void getOcorrenciasPeloAluno(int idAluno, String locale, AsyncCallback<ArrayList<OcorrenciaAluno>> callback);
+	public void getOcorrenciasPeloAluno(int idAluno, AsyncCallback<ArrayList<OcorrenciaAluno>> callback);
+	public void getTodasAsOcorrenciasDosAlunos(int idConteudoProgramatico, AsyncCallback<ArrayList<OcorrenciaAluno>> callback);
 	
 }

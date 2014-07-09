@@ -353,7 +353,7 @@ public class TabelaComunicados extends VerticalPanel{
 		    public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
 		        super.render(context, value, sb);
 		        final Comunicado object = (Comunicado) context.getKey();
-		        String imagePath = "images/download/"+object.getNomeImagem();
+		        String imagePath = "images/download/compressed-"+object.getNomeImagem();
 		        sb.appendHtmlConstant("<img src = '"+imagePath+"' height = '64px' width = '64px' />");
 
 		    }

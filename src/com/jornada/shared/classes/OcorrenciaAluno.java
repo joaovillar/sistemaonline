@@ -17,8 +17,11 @@ public class OcorrenciaAluno implements Serializable{
 	private String data;
 	private String hora;
 	private boolean paiCiente;
+	private Usuario usuario;
 		
 	public OcorrenciaAluno(){
+		
+		usuario = new Usuario();
 		
 	}
 
@@ -108,6 +111,14 @@ public class OcorrenciaAluno implements Serializable{
 
 	public void setIdUsuario(int idUsuario) {
 		this.idUsuario = idUsuario;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	
 	

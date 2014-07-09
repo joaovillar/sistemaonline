@@ -31,6 +31,8 @@ public interface GWTServiceComunicado extends RemoteService {
 	public boolean deleteComunicadoRow(int id_comunicado);
 	public ArrayList<Comunicado> getComunicados();
 	public ArrayList<Comunicado> getComunicados(String strFilter);
+	public ArrayList<Comunicado> getComunicadosExterno(String strFilter);
+	public ArrayList<Comunicado> getComunicadosInterno(String strFilter);
 	
 	
 	public static class Util {

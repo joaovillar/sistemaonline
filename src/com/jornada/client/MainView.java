@@ -85,7 +85,7 @@ public class MainView extends Composite implements HistoryListener{
 		vPanelFooter.setSize("100%", "100%");
 		vPanelPrincipal.setSize("99%", "100%");
 		
-		//vPanelMenu.setVisible(true);
+
 		openMainView();
 		
 		//new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1500);
@@ -94,6 +94,9 @@ public class MainView extends Composite implements HistoryListener{
 		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		vPanelFooter.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		vPanelPrincipal.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
+		
+//		Label labelTest = new Label("Testing");
+//		vPanelPrincipal.add(labelTest);
 		
 		vPanelPrincipal.setSpacing(2);	
 		

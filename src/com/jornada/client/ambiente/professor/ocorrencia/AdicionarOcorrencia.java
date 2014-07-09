@@ -74,6 +74,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	
 	private MpLabelTextBoxError lblErroOcorrencia;
 	private MpLabelTextBoxError lblErroConteudo;
+	private MpLabelTextBoxError lblErroData;
 	
 	EditarOcorrencia editarOcorrencia;
 
@@ -102,6 +103,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		
 		if (enumOcorrencia == EnumOcorrencia.ADICIONAR) {
 			abrirTelaCadastro();
+//			editarOcorrencia = new EditarOcorrencia(telaInicialProfessorOcorrencia);
 		} else if (enumOcorrencia == EnumOcorrencia.EDITAR) {
 
 		}
@@ -143,8 +145,9 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		
 		txtAssunto.setText(this.ocorrenciaAux.getOcorrencia().getAssunto());
 		txtDescricao.setText(this.ocorrenciaAux.getOcorrencia().getDescricao());
-		mpDateBoxData.getDate().setValue(this.ocorrenciaAux.getOcorrencia().getData());
-		mpTimePicker.setTime(this.ocorrenciaAux.getOcorrencia().getHora());	
+//		mpDateBoxData.getDate().setValue(this.ocorrenciaAux.getOcorrencia().getData());
+		mpDateBoxData.getDate().setValue(MpUtilClient.convertStringToDate(this.ocorrenciaAux.getOcorrencia().getData()));
+		mpTimePicker.setTime(MpUtilClient.convertStringToTime(this.ocorrenciaAux.getOcorrencia().getHora()));	
 		
 		multiBoxAlunosAssociado.clear();
 		for(int i=0;i<this.ocorrenciaAux.getOcorrencia().getListUsuariosRelacionadosOcorrencia().size();i++){			
@@ -205,6 +208,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		
 		lblErroOcorrencia = new MpLabelTextBoxError();
 		lblErroConteudo = new MpLabelTextBoxError();
+		lblErroData = new MpLabelTextBoxError();
 
 		
 		lblCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -238,7 +242,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		
 		layout.setWidget(row, 0, lblAssunto);layout.setWidget(row, 1, txtAssunto);layout.setWidget(row++, 2, lblErroOcorrencia);
 		layout.setWidget(row, 0, lblDescricao);layout.setWidget(row++, 1, txtDescricao);
-		layout.setWidget(row, 0, lblData);layout.setWidget(row++, 1, mpDateBoxData);
+		layout.setWidget(row, 0, lblData);layout.setWidget(row, 1, mpDateBoxData);layout.setWidget(row++, 2, lblErroData);
 		layout.setWidget(row, 0, lblHorario);layout.setWidget(row++, 1, mpTimePicker);
 
 		mpPanelForm.add(layout);
@@ -261,15 +265,22 @@ public class AdicionarOcorrencia extends VerticalPanel {
 				boolean isSuccess = result;
 				if (isSuccess) {
 
-					
+					int intIdConteudo = listBoxConteudo.getSelectedIndex();
+					intIdConteudo = Integer.parseInt(listBoxConteudo.getValue(intIdConteudo));					
 					
 					if (enumOcorrencia == EnumOcorrencia.ADICIONAR) {
+//						editarOcorrencia.populateGridOcorrencia();
+//						editarOcorrencia.updateClientData();
+						telaInicialProfessorOcorrencia.updateEditarOcorrenciaPopulateGrid();
+						telaInicialProfessorOcorrencia.updateVisualizarOcorrenciaPopulateGrid();
 						cleanFields();
 						mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
-						mpDialogBoxConfirm.setBodyText(txtConstants.ocorrenciaSalva());
+						mpDialogBoxConfirm.setBodyText(txtConstants.ocorrenciaSalva());						
 					}
 					else if (enumOcorrencia == EnumOcorrencia.EDITAR) {
-						editarOcorrencia.populateGridOcorrencia();
+//						editarOcorrencia.populateGridOcorrencia();
+						telaInicialProfessorOcorrencia.updateEditarOcorrenciaPopulateGrid();
+						telaInicialProfessorOcorrencia.updateVisualizarOcorrenciaPopulateGrid();
 						editarOcorrencia.vPanelEditarDetalhes.setVisible(false);
 						editarOcorrencia.vPanelEditarTabela.setVisible(true);
 						mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
@@ -458,22 +469,9 @@ public class AdicionarOcorrencia extends VerticalPanel {
 
 		public void onClick(ClickEvent event) {
 			
-//			int intIdConteudoProgramatico = Integer.parseInt(listBoxConteudoProgramatico.getValue(listBoxConteudoProgramatico.getSelectedIndex()));
 			int intIdConteudo = listBoxConteudo.getSelectedIndex();
 
-//			if (txtAssunto == null || txtAssunto.getText().isEmpty()) {
-//
-//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//				mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.ocorrencia()));
-//				mpDialogBoxWarning.showDialog();
-//
-//			} 
-//			else if(intIdConteudo==-1){
-//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroSemUmConteudoProgramatico());
-//				mpDialogBoxWarning.showDialog();
-//			}else{
-			
+		
 			if(checkFieldsValidator()){
 				
 				mpPanelLoading.setVisible(true);
@@ -484,8 +482,10 @@ public class AdicionarOcorrencia extends VerticalPanel {
 				Ocorrencia ocorrencia = new Ocorrencia();
 				ocorrencia.setAssunto(txtAssunto.getText());
 				ocorrencia.setDescricao(txtDescricao.getText());
-				ocorrencia.setData(mpDateBoxData.getDate().getValue());
-				ocorrencia.setHora(MpUtilClient.convertStringToTime(strHora));
+//				ocorrencia.setData(mpDateBoxData.getDate().getValue());
+//				ocorrencia.setHora(MpUtilClient.convertStringToTime(strHora));
+				ocorrencia.setData(MpUtilClient.convertDateToString(mpDateBoxData.getDate().getValue()));
+				ocorrencia.setHora(strHora);
 				ocorrencia.setIdConteudoProgramatico(intIdConteudo);
 				
 				ArrayList<Usuario> listUsuario = new ArrayList<Usuario>();
@@ -642,6 +642,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	private void cleanFields(){
 		lblErroConteudo.hideErroMessage();
 		lblErroOcorrencia.hideErroMessage();
+		lblErroData.hideErroMessage();
 		txtAssunto.setValue("");
 		txtDescricao.setValue("");
 		mpDateBoxData.getDate().setValue(null);
@@ -666,6 +667,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		boolean isFieldsOk = false;
 		boolean isOcorrenciaOk=false;
 		boolean isConteudoOk=false;
+		boolean isDataOk=false;
 		
 		if(FieldVerifier.isValidName(txtAssunto.getText())){
 			isOcorrenciaOk=true;	
@@ -673,8 +675,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		}else{
 			isOcorrenciaOk=false;
 			lblErroOcorrencia.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.ocorrencia()));
-		}
-		
+		}		
 
 		
 		if(FieldVerifier.isValidListBoxSelectedValue(listBoxConteudo.getSelectedIndex())){
@@ -684,7 +685,15 @@ public class AdicionarOcorrencia extends VerticalPanel {
 			lblErroConteudo.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.conteudoProgramatico()));
 		}
 		
-		isFieldsOk = isOcorrenciaOk && isConteudoOk;
+		if(FieldVerifier.isValidDate(mpDateBoxData.getDate().getTextBox().getValue())){
+			isDataOk=true;
+			lblErroData.hideErroMessage();
+		}else{
+			lblErroData.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.ocorrenciaData()));
+		}
+		
+		
+		isFieldsOk = isOcorrenciaOk && isConteudoOk && isDataOk;
 
 		
 		return isFieldsOk;

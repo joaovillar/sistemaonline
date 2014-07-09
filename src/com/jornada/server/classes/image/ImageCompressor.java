@@ -21,8 +21,10 @@ public class ImageCompressor {
 	   public static void compressAndSave(String imageFolder, String imageFile, float quality) throws IOException
        {
            
-        BufferedImage image = ImageIO.read(new File(imageFolder+imageFile));
+		String strImageAddress = imageFolder+"/"+imageFile;
+        BufferedImage image = ImageIO.read(new File(strImageAddress));
        // Get a ImageWriter for jpeg format.
+        
        Iterator<ImageWriter> writers = ImageIO.getImageWritersBySuffix("jpeg");
        if (!writers.hasNext()) throw new IllegalStateException("No writers found");
        ImageWriter writer = (ImageWriter) writers.next();
@@ -41,7 +43,7 @@ public class ImageCompressor {
        RenderedImage out = ImageIO.read(in);
        int size = bos.toByteArray().length;
        
-       ImageIO.write(out, "JPG", new File(imageFolder+"compressed-"+imageFile));
+       ImageIO.write(out, "JPG", new File(imageFolder+"/"+"compressed-"+imageFile));
        System.out.println("Compressed to " + quality + ": " + size + " bytes");
        // Uncomment code below to save the compressed files.
    //    File file = new File("compressed."+quality+".jpeg");

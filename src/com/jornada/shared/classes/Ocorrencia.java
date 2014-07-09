@@ -1,9 +1,7 @@
 package com.jornada.shared.classes;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Ocorrencia implements Serializable {
 
@@ -13,8 +11,8 @@ public class Ocorrencia implements Serializable {
 	private String assunto;
 	private String descricao;
 	private int idConteudoProgramatico;
-	private Date data;
-	private Time hora;
+	private String data;
+	private String hora;
 	
 	private ArrayList<Usuario> listUsuariosRelacionadosOcorrencia;
 	
@@ -48,16 +46,16 @@ public class Ocorrencia implements Serializable {
 	public void setIdConteudoProgramatico(int idConteudoProgramatico) {
 		this.idConteudoProgramatico = idConteudoProgramatico;
 	}
-	public Date getData() {
+	public String getData() {
 		return data;
 	}
-	public void setData(Date data) {
+	public void setData(String data) {
 		this.data = data;
 	}
-	public Time getHora() {
+	public String getHora() {
 		return hora;
 	}
-	public void setHora(Time hora) {
+	public void setHora(String hora) {
 		this.hora = hora;
 	}	
 

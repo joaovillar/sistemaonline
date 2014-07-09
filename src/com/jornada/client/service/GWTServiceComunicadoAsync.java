@@ -13,5 +13,7 @@ public interface GWTServiceComunicadoAsync {
 	public void deleteComunicadoRow(int id_comunicado, AsyncCallback<Boolean> callback);		
 	public void getComunicados(AsyncCallback<ArrayList<Comunicado>> callback);	
 	public void getComunicados(String strFilter, AsyncCallback<ArrayList<Comunicado>> callback);
+	public void getComunicadosExterno(String strFilter, AsyncCallback<ArrayList<Comunicado>> callback);
+	public void getComunicadosInterno(String strFilter, AsyncCallback<ArrayList<Comunicado>> callback);
 	
 }

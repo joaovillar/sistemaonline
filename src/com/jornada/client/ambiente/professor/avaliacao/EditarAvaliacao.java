@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import com.google.gwt.cell.client.DatePickerCell;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.ImageCell;
@@ -41,6 +40,7 @@ import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoA
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
 import com.jornada.client.classes.resources.CellTableStyle;
+import com.jornada.client.classes.widgets.cells.MpDatePickerCell;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.cells.MpStyledSelectionCell;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
@@ -477,7 +477,7 @@ public class EditarAvaliacao extends VerticalPanel {
 			}
 		});
 	    
-		dataColumn = new Column<Avaliacao, Date>(new DatePickerCell()) {
+		dataColumn = new Column<Avaliacao, Date>(new MpDatePickerCell()) {
 			@Override
 			public Date getValue(Avaliacao object) {
 //				Date date = MpUtilClient.convertStringToDate(object.getData());

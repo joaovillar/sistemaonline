@@ -11,14 +11,27 @@ import com.jornada.ConfigJornada;
 public class ConnectionManager {
 	
 	
-	private static String driver = ConfigJornada.getProperty("config.driver");
-	private static String url = ConfigJornada.getProperty("config.url");//jdbc:postgresql://
-	private static String host = ConfigJornada.getProperty("config.host");
-	private static String portNumber = ConfigJornada.getProperty("config.portNumber");
-	private static String database = ConfigJornada.getProperty("config.database");
-	private static String userName = ConfigJornada.getProperty("config.userName");
-	private static String password = ConfigJornada.getProperty("config.password");
-	private static String connectionUrl = String.format("%s%s:%s/%s", url, host, portNumber, database);	
+	private static final String driver = ConfigJornada.getProperty("config.driver");
+	private static final String url = ConfigJornada.getProperty("config.url");//jdbc:postgresql://
+	private static final String host = ConfigJornada.getProperty("config.host");
+	private static final String portNumber = ConfigJornada.getProperty("config.portNumber");
+	private static final String database = ConfigJornada.getProperty("config.database");
+	private static final String userName = ConfigJornada.getProperty("config.userName");
+	private static final String password = ConfigJornada.getProperty("config.password");
+	private static final String connectionUrl = String.format("%s%s:%s/%s", url, host, portNumber, database);
+	private static final String bonecp_IdleConnectionTestPeriodInMinutes = ConfigJornada.getProperty("bonecp.IdleConnectionTestPeriodInMinutes");
+	private static final String bonecp_IdleMaxAgeInMinutes = ConfigJornada.getProperty("bonecp.IdleMaxAgeInMinutes");
+	private static final String bonecp_MaxConnectionsPerPartition = ConfigJornada.getProperty("bonecp.MaxConnectionsPerPartition");
+	private static final String bonecp_MinConnectionsPerPartition = ConfigJornada.getProperty("bonecp.MinConnectionsPerPartition");
+	private static final String bonecp_PoolAvailabilityThreshold = ConfigJornada.getProperty("bonecp.PoolAvailabilityThreshold"); 
+	private static final String bonecp_PartitionCount = ConfigJornada.getProperty("bonecp.PartitionCount");
+	private static final String bonecp_AcquireIncrement = ConfigJornada.getProperty("bonecp.AcquireIncrement");
+	private static final String bonecp_StatementsCacheSize = ConfigJornada.getProperty("bonecp.StatementsCacheSize");
+	private static final String bonecp_ReleaseHelperThreads = ConfigJornada.getProperty("bonecp.ReleaseHelperThreads");
+	private static final String bonecp_ConnectionTestStatement = ConfigJornada.getProperty("bonecp.ConnectionTestStatement");
+	private static final String bonecp_LazyInit = ConfigJornada.getProperty("bonecp.LazyInit");				
+	
+	
 
 	private static BoneCP connectionPool = null;
 
@@ -31,22 +44,30 @@ public class ConnectionManager {
 				Class.forName(driver); // also you need the MySQL
 														// driver
 				BoneCPConfig config = new BoneCPConfig();
-	//			config.setJdbcUrl("jdbc:postgresql://localhost:5432/notas");
-	//			config.setUsername("BTCDashboard");
-	//			config.setPassword("Btcbrazil01");
+//				config.setPoolName("paisonline");
 				config.setJdbcUrl(connectionUrl);
 				config.setUsername(userName);
-				config.setPassword(password);
-				config.setMinConnectionsPerPartition(5); // if you say 5 here, there
-															// will be 10 connection
-															// available
-															// config.setMaxConnectionsPerPartition(10);
-				config.setPartitionCount(2); // 2*5 = 10 connection will be
-												// available
-				// config.setLazyInit(true); //depends on the application usage you
-				// should chose lazy or not
-				// setting Lazy true means BoneCP won't open any connections before
-				// you request a one from it.
+				config.setPassword(password);				
+				
+				
+				config.setIdleConnectionTestPeriodInMinutes(Integer.parseInt(bonecp_IdleConnectionTestPeriodInMinutes.trim()));
+				config.setIdleMaxAgeInMinutes(Integer.parseInt(bonecp_IdleMaxAgeInMinutes.trim()));
+				config.setMaxConnectionsPerPartition(Integer.parseInt(bonecp_MaxConnectionsPerPartition.trim()));
+				config.setMinConnectionsPerPartition(Integer.parseInt(bonecp_MinConnectionsPerPartition.trim()));
+				config.setPoolAvailabilityThreshold(Integer.parseInt(bonecp_PoolAvailabilityThreshold.trim())); 
+				config.setPartitionCount(Integer.parseInt(bonecp_PartitionCount.trim()));
+				config.setAcquireIncrement(Integer.parseInt(bonecp_AcquireIncrement.trim()));
+				config.setStatementsCacheSize(Integer.parseInt(bonecp_StatementsCacheSize.trim()));
+				config.setReleaseHelperThreads(Integer.parseInt(bonecp_ReleaseHelperThreads.trim()));
+				config.setConnectionTestStatement(bonecp_ConnectionTestStatement.trim());
+				config.setLazyInit(Boolean.parseBoolean(bonecp_LazyInit.trim()));				
+				
+				
+//				config.setIdleConnectionTestPeriod(1);
+//				config.setMinConnectionsPerPartition(1); // if you say 5 here, there will be 10 connection available
+//				config.setMaxConnectionsPerPartition(2);
+//				config.setPartitionCount(2); // 2*5 = 10 connection will be available
+//				 config.setLazyInit(true); //depends on the application usage you should chose lazy or not setting Lazy true means BoneCP won't open any connections before you request a one from it.
 				connectionPool = new BoneCP(config); // setup the connection pool
 				System.out.println("contextInitialized.....Connection Pooling is configured");
 				System.out.println("Total connections ==> "+ connectionPool.getTotalCreatedConnections());

@@ -20,6 +20,7 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 	
 	private AdicionarOcorrencia adicionarOcorrencia;
 	private EditarOcorrencia editarOcorrencia;
+	private VisualizarOcorrencia visualizarOcorrencia;
 	
 	private MainView mainView;
 
@@ -44,6 +45,7 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 		
 		adicionarOcorrencia = new AdicionarOcorrencia(this, EnumOcorrencia.ADICIONAR);
 		editarOcorrencia = new EditarOcorrencia(this);
+		visualizarOcorrencia = new VisualizarOcorrencia(this);
 		
 		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
 		TabLayoutPanel stackPanel = new TabLayoutPanel(2.5, Unit.EM);		
@@ -54,7 +56,7 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 		
 		stackPanel.add(adicionarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaAdicionarNovaOcorrência(), "images/plus-circle.png"));
 		stackPanel.add(editarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaEditar(), "images/comment_edit.png"));				
-//		stackPanel.add(associarCursoAluno, createHeaderWidget("Adicionar Aluno ao Curso", "images/user1_add2_16.png"));
+		stackPanel.add(visualizarOcorrencia, new MpHeaderWidget("Visualizar Ocorrências", "images/organizacao.png"));
 		
 		
 		VerticalPanel verticalPanelPage = new VerticalPanel();		
@@ -72,17 +74,14 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 		return mainView;
 	}
 
-//	private Widget createHeaderWidget(String text, String image) {
-//		// Add the image and text to a horizontal panel
-//		HorizontalPanel hPanel = new HorizontalPanel();
-//		hPanel.setHeight("100%");
-//		hPanel.setSpacing(0);
-//		hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-//		hPanel.add(new Image(image));
-//		Label headerText = new Label(text);
-//		headerText.setStyleName("gwt-TabLayoutPanel");
-//		hPanel.add(headerText);
-//		return new SimplePanel(hPanel);
-//	}	
+
+	protected void updateEditarOcorrenciaPopulateGrid(){
+		editarOcorrencia.populateGridOcorrencia();
+	}
+	
+	protected void updateVisualizarOcorrenciaPopulateGrid(){
+//		editarOcorrencia.populateGridOcorrencia();
+		visualizarOcorrencia.populateGridOcorrencia();
+	}
 
 }

@@ -2,22 +2,30 @@ package com.jornada.client.ambiente.pais.ocorrencia;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.DatePickerCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
@@ -25,12 +33,15 @@ import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunoAmbientePais;
 import com.jornada.client.classes.resources.CellTableStyle;
+import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
+import com.jornada.client.classes.widgets.panel.MpSpacePanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceOcorrencia;
 import com.jornada.shared.classes.OcorrenciaAluno;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class VisualizarPaisOcorrencia extends VerticalPanel {
 	
@@ -48,10 +59,13 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 	private Column<OcorrenciaAluno, String> nomeConteudoProgramaticoColumn;
 	private Column<OcorrenciaAluno, String> nomeOcorrenciaColumn;
 	private Column<OcorrenciaAluno, String> nomeDescricaoColumn;
-	private Column<OcorrenciaAluno, String> dataColumn;
+	private Column<OcorrenciaAluno, Date> dataColumn;
 	private Column<OcorrenciaAluno, String> horaColumn;	
 	
 	private ListDataProvider<OcorrenciaAluno> dataProvider = new ListDataProvider<OcorrenciaAluno>();
+	
+	private TextBox txtSearch;
+	ArrayList<OcorrenciaAluno> arrayListBackup = new ArrayList<OcorrenciaAluno>();
 
 	private MpSelectionAlunoAmbientePais listBoxAluno;
 
@@ -122,6 +136,27 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 		mpPager.setPageSize(15);
 		
 		
+		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
+		
+		if (txtSearch == null) {
+			txtSearch = new TextBox();
+			txtSearch.setStyleName("design_text_boxes");
+		}
+		
+		txtSearch.addKeyDownHandler(new EnterKeyPressHandler());
+		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
+		
+		FlexTable flexTableFiltrar = new FlexTable();	
+		flexTableFiltrar.setBorderWidth(2);
+		flexTableFiltrar.setCellSpacing(3);
+		flexTableFiltrar.setCellPadding(3);
+		flexTableFiltrar.setBorderWidth(0);		
+		flexTableFiltrar.setWidget(0, 0, mpPager);
+		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrar.setWidget(0, 2, txtSearch);
+		flexTableFiltrar.setWidget(0, 3, btnFiltrar);				
+		
+		
 		ScrollPanel scrollPanel = new ScrollPanel();
 		scrollPanel.setSize(Integer.toString(TelaInicialPaisOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialPaisOcorrencia.intHeightTable-110)+"px");
 		scrollPanel.setAlwaysShowScrollBars(false);		
@@ -129,7 +164,8 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 		
 		VerticalPanel vPanelEditGrid = new VerticalPanel();		
 		vPanelEditGrid.add(gridComboBox);
-		vPanelEditGrid.add(mpPager);
+//		vPanelEditGrid.add(mpPager);
+		vPanelEditGrid.add(flexTableFiltrar);
 		vPanelEditGrid.add(scrollPanel);
 		
 		
@@ -164,9 +200,9 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 	protected void populateGrid() {
 		mpPanelLoading.setVisible(true);	
 		isFirstTime=true;
-		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+//		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		int idAluno = Integer.parseInt(listBoxAluno.getValue(listBoxAluno.getSelectedIndex()));
-		GWTServiceOcorrencia.Util.getInstance().getOcorrenciasPeloAluno(idAluno,locale,
+		GWTServiceOcorrencia.Util.getInstance().getOcorrenciasPeloAluno(idAluno,
 		
 				new AsyncCallback<ArrayList<OcorrenciaAluno>>() {
 
@@ -182,8 +218,11 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 					public void onSuccess(ArrayList<OcorrenciaAluno> list) {
 						mpPanelLoading.setVisible(false);	
 						dataProvider.getList().clear();
+						arrayListBackup.clear();
+						cellTable.setRowCount(0);
 						for(int i=0;i<list.size();i++){
 							dataProvider.getList().add(list.get(i));
+							arrayListBackup.add(list.get(i));
 						}
 						addCellTableData(dataProvider);
 						cellTable.redraw();
@@ -269,10 +308,10 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 		};			
 
 
-		dataColumn = new Column<OcorrenciaAluno, String>(new TextCell()) {
+		dataColumn = new Column<OcorrenciaAluno, Date>(new DatePickerCell()) {
 			@Override
-			public String getValue(OcorrenciaAluno object) {			    
-				return object.getData();
+			public Date getValue(OcorrenciaAluno object) {			    
+				return MpUtilClient.convertStringToDate(object.getData());
 			}
 		};	
 
@@ -387,7 +426,76 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 	      }
 	    });		    
 		
-	}	
+	}
+	
+	
+	/*******************************************************************************************************/	
+	/*******************************************************************************************************/
+	/***************************************BEGIN Filterting CellTable***************************************/
+	
+	private class EnterKeyPressHandler implements KeyDownHandler {
+		 public void onKeyDown(KeyDownEvent event) {
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				filtrarCellTable(txtSearch.getText());
+			}
+		}
+	}
+
+	
+	private class ClickHandlerFiltrar implements ClickHandler {
+		public void onClick(ClickEvent event) {
+			filtrarCellTable(txtSearch.getText());
+		}
+	}		
+		
+		public void filtrarCellTable(String strFiltro) {
+			
+			removeCellTableFilter();
+
+			strFiltro = strFiltro.toUpperCase();
+
+			if (!strFiltro.isEmpty()) {
+
+				int i = 0;
+				while (i < dataProvider.getList().size()) {
+
+					String strOcorrencia = dataProvider.getList().get(i).getAssunto();
+					String strDescricao = dataProvider.getList().get(i).getDescricao();
+//					String strData = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getData(), "EEEE, MMMM dd, yyyy");
+					String strData = dataProvider.getList().get(i).getData();
+					String strHora = dataProvider.getList().get(i).getHora();
+					String strCurso = dataProvider.getList().get(i).getNomeCurso();
+					String strPeriodo = dataProvider.getList().get(i).getNomePeriodo();
+					String strDisciplina = dataProvider.getList().get(i).getNomeDisciplina();
+					String strMateria = dataProvider.getList().get(i).getNomeConteudoProgramatico();
+
+					String strJuntaTexto = strOcorrencia.toUpperCase() + " " + strDescricao.toUpperCase() + " " + strData.toUpperCase() + " " + strHora.toUpperCase();
+					strJuntaTexto +=  " " + strCurso.toUpperCase() + " " + strPeriodo.toUpperCase() + " " + strDisciplina.toUpperCase() + " " + strMateria.toUpperCase();
+
+					if (!strJuntaTexto.contains(strFiltro)) {
+						dataProvider.getList().remove(i);
+						i = 0;
+						continue;
+					}
+
+					i++;
+				}
+
+			}
+
+		}
+		
+		public void removeCellTableFilter(){
+			
+			dataProvider.getList().clear();
+
+			for (int i = 0; i < arrayListBackup.size(); i++) {
+				dataProvider.getList().add(arrayListBackup.get(i));
+			}
+			cellTable.setPageStart(0);
+		}
+	/***************************************BEGIN Filterting CellTable***************************************/		
+	
 
 
 }

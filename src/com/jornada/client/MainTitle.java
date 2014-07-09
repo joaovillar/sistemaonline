@@ -33,12 +33,15 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 public class MainTitle extends Composite {
 	
 	
+	private String strControlClosingEvent="";
+	
+	
 	private static final String SAIR = "SAIR"; 
 	private static final String CONFIGURACAO_IDIOMA = "CONFIGURARAO_IDIOMA";
 //	private static final String CONFIGURACAO_DESIGN = "CONFIGURARAO_DESIGN";
 	private static final String CONFIGURACAO_SENHA = "CONFIGURARAO_SENHA";
 	private static final String AJUDA_SOBRE= "AJUDA_SOBRE";
-	private static final String AJUDA_CONTEUDO= "AJUDA_CONTEUDO";
+//	private static final String AJUDA_CONTEUDO= "AJUDA_CONTEUDO";
 	
 	private AsyncCallback<Boolean> callBackSair;
 	
@@ -61,6 +64,8 @@ public class MainTitle extends Composite {
 	
 //	@SuppressWarnings("deprecation")
 	private MainTitle(MainView mainView) {
+		
+		verifyWindowsClose();
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
@@ -180,8 +185,8 @@ public class MainTitle extends Composite {
         menuConfiguracao.addItem(txtConstants.senhaAlterar(), new MenuBarCommand(CONFIGURACAO_SENHA));
 //        menuConfiguracao.addItem("Design", new MenuBarCommand(CONFIGURACAO_DESIGN));
         
-        menuAjuda.addItem(txtConstants.ajudaConteudo(), new MenuBarCommand(AJUDA_CONTEUDO));
-        menuAjuda.addSeparator();
+//        menuAjuda.addItem(txtConstants.ajudaConteudo(), new MenuBarCommand(AJUDA_CONTEUDO));
+//        menuAjuda.addSeparator();
         menuAjuda.addItem(txtConstants.ajudaSobre(), new MenuBarCommand(AJUDA_SOBRE));
 	
 	    
@@ -209,7 +214,7 @@ public class MainTitle extends Composite {
 		callBackSair = new AsyncCallback<Boolean>() {
 
 			public void onSuccess(Boolean success) {
-				
+				System.out.println("success");
 				String strUrl = GWT.getHostPageBaseURL()+Window.Location.getQueryString();
 				try {
 					strUrl = strUrl.substring(0, strUrl.indexOf("?"));
@@ -222,10 +227,10 @@ public class MainTitle extends Composite {
 			}
 
 			public void onFailure(Throwable caught) {
-
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.loginErroSairSistema());
-				mpDialogBoxWarning.showDialog();
+				caught.printStackTrace();
+//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//				mpDialogBoxWarning.setBodyText(txtConstants.loginErroSairSistema());
+//				mpDialogBoxWarning.showDialog();
 			}
 		};		
 		
@@ -257,7 +262,13 @@ public class MainTitle extends Composite {
 	    		  GWTServiceLogin.Util.getInstance().logout(callBackSair);			
 	    	  }
 	    	  else if(this.id.equals(CONFIGURACAO_IDIOMA)){
-	    		  DialogBoxIdioma.getInstance(uniqueInstance.getMainView().getUsuarioLogado());
+	    		  
+	    		  strControlClosingEvent = "changing";
+                  
+//                  final long DURATION = 1000 * 60 * 60 * 24 * 1;
+//                  Date expires = new Date(System.currentTimeMillis() + DURATION);
+//                  Cookies.setCookie("language", "changing", expires);
+                  DialogBoxIdioma.getInstance(uniqueInstance.getMainView().getUsuarioLogado());
 	    	  }
 	    	  else if(this.id.equals(CONFIGURACAO_SENHA)){
 	    		  DialogBoxSenha.getInstance(uniqueInstance.getMainView().getUsuarioLogado());
@@ -269,7 +280,71 @@ public class MainTitle extends Composite {
 	      }
 	   }
 	
-	
+	public void verifyWindowsClose() {
+		
 
+		
+		Window.addWindowClosingHandler(new Window.ClosingHandler() {
+			@Override
+			public void onWindowClosing(Window.ClosingEvent event) {
+
+
+//				if (getCookieLanguage().equals("changing")) {
+				if (strControlClosingEvent.equals("changing")) {
+					strControlClosingEvent = "";
+					//Cookies.removeCookie("language");
+				} else {
+//					event.setMessage("You sure?");
+//					System.out.println("logging out");
+//					GWTServiceLogin.Util.getInstance().logout(callBackSair);
+//					String s = "";
+//			        for(int i = 0; i < 30000; i++)
+//			        {
+//			            s += i;
+//			        }					
+
+				}
+
+				// GWTServiceLogin.Util.getInstance().logout(callBackSair);
+			}
+		});
+//		Window.addCloseHandler(new CloseHandler<Window>() {
+//			@Override
+//			public void onClose(CloseEvent<Window> event) {
+//
+////				if (getCookieLanguage().equals("changing")) {
+////					Cookies.removeCookie("language");
+//				if (strControlClosingEvent.equals("changing")) {
+//					strControlClosingEvent = "";
+//				} else {
+//					System.out.println("logging out");
+//					GWTServiceLogin.Util.getInstance().logout(callBackSair);
+//					String s = "";
+//			        for(int i = 0; i < 100000; i++)
+//			        {
+//			            s += i;
+//			        }
+//				}
+//			}
+//		});
+		
+	}
+	
+	
+	
+//	private String getCookieLanguage(){
+//		String strCookieLanguage = "";
+//		try {
+//			strCookieLanguage = Cookies.getCookie("language");
+//		} catch (Exception ex) {
+//			strCookieLanguage = "";
+//		}
+//
+//		if (strCookieLanguage == null) {
+//			strCookieLanguage = "";
+//		}
+//
+//		return strCookieLanguage;		
+//	}
 
 }

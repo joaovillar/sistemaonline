@@ -11,6 +11,8 @@ import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Ocorrencia;
 import com.jornada.shared.classes.OcorrenciaAluno;
+import com.jornada.shared.classes.RelUsuarioOcorrencia;
+import com.jornada.shared.classes.Usuario;
 
 public class OcorrenciaServer {
 	
@@ -24,12 +26,15 @@ public class OcorrenciaServer {
 	public static String DB_SELECT_OCORRENCIA_ILIKE = "SELECT * FROM ocorrencia where (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
 	public static String DB_SELECT_OCORRENCIA_POR_CONTEUDO_PROGRAMATICO = "SELECT * FROM ocorrencia where (id_conteudo_programatico = ?) order by data, hora asc;";
 	
+	
+	public static String DB_SELECT_REL_USUARIO_OCORRENCIA = "SELECT * FROM rel_usuario_ocorrencia where id_ocorrencia = ? and id_usuario = ?;";
+	
 	public static String DB_SELECT_OCORRENCIA_PELO_ALUNO=
 	"select "+
 	"c.nome_curso as nomecurso, "+
 	"p.nome_periodo as nomeperiodo, "+ 
 	"d.nome_disciplina as nomedisciplina, "+
-	"cp.descricao as nomeconteudo, "+
+	"cp.nome_conteudo_programatico as nomeconteudo, "+
 	"o.*," +
 	"ruo.id_usuario, "+
 	"ruo.pai_ciente "+
@@ -56,15 +61,17 @@ public class OcorrenciaServer {
 			Date date = new Date();
 
 			if (object.getData() == null) {
-				object.setData(date);
+				object.setData(MpUtilServer.convertDateToString(date));
 			}
 
 			int count = 0;
 			PreparedStatement ps = connection.prepareStatement(DB_INSERT_OCORRENCIA);
 			ps.setString(++count, object.getAssunto());
 			ps.setString(++count, object.getDescricao());
-			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
-			ps.setTime(++count, object.getHora());
+//			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
+//			ps.setTime(++count, object.getHora());
+			ps.setDate(++count, MpUtilServer.convertStringToSqlDate(object.getData()));
+			ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
 			ps.setInt(++count, object.getIdConteudoProgramatico());
 
 			ResultSet rs = ps.executeQuery();			
@@ -138,15 +145,17 @@ public class OcorrenciaServer {
 			Date date = new Date();
 
 			if (object.getData() == null) {
-				object.setData(date);
+				object.setData(MpUtilServer.convertDateToString(date));
 			}
 			//"UPDATE ocorrencia set assunto=?, descricao=?, data=?, hora=?, id_conteudo_programatico=? where id_ocorrencia=?;";
 			int count = 0;
 			PreparedStatement ps = connection.prepareStatement(OcorrenciaServer.DB_UPDATE_OCORRENCIA);
 			ps.setString(++count, object.getAssunto());
 			ps.setString(++count, object.getDescricao());
-			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
-			ps.setTime(++count, object.getHora());
+//			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
+//			ps.setTime(++count, object.getHora());
+			ps.setDate(++count, MpUtilServer.convertStringToSqlDate(object.getData()));
+			ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
 			ps.setInt(++count, object.getIdConteudoProgramatico());
 			ps.setInt(++count, object.getIdOcorrencia());
 
@@ -292,8 +301,10 @@ public class OcorrenciaServer {
 				currentObject.setIdConteudoProgramatico(rs.getInt("id_conteudo_programatico"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
-				currentObject.setData(rs.getDate("data"));
-				currentObject.setHora(rs.getTime("hora"));
+//				currentObject.setData(rs.getDate("data"));
+//				currentObject.setHora(rs.getTime("hora"));
+				currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+				currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
 				
 				currentObject.setListUsuariosRelacionadosOcorrencia(UsuarioServer.getUsuariosPorOcorrencia(currentObject.getIdOcorrencia()));
 
@@ -337,8 +348,10 @@ public class OcorrenciaServer {
 				currentObject.setIdConteudoProgramatico(rs.getInt("id_conteudo_programatico"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
-				currentObject.setData(rs.getDate("data"));
-				currentObject.setHora(rs.getTime("hora"));
+//				currentObject.setData(rs.getDate("data"));
+//				currentObject.setHora(rs.getTime("hora"));
+				currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+				currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
 
 				data.add(currentObject);
 			}
@@ -380,8 +393,10 @@ public class OcorrenciaServer {
 				currentObject.setIdConteudoProgramatico(rs.getInt("id_conteudo_programatico"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
-				currentObject.setData(rs.getDate("data"));
-				currentObject.setHora(rs.getTime("hora"));
+//				currentObject.setData(rs.getDate("data"));
+//				currentObject.setHora(rs.getTime("hora"));
+				currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+				currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
 				
 				currentObject.setListUsuariosRelacionadosOcorrencia(UsuarioServer.getUsuariosPorOcorrencia(currentObject.getIdOcorrencia()));
 
@@ -399,7 +414,7 @@ public class OcorrenciaServer {
 
 	}			
 	
-	public static ArrayList<OcorrenciaAluno> getOcorrenciasPeloAluno(int idAluno, String locale) {
+	public static ArrayList<OcorrenciaAluno> getOcorrenciasPeloAluno(int idAluno) {
 
 		ArrayList<OcorrenciaAluno> data = new ArrayList<OcorrenciaAluno>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
@@ -427,7 +442,8 @@ public class OcorrenciaServer {
 				currentObject.setIdUsuario(rs.getInt("id_usuario"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
-//				currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data"), locale));
+//				currentObject.setData(rs.getDate("data"));
+				currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
 				currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
 				currentObject.setPaiCiente(rs.getBoolean("pai_ciente"));
 
@@ -446,6 +462,80 @@ public class OcorrenciaServer {
 	}
 	
 	
+	public static RelUsuarioOcorrencia getRelUsuarioOcorrencia(int idOcorrencia, int idUsuario) {
+
+		RelUsuarioOcorrencia currentObject = new RelUsuarioOcorrencia();
+		// JornadaDataBase dataBase = new JornadaDataBase();
+		Connection connection = ConnectionManager.getConnection();
+		try {
+
+			// dataBase.createConnection();
+			// Connection connection = dataBase.getConnection();
+
+			PreparedStatement ps = connection.prepareStatement(OcorrenciaServer.DB_SELECT_REL_USUARIO_OCORRENCIA);
+			int count = 0;
+			ps.setInt(++count, idOcorrencia);
+			ps.setInt(++count, idUsuario);
+
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+
+			currentObject.setIdRelUsuarioOcorrencia(rs.getInt("id_rel_usuario_ocorrencia"));
+			currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
+			currentObject.setIdUsuario(rs.getInt("id_usuario"));
+			currentObject.setPaiCiente(rs.getBoolean("pai_ciente"));
+
+		} catch (SQLException sqlex) {
+			System.err.println(sqlex.getMessage());
+		} finally {
+			// dataBase.close();
+			ConnectionManager.closeConnection(connection);
+		}
+
+		return currentObject;
+
+	}
 	
+	public static ArrayList<OcorrenciaAluno> getTodasAsOcorrenciasDosAlunos(int idConteudoProgramatico){	
+		
+		ArrayList<OcorrenciaAluno> listaOcorrenciaTodosAlunos = new ArrayList<OcorrenciaAluno>();		
+		
+		ArrayList<Ocorrencia> listaOcorrencias = getOcorrenciasPeloConteudoProgramatico(idConteudoProgramatico);
+		
+		for(int cvOcorrencia=0;cvOcorrencia<listaOcorrencias.size();cvOcorrencia++){
+			
+			Ocorrencia ocorrencia = listaOcorrencias.get(cvOcorrencia);
+			
+			for(int cvUsuario=0;cvUsuario<ocorrencia.getListUsuariosRelacionadosOcorrencia().size();cvUsuario++){
+				
+				Usuario usuario = ocorrencia.getListUsuariosRelacionadosOcorrencia().get(cvUsuario);
+				
+				int idOcorrencia = ocorrencia.getIdOcorrencia();
+				int idUsuario = usuario.getIdUsuario();
+				
+				RelUsuarioOcorrencia relUsuarioOcorrencia = getRelUsuarioOcorrencia(idOcorrencia, idUsuario);
+				
+				OcorrenciaAluno ocorrenciaAluno = new OcorrenciaAluno();
+				
+				ocorrenciaAluno.setAssunto(ocorrencia.getAssunto());
+				ocorrenciaAluno.setDescricao(ocorrencia.getDescricao());
+				ocorrenciaAluno.setData(ocorrencia.getData());
+				ocorrenciaAluno.setHora(ocorrencia.getHora());
+				ocorrenciaAluno.setPaiCiente(relUsuarioOcorrencia.isPaiCiente());
+				ocorrenciaAluno.setIdUsuario(usuario.getIdUsuario());
+				ocorrenciaAluno.setUsuario(usuario);
+				
+				listaOcorrenciaTodosAlunos.add(ocorrenciaAluno);
+				
+			}
+			
+		}
+		
+		return listaOcorrenciaTodosAlunos;
+		
+	}
+	
+	
+
 	
 }
