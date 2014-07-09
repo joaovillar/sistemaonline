@@ -1,5 +1,6 @@
 package com.jornada.client;
 
+/**GitHub**/
 import java.util.Date;
 
 import com.google.gwt.core.client.EntryPoint;
