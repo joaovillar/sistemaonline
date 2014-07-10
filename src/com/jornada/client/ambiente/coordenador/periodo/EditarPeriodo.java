@@ -84,8 +84,19 @@ public class EditarPeriodo extends VerticalPanel {
 	
 	@SuppressWarnings("unused")
 	private TelaInicialPeriodo telaInicialPeriodo;
+	
+	private static EditarPeriodo uniqueInstance;
+	
+	public static EditarPeriodo getInstance(TelaInicialPeriodo telaInicialPeriodo) {
 
-	public EditarPeriodo(TelaInicialPeriodo telaInicialPeriodo) {
+		if(uniqueInstance==null){
+			uniqueInstance = new EditarPeriodo(telaInicialPeriodo);
+		}		
+		
+		return uniqueInstance;
+	}
+
+	private EditarPeriodo(TelaInicialPeriodo telaInicialPeriodo) {
 		
 		txtConstants = GWT.create(TextConstants.class);
 		

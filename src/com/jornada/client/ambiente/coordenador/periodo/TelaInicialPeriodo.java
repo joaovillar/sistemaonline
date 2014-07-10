@@ -26,7 +26,7 @@ public class TelaInicialPeriodo extends Composite{
 	private static TelaInicialPeriodo uniqueInstance;
 	public static TelaInicialPeriodo getInstance(){		
 		if(uniqueInstance==null){
-			uniqueInstance = new TelaInicialPeriodo();
+			uniqueInstance = new TelaInicialPeriodo();			
 		}		
 		else{
 			uniqueInstance.adicionarPeriodo.updateClientData();
@@ -39,8 +39,8 @@ public class TelaInicialPeriodo extends Composite{
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
-		 adicionarPeriodo =  new AdicionarPeriodo(this);
-		 editarPeriodo = new EditarPeriodo(this);
+		 adicionarPeriodo =  AdicionarPeriodo.getInstance(this);
+		 editarPeriodo = EditarPeriodo.getInstance(this);
 		
 		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
 		TabLayoutPanel stackPanel = new TabLayoutPanel(2.5, Unit.EM);		
@@ -60,24 +60,11 @@ public class TelaInicialPeriodo extends Composite{
 		
 	}
 
-	
-//	private Widget createHeaderWidget(String text, String image) {
-//		// Add the image and text to a horizontal panel
-//		HorizontalPanel hPanel = new HorizontalPanel();
-//		hPanel.setHeight("100%");
-//		hPanel.setSpacing(0);
-//		hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-//		hPanel.add(new Image(image));
-//		Label headerText = new Label(text);
-//		headerText.setStyleName("gwt-TabLayoutPanel");
-//		hPanel.add(headerText);
-//		return new SimplePanel(hPanel);
-//	}
-	
+
 	protected void populateGrid(){
 		editarPeriodo.populateGrid();
 	}
-	
+
 	
 	
 }

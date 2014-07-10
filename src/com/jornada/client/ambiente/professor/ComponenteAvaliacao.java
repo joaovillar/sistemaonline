@@ -54,6 +54,7 @@ public class ComponenteAvaliacao extends Composite {
 		@Override
 		public void onClick(ClickEvent event) {
 			//mainView.openCadastroCurso();
+			MainMenu.isFirstEventFire=true;
 			History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_AVALIACAO);
 			
 		}

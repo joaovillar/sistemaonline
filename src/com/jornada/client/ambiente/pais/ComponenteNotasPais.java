@@ -46,6 +46,7 @@ public class ComponenteNotasPais extends Composite{
 	private class addClickHandler implements ClickHandler{
 		@Override
 		public void onClick(ClickEvent event) {
+			MainMenu.isFirstEventFire=true;
 			History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_NOTA);			
 		}		
 	}	

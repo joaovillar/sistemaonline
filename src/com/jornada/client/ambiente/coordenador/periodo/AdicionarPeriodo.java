@@ -53,9 +53,21 @@ public class AdicionarPeriodo extends VerticalPanel {
 	private TelaInicialPeriodo telaInicialPeriodo;
 	
 	TextConstants txtConstants;
+	
+	private static AdicionarPeriodo uniqueInstance;
+	
+	public static AdicionarPeriodo getInstance(final TelaInicialPeriodo telaInicialPeriodo){
+
+		if(uniqueInstance==null){
+			uniqueInstance = new AdicionarPeriodo(telaInicialPeriodo);
+		}
+		
+		return uniqueInstance;
+		
+	}
 
 	@SuppressWarnings("deprecation")
-	public AdicionarPeriodo(final TelaInicialPeriodo telaInicialPeriodo) {
+	private AdicionarPeriodo(final TelaInicialPeriodo telaInicialPeriodo) {
 		
 		txtConstants = GWT.create(TextConstants.class);
 		

@@ -46,7 +46,7 @@ public class ComponenteDiarioProfessor extends Composite{
 
 		@Override
 		public void onClick(ClickEvent event) {
-
+			MainMenu.isFirstEventFire=true;
 			History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO);
 			
 		}

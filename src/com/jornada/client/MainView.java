@@ -231,8 +231,7 @@ public class MainView extends Composite implements HistoryListener{
 		TelaInicialCurso telaInicialCurso = TelaInicialCurso.getInstance(this);
 		
 		this.vPanelBody.add(telaInicialCurso);
-		this.vPanelMenu.setVisible(true);
-	
+		this.vPanelMenu.setVisible(true);	
 		
 	}	
 		
@@ -246,7 +245,10 @@ public class MainView extends Composite implements HistoryListener{
 		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		
 //		CadastroPeriodo cadastroPeriodo = new CadastroPeriodo();
+
 		TelaInicialPeriodo telaInicialPeriodo = TelaInicialPeriodo.getInstance();
+
+
 		this.vPanelBody.add(telaInicialPeriodo);
 		this.vPanelMenu.setVisible(true);	
 		
