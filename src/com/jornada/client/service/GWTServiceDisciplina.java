@@ -13,6 +13,7 @@ import com.jornada.shared.classes.Usuario;
 public interface GWTServiceDisciplina  extends RemoteService {
 
 	public int AdicionarDisciplina(Disciplina disciplina);
+	public int AdicionarDisciplina(Integer[] instPeriodos, Disciplina disciplina);
 	public ArrayList<Disciplina> getDisciplinasPeloPeriodo(int idPeriodo);
 	public ArrayList<Disciplina> getDisciplinasPeloPeriodo(int idPeriodo, String strSearch);
 	public ArrayList<Disciplina> getDisciplinas(String strFilter);

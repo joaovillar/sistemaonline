@@ -41,19 +41,67 @@ public class DisciplinaServer {
 //			Connection conn = dataBase.getConnection();
 			
 				int param = 0;
-				PreparedStatement pstmtInsertPeriodo = conn.prepareStatement(DB_INSERT_DISCIPLINA);
-				pstmtInsertPeriodo.setString(++param, disciplina.getNome());
-				pstmtInsertPeriodo.setInt(++param, disciplina.getCargaHoraria());				
-				pstmtInsertPeriodo.setString(++param, disciplina.getDescricao());
-				pstmtInsertPeriodo.setString(++param, disciplina.getObjetivo());
-				pstmtInsertPeriodo.setInt(++param, disciplina.getIdPeriodo());				
+				PreparedStatement pstmtInsert = conn.prepareStatement(DB_INSERT_DISCIPLINA);
+				pstmtInsert.setString(++param, disciplina.getNome());
+				pstmtInsert.setInt(++param, disciplina.getCargaHoraria());				
+				pstmtInsert.setString(++param, disciplina.getDescricao());
+				pstmtInsert.setString(++param, disciplina.getObjetivo());
+				pstmtInsert.setInt(++param, disciplina.getIdPeriodo());				
 				
 //				int numberUpdate = pstmtInsertPeriodo.executeUpdate();
 				
-				ResultSet rs = pstmtInsertPeriodo.executeQuery();			
+				ResultSet rs = pstmtInsert.executeQuery();			
 				rs.next();
 				
 				idDisciplina = rs.getInt("id_disciplina");
+			
+		}
+		catch(Exception ex)
+		{
+			idDisciplina=0;
+			System.err.println(ex.getMessage());
+		}
+		finally
+		{
+//			dataBase.close();
+			ConnectionManager.closeConnection(conn);
+			
+		}
+		
+		return idDisciplina;
+	}
+	
+	
+	
+	public static int AdicionarDisciplina(Integer[] intPeriodos, Disciplina disciplina) {
+		
+//		Boolean isOperationDone = false; 
+		int idDisciplina=0;
+		
+//		JornadaDataBase dataBase = new JornadaDataBase();
+		Connection conn = ConnectionManager.getConnection();
+		try {
+//			dataBase.createConnection();
+//			Connection conn = dataBase.getConnection();
+			for(int i=0;i<intPeriodos.length;i++){
+			
+				int param = 0;
+				PreparedStatement pstmtInsert = conn.prepareStatement(DB_INSERT_DISCIPLINA);
+				pstmtInsert.setString(++param, disciplina.getNome());
+				pstmtInsert.setInt(++param, disciplina.getCargaHoraria());				
+				pstmtInsert.setString(++param, disciplina.getDescricao());
+				pstmtInsert.setString(++param, disciplina.getObjetivo());
+//				pstmtInsertPeriodo.setInt(++param, disciplina.getIdPeriodo());				
+				pstmtInsert.setInt(++param, intPeriodos[i]);
+				
+//				int numberUpdate = pstmtInsertPeriodo.executeUpdate();
+				
+				ResultSet rs = pstmtInsert.executeQuery();			
+				rs.next();
+				
+//				idDisciplina = rs.getInt("id_disciplina");
+				idDisciplina++;
+			}
 			
 		}
 		catch(Exception ex)

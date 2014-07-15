@@ -19,6 +19,11 @@ public class GWTServiceDisciplinaImpl extends RemoteServiceServlet implements GW
 		return DisciplinaServer.AdicionarDisciplina(disciplina);			
 	}
 	
+	@Override
+	public int AdicionarDisciplina(Integer[] intPeriodos, Disciplina disciplina) {		
+		return DisciplinaServer.AdicionarDisciplina(intPeriodos, disciplina);			
+	}	
+	
 	public ArrayList<Disciplina> getDisciplinasPeloPeriodo(int idPeriodo) {		
 		return DisciplinaServer.getDisciplinasPeloPeriodo(idPeriodo);
 	}	

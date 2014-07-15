@@ -10,6 +10,7 @@ import com.jornada.shared.classes.Usuario;
 public interface GWTServiceDisciplinaAsync {
 
 	public void AdicionarDisciplina(Disciplina disciplina, AsyncCallback<Integer> callback);	
+	public void AdicionarDisciplina(Integer[] intPeriodos, Disciplina disciplina, AsyncCallback<Integer> callback);
 	public void getDisciplinasPeloPeriodo(int idPeriodo, AsyncCallback<ArrayList<Disciplina>> callback);	
 	public void getDisciplinasPeloPeriodo(int idPeriodo, String strSearch, AsyncCallback<ArrayList<Disciplina>> callback);		
 	public void getDisciplinas(String strFilter, AsyncCallback<ArrayList<Disciplina>> callback);	

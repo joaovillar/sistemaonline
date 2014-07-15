@@ -14,16 +14,11 @@
  *******************************************************************************/
 package com.jornada.server.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceAula;
 import com.jornada.server.classes.AulaServer;
-import com.jornada.server.classes.PresencaServer;
-import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Aula;
 
 public class GWTServiceAulaImpl extends RemoteServiceServlet implements GWTServiceAula {

@@ -1,5 +1,7 @@
 package com.jornada.client.ambiente.coordenador.disciplina;
 
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -52,6 +54,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 	private TextBox txtCargaHoraria;	
 	private TextArea txtDescricao;
 	private TextArea txtObjetivo;
+	
 
 	TextConstants txtConstants;
 	
@@ -84,16 +87,22 @@ public class AdicionarDisciplina extends VerticalPanel {
 		txtCargaHoraria = new TextBox();
 		txtDescricao = new TextArea();
 		txtObjetivo = new TextArea();
+//		final ListBox multiBox = new ListBox(true);
+	    
+//	    multiBox.setVisibleItemCount(10);
 		
 		txtNome.setStyleName("design_text_boxes");
 		txtCargaHoraria.setStyleName("design_text_boxes");
 		txtDescricao.setStyleName("design_text_boxes");
 		txtObjetivo.setStyleName("design_text_boxes");
+//		multiBox.setStyleName("design_text_boxes");
+		
 		
 		txtNome.setWidth("350px");
 		txtCargaHoraria.setWidth("30px");		
 		txtDescricao.setSize("350px", "50px");
 		txtObjetivo.setSize("350px", "50px");
+//		multiBox.setWidth("350px");
 		
 
 		Label lblCurso = new Label(txtConstants.curso());		
@@ -102,6 +111,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		Label lblCargaHoraria = new Label(txtConstants.disciplinaCarga());		
 		Label lblDescricao = new Label(txtConstants.disciplinaDescricao());		
 		Label lblObjetivo = new Label(txtConstants.disciplinaObjetivo());
+//		Label lblSelecionaPeriodo = new Label("Selecionar Periodos");
 		
 		lblErroNomeDisciplina = new MpLabelTextBoxError();
 		lblErroPeriodo = new MpLabelTextBoxError();
@@ -113,6 +123,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		lblCargaHoraria.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
 		lblDescricao.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblObjetivo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//		lblSelecionaPeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
 		lblCurso.setStyleName("design_label");
 		lblPeriodo.setStyleName("design_label");
@@ -120,7 +131,8 @@ public class AdicionarDisciplina extends VerticalPanel {
 		lblCargaHoraria.setStyleName("design_label");		
 		lblDescricao.setStyleName("design_label");
 		lblObjetivo.setStyleName("design_label");
-		lblCargaHoraria.setStyleName("design_label");	
+		lblCargaHoraria.setStyleName("design_label");
+//		lblSelecionaPeriodo.setStyleName("design_label");
 
 
 
@@ -132,7 +144,12 @@ public class AdicionarDisciplina extends VerticalPanel {
 		listBoxCurso = new MpSelectionCurso();
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		
-		listBoxPeriodo = new MpSelectionPeriodo();		
+		listBoxPeriodo = new MpSelectionPeriodo();
+//		listBoxPeriodo.setStyleName("design_list_boxes", false);
+		listBoxPeriodo.setMultipleSelect(true);
+		listBoxPeriodo.setVisibleItemCount(5);
+		listBoxPeriodo.setSize("350px", "70px");
+		
 
 		
 		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row++, 1, listBoxCurso);
@@ -141,6 +158,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		flexTable.setWidget(row, 0, lblCargaHoraria);flexTable.setWidget(row, 1, txtCargaHoraria);flexTable.setWidget(row++, 2, lblErroCargaHoraria);		
 		flexTable.setWidget(row, 0, lblDescricao);flexTable.setWidget(row++, 1, txtDescricao);
 		flexTable.setWidget(row, 0, lblObjetivo);flexTable.setWidget(row++, 1, txtObjetivo);
+//		flexTable.setWidget(row, 0, lblSelecionaPeriodo);flexTable.setWidget(row++, 1, multiBox);
 
 
 		MpImageButton btnSave = new MpImageButton(txtConstants.geralSalvar(), "images/save.png");
@@ -221,7 +239,18 @@ public class AdicionarDisciplina extends VerticalPanel {
 				
 				hPanelLoading.setVisible(true);
 
-				int intIdPeriodo = Integer.parseInt(listBoxPeriodo.getValue(listBoxPeriodo.getSelectedIndex()));
+//				int intIdPeriodo = Integer.parseInt(listBoxPeriodo.getValue(listBoxPeriodo.getSelectedIndex()));
+				
+				ArrayList<Integer> arraySelectedPeriodo = new ArrayList<Integer>();
+				
+				for(int i=0;i<listBoxPeriodo.getItemCount();i++){
+					if(listBoxPeriodo.isItemSelected(i)){
+						int intIdPeriodo = Integer.parseInt(listBoxPeriodo.getValue(i));
+						arraySelectedPeriodo.add(intIdPeriodo);
+					}
+				}
+				
+				Integer[] intPeriodos = arraySelectedPeriodo.toArray(new Integer[]{});
 				
 				int intCargaHoraria = 0;
 				if(!txtCargaHoraria.getText().isEmpty()){
@@ -229,13 +258,13 @@ public class AdicionarDisciplina extends VerticalPanel {
 				}
 
 				Disciplina disciplina = new Disciplina();
-				disciplina.setIdPeriodo(intIdPeriodo);
+//				disciplina.setIdPeriodo(intIdPeriodo);
 				disciplina.setNome(txtNome.getText());
 				disciplina.setCargaHoraria(intCargaHoraria);
 				disciplina.setDescricao(txtDescricao.getText());
 				disciplina.setObjetivo(txtObjetivo.getText());
 
-				GWTServiceDisciplina.Util.getInstance().AdicionarDisciplina(disciplina, callbackAddDisciplina);
+				GWTServiceDisciplina.Util.getInstance().AdicionarDisciplina(intPeriodos, disciplina, callbackAddDisciplina);
 
 			}
 		}
