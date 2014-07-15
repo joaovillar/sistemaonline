@@ -500,9 +500,6 @@ public class EditarDiarioProfessor extends VerticalPanel {
 
 												@Override
 												public void onSuccess(Boolean success) {
-//													mpPanelLoadingAluno.setVisible(false);													
-//													cellTablePageIndex = cellTable.getPageStart();													
-//													populateGridListaPresenca();
 													mpPanelLoadingAluno.setVisible(true);
 													populateDinamicColumns();
 												}});

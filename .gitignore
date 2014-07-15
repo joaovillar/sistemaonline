@@ -223,6 +223,6 @@ gwt-unitCache
 
 *.orig
 *.txt
-**/WEB-INF/deploy
-#war/WEB-INF/deploy/jornada/rpcPolicyManifest/manifests/*.txt
-##war/WEB-INF/classes/*
+war/**
+war/WEB-INF/deploy/**
+war/jornada/jornada.nocache.js
