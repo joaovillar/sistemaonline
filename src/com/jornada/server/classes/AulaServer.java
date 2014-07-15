@@ -14,6 +14,7 @@ public class AulaServer {
 	
 	
 	public static final String DB_INSERT_AULA = "insert into aula (id_disciplina, data) values (?,?) returning id_aula;";
+	public static final String DB_DELETE_AULA = "delete from aula where id_aula=?";
 	public static final String DB_SELECT_AULA = "SELECT * FROM aula order by data asc;";
 	public static final String DB_SELECT_AULA_POR_ID_DISCIPLINA = "SELECT * FROM aula where id_disciplina=? order by data asc;";
 	
@@ -51,6 +52,37 @@ public class AulaServer {
 		
 		return idAula;
 
+	}
+
+	public static boolean deleteAula(int idAula) {
+
+		boolean success = false;
+
+		// JornadaDataBase dataBase = new JornadaDataBase();
+		Connection conn = ConnectionManager.getConnection();
+		try {
+			// dataBase.createConnection();
+			// Connection connection = dataBase.getConnection();
+
+			int count = 0;
+			PreparedStatement delete = conn.prepareStatement(DB_DELETE_AULA);
+			delete.setInt(++count, idAula);
+
+			int numberUpdate = delete.executeUpdate();
+
+			if (numberUpdate == 1) {
+				success = true;
+			}
+
+		} catch (SQLException sqlex) {
+			success = false;
+			System.err.println(sqlex.getMessage());
+		} finally {
+			// dataBase.close();
+			ConnectionManager.closeConnection(conn);
+		}
+
+		return success;
 	}
 	
 	public static ArrayList<Aula> getAulas() {

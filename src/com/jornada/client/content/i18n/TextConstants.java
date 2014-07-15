@@ -472,7 +472,7 @@ public interface TextConstants extends Messages {
 	String ocorrenciaErroSalvar();
 	String ocorrenciaSalva();
 	String ocorrenciaAtualizada();
-	String ocorrenciaAdicionarNovaOcorrência();
+	String ocorrenciaAdicionarNovaOcorrencia();
 	String ocorrenciaEditar();
 	String ocorrenciaSelecionarConteudo();
 	String ocorrenciaEditarDetalhes();
@@ -510,6 +510,7 @@ public interface TextConstants extends Messages {
 	String presencaAmbienteDiarioAcompanhamento();
 	String presencaAmbienteDiarioPresenca();
 	String presencaAmbienteDiarioConteudo();
+	String presencaRemoverMsg(String presencaText);
 	/******* PRESENCA END *******/
 	
 	

@@ -54,7 +54,7 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 		stackPanel.setAnimationVertical(true);
 
 		
-		stackPanel.add(adicionarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaAdicionarNovaOcorrência(), "images/plus-circle.png"));
+		stackPanel.add(adicionarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaAdicionarNovaOcorrencia(), "images/plus-circle.png"));
 		stackPanel.add(editarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaEditar(), "images/comment_edit.png"));				
 		stackPanel.add(visualizarOcorrencia, new MpHeaderWidget("Visualizar Ocorrências", "images/organizacao.png"));
 		

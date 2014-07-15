@@ -25,6 +25,7 @@ import com.jornada.shared.classes.Aula;
 public interface GWTServiceAula extends RemoteService {
 	
 	
+	public boolean deleteAula(int idAula);	
 	public ArrayList<Aula> getAulas();
 	public ArrayList<Aula> getAulas(int idDisciplina);
 	

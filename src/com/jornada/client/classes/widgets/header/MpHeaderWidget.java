@@ -28,7 +28,6 @@ public class MpHeaderWidget extends SimplePanel{
 				
 				Element imageContainer = DOM.getParent(img.getElement());
 				imageContainer.setClassName("img-center-alignment");
-				
 				add(hPanel);
 //				return new SimplePanel(hPanel);		
 		

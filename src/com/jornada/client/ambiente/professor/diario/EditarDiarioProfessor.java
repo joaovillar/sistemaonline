@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 
+import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -14,17 +18,23 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
-import com.google.gwt.user.cellview.client.TextHeader;
+import com.google.gwt.user.cellview.client.Header;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -36,6 +46,7 @@ import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.cells.MpStyledSelectionCellPresenca;
+import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpacePanel;
@@ -46,12 +57,9 @@ import com.jornada.shared.classes.Aula;
 import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
+
 public class EditarDiarioProfessor extends VerticalPanel {
 
-//	private AsyncCallback<ArrayList<PresencaUsuario>> callBackDiario;
-//	private AsyncCallback<ArrayList<Aula>> callBackAula;
-//	private AsyncCallback<String> callBackUpdatePresenca;
-	
 	private final static int INT_POSITION_NAME=1;
 	private final static int INT_POSITION_FALTAS=INT_POSITION_NAME+1;
 
@@ -437,9 +445,93 @@ public class EditarDiarioProfessor extends VerticalPanel {
 												}
 							});
 						}
-			});      
+			});
+        	
+        	final String strAula =arrayColumns.get(column); 
+        	final int idAula = arrayAula.get(column).getIdAula();
+        	
+			Header<String> header = new Header<String>(new ClickableTextCell()) {
+				
+				@Override
+				public String getValue() {
+					return  strAula;
+				}
+				
+				@Override
+				public void render(Context context,SafeHtmlBuilder sb){
+//					if (value != null) {
+				          sb.appendHtmlConstant(
+				          		"<span style='position: relative; top: -4px; padding-left: 5px; padding-right: 3px; vertical-align: middle; color: black;'>" +
+				          		strAula+
+				          		"</span>&nbsp;&nbsp;&nbsp;"+
+				          		"<img src='images/delete.png'>"); 
 
-        	cellTable.addColumn(indexedColumn, new TextHeader(arrayColumns.get(column)));
+//				        }
+				}
+
+				@Override
+				public void onBrowserEvent(Context context, Element elem,NativeEvent event) {
+					// add your popup
+					System.out.println("Clicked");
+//					Window.alert("Clicked");
+					
+					switch (DOM.eventGetType((Event) event)) {
+					case Event.ONCLICK:
+						@SuppressWarnings("unused")
+						CloseHandler<PopupPanel> closeHandler;
+						MpConfirmDialogBox confirmationDialog = new MpConfirmDialogBox(
+								txtConstants.cursoRemoverTitle(),txtConstants.presencaRemoverMsg(strAula), txtConstants.geralSim(), txtConstants.geralNao(),
+
+								closeHandler = new CloseHandler<PopupPanel>() {
+
+									public void onClose(CloseEvent<PopupPanel> event) {
+
+										MpConfirmDialogBox x = (MpConfirmDialogBox) event.getSource();
+
+										if (x.primaryActionFired()) {
+
+											GWTServiceAula.Util.getInstance().deleteAula(idAula, new AsyncCallback<Boolean>() {
+												@Override
+												public void onFailure(Throwable caught) {
+													mpPanelLoadingAluno.setVisible(false);
+													mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+													mpDialogBoxWarning.setBodyText(txtConstants.presencaErroAtualizar());
+												}
+
+												@Override
+												public void onSuccess(Boolean success) {
+//													mpPanelLoadingAluno.setVisible(false);													
+//													cellTablePageIndex = cellTable.getPageStart();													
+//													populateGridListaPresenca();
+													mpPanelLoadingAluno.setVisible(true);
+													populateDinamicColumns();
+												}});
+//											System.out.println("IdAula!!!"+idAula);
+//											System.out.println("AulaData!!!"+strAula);
+
+										}
+									}
+								}
+						);
+						confirmationDialog.paint();
+						break;
+
+					default:
+						Window.alert("Test default");
+						break;
+					}
+					
+				}
+			};   	
+			
+			
+			header.setHeaderStyleNames("hand-over");
+
+
+//        	cellTable.addColumn(indexedColumn,header, new TextHeader(arrayColumns.get(column)));
+			
+			cellTable.addColumn(indexedColumn,header);
+//			cellTable.addColumn(indexedColumn,new TextHeader(arrayColumns.get(column)),header);
         	
         }      
 	

@@ -7,6 +7,7 @@ import com.jornada.shared.classes.Aula;
 
 public interface GWTServiceAulaAsync {
 
+	public void deleteAula(int idAula, AsyncCallback<Boolean> callback);
 	public void getAulas(AsyncCallback<ArrayList<Aula>> callback);	
 	public void getAulas(int idDisciplina, AsyncCallback<ArrayList<Aula>> callback);
 	

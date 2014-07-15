@@ -23,6 +23,7 @@ public class PresencaServer {
 	public static final String DB_SELECT_PRESENCA_POR_ID_AULA = "SELECT * FROM presenca where id_aula=? order by id_aula asc;";
 	public static final String DB_SELECT_PRESENCA_POR_ID_AULA_ID_USUARIO = "SELECT * FROM presenca where id_aula=? and id_usuario=? order by id_aula asc;";
 	public static String DB_UPDATE_PRESENCA = "UPDATE presenca set id_tipo_presenca=? where id_aula=? and id_usuario=?;";
+
 	
 	
 	
@@ -90,7 +91,9 @@ public class PresencaServer {
 		}
 		
 		return success;
-	}		
+	}	
+	
+	
 	
 	
 	public static ArrayList<Presenca> getPresencas() {

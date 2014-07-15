@@ -63,8 +63,8 @@ public class GWTServicePresencaImpl extends RemoteServiceServlet implements GWTS
 	
 	public boolean updatePresencaRow(int idAula, int idUsuario, int idTipoPresenca){		
 		return PresencaServer.updatePresencaRow(idAula, idUsuario, idTipoPresenca);
-	}		
-		
+	}	
+	
 	public ArrayList<PresencaUsuarioAula> getAlunos(int idCurso){				
 		return PresencaServer.getAlunos(idCurso);		
 	}
