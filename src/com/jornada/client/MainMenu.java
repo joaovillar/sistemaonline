@@ -82,6 +82,10 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     private Hyperlink linkProfessorTopico;
     private Image imgProfessorTopico;
     
+    public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR_COMUNICADO = txtConstants.menuTokenFerramentaProfessorComunicado();
+    private Hyperlink linkProfessorComunicado;
+    private Image imgProfessorComunicado;   
+    
     public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR_OCORRENCIA = txtConstants.menuTokenFerramentaProfessorOcorrencia();
     private Hyperlink linkProfessorOcorrencia;
     private Image imgProfessorOcorrencia;       
@@ -329,6 +333,15 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 				mainView.openCadastroProfessorTopico();
 			}	
 		}	
+		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_COMUNICADO)) {
+			this.linkPaginaPrincipal(true);			
+			this.linkFerramentaProfessor(true);
+			this.linkProfessorComunicado();
+			if (isFirstEventFire == true) {
+				isFirstEventFire = false;
+				mainView.openProfessorComunicado();
+			}					
+		}				
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_OCORRENCIA)) {
 			this.linkPaginaPrincipal(true);			
 			this.linkFerramentaProfessor(true);
@@ -702,6 +715,18 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(linkProfessorTopico);
 
 	}	
+	
+	public void linkProfessorComunicado(){
+
+	    imgProfessorComunicado = new Image("images/notes_16.png");
+	    linkProfessorComunicado = new Hyperlink(txtConstants.professorAmbienteComunicado(), MENU_TOKEN_FERRAMENTA_PROFESSOR_COMUNICADO);
+	    linkProfessorComunicado.setStyleName("a");
+	    
+        hPanel.add(imgProfessorComunicado);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkProfessorComunicado);
+
+	}		
 	
 	public void linkProfessorOcorrencia(){
 

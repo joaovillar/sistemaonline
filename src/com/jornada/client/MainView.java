@@ -31,11 +31,15 @@ import com.jornada.client.ambiente.pais.notas.TelaInicialPaisVisualizarNotas;
 import com.jornada.client.ambiente.pais.ocorrencia.TelaInicialPaisOcorrencia;
 import com.jornada.client.ambiente.professor.TelaInicialProfessor;
 import com.jornada.client.ambiente.professor.avaliacao.TelaInicialAvaliacao;
+import com.jornada.client.ambiente.professor.comunicado.TelaInicialComunicadoProfessor;
 import com.jornada.client.ambiente.professor.diario.TelaInicialDiarioProfessor;
 import com.jornada.client.ambiente.professor.hierarquia.HierarquiaCursoProfessor;
 import com.jornada.client.ambiente.professor.nota.TelaInicialNota;
 import com.jornada.client.ambiente.professor.ocorrencia.TelaInicialProfessorOcorrencia;
 import com.jornada.client.ambiente.professor.topico.TelaInicialTopicoProfessor;
+import com.jornada.client.classes.animation.ElementFader;
+import com.jornada.client.classes.animation.ResizeWidthAnimation;
+import com.jornada.client.classes.animation.RockAnimation;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 //import com.jornada.client.ambiente.professor.nota.CadastroNota;
@@ -210,11 +214,11 @@ public class MainView extends Composite implements HistoryListener{
 		this.vPanelBody.clear();
 //		new ElementFader().fade(vPanelBody.getElement(), 0, 1, 500);
 		
-//		AdminEscola adminEscola = new AdminEscola(this);
 		TelaInicialAdminEscola telaInicialAdminEscola = TelaInicialAdminEscola.getInstance(this);
-
+		
 		this.vPanelBody.add(telaInicialAdminEscola);
 		this.vPanelMenu.setVisible(true);
+
 		
 	}
 	
@@ -410,6 +414,20 @@ public class MainView extends Composite implements HistoryListener{
 		this.vPanelMenu.setVisible(true);
 
 	}	
+	
+	
+	public void openProfessorComunicado(){
+		
+		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_COMUNICADO);		
+//		new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1300);	
+		this.vPanelBody.clear();
+		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+
+		TelaInicialComunicadoProfessor telaInicialComunicadoProfessor = TelaInicialComunicadoProfessor.getInstance();
+		
+		this.vPanelBody.add(telaInicialComunicadoProfessor);
+		this.vPanelMenu.setVisible(true);		
+	}
 	
 	public void openCadastroProfessorOcorrencia() {
 		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_OCORRENCIA);

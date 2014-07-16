@@ -33,8 +33,6 @@ import com.jornada.shared.classes.Disciplina;
 public class AdicionarDisciplina extends VerticalPanel {
 
 	private AsyncCallback<Integer> callbackAddDisciplina;
-//	private AsyncCallback<ArrayList<Curso>> callBackPopulateCursoComboBox;
-//	private AsyncCallback<ArrayList<Periodo>> callBackPopulatePeriodoComboBox;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -43,9 +41,6 @@ public class AdicionarDisciplina extends VerticalPanel {
 	MpLabelTextBoxError lblErroNomeDisciplina;
 	MpLabelTextBoxError lblErroPeriodo;
 	MpLabelTextBoxError lblErroCargaHoraria;
-
-//	private ListBox selectCurso;
-//	private ListBox selectPeriodo;
 	
 	private MpSelectionCurso listBoxCurso;
 	private MpSelectionPeriodo listBoxPeriodo;

@@ -20,12 +20,16 @@ public class ComunicadoServer {
 	public static String DB_SELECT_TIPO_COMUNICADO_ALL = "SELECT * FROM comunicado order by data, hora asc;";
 	public static String DB_SELECT_TIPO_COMUNICADO_ILIKE = "SELECT * FROM comunicado where (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
 	public static String DB_SELECT_TIPO_COMUNICADO_EXTERNO_ILIKE = 
-			"SELECT * FROM comunicado where id_tipo_comunicado="+Integer.toString(TipoComunicado.EXTERNO)+" "+
+			"SELECT * FROM comunicado where " +
+			"( id_tipo_comunicado="+Integer.toString(TipoComunicado.EXTERNO)+" or " +
+			"  id_tipo_comunicado="+Integer.toString(TipoComunicado.MURAL)+" ) " +
 			"and (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
 	
 	public static String DB_SELECT_TIPO_COMUNICADO_INTERNO_ILIKE = 
 			"SELECT * FROM comunicado where " +
-			"(id_tipo_comunicado="+Integer.toString(TipoComunicado.EXTERNO)+" or id_tipo_comunicado="+Integer.toString(TipoComunicado.INTERNO)+" ) " +
+			"( id_tipo_comunicado="+Integer.toString(TipoComunicado.EXTERNO)+" or " +
+			"  id_tipo_comunicado="+Integer.toString(TipoComunicado.INTERNO)+" or " +
+			"  id_tipo_comunicado="+Integer.toString(TipoComunicado.MURAL)+" ) " +
 			"and (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
 	
 

@@ -9,12 +9,13 @@ import com.jornada.client.MainView;
 
 public class TelaInicialProfessor extends Composite {
 
-	ComponenteAvaliacao componenteAvaliacao;
-	ComponenteNotas componenteNotas;
-	ComponenteTopico componenteTopico;
-	ComponenteOcorrencia componenteOcorrencia;
-	ComponenteVisualizarCursoProfessor componenteVisualizarCursoProfessor;
-	ComponenteDiarioProfessor componenteDiarioProfessor;
+	ComponenteAvaliacao compAvaliacao;
+	ComponenteNotas compNotas;
+	ComponenteTopico compTopico;
+	ComponenteComunicadoProfessor compComunicadoProfessor;
+	ComponenteOcorrencia compOcorrencia;
+	ComponenteVisualizarCursoProfessor compVisualizarCursoProfessor;
+	ComponenteDiarioProfessor compDiarioProfessor;
 	
 	VerticalPanel verticalPanel;
 	
@@ -37,27 +38,26 @@ public class TelaInicialProfessor extends Composite {
 		
 		this.mainView = mainView;
 		
-		componenteAvaliacao = ComponenteAvaliacao.getInstance(mainView);
-		componenteNotas = ComponenteNotas.getInstance(mainView);
-		componenteTopico = ComponenteTopico.getInstance(mainView);
-		componenteOcorrencia = ComponenteOcorrencia.getInstance(mainView);
-		componenteVisualizarCursoProfessor = new ComponenteVisualizarCursoProfessor();
-		componenteDiarioProfessor = ComponenteDiarioProfessor.getInstance();
+		compAvaliacao = ComponenteAvaliacao.getInstance(mainView);
+		compNotas = ComponenteNotas.getInstance(mainView);
+		compTopico = ComponenteTopico.getInstance(mainView);
+		compComunicadoProfessor = ComponenteComunicadoProfessor.getInstance();
+		compOcorrencia = ComponenteOcorrencia.getInstance(mainView);
+		compVisualizarCursoProfessor = new ComponenteVisualizarCursoProfessor();
+		compDiarioProfessor = ComponenteDiarioProfessor.getInstance();
 	
 		verticalPanel = new VerticalPanel();
 		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.setSize("100%", "100%");
 		
-		grid = new Grid(2,3);
+		grid = new Grid(3,3);
 		grid.setCellSpacing(3);
 		grid.setCellPadding(3);
 		int row=0;
-		grid.setWidget(row, 0, componenteTopico);
-		grid.setWidget(row, 1, componenteAvaliacao);
-		grid.setWidget(row++, 2, componenteNotas);
-		grid.setWidget(row, 0, componenteOcorrencia);
-		grid.setWidget(row, 1, componenteVisualizarCursoProfessor);
-		grid.setWidget(row, 2, componenteDiarioProfessor);
+		grid.setWidget(row, 0, compComunicadoProfessor); grid.setWidget(row, 1, compDiarioProfessor);grid.setWidget(row++, 2, compOcorrencia);
+		grid.setWidget(row, 0, compTopico);grid.setWidget(row, 1, compAvaliacao);grid.setWidget(row++, 2, compNotas);
+		grid.setWidget(row, 0, compVisualizarCursoProfessor);
+		
 		
 
 		
