@@ -15,8 +15,8 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -111,7 +111,7 @@ public class TabelaComunicados extends VerticalPanel{
 		txtSearch = new TextBox();
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
 		
-		txtSearch.addKeyPressHandler(new EnterKeyPressHandler());
+		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 		
 		txtSearch.setStyleName("design_text_boxes");	
@@ -222,10 +222,10 @@ public class TabelaComunicados extends VerticalPanel{
 		}
 	}	
 	
-	private class EnterKeyPressHandler implements KeyPressHandler{
+	private class EnterKeyUpHandler implements KeyUpHandler{
 		
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelLoading.setVisible(true);					
 				GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
 			}

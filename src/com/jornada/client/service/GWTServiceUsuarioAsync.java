@@ -15,8 +15,8 @@ public interface GWTServiceUsuarioAsync {
 	public void getUsuarios(AsyncCallback<ArrayList<Usuario>> callback);	
 	public void getUsuarios(String strFilter, AsyncCallback<ArrayList<Usuario>> callback);
 	public void getUsuarios(String strDBField, String strFilter, AsyncCallback<ArrayList<Usuario>> callback);	
-	public void getUsuariosPorCurso(int idCurso, String strFiltroUsuario, AsyncCallback<ArrayList<Usuario>> callback);
-	public void getUsuariosPorCurso(int idCurso, AsyncCallback<ArrayList<Usuario>> callback);	
+	public void getAlunosPorCurso(int idCurso, String strFiltroUsuario, AsyncCallback<ArrayList<Usuario>> callback);
+	public void getAlunosPorCurso(int idCurso, AsyncCallback<ArrayList<Usuario>> callback);	
 	public void getUsuariosPorCursoAmbientePai(Usuario usuarioPai, int idCurso, AsyncCallback<ArrayList<Usuario>> callback);
 	public void getUsuariosPorTipoUsuario(int id_tipo_usuario, String strFilter, AsyncCallback<ArrayList<Usuario>> callback);	
 	public void getUsuariosPorTipoUsuario(int id_tipo_usuario, AsyncCallback<ArrayList<Usuario>> callback);

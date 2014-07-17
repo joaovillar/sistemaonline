@@ -121,19 +121,12 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		listBoxAlunosPorCurso = new MpSelectionAlunosPorCursoAmbientePais();
 		listBoxAlunosPorCurso.addChangeHandler(new MpAlunosPorCursoSelectionChangeHandler());
 		
-		
-//		txtFiltroAluno = new TextBox();		
-//		MpImageButton btnFiltrar = new MpImageButton(txtConstants.usuarioFiltrarListaAlunos(), "images/magnifier.png");
-		
-//		txtFiltroAluno.addKeyDownHandler(new KeyDownHandlerFiltrarAluno());		
-//		btnFiltrar.addClickHandler(new ClickHandlerFiltrarAluno());				
-		
 		lblNomeCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblNomeAluno.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
 		
 		lblNomeCurso.setStyleName("design_label");	
 		lblNomeAluno.setStyleName("design_label");	
-//		txtFiltroAluno.setStyleName("design_text_boxes");		
+		
 
 		Grid gridFiltrar = new Grid(1,7);		
 		gridFiltrar.setCellSpacing(2);
@@ -232,21 +225,6 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 	}
 
 	
-
-	
-//	private class ClickHandlerFiltrarAluno implements ClickHandler {
-//		public void onClick(ClickEvent event) {			
-//			listBoxAlunosPorCurso.filterComboBox(txtFiltroAluno.getText());
-//		}
-//	}
-//	
-//	private class KeyDownHandlerFiltrarAluno implements KeyDownHandler {
-//		public void onKeyDown(KeyDownEvent event) {
-//			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-//				listBoxAlunosPorCurso.filterComboBox(txtFiltroAluno.getText());
-//			}
-//		}
-//	}
 
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {

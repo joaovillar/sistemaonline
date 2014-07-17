@@ -5,11 +5,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.TextBox;
  
-public class PromptedTextBox extends TextBox implements KeyPressHandler, FocusHandler, ClickHandler
+public class PromptedTextBox extends TextBox implements KeyUpHandler, FocusHandler, ClickHandler
 {
     private String promptText;
     private String promptStyle;
@@ -18,7 +18,7 @@ public class PromptedTextBox extends TextBox implements KeyPressHandler, FocusHa
     {
         this.promptText = promptText;
         this.promptStyle = promptStyleName;
-        this.addKeyPressHandler(this);
+        this.addKeyUpHandler(this);
         this.addFocusHandler(this);
         this.addClickHandler(this);
         showPrompt();
@@ -37,10 +37,10 @@ public class PromptedTextBox extends TextBox implements KeyPressHandler, FocusHa
     }
  
     @Override
-    public void onKeyPress(KeyPressEvent event)
+    public void onKeyUp(KeyUpEvent event)
     {
         if (promptText.equals(this.getText())
-            && !(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB))
+        	 && !(event.getNativeKeyCode() == KeyCodes.KEY_TAB))
         {
             hidePrompt();
         }

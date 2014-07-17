@@ -8,8 +8,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionCursoItemTodos;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
@@ -26,14 +27,13 @@ import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceUsuario;
-import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 
 public class AssociarCursoAluno extends VerticalPanel{
 	
 	
-	private AsyncCallback<ArrayList<Curso>> callbackGetCursosFiltro;
+//	private AsyncCallback<ArrayList<Curso>> callbackGetCursosFiltro;
 	private AsyncCallback<ArrayList<Usuario>> callbackGetAlunosFiltro;
 	private AsyncCallback<ArrayList<Usuario>> callbackGetAlunosAssociados;	
 	private AsyncCallback<Boolean> callbackAssociarAlunoAoCurso;
@@ -50,10 +50,13 @@ public class AssociarCursoAluno extends VerticalPanel{
 //	private NoSelectionModel<Curso> selModel;
 //	
 	
-	private TextBox txtFiltroCurso;	
+	private TextBox txtFiltroNomeCurso;	
+	private TextBox txtFiltroCursoParaAluno;	
 	private TextBox txtFiltroAluno;
 	
-	private MpSelectionCurso listBoxCursos;
+	private MpSelectionCurso listBoxNomeCurso;
+	private MpSelectionCursoItemTodos listBoxCursoParaAluno;
+	
 	private ListBox multiBoxAlunoFiltrado;
 	private ListBox multiBoxAlunoAssociado;
 	
@@ -111,54 +114,55 @@ public class AssociarCursoAluno extends VerticalPanel{
 		flexTableFiltrar.setBorderWidth(0);		
 		
 		Label lblFiltrarCurso = new Label(txtConstants.cursoNome());
-		txtFiltroCurso = new TextBox();		
-		txtFiltroCurso.addKeyPressHandler(new EnterKeyPressHandlerFiltrarCurso());
+		txtFiltroNomeCurso = new TextBox();		
+		txtFiltroNomeCurso.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCurso());
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrarCurso());		
 		
 		lblFiltrarCurso.setStyleName("design_label");	
 		lblFiltrarCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		txtFiltroCurso.setStyleName("design_text_boxes");		
+		txtFiltroNomeCurso.setStyleName("design_text_boxes");		
 		
-		listBoxCursos = new MpSelectionCurso();
+		listBoxNomeCurso = new MpSelectionCurso();
 //		listBoxCursos.setStyleName("design_text_boxes");
 //		listBoxCursos.setWidth("350px");
-		listBoxCursos.addChangeHandler(new ChangeHandlerPopularAlunosAssociados());			
+		listBoxNomeCurso.addChangeHandler(new ChangeHandlerPopularAlunosAssociados());			
 
 		
 		flexTableFiltrar.setWidget(0, 0, lblFiltrarCurso);
-		flexTableFiltrar.setWidget(0, 1, listBoxCursos);
-		flexTableFiltrar.setWidget(0, 2, txtFiltroCurso);
-		flexTableFiltrar.setWidget(0, 3, btnFiltrar);
-		flexTableFiltrar.setWidget(0, 4, mpPanelCursoLoading);	
+		flexTableFiltrar.setWidget(0, 1, listBoxNomeCurso);
+		flexTableFiltrar.setWidget(0, 2, txtFiltroNomeCurso);
+//		flexTableFiltrar.setWidget(0, 3, btnFiltrar);
+//		flexTableFiltrar.setWidget(0, 4, mpPanelCursoLoading);	
+		flexTableFiltrar.setWidget(0, 3, mpPanelCursoLoading);
 		
 		mpPanel.add(flexTableFiltrar);
 		
-		callbackGetCursosFiltro = new AsyncCallback<ArrayList<Curso>>() {
-
-			public void onSuccess(ArrayList<Curso> list) {
-				
-				mpPanelCursoLoading.setVisible(false);	
-				
-				listBoxCursos.clear();
-				for(int i=0;i<list.size();i++){
-					Curso curso = list.get(i);
-					listBoxCursos.addItem(curso.getNome(), Integer.toString(curso.getIdCurso()));
-				}
-				
-				popularAlunosAssociados();
-				
-			}
-			
-			public void onFailure(Throwable caught) {
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroCarregar());
-				mpDialogBoxWarning.showDialog();
-
-			}
-		};		
+//		callbackGetCursosFiltro = new AsyncCallback<ArrayList<Curso>>() {
+//
+//			public void onSuccess(ArrayList<Curso> list) {
+//				
+//				mpPanelCursoLoading.setVisible(false);	
+//				
+//				listBoxCursos.clear();
+//				for(int i=0;i<list.size();i++){
+//					Curso curso = list.get(i);
+//					listBoxCursos.addItem(curso.getNome(), Integer.toString(curso.getIdCurso()));
+//				}
+//				
+//				popularAlunosAssociados();
+//				
+//			}
+//			
+//			public void onFailure(Throwable caught) {
+//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroCarregar());
+//				mpDialogBoxWarning.showDialog();
+//
+//			}
+//		};		
 		
-		popularOnLoadListBoxCursos();
+//		popularOnLoadListBoxCursos();
 		
 		return mpPanel;
 		
@@ -170,25 +174,42 @@ public class AssociarCursoAluno extends VerticalPanel{
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.cursoSelecionarAluno(), "images/people.png");
 		mpPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
 		
-		FlexTable flexTableFiltrar = new FlexTable();		
-		flexTableFiltrar.setCellSpacing(3);
-		flexTableFiltrar.setCellPadding(3);
-		flexTableFiltrar.setBorderWidth(0);		
+		listBoxCursoParaAluno = new MpSelectionCursoItemTodos();
+		listBoxCursoParaAluno.addChangeHandler(new ChangeHandlerCleanAlunos());			
 		
+		listBoxCursoParaAluno.setWidth("250px");
+		
+		FlexTable flexFiltrar = new FlexTable();		
+		flexFiltrar.setCellSpacing(3);
+		flexFiltrar.setCellPadding(3);
+		flexFiltrar.setBorderWidth(0);		
+		
+		Label lblFiltrarCurso = new Label(txtConstants.curso());		
 		Label lblFiltrarAluno = new Label(txtConstants.alunoNome());
+		
+		txtFiltroCursoParaAluno = new TextBox();		
+		txtFiltroCursoParaAluno.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCursoParaAluno());
+		MpImageButton btnFiltrarCursoParaAluno = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
+		btnFiltrarCursoParaAluno.addClickHandler(new ClickHandlerFiltrarCursoParaAluno());		
+		
+		
 		txtFiltroAluno = new TextBox();		
-		txtFiltroAluno.addKeyPressHandler(new EnterKeyPressHandlerFiltrarAluno());
+		txtFiltroAluno.setWidth("250px");
+		txtFiltroAluno.addKeyUpHandler(new EnterKeyUpHandlerFiltrarAluno());
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrarAluno());		
 		
+		
+		lblFiltrarAluno.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		
 		lblFiltrarAluno.setStyleName("design_label");	
-		lblFiltrarAluno.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
+		txtFiltroCursoParaAluno.setStyleName("design_text_boxes");		
 		txtFiltroAluno.setStyleName("design_text_boxes");		
 		
-		flexTableFiltrar.setWidget(0, 0, lblFiltrarAluno);
-		flexTableFiltrar.setWidget(0, 1, txtFiltroAluno);
-		flexTableFiltrar.setWidget(0, 2, btnFiltrar);
-		flexTableFiltrar.setWidget(0, 3, mpPanelAlunoLoading);
+		
+		int row=0;
+		flexFiltrar.setWidget(row, 0, lblFiltrarCurso);flexFiltrar.setWidget(row, 1, listBoxCursoParaAluno);flexFiltrar.setWidget(row, 2, txtFiltroCursoParaAluno);flexFiltrar.setWidget(row++, 3, new InlineHTML("&nbsp;"));
+		flexFiltrar.setWidget(row, 0, lblFiltrarAluno);flexFiltrar.setWidget(row, 1, txtFiltroAluno);flexFiltrar.setWidget(row, 2, btnFiltrar);flexFiltrar.setWidget(row, 3, mpPanelAlunoLoading);
 		
 		
 		FlexTable flexTableBotoes = new FlexTable();
@@ -214,20 +235,20 @@ public class AssociarCursoAluno extends VerticalPanel{
 		lblAluno.setStyleName("design_label");
 		
 		multiBoxAlunoFiltrado = new ListBox(true);
-	    multiBoxAlunoFiltrado.setWidth("450px");
+	    multiBoxAlunoFiltrado.setWidth("600px");
 	    multiBoxAlunoFiltrado.setHeight("130px");
 	    multiBoxAlunoFiltrado.setVisibleItemCount(10);	
 	    multiBoxAlunoFiltrado.setStyleName("design_text_boxes");
 	    
 		multiBoxAlunoAssociado = new ListBox(true);
-	    multiBoxAlunoAssociado.setWidth("450px");
+	    multiBoxAlunoAssociado.setWidth("600px");
 	    multiBoxAlunoAssociado.setHeight("130px");
 	    multiBoxAlunoAssociado.setVisibleItemCount(10);	
 	    multiBoxAlunoAssociado.setStyleName("design_text_boxes");
 	    
 
 	    
-	    flexTableSelecionar.setWidget(0, 0, flexTableFiltrar);
+	    flexTableSelecionar.setWidget(0, 0, flexFiltrar);
 	    flexTableSelecionar.setWidget(0, 1, new InlineHTML("&nbsp;"));
 	    flexTableSelecionar.setWidget(0, 2, lblAluno);
 	    flexTableSelecionar.setWidget(1, 0, multiBoxAlunoFiltrado);
@@ -356,14 +377,16 @@ public class AssociarCursoAluno extends VerticalPanel{
 		return vPanel;
 	}
 	
-	public void popularOnLoadListBoxCursos(){
-		mpPanelCursoLoading.setVisible(true);				
-		GWTServiceCurso.Util.getInstance().getCursos("%" + txtFiltroCurso.getText() + "%", callbackGetCursosFiltro);
+	public void updateClientData(){
+//		mpPanelCursoLoading.setVisible(true);				
+//		GWTServiceCurso.Util.getInstance().getCursos("%" + txtFiltroCurso.getText() + "%", callbackGetCursosFiltro);
+//		listBoxCursos.populateComboBox();
+		listBoxNomeCurso.populateComboBox();
 	}
 	
 	public void popularAlunosAssociados(){
 		mpPanelCursoLoading.setVisible(true);	
-		int id_curso = Integer.parseInt(listBoxCursos.getValue(listBoxCursos.getSelectedIndex()));
+		int id_curso = Integer.parseInt(listBoxNomeCurso.getValue(listBoxNomeCurso.getSelectedIndex()));
 		GWTServiceCurso.Util.getInstance().getTodosOsAlunosDoCurso(id_curso, callbackGetAlunosAssociados);
 	}
 	
@@ -372,30 +395,50 @@ public class AssociarCursoAluno extends VerticalPanel{
 	
 	private class ClickHandlerFiltrarCurso implements ClickHandler {
 		public void onClick(ClickEvent event) {
-				mpPanelCursoLoading.setVisible(true);				
-				GWTServiceCurso.Util.getInstance().getCursos("%" + txtFiltroCurso.getText() + "%", callbackGetCursosFiltro);
+			listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
 		}
 	}
 	
-	private class EnterKeyPressHandlerFiltrarCurso implements KeyPressHandler{
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-				mpPanelCursoLoading.setVisible(true);				
-				GWTServiceCurso.Util.getInstance().getCursos("%" + txtFiltroCurso.getText() + "%", callbackGetCursosFiltro);
+	private class EnterKeyUpHandlerFiltrarCurso implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
 			}
 		}
 	}	
 	
+	private class ClickHandlerFiltrarCursoParaAluno implements ClickHandler {
+		public void onClick(ClickEvent event) {
+			listBoxCursoParaAluno.filterComboBox(txtFiltroCursoParaAluno.getText());
+		}
+	}
+	
+	private class EnterKeyUpHandlerFiltrarCursoParaAluno implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				listBoxCursoParaAluno.filterComboBox(txtFiltroCursoParaAluno.getText());
+			}
+		}
+	}		
+	
 	private class ClickHandlerFiltrarAluno implements ClickHandler {
 		public void onClick(ClickEvent event) {
-				mpPanelAlunoLoading.setVisible(true);				
-				GWTServiceUsuario.Util.getInstance().getUsuariosPorTipoUsuario(TipoUsuario.ALUNO, "%" + txtFiltroAluno.getText() + "%", callbackGetAlunosFiltro);
+				mpPanelAlunoLoading.setVisible(true);	
+				int idCurso = Integer.parseInt(listBoxCursoParaAluno.getValue(listBoxCursoParaAluno.getSelectedIndex()));
+				
+				if(idCurso==0){
+					GWTServiceUsuario.Util.getInstance().getUsuariosPorTipoUsuario(TipoUsuario.ALUNO, "%" + txtFiltroAluno.getText() + "%", callbackGetAlunosFiltro);					
+				}
+				else{
+					GWTServiceUsuario.Util.getInstance().getAlunosPorCurso(idCurso, "%" + txtFiltroAluno.getText() + "%", callbackGetAlunosFiltro);
+				}
+				
 		}
 	}	
 	
-	private class EnterKeyPressHandlerFiltrarAluno implements KeyPressHandler{
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	private class EnterKeyUpHandlerFiltrarAluno implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelAlunoLoading.setVisible(true);				
 				GWTServiceUsuario.Util.getInstance().getUsuariosPorTipoUsuario(TipoUsuario.ALUNO, "%" +  txtFiltroAluno.getText() + "%", callbackGetAlunosFiltro);
 			}
@@ -450,8 +493,14 @@ public class AssociarCursoAluno extends VerticalPanel{
 	
 	private class ChangeHandlerPopularAlunosAssociados implements ChangeHandler{
 		public void onChange(ChangeEvent event){
-			popularAlunosAssociados();			
-
+			popularAlunosAssociados();	
+		}	
+	}
+	
+	private class ChangeHandlerCleanAlunos implements ChangeHandler{
+		public void onChange(ChangeEvent event){
+			//popularAlunosAssociados();
+			multiBoxAlunoFiltrado.clear();
 		}	
 	}
 	
@@ -463,11 +512,12 @@ public class AssociarCursoAluno extends VerticalPanel{
 			
 			mpPanelAssociandoLoading.setVisible(true);
 			
-			ArrayList<String> list_id_aluno = new ArrayList<String>();
+			ArrayList<Integer> list_id_aluno = new ArrayList<Integer>();
 			for(int i=0;i<multiBoxAlunoAssociado.getItemCount();i++){
-				list_id_aluno.add(multiBoxAlunoAssociado.getValue(i));
+				int idAluno = Integer.parseInt(multiBoxAlunoAssociado.getValue(i));
+				list_id_aluno.add(idAluno);
 			}
-			int id_curso = Integer.parseInt(listBoxCursos.getValue(listBoxCursos.getSelectedIndex()));
+			int id_curso = Integer.parseInt(listBoxNomeCurso.getValue(listBoxNomeCurso.getSelectedIndex()));
 			GWTServiceCurso.Util.getInstance().associarAlunosAoCurso(id_curso, list_id_aluno, callbackAssociarAlunoAoCurso);
 			
 		}

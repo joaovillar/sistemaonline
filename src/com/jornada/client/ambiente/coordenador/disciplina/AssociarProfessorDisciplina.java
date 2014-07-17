@@ -8,8 +8,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -109,7 +109,7 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		
 		Label lblFiltrarProfessor = new Label(txtConstants.professorNome());
 		txtFiltroProfessor = new TextBox();		
-		txtFiltroProfessor.addKeyPressHandler(new EnterKeyPressHandlerFiltrarProfessor());
+		txtFiltroProfessor.addKeyUpHandler(new EnterKeyUpHandlerFiltrarProfessor());
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.disciplinaFiltrarProfessor(), "images/magnifier.png");
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrarProfessor());		
 		
@@ -388,9 +388,9 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		}
 	}
 	
-	private class EnterKeyPressHandlerFiltrarProfessor implements KeyPressHandler{
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	private class EnterKeyUpHandlerFiltrarProfessor implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelProfessorLoading.setVisible(true);				
 				GWTServiceUsuario.Util.getInstance().getUsuariosPorTipoUsuario(TipoUsuario.PROFESSOR, "%" + txtFiltroProfessor.getText() + "%", callbackGetProfessoresFiltro);
 			}

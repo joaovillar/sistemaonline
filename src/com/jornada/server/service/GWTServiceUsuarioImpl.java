@@ -56,21 +56,21 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.getUsuarios(strDBField, strFilter);
 	}		
 	
-	public ArrayList<Usuario> getUsuariosPorCurso(int idCurso, String strFiltroUsuario) {				
-		return UsuarioServer.getUsuariosPorCurso(idCurso, strFiltroUsuario);
+	public ArrayList<Usuario> getAlunosPorCurso(int idCurso, String strFiltroUsuario) {				
+		return UsuarioServer.getAlunosPorCurso(idCurso, strFiltroUsuario);
 	}	
 	
-	public ArrayList<Usuario> getUsuariosPorCurso(int idCurso) {				
-		return UsuarioServer.getUsuariosPorCurso(idCurso);
+	public ArrayList<Usuario> getAlunosPorCurso(int idCurso) {				
+		return UsuarioServer.getAlunosPorCurso(idCurso);
 	}	
 	
 	public ArrayList<Usuario> getUsuariosPorCursoAmbientePai(Usuario usuarioPai, int idCurso) {		
 		
 		switch (usuarioPai.getIdTipoUsuario()) {
 			case TipoUsuario.ADMINISTRADOR:
-				return UsuarioServer.getUsuariosPorCurso(idCurso);
+				return UsuarioServer.getAlunosPorCurso(idCurso);
 			case TipoUsuario.COORDENADOR:
-				return UsuarioServer.getUsuariosPorCurso(idCurso);
+				return UsuarioServer.getAlunosPorCurso(idCurso);
 			case TipoUsuario.PAIS:
 				return UsuarioServer.getUsuariosPorCursoAmbientePai(usuarioPai, idCurso);		
 			default:

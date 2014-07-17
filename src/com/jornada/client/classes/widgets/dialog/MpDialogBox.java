@@ -1,8 +1,8 @@
 package com.jornada.client.classes.widgets.dialog;
 
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -40,7 +40,7 @@ public class MpDialogBox extends DialogBox implements ClickListener {
 
 		    Button closeButton = new Button("Ok", this);
 //		    closeButton.ad
-		    closeButton.addKeyDownHandler(new EnterKeyPressHandler());
+		    closeButton.addKeyUpHandler(new EnterKeyUpHandler());
 		    closeButton.setFocus(true);
 		    closeButton.setStyleName("cw-Button");
 
@@ -106,8 +106,8 @@ public class MpDialogBox extends DialogBox implements ClickListener {
 		hide();
 	}
 	
-	private class EnterKeyPressHandler implements KeyDownHandler {
-		 public void onKeyDown(KeyDownEvent event) {
+	private class EnterKeyUpHandler implements KeyUpHandler {
+		 public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				hide();
 			}

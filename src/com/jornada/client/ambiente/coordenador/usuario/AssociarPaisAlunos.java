@@ -8,8 +8,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
@@ -98,7 +98,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		
 		Label lblFiltrarAluno = new Label(txtConstants.alunoNome());
 		txtFiltroAlunos = new TextBox();		
-		txtFiltroAlunos.addKeyPressHandler(new EnterKeyPressHandlerFiltrarCurso());
+		txtFiltroAlunos.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCurso());
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.usuarioFiltrarListaAlunos(), "images/magnifier.png");
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrarCurso());		
 		
@@ -136,7 +136,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		
 		Label lblFiltrarPais = new Label(txtConstants.usuarioNomePais());
 		txtFiltroPais = new TextBox();		
-		txtFiltroPais.addKeyPressHandler(new EnterKeyPressHandlerFiltrarPais());
+		txtFiltroPais.addKeyUpHandler(new EnterKeyUpHandlerFiltrarPais());
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrarPais());		
 		
@@ -338,9 +338,9 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		}
 	}
 	
-	private class EnterKeyPressHandlerFiltrarCurso implements KeyPressHandler{
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	private class EnterKeyUpHandlerFiltrarCurso implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				//mpPanelAlunoLoading.setVisible(true);				
 				//GWTServiceCurso.Util.getInstance().getCursos("%" + txtFiltroAlunos.getText() + "%", callbackGetAlunosFiltro);
 				listBoxAlunos.filterComboBox(txtFiltroAlunos.getText());
@@ -355,9 +355,9 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		}
 	}	
 	
-	private class EnterKeyPressHandlerFiltrarPais implements KeyPressHandler{
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	private class EnterKeyUpHandlerFiltrarPais implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelPaisLoading.setVisible(true);				
 				GWTServiceUsuario.Util.getInstance().getUsuariosPorTipoUsuario(TipoUsuario.PAIS, "%" +  txtFiltroPais.getText() + "%", callbackGetPaisFiltro);
 			}

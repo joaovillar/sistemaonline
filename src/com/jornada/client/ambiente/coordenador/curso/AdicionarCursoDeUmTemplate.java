@@ -1,11 +1,13 @@
 package com.jornada.client.ambiente.coordenador.curso;
 
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -38,14 +40,20 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 	
 	private static AdicionarCursoDeUmTemplate uniqueInstance;	
 	
-	private TextBox txtFiltroCurso;	
-	private TextBox txtNomeCurso;
+	private TextBox txtFiltroCursoEstrutura;	
+	private TextBox txtNomeCursoEstrutura;
+	private TextBox txtFiltroCursoImportar;	
+	
+	private MpImageButton btnFiltrarEstrutura;
+	private MpImageButton btnFiltrarImportarAluno;
+	
 	private MpDateBoxWithImage mpDateBoxInicial;
 	private MpDateBoxWithImage mpDateBoxFinal;
 	
 	private MpLabelTextBoxError lblErroNomeCurso;
 	
-	private MpSelectionCurso listBoxCurso;
+	private MpSelectionCurso listBoxCursoEstrutura;
+	private MpSelectionCurso listBoxCursoImportarAluno;
 	
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -74,40 +82,61 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 		hPanelLoading.setVisible(false);
 		
 		
-		Label lblCursoTemplate = new Label(txtConstants.cursoTemplate());
-		Label lblCursoNome = new Label(txtConstants.cursoNome());
+		Label lblCursoEstrutura = new Label(txtConstants.cursoTemplate());
+		Label lblCursoNome = new Label(txtConstants.cursoNovoCurso());
 		Label lblDataInicial = new Label(txtConstants.cursoDataInicial());
 		Label lblDataFinal = new Label(txtConstants.cursoDataFinal());
+		Label lblCursoImportarAlunos = new Label("Importar alunos do Curso");
+		lblErroNomeCurso = new MpLabelTextBoxError();
 		
-		listBoxCurso = new MpSelectionCurso();				
-		txtFiltroCurso = new TextBox();
-		MpImageButton btnFiltrar = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
-		txtNomeCurso = new TextBox();
+		listBoxCursoEstrutura = new MpSelectionCurso();				
+		txtFiltroCursoEstrutura = new TextBox();
+		btnFiltrarEstrutura = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
+		
+		
+		txtNomeCursoEstrutura = new TextBox();
 		mpDateBoxInicial = new MpDateBoxWithImage();		
 		mpDateBoxFinal = new MpDateBoxWithImage();		
+
+		listBoxCursoImportarAluno = new MpSelectionCurso();
+		txtFiltroCursoImportar = new TextBox();
+		btnFiltrarImportarAluno = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
+		
+		listBoxCursoImportarAluno.setMultipleSelect(true);
+		listBoxCursoImportarAluno.setVisibleItemCount(5);
+		listBoxCursoImportarAluno.setSize("350px", "70px");
+
+
 				
 		
 		mpDateBoxInicial.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));	
 		mpDateBoxFinal.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
 		
-		lblCursoTemplate.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblCursoEstrutura.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblCursoNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblDataInicial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblDataFinal.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblCursoImportarAlunos.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		
-		lblErroNomeCurso = new MpLabelTextBoxError();
 		
-		lblCursoTemplate.setStyleName("design_label");
+		
+		lblCursoEstrutura.setStyleName("design_label");
 		lblCursoNome.setStyleName("design_label");		
-		txtNomeCurso.setStyleName("design_text_boxes");
-		txtFiltroCurso.setStyleName("design_text_boxes");	
+		lblCursoImportarAlunos.setStyleName("design_label");
+		txtNomeCursoEstrutura.setStyleName("design_text_boxes");
+		txtFiltroCursoEstrutura.setStyleName("design_text_boxes");	
+		txtFiltroCursoImportar.setStyleName("design_text_boxes");
 				
-		txtNomeCurso.setWidth("350px");
+		txtNomeCursoEstrutura.setWidth("350px");
 		mpDateBoxInicial.getDate().setWidth("170px");
-		mpDateBoxFinal.getDate().setWidth("170px");		
+		mpDateBoxFinal.getDate().setWidth("170px");
+		
 				
-		txtFiltroCurso.addKeyPressHandler(new EnterKeyPressHandlerFiltrarCurso());		
-		btnFiltrar.addClickHandler(new ClickHandlerFiltrarCurso());				
+		txtFiltroCursoEstrutura.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCursoEstrutura());		
+		btnFiltrarEstrutura.addClickHandler(new ClickHandlerFiltrarCursoEstrutura());	
+		
+		txtFiltroCursoImportar.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCursoImportarAluno());		
+		btnFiltrarImportarAluno.addClickHandler(new ClickHandlerFiltrarCursoImportarAluno());
 		
 		
 		FlexTable flexTable = new FlexTable();
@@ -115,12 +144,13 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 		flexTable.setCellPadding(3);
 		flexTable.setBorderWidth(0);
 		int row=0;
-		flexTable.setWidget(row, 0, lblCursoTemplate);flexTable.setWidget(row, 1, listBoxCurso);flexTable.setWidget(row, 2, txtFiltroCurso);flexTable.setWidget(row++, 3, btnFiltrar);
 		
-		flexTable.setWidget(row, 0, lblCursoNome);flexTable.setWidget(row, 1, txtNomeCurso);flexTable.setWidget(row, 2, lblErroNomeCurso);flexTable.getFlexCellFormatter().setColSpan(row++, 2, 3);
 		
+		flexTable.setWidget(row, 0, lblCursoNome);flexTable.setWidget(row, 1, txtNomeCursoEstrutura);flexTable.setWidget(row, 2, lblErroNomeCurso);flexTable.getFlexCellFormatter().setColSpan(row++, 2, 3);
 		flexTable.setWidget(row, 0, lblDataInicial);flexTable.setWidget(row++, 1, mpDateBoxInicial);
 		flexTable.setWidget(row, 0, lblDataFinal);flexTable.setWidget(row++, 1, mpDateBoxFinal);
+		flexTable.setWidget(row, 0, lblCursoEstrutura);flexTable.setWidget(row, 1, listBoxCursoEstrutura);flexTable.setWidget(row, 2, txtFiltroCursoEstrutura);flexTable.setWidget(row++, 3, btnFiltrarEstrutura);
+		flexTable.setWidget(row, 0, lblCursoImportarAlunos);flexTable.setWidget(row, 1, listBoxCursoImportarAluno);flexTable.setWidget(row, 2, txtFiltroCursoImportar);flexTable.setWidget(row++, 3, btnFiltrarImportarAluno);
 		flexTable.setWidget(row, 0, new InlineHTML("&nbsp;"));
 		
 		
@@ -192,17 +222,32 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 	}
 	
 	
-	private class EnterKeyPressHandlerFiltrarCurso implements KeyPressHandler{
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-				listBoxCurso.filterComboBox(txtFiltroCurso.getText());
+	private class EnterKeyUpHandlerFiltrarCursoEstrutura implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				listBoxCursoEstrutura.filterComboBox(txtFiltroCursoEstrutura.getText());
 			}
 		}
 	}	
 	
-	private class ClickHandlerFiltrarCurso implements ClickHandler {
+	private class ClickHandlerFiltrarCursoEstrutura implements ClickHandler {
 		public void onClick(ClickEvent event) {
-			listBoxCurso.filterComboBox(txtFiltroCurso.getText());
+			listBoxCursoEstrutura.filterComboBox(txtFiltroCursoEstrutura.getText());
+		}
+	}
+	
+	
+	private class EnterKeyUpHandlerFiltrarCursoImportarAluno implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				listBoxCursoImportarAluno.filterComboBox(txtFiltroCursoImportar.getText());
+			}
+		}
+	}	
+	
+	private class ClickHandlerFiltrarCursoImportarAluno implements ClickHandler {
+		public void onClick(ClickEvent event) {
+			listBoxCursoImportarAluno.filterComboBox(txtFiltroCursoImportar.getText());
 		}
 	}
 	
@@ -222,15 +267,26 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 				hPanelLoading.setVisible(true);
 
 				Curso curso = new Curso();
-				curso.setNome(txtNomeCurso.getText());
+				curso.setNome(txtNomeCursoEstrutura.getText());
 				curso.setDataInicial(mpDateBoxInicial.getDate().getValue());
 				curso.setDataFinal(mpDateBoxFinal.getDate().getValue());
 				
+				int idCursoEstrutura = Integer.parseInt(listBoxCursoEstrutura.getValue(listBoxCursoEstrutura.getSelectedIndex()));
+//				int idCursoImportarAlunos = Integer.parseInt(listBoxCursoImportarAluno.getValue(listBoxCursoImportarAluno.getSelectedIndex()));
 				
-				int idCursoTemplate = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
+				ArrayList<Integer> arraySelectedImportarAluno = new ArrayList<Integer>();
+				
+				for(int i=0;i<listBoxCursoImportarAluno.getItemCount();i++){
+					if(listBoxCursoImportarAluno.isItemSelected(i)){
+						int intIdCursoSelected = Integer.parseInt(listBoxCursoImportarAluno.getValue(i));
+						arraySelectedImportarAluno.add(intIdCursoSelected);
+					}
+				}
+				
+				Integer[] intIdCursosImportarAlunosSelected = arraySelectedImportarAluno.toArray(new Integer[]{});
 
 //				getServiceCursoAsync().AdicionarCurso(curso,callbackAddCurso);
-				GWTServiceCurso.Util.getInstance().AdicionarCursoTemplate(idCursoTemplate, curso, callbackAddCursoTemplate);
+				GWTServiceCurso.Util.getInstance().AdicionarCursoTemplate(idCursoEstrutura, intIdCursosImportarAlunosSelected, curso, callbackAddCursoTemplate);
 
 			}
 
@@ -252,7 +308,7 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 	public boolean checkFieldsValidator(){
 		boolean isFieldsOk = false;
 		
-		if(FieldVerifier.isValidName(txtNomeCurso.getText())){
+		if(FieldVerifier.isValidName(txtNomeCursoEstrutura.getText())){
 			isFieldsOk=true;	
 			lblErroNomeCurso.hideErroMessage();
 		}
@@ -266,13 +322,14 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 	
 	private void cleanFields(){
 		lblErroNomeCurso.hideErroMessage();
-		txtNomeCurso.setValue("");
+		txtNomeCursoEstrutura.setValue("");
 		mpDateBoxInicial.getDate().setValue(null);
 		mpDateBoxFinal.getDate().setValue(null);
+		listBoxCursoImportarAluno.setSelectItem("");
 	}
 	
 	protected void updateListBoxCurso(){
-		listBoxCurso.populateComboBox();
+		listBoxCursoEstrutura.populateComboBox();
 	}
 		
 

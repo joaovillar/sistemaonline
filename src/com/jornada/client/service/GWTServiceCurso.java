@@ -27,7 +27,7 @@ public interface GWTServiceCurso extends RemoteService {
 	
 	
 	public int AdicionarCurso(Curso curso);	
-	public boolean AdicionarCursoTemplate(int idCursoTemplate, Curso curso);	
+	public boolean AdicionarCursoTemplate(int idCursoTemplate, Integer[] idCursosImportarAluno, Curso curso);	
 	public boolean updateCursoRow(Curso curso);	
 	public boolean deleteCursoRow(int id_curso);	
 	public ArrayList<Curso> getCursos();
@@ -36,7 +36,7 @@ public interface GWTServiceCurso extends RemoteService {
 	public ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario);
 	public ArrayList<Curso> getCursos(String strFilter);	
 	public ArrayList<Usuario> getTodosOsAlunosDoCurso(int id_curso);	
-	public boolean associarAlunosAoCurso(int id_curso, ArrayList<String> list_id_aluno);
+	public boolean associarAlunosAoCurso(int id_curso, ArrayList<Integer> list_id_aluno);
 	
 
 	public static class Util {

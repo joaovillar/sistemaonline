@@ -6,8 +6,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -116,7 +116,7 @@ public class EditarNotaPorAluno extends VerticalPanel{
 		
 		Label lblFiltrarAluno = new Label(txtConstants.alunoNome());
 		txtFiltroAluno = new TextBox();		
-		txtFiltroAluno.addKeyPressHandler(new EnterKeyPressHandlerFiltrarAluno());
+		txtFiltroAluno.addKeyUpHandler(new EnterKeyUpHandlerFiltrarAluno());
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.usuarioFiltrarListaAlunos(), "images/magnifier.png");
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrarAluno());		
 		
@@ -199,9 +199,9 @@ public class EditarNotaPorAluno extends VerticalPanel{
 		}
 	}
 	
-	private class EnterKeyPressHandlerFiltrarAluno implements KeyPressHandler{
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	private class EnterKeyUpHandlerFiltrarAluno implements KeyUpHandler{
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelAlunosLoading.setVisible(true);				
 				GWTServiceUsuario.Util.getInstance().getUsuariosPorTipoUsuario(TipoUsuario.ALUNO, "%" + txtFiltroAluno.getText() + "%", callbackGetAlunosFiltro);
 			}

@@ -1,4 +1,4 @@
-package com.jornada.client.classes.listBoxes;
+package com.jornada.client.classes.listBoxes.ambiente.coordenador;
 
 import java.util.ArrayList;
 
@@ -7,10 +7,11 @@ import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.service.GWTServicePeriodo;
 import com.jornada.shared.classes.Curso;
 
-public class MpSelectionCurso extends MpSelection {	
+public class MpSelectionCursoItemTodos extends MpSelection {	
 	
 	private ListBox listBoxAux;
 	
@@ -18,7 +19,7 @@ public class MpSelectionCurso extends MpSelection {
 	
 	private ArrayList<Curso> listCurso;
 	
-	public MpSelectionCurso(){
+	public MpSelectionCursoItemTodos(){
 
 		listBoxAux = new ListBox();
 		
@@ -29,6 +30,8 @@ public class MpSelectionCurso extends MpSelection {
 			public void onSuccess(ArrayList<Curso> lista) {
 				
 				finishLoadingListBox();		
+				
+				addItem("Todos Alunos","0");
 
 				for (Curso object : lista) {
 					addItem(object.getNome(),Integer.toString(object.getIdCurso()));
@@ -38,7 +41,7 @@ public class MpSelectionCurso extends MpSelection {
 
 				setVisibleItemCount(1);
 
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionCurso.this);
+				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionCursoItemTodos.this);
 				
 			}
 

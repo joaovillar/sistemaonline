@@ -12,8 +12,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -265,7 +265,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		txtSearch = new TextBox();
 		txtSearch.setStyleName("design_text_boxes");	
 		
-		txtSearch.addKeyDownHandler(new EnterKeyPressHandler());
+		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 		
 		flexTableFiltrarAluno.setWidget(0, 0, mpPager);
@@ -598,15 +598,10 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 				});
 	}
 
-//	private class EnterKeyPressHandler implements KeyPressHandler {
-	private class EnterKeyPressHandler implements KeyDownHandler {
 
-//		public void onKeyPress(KeyPressEvent event) {
-		 public void onKeyDown(KeyDownEvent event) {
-//			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	private class EnterKeyUpHandler implements KeyUpHandler {
+		 public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				// populateGridUsuarios();
-				// GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
 				filtrarCellTable(txtSearch.getText());
 			}
 		}

@@ -8,8 +8,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
@@ -153,7 +153,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		txtFiltroAluno = new TextBox();		
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.usuarioFiltrarListaAlunos(), "images/magnifier.png");
 		
-		txtFiltroAluno.addKeyDownHandler(new KeyDownHandlerFiltrarAluno());		
+		txtFiltroAluno.addKeyUpHandler(new KeyUpHandlerFiltrarAluno());		
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrarAluno());				
 		
 		lblNomeCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -289,9 +289,9 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		}
 	}
 	
-	private class KeyDownHandlerFiltrarAluno implements KeyDownHandler {
-		public void onKeyDown(KeyDownEvent event) {
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	private class KeyUpHandlerFiltrarAluno implements KeyUpHandler {
+		public void onKeyUp(KeyUpEvent event) {
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				listBoxAlunosPorCurso.filterComboBox(txtFiltroAluno.getText());
 			}
 		}

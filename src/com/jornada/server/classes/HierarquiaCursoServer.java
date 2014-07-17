@@ -19,7 +19,7 @@ public class HierarquiaCursoServer {
 			//Getting Periodos
 			//curso.setListPeriodos(PeriodoServer.getPeriodos(curso.getIdCurso()));
 			curso.getListPeriodos().addAll(PeriodoServer.getPeriodos(curso.getIdCurso()));
-			curso.getListAlunos().addAll(UsuarioServer.getUsuariosPorCurso(curso.getIdCurso()));
+			curso.getListAlunos().addAll(UsuarioServer.getAlunosPorCurso(curso.getIdCurso()));
 			                        
 			
 			//Getting Disciplinas

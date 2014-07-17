@@ -33,8 +33,8 @@ public interface GWTServiceUsuario extends RemoteService {
 	public ArrayList<Usuario> getUsuarios();	
 	public ArrayList<Usuario> getUsuarios(String strFilter);
 	public ArrayList<Usuario> getUsuarios(String strDBField, String strFilter);	
-	public ArrayList<Usuario> getUsuariosPorCurso(int idCurso, String strFiltroUsuario);	
-	public ArrayList<Usuario> getUsuariosPorCurso(int idCurso);	
+	public ArrayList<Usuario> getAlunosPorCurso(int idCurso, String strFiltroUsuario);	
+	public ArrayList<Usuario> getAlunosPorCurso(int idCurso);	
 	public ArrayList<Usuario> getUsuariosPorCursoAmbientePai(Usuario usuarioPai, int idCurso);	
 	public ArrayList<Usuario> getUsuariosPorTipoUsuario(int id_tipo_usuario, String strFilter);	
 	public ArrayList<Usuario> getUsuariosPorTipoUsuario(int id_tipo_usuario);

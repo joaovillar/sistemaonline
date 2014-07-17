@@ -65,6 +65,7 @@ public class MpSelectionAluno extends MpSelection {
 	
 	private void startLoadingListBox(){
 		clear();
+//		listBoxAux.clear();
 		addItem(CARREGANDO,Integer.toString(-1));
 	}
 	

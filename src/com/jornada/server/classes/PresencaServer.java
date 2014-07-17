@@ -170,7 +170,7 @@ public class PresencaServer {
 		
 		ArrayList<PresencaUsuarioAula> arrayPresencaUsuario = new ArrayList<PresencaUsuarioAula>();
 		
-		ArrayList<Usuario> arrayUsuario = UsuarioServer.getUsuariosPorCurso(idCurso);
+		ArrayList<Usuario> arrayUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
 //		Presenca presenca = PresencaServer.getPresenca(1);	
 		Presenca presenca = new Presenca();
 		TipoPresenca tipoPresenca = TipoPresencaServer.getTipoPresenca(1);
@@ -192,7 +192,7 @@ public class PresencaServer {
 		
 		ArrayList<PresencaUsuarioAula> arrayPresencaUsuario = new ArrayList<PresencaUsuarioAula>();
 		
-		ArrayList<Usuario> arrayUsuario = UsuarioServer.getUsuariosPorCurso(idCurso, strAluno);
+		ArrayList<Usuario> arrayUsuario = UsuarioServer.getAlunosPorCurso(idCurso, strAluno);
 		Presenca presenca = PresencaServer.getPresenca(1);	
 		
 		for(int i=0;i<arrayUsuario.size();i++){
@@ -209,7 +209,7 @@ public class PresencaServer {
     public static ArrayList<PresencaUsuarioAula> getListaPresencaAlunos(int idCurso, int idDisciplina)
     {
 
-        ArrayList<Usuario> arrayUsuario = UsuarioServer.getUsuariosPorCurso(idCurso);
+        ArrayList<Usuario> arrayUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
         ArrayList<Aula> arrayAula = AulaServer.getAulas(idDisciplina);
 
 
@@ -250,7 +250,7 @@ public class PresencaServer {
     public static ArrayList<ArrayList<String>> getListaPresencaAlunosArrayList(int idCurso, int idDisciplina)
     {
 
-        ArrayList<Usuario> arrayUsuario = UsuarioServer.getUsuariosPorCurso(idCurso);
+        ArrayList<Usuario> arrayUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
         ArrayList<Aula> arrayAula = AulaServer.getAulas(idDisciplina);
 
         ArrayList<ArrayList<String>> resultRows = new ArrayList<ArrayList<String>>();

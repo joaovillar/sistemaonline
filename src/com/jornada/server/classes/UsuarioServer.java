@@ -523,7 +523,7 @@ public class UsuarioServer{
 
 	}		
 	
-	public static ArrayList<Usuario> getUsuariosPorCurso(int idCurso, String strFiltroUsuario) {
+	public static ArrayList<Usuario> getAlunosPorCurso(int idCurso, String strFiltroUsuario) {
 		
 		ArrayList<Usuario> userList = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
@@ -553,7 +553,7 @@ public class UsuarioServer{
 
 	}		
 		
-	public static ArrayList<Usuario> getUsuariosPorCurso(int idCurso) {
+	public static ArrayList<Usuario> getAlunosPorCurso(int idCurso) {
 		
 		ArrayList<Usuario> userList = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();

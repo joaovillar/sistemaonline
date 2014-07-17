@@ -193,6 +193,7 @@ public interface TextConstants extends Messages {
 	/******Curso Begin******/
 	String curso();
 	String cursoNome();
+	String cursoNovoCurso();
 	String cursoDescricao();
 	String cursoEmenta();
 	String cursoMediaNota();

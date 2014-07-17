@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Avaliacao;
@@ -106,7 +107,7 @@ public class CursoServer{
 //		return isOperationDone;
 	}
 	
-	public static boolean AdicionarCursoTemplate(Curso curso) {
+	public static boolean AdicionarCursoTemplate(Curso curso, Integer[] idCursosImportarAluno) {
 
 		boolean isOperationDone = false;
 		
@@ -158,6 +159,27 @@ public class CursoServer{
 			}
 			
 		}
+		
+		HashSet<Integer> hashSetIdAlunosImportar = new HashSet<Integer>();
+		
+		for(int i=0; i<idCursosImportarAluno.length;i++){
+			ArrayList<Usuario> listUsuario = new ArrayList<Usuario>();
+			listUsuario.addAll(UsuarioServer.getAlunosPorCurso(idCursosImportarAluno[i]));
+			
+			for(int cv=0;cv<listUsuario.size();cv++){
+				hashSetIdAlunosImportar.add(listUsuario.get(cv).getIdUsuario());
+			}
+		}
+		
+		ArrayList<Integer> listIdAlunosImportar = new ArrayList<Integer>(hashSetIdAlunosImportar);
+		
+		isOperationDone = CursoServer.associarAlunosAoCurso(intNewIdCurso, listIdAlunosImportar);
+		
+//		for(int i=0;i<listIdAlunosImportar.size();i++){
+//			Usuario aluno = hashSetIdAlunosImportar.get(i);
+////			insertedOk = UsuarioServer.AdicionarUsuario(aluno);			
+//			isOperationDone = CursoServer.associarAlunosAoCurso(intNewIdCurso, listIdAlunosImportar);
+//		}
 
 		return isOperationDone;
 	}	
@@ -441,18 +463,21 @@ public class CursoServer{
 
 	}	
 		
-	public static boolean associarAlunosAoCurso(int id_curso, ArrayList<String> list_id_aluno){
+	public static boolean associarAlunosAoCurso(int id_curso, ArrayList<Integer> list_id_aluno){
 
 		boolean success = false;
 
 //		JornadaDataBase dataBase = new JornadaDataBase();
-		Connection conn = ConnectionManager.getConnection();
+//		Connection conn = ConnectionManager.getConnection();
 		try {
 //			dataBase.createConnection();
 //			Connection connection = dataBase.getConnection();
-
-			deleteAssociacaoCursoAluno(conn, id_curso);
-			insertAssociacaoCursoAluno(conn, id_curso, list_id_aluno);
+			
+			deleteAssociacaoCursoAluno(id_curso);
+			insertAssociacaoCursoAluno(id_curso, list_id_aluno);
+			
+//			deleteAssociacaoCursoAluno(conn, id_curso);
+//			insertAssociacaoCursoAluno(conn, id_curso, list_id_aluno);
 			success=true;
 
 		} catch (Exception ex) {
@@ -460,22 +485,24 @@ public class CursoServer{
 			System.err.println(ex.getMessage());
 		} finally {
 			// dataBase.close();
-			ConnectionManager.closeConnection(conn);
+//			ConnectionManager.closeConnection(conn);
 		}
 
 		return success;
 	}	
 	
-	private static int deleteAssociacaoCursoAluno(Connection conn, int id_curso){
+	private static int deleteAssociacaoCursoAluno(int id_curso){
 		
 		int count = 0;
 		int deleted = 0;
 
+		Connection conn = ConnectionManager.getConnection();
+		
 		try {
 			
-			Connection connection = conn;
+//			Connection connection = conn;			
 
-			PreparedStatement psDelete = connection.prepareStatement(CursoServer.DB_DELETE_REL_CURSO_ALUNO);
+			PreparedStatement psDelete = conn.prepareStatement(CursoServer.DB_DELETE_REL_CURSO_ALUNO);
 			psDelete.setInt(++count, id_curso);
 			deleted = psDelete.executeUpdate();
 
@@ -484,25 +511,28 @@ public class CursoServer{
 		} finally {
 			// dataBase.close();
 //			ConnectionManager.closeConnection(conn);
+			ConnectionManager.closeConnection(conn);
 		}
 		
 		return deleted;
 		
 	}
 	
-	private static int insertAssociacaoCursoAluno(Connection conn, int id_curso, ArrayList<String> list_id_aluno){
+	private static int insertAssociacaoCursoAluno(int id_curso, ArrayList<Integer> list_id_aluno){
 		
 		int count = 0;
 		int intAddedItems = 0;
-
+		
+		Connection conn = ConnectionManager.getConnection();
+		
 		try {
 			
-			Connection connection = conn;
+//			Connection connection = conn;
 
 			for(int i=0;i<list_id_aluno.size();i++){
 				count=0;
-				int id_usuario = Integer.parseInt(list_id_aluno.get(i));
-				PreparedStatement psInsert = connection.prepareStatement(CursoServer.DB_INSERT_REL_CURSO_ALUNO);
+				int id_usuario = list_id_aluno.get(i);
+				PreparedStatement psInsert = conn.prepareStatement(CursoServer.DB_INSERT_REL_CURSO_ALUNO);
 				psInsert.setInt(++count, id_usuario);				
 				psInsert.setInt(++count, id_curso);	
 				intAddedItems=psInsert.executeUpdate();					
@@ -513,6 +543,7 @@ public class CursoServer{
 			System.err.println(sqlex.getMessage());
 		} finally {
 			// dataBase.close();
+			ConnectionManager.closeConnection(conn);
 		}
 		
 		return intAddedItems;

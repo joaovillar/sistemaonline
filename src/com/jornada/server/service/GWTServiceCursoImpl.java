@@ -34,12 +34,29 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 	}
 	
 	
-	public boolean AdicionarCursoTemplate(int idCursoTemplate, Curso curso) {
-		Curso template = HierarquiaCursoServer.getHierarquiaCurso(idCursoTemplate);
+	public boolean AdicionarCursoTemplate(int idCursoEstrutura, Integer[] idCursosImportarAluno, Curso curso) {
+		boolean insertedOk = false;
+		Curso template = HierarquiaCursoServer.getHierarquiaCurso(idCursoEstrutura);
 		template.setNome(curso.getNome());
 		template.setDataInicial(curso.getDataInicial());
-		template.setDataFinal(curso.getDataFinal());		
-		return CursoServer.AdicionarCursoTemplate(template);		
+		template.setDataFinal(curso.getDataFinal());
+		insertedOk = CursoServer.AdicionarCursoTemplate(template, idCursosImportarAluno);
+		
+//		ArrayList<Usuario> listAlunosImportar = new ArrayList<Usuario>();
+//		
+//		for(int i=0; i<idCursosImportarAluno.length;i++){
+//			listAlunosImportar.addAll(UsuarioServer.getUsuariosPorCurso(idCursosImportarAluno[i]));
+//		}
+//		
+//		for(int i=0;i<listAlunosImportar.size();i++){
+//			Usuario aluno = listAlunosImportar.get(i);
+////			insertedOk = UsuarioServer.AdicionarUsuario(aluno);			
+//			insertedOk = CursoServer.associarAlunosAoCurso(id_curso, list_id_aluno)
+//		}
+		
+		
+		return insertedOk;
+//		return CursoServer.AdicionarCursoTemplate(template);		
 	}	
 	
 	
@@ -87,7 +104,7 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 	public ArrayList<Usuario> getTodosOsAlunosDoCurso(int id_curso){		
 		return CursoServer.getTodosOsAlunosDoCurso(id_curso);	
 	}	
-	public boolean associarAlunosAoCurso(int id_curso,ArrayList<String> list_id_aluno){		
+	public boolean associarAlunosAoCurso(int id_curso,ArrayList<Integer> list_id_aluno){		
 		return CursoServer.associarAlunosAoCurso(id_curso, list_id_aluno);
 	}	
 

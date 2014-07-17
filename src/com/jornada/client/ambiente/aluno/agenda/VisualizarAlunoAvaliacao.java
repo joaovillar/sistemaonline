@@ -12,8 +12,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -138,7 +138,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 			txtSearch.setStyleName("design_text_boxes");
 		}
 		
-		txtSearch.addKeyDownHandler(new EnterKeyPressHandler());
+		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 		
 		FlexTable flexTableFiltrar = new FlexTable();	
@@ -350,8 +350,8 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 	/*******************************************************************************************************/
 	/***************************************BEGIN Filterting CellTable***************************************/
 	
-	private class EnterKeyPressHandler implements KeyDownHandler {
-		 public void onKeyDown(KeyDownEvent event) {
+	private class EnterKeyUpHandler implements KeyUpHandler {
+		 public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				filtrarCellTable(txtSearch.getText());
 			}

@@ -13,8 +13,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
@@ -156,7 +156,7 @@ public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 		txtSearch = new TextBox();
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
 
-		txtSearch.addKeyPressHandler(new EnterKeyPressHandler());		
+		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());		
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 
 		lblFiltroUsuario.setStyleName("design_label");
@@ -273,10 +273,10 @@ public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 		}
 	}	
 	
-	private class EnterKeyPressHandler implements KeyPressHandler{
+	private class EnterKeyUpHandler implements KeyUpHandler{
 		
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				filteringDataProvider();
 			}
 		}

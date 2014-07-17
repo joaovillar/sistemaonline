@@ -37,9 +37,6 @@ import com.jornada.client.ambiente.professor.hierarquia.HierarquiaCursoProfessor
 import com.jornada.client.ambiente.professor.nota.TelaInicialNota;
 import com.jornada.client.ambiente.professor.ocorrencia.TelaInicialProfessorOcorrencia;
 import com.jornada.client.ambiente.professor.topico.TelaInicialTopicoProfessor;
-import com.jornada.client.classes.animation.ElementFader;
-import com.jornada.client.classes.animation.ResizeWidthAnimation;
-import com.jornada.client.classes.animation.RockAnimation;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 //import com.jornada.client.ambiente.professor.nota.CadastroNota;

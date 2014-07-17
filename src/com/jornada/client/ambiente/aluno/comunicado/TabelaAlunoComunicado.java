@@ -15,8 +15,8 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -107,7 +107,7 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		txtSearch = new TextBox();
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
 		
-		txtSearch.addKeyPressHandler(new EnterKeyPressHandler());
+		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 		
 		txtSearch.setStyleName("design_text_boxes");	
@@ -185,22 +185,15 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		}
 	}	
 	
-	private class EnterKeyPressHandler implements KeyPressHandler{
+	private class EnterKeyUpHandler implements KeyUpHandler{
 		
-		public void onKeyPress(KeyPressEvent event){
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+		public void onKeyUp(KeyUpEvent event){
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelLoading.setVisible(true);					
 				GWTServiceComunicado.Util.getInstance().getComunicadosExterno("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
 			}
 		}
 	}
-	
-//	private class ClickHandlerAdicionar implements ClickHandler {
-//		public void onClick(ClickEvent event) {			
-////			paginaComunicado.openFormularioComunicadoParaAdicionar();
-//		}
-//	}		
-	
 	
 	
 	protected void populateGrid() {

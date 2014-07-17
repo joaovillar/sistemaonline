@@ -7,8 +7,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -128,8 +128,8 @@ public class MainEntryPoint implements EntryPoint {
 		lblPassword.setStyleName("design_label");
 		
 		MpImageButton btnSignIn = new MpImageButton(txtConstants.loginLogar(),"images/image002.png");		
-		textBoxUsername.addKeyDownHandler(new KeyDownHandlerLogin());		
-		textBoxPassword.addKeyDownHandler(new KeyDownHandlerLogin());
+		textBoxUsername.addKeyUpHandler(new KeyUpHandlerLogin());		
+		textBoxPassword.addKeyUpHandler(new KeyUpHandlerLogin());
 		btnSignIn.addClickHandler(new ClickHandlerLogin());
 		
 		int row=0;
@@ -208,9 +208,9 @@ public class MainEntryPoint implements EntryPoint {
 	 }	
 	
 	
-		private class KeyDownHandlerLogin implements KeyDownHandler {
-			public void onKeyDown(KeyDownEvent event) {
-				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+		private class KeyUpHandlerLogin implements KeyUpHandler {
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					autenticarUsuario();					
 				}
 			}

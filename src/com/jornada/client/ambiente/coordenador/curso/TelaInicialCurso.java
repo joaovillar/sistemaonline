@@ -34,7 +34,7 @@ public class TelaInicialCurso extends Composite {
 			uniqueInstance = new TelaInicialCurso(mainView);
 		}
 		else{
-			uniqueInstance.associarCursoAluno.popularOnLoadListBoxCursos();
+			uniqueInstance.associarCursoAluno.updateClientData();
 		}
 		
 		return uniqueInstance;
@@ -86,8 +86,8 @@ public class TelaInicialCurso extends Composite {
 	}
 	
 	protected void updateAssociarCurso(){
-		associarCursoAluno.popularAlunosAssociados();
-		associarCursoAluno.popularOnLoadListBoxCursos();
+//		associarCursoAluno.popularAlunosAssociados();
+		associarCursoAluno.updateClientData();
 	}
 	
 	protected void updateAdicionarCurso(){
