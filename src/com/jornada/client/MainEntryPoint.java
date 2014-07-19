@@ -49,17 +49,11 @@ public class MainEntryPoint implements EntryPoint {
 
 	public void onModuleLoad() {	
 		
-		
 		txtConstants = GWT.create(TextConstants.class);
 	    
 		vPanelPage = new VerticalPanel();
 		vPanelPage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		vPanelPage.setSize("100%", "100%");
-		
-		
-//		Label label = new Label("Testing");		
-//		vPanelPage.add(label);
-		
+		vPanelPage.setSize("100%", "100%");		
 
 		String sessionID;
 		try {
@@ -75,18 +69,14 @@ public class MainEntryPoint implements EntryPoint {
 			checkWithServerIfSessionIdIsStillLegal();
 		}
 		
-
-
-		RootPanel.get().add(vPanelPage);		
-
-	    
+		RootPanel.get().add(vPanelPage);	
+		
 	  }
 	
 	
 	
 	private void createMainView(Usuario usuarioLogado){
-
-	
+		
 		mainView = new MainView(usuarioLogado);		
 		mainView.initHistorySupport();
     	vPanelPage.clear();

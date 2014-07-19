@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceLogin;
 import com.jornada.server.classes.UsuarioServer;
+import com.jornada.server.classes.password.BCrypt;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Usuario;
 
@@ -35,12 +36,13 @@ public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServ
 		
 		//validate username and password
 		Usuario user = UsuarioServer.getUsuarioPeloLogin(login);
-//		user.setIdioma(IdiomaServer.getIdioma(user.getIdIdioma()));
+		
+		boolean valid = BCrypt.checkpw(password, user.getSenha());
 
-		if (user.getSenha().equals(password)) {
+		if(valid){
 			user.setLoggedIn(true);
 			user.setSessionId(this.getThreadLocalRequest().getSession().getId());
-//			Locale.setDefault(Locale.forLanguageTag(user.getIdioma().getLocale()));
+
 			// store the user/session id
 			storeUserInSession(user);
 			System.out.println("User: " + user.getPrimeiroNome() + " logged in successfully. Session id: " + user.getSessionId());

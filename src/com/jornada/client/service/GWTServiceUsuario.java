@@ -28,6 +28,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	
 	public boolean AdicionarUsuario(Usuario usuario);	
 	public boolean updateUsuarioRow(Usuario usuario);	
+	public boolean atualizarSenha(int idUsuario, String senha);	
 	public boolean deleteUsuarioRow(int id_usuario);	
 	public ArrayList<Usuario> importarUsuariosUsandoExcel(String strFileName);
 	public ArrayList<Usuario> getUsuarios();	

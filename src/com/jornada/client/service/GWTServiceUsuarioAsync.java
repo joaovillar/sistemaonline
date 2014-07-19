@@ -10,6 +10,7 @@ public interface GWTServiceUsuarioAsync {
 
 	public void AdicionarUsuario(Usuario usuario, AsyncCallback<Boolean> callback);	
 	public void updateUsuarioRow(Usuario usuario, AsyncCallback<Boolean> callback);	
+	public void atualizarSenha(int idUsuario, String senha, AsyncCallback<Boolean> callback);
 	public void deleteUsuarioRow(int id_usuario, AsyncCallback<Boolean> callback);	
 	public void importarUsuariosUsandoExcel(String strFileName, AsyncCallback<ArrayList<Usuario>> callback);
 	public void getUsuarios(AsyncCallback<ArrayList<Usuario>> callback);	

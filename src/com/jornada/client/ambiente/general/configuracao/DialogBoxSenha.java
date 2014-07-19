@@ -183,8 +183,7 @@ public class DialogBoxSenha extends DialogBox {
 			if (FieldVerifier.isValidPassword(txtNovaSenha.getValue())) {
 				if (txtNovaSenha.getValue().equals(txtConfirmarNovaSenha.getValue())) {
 					mpLoading.setVisible(true);
-					usuario.setSenha(txtNovaSenha.getValue());
-					GWTServiceUsuario.Util.getInstance().updateUsuarioRow(usuario, callbackAtualizarSenha);
+					GWTServiceUsuario.Util.getInstance().atualizarSenha(usuario.getIdUsuario(), txtNovaSenha.getValue(), callbackAtualizarSenha);
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.senhaNaoConfere());

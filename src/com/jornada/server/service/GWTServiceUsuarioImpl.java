@@ -36,6 +36,10 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.updateUsuarioRow(usuario);
 	}
 	
+	public boolean atualizarSenha(int idUsuario, String password){		
+		return UsuarioServer.atualizarSenha(idUsuario, password);
+	}
+	
 	public boolean deleteUsuarioRow(int id_usuario){		
 		return UsuarioServer.deleteUsuarioRow(id_usuario);		
 	}	

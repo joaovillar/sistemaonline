@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.jornada.server.classes.password.BCrypt;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
@@ -20,8 +21,10 @@ import com.jornada.shared.classes.Usuario;
 public class UsuarioServer{
 
 	public static String DB_INSERT = "INSERT INTO usuario (primeiro_nome,sobre_nome,cpf,data_nascimento,id_tipo_usuario,email,telefone_celular,telefone_residencial,telefone_comercial,login,senha) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-	public static String DB_UPDATE = "UPDATE usuario set primeiro_nome=?, sobre_nome=?, cpf=?, data_nascimento=?, id_tipo_usuario=?, email=?, telefone_celular=?, telefone_residencial=?, telefone_comercial=?, login=?, senha=? where id_usuario=?";	
+//	public static String DB_UPDATE = "UPDATE usuario set primeiro_nome=?, sobre_nome=?, cpf=?, data_nascimento=?, id_tipo_usuario=?, email=?, telefone_celular=?, telefone_residencial=?, telefone_comercial=?, login=?, senha=? where id_usuario=?";	
+	public static String DB_UPDATE = "UPDATE usuario set primeiro_nome=?, sobre_nome=?, cpf=?, data_nascimento=?, id_tipo_usuario=?, email=?, telefone_celular=?, telefone_residencial=?, telefone_comercial=?, login=? where id_usuario=?";
 	public static String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
+	public static String DB_UPDATE_SENHA = "UPDATE usuario set senha=? where id_usuario=?";
 	public static String DB_SELECT_ILIKE = "SELECT * FROM usuario where (primeiro_nome ilike ?) order by primeiro_nome asc";
 	public static String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario where (<change> ilike ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome asc";
 	public static String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome asc";
@@ -96,6 +99,8 @@ public class UsuarioServer{
 			if (usuario.getDataNascimento() == null) {
 				usuario.setDataNascimento(date);
 			}
+			
+			String senhaHashed = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
 
 			int count = 0;
 			PreparedStatement insert = connection.prepareStatement(UsuarioServer.DB_INSERT);
@@ -109,8 +114,7 @@ public class UsuarioServer{
 			insert.setString(++count, usuario.getTelefoneResidencial());
 			insert.setString(++count, usuario.getTelefoneComercial());
 			insert.setString(++count, usuario.getLogin());
-			insert.setString(++count, usuario.getSenha());
-
+			insert.setString(++count, senhaHashed);
 
 
 			int numberUpdate = insert.executeUpdate();
@@ -152,8 +156,42 @@ public class UsuarioServer{
 			update.setString(++count, usuario.getTelefoneResidencial());
 			update.setString(++count, usuario.getTelefoneComercial());
 			update.setString(++count, usuario.getLogin());
-			update.setString(++count, usuario.getSenha());
+//			update.setString(++count, usuario.getSenha());
 			update.setInt(++count, usuario.getIdUsuario());
+
+			int numberUpdate = update.executeUpdate();
+
+
+			if (numberUpdate == 1) {
+				success = true;
+			}
+
+
+		} catch (SQLException sqlex) {
+			success=false;
+			System.err.println(sqlex.getMessage());			
+		} finally {
+//			dataBase.close();
+			ConnectionManager.closeConnection(connection);
+		}
+		
+		return success;
+	}	
+		
+	public static boolean atualizarIdioma(int idUsuario, int idIdioma){
+		boolean success=false;
+
+//		JornadaDataBase dataBase = new JornadaDataBase();
+		Connection connection = ConnectionManager.getConnection();
+
+		try {
+//			dataBase.createConnection();
+//			Connection connection = dataBase.getConnection();
+			
+			int count = 0;
+			PreparedStatement update = connection.prepareStatement(DB_UPDATE_IDIOMA);
+			update.setInt(++count, idIdioma);
+			update.setInt(++count, idUsuario);
 
 			int numberUpdate = update.executeUpdate();
 
@@ -175,7 +213,7 @@ public class UsuarioServer{
 	}	
 	
 	
-	public static boolean atualizarIdioma(int idUsuario, int idIdioma){
+	public static boolean atualizarSenha(int idUsuario, String senha){
 		boolean success=false;
 
 //		JornadaDataBase dataBase = new JornadaDataBase();
@@ -185,9 +223,11 @@ public class UsuarioServer{
 //			dataBase.createConnection();
 //			Connection connection = dataBase.getConnection();
 			
+			String senhaHashed = BCrypt.hashpw(senha, BCrypt.gensalt());
+			
 			int count = 0;
-			PreparedStatement update = connection.prepareStatement(DB_UPDATE_IDIOMA);
-			update.setInt(++count, idIdioma);
+			PreparedStatement update = connection.prepareStatement(DB_UPDATE_SENHA);
+			update.setString(++count, senhaHashed);
 			update.setInt(++count, idUsuario);
 
 			int numberUpdate = update.executeUpdate();
