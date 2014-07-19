@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.jornada.ConfigJornada;
 import com.jornada.server.classes.password.BCrypt;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.TipoUsuario;
@@ -334,13 +335,19 @@ public class UsuarioServer{
 				
 				TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuario((cellTipoUsuario.getStringCellValue()==null)?"":cellTipoUsuario.getStringCellValue());
 				
+				String senha="";				
+				if((cellSenha==null)|| (cellSenha.getStringCellValue().isEmpty())){
+					senha = ConfigJornada.getProperty("config.senha.inicial");
+				}
+				String senhaHashed = BCrypt.hashpw(senha, BCrypt.gensalt());
+				
 				usuario.setTipoUsuario(tipoUsuario);
 				usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
 				usuario.setPrimeiroNome((cellPrimeiroNome==null)?"":cellPrimeiroNome.getStringCellValue());
 				usuario.setSobreNome((cellSobreNome==null)?"":cellSobreNome.getStringCellValue());
 				usuario.setEmail((cellEmail==null)?"":cellEmail.getStringCellValue());
 				usuario.setLogin((cellUsuario==null)?"":cellUsuario.getStringCellValue());
-				usuario.setSenha((cellSenha==null)?"":cellSenha.getStringCellValue());
+				usuario.setSenha(senhaHashed);
 				usuario.setCpf((cellCPF==null)?"":cellCPF.getStringCellValue());
 				usuario.setTelefoneCelular((cellTelCelular==null)?"":cellTelCelular.getStringCellValue());
 				usuario.setTelefoneResidencial((cellTelResidencial==null)?"":cellTelResidencial.getStringCellValue());
