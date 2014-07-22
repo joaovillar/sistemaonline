@@ -259,7 +259,7 @@ public class CursoServer{
 	}		
 	
 	
-	public static ArrayList<Curso> getCursos() {
+	public static ArrayList<Curso> getCursos(){
 		ArrayList<Curso> data = new ArrayList<Curso>();		
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection conn = ConnectionManager.getConnection();
@@ -272,7 +272,8 @@ public class CursoServer{
 			
 			data = getCursoParameters(psCurso.executeQuery());
 
-		} catch (SQLException sqlex) {
+		} catch (SQLException sqlex) {			
+			System.out.println("Error:<getCursos>");
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();

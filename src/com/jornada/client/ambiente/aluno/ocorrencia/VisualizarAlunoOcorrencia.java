@@ -195,9 +195,9 @@ public class VisualizarAlunoOcorrencia extends VerticalPanel {
 //		};		
 
 
-//		if(usuarioLogado.getIdTipoUsuario()==TipoUsuario.ALUNO){
-//			populateGrid();
-//		}
+		if(usuarioLogado.getIdTipoUsuario()==TipoUsuario.ALUNO){
+			populateGrid();
+		}
 		
 //		populateGrid();
 

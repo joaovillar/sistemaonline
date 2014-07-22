@@ -16,23 +16,23 @@ package com.jornada.server.service;
 
 import java.util.ArrayList;
 
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceHierarquiaCurso;
 import com.jornada.server.classes.HierarquiaCursoServer;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class GWTServiceHierarquiaCursoImpl extends RemoteServiceServlet implements GWTServiceHierarquiaCurso {
 
 	private static final long serialVersionUID = 4409046912033721940L;
 	
 	
-	public ArrayList<Curso> getHierarquiaCursos() {			
+	public ArrayList<Curso> getHierarquiaCursos(){			
 		return HierarquiaCursoServer.getHierarquiaCursos();		
 	}
 	
-	public ArrayList<Curso> getHierarquiaCursosAmbientePais(Usuario usuarioPais) {
+	public ArrayList<Curso> getHierarquiaCursosAmbientePais(Usuario usuarioPais){
 		
 		switch(usuarioPais.getIdTipoUsuario()){
 			case TipoUsuario.ADMINISTRADOR: return HierarquiaCursoServer.getHierarquiaCursos();		
@@ -43,7 +43,7 @@ public class GWTServiceHierarquiaCursoImpl extends RemoteServiceServlet implemen
 		
 	}
 	
-	public ArrayList<Curso> getHierarquiaCursosAmbienteAluno(Usuario usuarioAluno) {
+	public ArrayList<Curso> getHierarquiaCursosAmbienteAluno(Usuario usuarioAluno){
 		
 		switch (usuarioAluno.getIdTipoUsuario()) {
 			case TipoUsuario.ADMINISTRADOR: return HierarquiaCursoServer.getHierarquiaCursos();
@@ -53,7 +53,7 @@ public class GWTServiceHierarquiaCursoImpl extends RemoteServiceServlet implemen
 		}
 	}
 	
-	public ArrayList<Curso> getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor) {
+	public ArrayList<Curso> getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor){
 		
 		switch (usuarioProfessor.getIdTipoUsuario()) {
 			case TipoUsuario.ADMINISTRADOR: return HierarquiaCursoServer.getHierarquiaCursos();

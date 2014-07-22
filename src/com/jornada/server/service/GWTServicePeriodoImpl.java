@@ -1,6 +1,7 @@
 package com.jornada.server.service;
 
 import java.util.ArrayList;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServicePeriodo;
 import com.jornada.server.classes.PeriodoServer;

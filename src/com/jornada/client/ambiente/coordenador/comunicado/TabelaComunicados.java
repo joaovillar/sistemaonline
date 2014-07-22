@@ -45,6 +45,7 @@ import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpacePanel;
 import com.jornada.client.content.i18n.TextConstants;
@@ -160,15 +161,27 @@ public class TabelaComunicados extends VerticalPanel{
 
 			public void onSuccess(ArrayList<Comunicado> list) {
 				
-				mpPanelLoading.setVisible(false);
+//				mpPanelLoading.setVisible(false);
+//			
+//				dataProvider.getList().clear();
+//				
+//				for(int i=0;i<list.size();i++){
+//					dataProvider.getList().add(list.get(i));
+//				}
 				
-//				listaUsuarios = list;
-				
+				mpPanelLoading.setVisible(false);	
+				if(list==null){
+					MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
+					mpDialogBox.showDialog();	
+				}
 				dataProvider.getList().clear();
-				
+				cellTable.setRowCount(0);
 				for(int i=0;i<list.size();i++){
 					dataProvider.getList().add(list.get(i));
 				}
+				addCellTableData(dataProvider);						
+				cellTable.redraw();								
+				
 		
 
 			}
@@ -245,30 +258,35 @@ public class TabelaComunicados extends VerticalPanel{
 	
 	protected void populateGrid() {
 		
-		GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%",
+		GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%",callbackGetComunicadosFiltro
 		
-				new AsyncCallback<ArrayList<Comunicado>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-						mpDialogBoxWarning.setBodyText(txtConstants.geralErroCarregarDados());
-					}
-
-					@Override
-					public void onSuccess(ArrayList<Comunicado> list) {
-					
-						dataProvider.getList().clear();
-						cellTable.setRowCount(0);
-						for(int i=0;i<list.size();i++){
-							dataProvider.getList().add(list.get(i));
-						}
-						addCellTableData(dataProvider);						
-						cellTable.redraw();								
-
-
-					}
-				});
+//				new AsyncCallback<ArrayList<Comunicado>>() {
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//						mpDialogBoxWarning.setBodyText(txtConstants.geralErroCarregarDados());
+//					}
+//
+//					@Override
+//					public void onSuccess(ArrayList<Comunicado> list) {
+//					
+//						if(list==null){
+//							MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
+//							mpDialogBox.showDialog();	
+//						}
+//						dataProvider.getList().clear();
+//						cellTable.setRowCount(0);
+//						for(int i=0;i<list.size();i++){
+//							dataProvider.getList().add(list.get(i));
+//						}
+//						addCellTableData(dataProvider);						
+//						cellTable.redraw();								
+//
+//
+//					}
+//				}
+		);
 	}	
 	
 	

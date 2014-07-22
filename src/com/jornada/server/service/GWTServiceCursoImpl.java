@@ -70,7 +70,7 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 		return CursoServer.getCursos();
 	}	
 	
-	public ArrayList<Curso> getCursosPorPaiAmbientePais(Usuario usuario) {			
+	public ArrayList<Curso> getCursosPorPaiAmbientePais(Usuario usuario){			
 		switch(usuario.getIdTipoUsuario()){
 			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos();
 			case TipoUsuario.COORDENADOR : return CursoServer.getCursos();
@@ -79,7 +79,7 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 		}
 	}
 	
-	public ArrayList<Curso> getCursosPorAlunoAmbienteAluno(Usuario usuario) {			
+	public ArrayList<Curso> getCursosPorAlunoAmbienteAluno(Usuario usuario){			
 		switch(usuario.getIdTipoUsuario()){
 			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos();
 			case TipoUsuario.COORDENADOR : return CursoServer.getCursos();
@@ -89,7 +89,7 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 	}		
 	
 	
-	public ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario) {			
+	public ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario){			
 		switch(usuario.getIdTipoUsuario()){
 			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos();
 			case TipoUsuario.COORDENADOR : return CursoServer.getCursos();

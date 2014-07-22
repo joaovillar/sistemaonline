@@ -240,7 +240,8 @@ public class ComunicadoServer {
 			}
 
 		} catch (SQLException sqlex) {
-			System.err.println(sqlex.getMessage());
+			data=null;
+			System.err.println("Error:<getComunicados>"+sqlex.getMessage());
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(conn);

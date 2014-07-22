@@ -241,6 +241,7 @@ public class MainEntryPoint implements EntryPoint {
 		                            // load the next app page
 		                            //set session cookie for 1 day expiry.
 		                            String sessionID = object.getSessionId();
+		                            //milliseconds * seconds * minutes * hours * days
 		                            final long DURATION = 1000 * 60 * 60 * 24 * 1;
 		                            Date expires = new Date(System.currentTimeMillis() + DURATION);
 		                            Cookies.setCookie("sid", sessionID, expires, null, "/", false);			                            

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 import com.jornada.ConfigJornada;
@@ -28,7 +29,7 @@ public class ConnectionManager {
 	private static final String bonecp_AcquireIncrement = ConfigJornada.getProperty("bonecp.AcquireIncrement");
 	private static final String bonecp_StatementsCacheSize = ConfigJornada.getProperty("bonecp.StatementsCacheSize");
 	private static final String bonecp_ReleaseHelperThreads = ConfigJornada.getProperty("bonecp.ReleaseHelperThreads");
-	private static final String bonecp_ConnectionTestStatement = ConfigJornada.getProperty("bonecp.ConnectionTestStatement");
+//	private static final String bonecp_ConnectionTestStatement = ConfigJornada.getProperty("bonecp.ConnectionTestStatement");
 	private static final String bonecp_LazyInit = ConfigJornada.getProperty("bonecp.LazyInit");				
 	
 	
@@ -59,8 +60,9 @@ public class ConnectionManager {
 				config.setAcquireIncrement(Integer.parseInt(bonecp_AcquireIncrement.trim()));
 				config.setStatementsCacheSize(Integer.parseInt(bonecp_StatementsCacheSize.trim()));
 				config.setReleaseHelperThreads(Integer.parseInt(bonecp_ReleaseHelperThreads.trim()));
-				config.setConnectionTestStatement(bonecp_ConnectionTestStatement.trim());
-				config.setLazyInit(Boolean.parseBoolean(bonecp_LazyInit.trim()));				
+//				config.setConnectionTestStatement(bonecp_ConnectionTestStatement.trim());
+				config.setLazyInit(Boolean.parseBoolean(bonecp_LazyInit.trim()));
+				
 				
 				
 //				config.setIdleConnectionTestPeriod(1);
@@ -74,6 +76,7 @@ public class ConnectionManager {
 				ConnectionManager.setConnectionPool(connectionPool);
 	
 			} catch (Exception e) {
+				System.out.println("Erro <configureConnPool>");
 				e.printStackTrace(); // you should use exception wrapping on
 										// real-production code
 			}
@@ -95,6 +98,7 @@ public class ConnectionManager {
 			}
 
 		} catch (Exception e) {
+			System.out.println("Erro <shutdownConnPool>");
 			e.printStackTrace();
 		}
 	}
@@ -109,6 +113,7 @@ public class ConnectionManager {
 			// synchronization of the method will be done inside BoneCP source
 
 		} catch (Exception e) {
+			System.out.println("Erro <getConnection>");
 			e.printStackTrace();
 		}
 		return conn;
@@ -121,6 +126,7 @@ public class ConnectionManager {
 				stmt.close();
 			}
 		} catch (Exception e) {
+			System.out.println("Erro <closeStatement>");
 			e.printStackTrace();
 		}
 
@@ -132,6 +138,7 @@ public class ConnectionManager {
 				rSet.close();
 			}
 		} catch (Exception e) {
+			System.out.println("Erro <closeResultSet>");
 			e.printStackTrace();
 		}
 
@@ -144,6 +151,7 @@ public class ConnectionManager {
 								// connection is not closed it is released
 			} // and it will stay in pool
 		} catch (SQLException e) {
+			System.out.println("Erro <closeConnection>");
 			e.printStackTrace();
 		}
 
