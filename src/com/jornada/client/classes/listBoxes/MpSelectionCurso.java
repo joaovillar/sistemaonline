@@ -7,7 +7,6 @@ import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.service.GWTServicePeriodo;
 import com.jornada.shared.classes.Curso;
 
@@ -42,14 +41,14 @@ public class MpSelectionCurso extends MpSelection {
 				try {
 					DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionCurso.this);
 				} catch (Exception ex) {
-					MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
-					mpDialogBox.showDialog();					
+					logoutAndRefreshPage();
 					System.out.println("Error:" + ex.getMessage());
 				}
 				
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				System.out.println("Error:"+cautch.getMessage());
 				clear();
 				listCurso.clear();

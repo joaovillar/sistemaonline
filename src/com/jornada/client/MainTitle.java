@@ -228,9 +228,6 @@ public class MainTitle extends Composite {
 
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace();
-//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//				mpDialogBoxWarning.setBodyText(txtConstants.loginErroSairSistema());
-//				mpDialogBoxWarning.showDialog();
 			}
 		};		
 		

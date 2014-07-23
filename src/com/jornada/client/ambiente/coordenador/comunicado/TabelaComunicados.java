@@ -161,19 +161,13 @@ public class TabelaComunicados extends VerticalPanel{
 
 			public void onSuccess(ArrayList<Comunicado> list) {
 				
-//				mpPanelLoading.setVisible(false);
-//			
-//				dataProvider.getList().clear();
-//				
-//				for(int i=0;i<list.size();i++){
-//					dataProvider.getList().add(list.get(i));
-//				}
-				
 				mpPanelLoading.setVisible(false);	
+				
 				if(list==null){
 					MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
 					mpDialogBox.showDialog();	
 				}
+				
 				dataProvider.getList().clear();
 				cellTable.setRowCount(0);
 				for(int i=0;i<list.size();i++){

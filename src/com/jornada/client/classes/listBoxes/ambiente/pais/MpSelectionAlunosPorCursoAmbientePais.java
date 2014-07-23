@@ -33,12 +33,18 @@ public class MpSelectionAlunosPorCursoAmbientePais extends MpSelection {
 				}		
 
 				setVisibleItemCount(1);
-
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionAlunosPorCursoAmbientePais.this);
+				
+				try {
+					DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionAlunosPorCursoAmbientePais.this);
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
+					System.out.println("Error:" + ex.getMessage());
+				}
 				
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 

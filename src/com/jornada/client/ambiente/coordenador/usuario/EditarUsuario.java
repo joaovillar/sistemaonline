@@ -46,6 +46,7 @@ import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.cells.MpStyledSelectionCell;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
@@ -202,31 +203,14 @@ public class EditarUsuario extends VerticalPanel {
 				for(int i=0;i<list.size();i++){
 					dataProvider.getList().add(list.get(i));
 				}
-		
-				
 				
 				addCellTableData(dataProvider);
-				
-//				sortHandler = new ListHandler<Usuario>(dataProvider.getList());
-//				
-//				cellTable.addColumnSortHandler(sortHandler);
-//				cellTable.setSelectionModel(selectionModel);
-//				
-//				sortHandler.setComparator(columnPrimeiroNome, new Comparator<Usuario>() {
-//			      @Override
-//			      public int compare(Usuario o1, Usuario o2) {
-//			        return o1.getPrimeiroNome().compareTo(o2.getPrimeiroNome());
-//			      }
-//			    });						
-			    
-		
-
 			}
 
 			public void onFailure(Throwable caught) {
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroCarregar());
-				mpDialogBoxWarning.showDialog();
+				mpPanelLoading.setVisible(false);
+				MpDialogBoxRefreshPage mpDialogBoxRefreshPage = new MpDialogBoxRefreshPage();
+				mpDialogBoxRefreshPage.showDialog();
 
 			}
 		};			

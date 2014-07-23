@@ -35,11 +35,18 @@ public class MpSelectionAlunoAmbienteAluno extends MpSelection {
 
 				setVisibleItemCount(1);
 
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionAlunoAmbienteAluno.this);
+				
+				try {
+					DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionAlunoAmbienteAluno.this);
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
+					System.out.println("Error:" + ex.getMessage());
+				}
 				
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 

@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -15,6 +16,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.jornada.client.content.i18n.TextConstants;
+import com.jornada.client.service.GWTServiceLogin;
 
 
 @SuppressWarnings("deprecation")
@@ -67,7 +69,7 @@ public class MpDialogBoxRefreshPage extends DialogBox implements ClickListener {
 		    	strImgAddress = "images/image002.png";
 		    }
 		    else if(TYPE_MESSAGE.equals(TYPE_WARNING)){
-		    	strImgAddress = "images/exclamation-icon-small.png";
+		    	strImgAddress = "images/refresh-icon.png";
 		    }		    
 		    
 		    Image image = new Image(strImgAddress);
@@ -86,17 +88,36 @@ public class MpDialogBoxRefreshPage extends DialogBox implements ClickListener {
 
 
 	public void onClick(Widget sender) {
-		hide();
-		Window.Location.reload();
+		logoutAndRefresh();
+		
+//		hide();
+//		Window.Location.reload();
 	}
 	
 	private class EnterKeyUpHandler implements KeyUpHandler {
 		 public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {				
+//				hide();
+//				Window.Location.reload();
+				logoutAndRefresh();
+			}
+		}
+	}
+	
+	
+	
+	private void logoutAndRefresh(){
+		GWTServiceLogin.Util.getInstance().logout(new AsyncCallback<Boolean>() {
+			public void onSuccess(Boolean success) {
 				hide();
 				Window.Location.reload();
 			}
-		}
+
+			public void onFailure(Throwable caught) {
+				hide();
+				Window.Location.reload();
+			}
+		});
 	}
 	
 

@@ -21,6 +21,7 @@ import com.jornada.client.MainView;
 import com.jornada.client.classes.resources.CellTreeStyle;
 import com.jornada.client.classes.resources.CustomTreeModel;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
 import com.jornada.client.content.i18n.TextConstants;
@@ -69,6 +70,11 @@ public abstract class MpHierarquiaCurso extends Composite{
 		callBackListaCursos = new AsyncCallback<ArrayList<Curso>>() {
 		
 		public void onSuccess(ArrayList<Curso> listaCurso) {
+			
+			if(listaCurso==null || listaCurso.size()==0){
+				MpDialogBoxRefreshPage mpRefresh = new MpDialogBoxRefreshPage();
+				mpRefresh.showDialog();
+			}
 			
 			labelMessage = new Label("");
 			
