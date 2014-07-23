@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Disciplina;
 
@@ -50,7 +50,7 @@ public class MpScrollPanelDisciplina extends ScrollPanel{
 		gridCargaHorario.setBorderWidth(0);		
 		int column=0;
 		gridCargaHorario.setWidget(0, column++, lblCargaHorario);
-		gridCargaHorario.setWidget(0, column++, new MpSpacePanel());
+		gridCargaHorario.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridCargaHorario.setWidget(0, column++, lblCargaHorarioDB);
 		
 	
@@ -66,13 +66,13 @@ public class MpScrollPanelDisciplina extends ScrollPanel{
 //		flexTableConteudo.setWidget(row++, 0, lblCargaHorario);
 //		flexTableConteudo.setWidget(row++, 0, lblCargaHorarioDB);	
 		flexTableConteudo.setWidget(row++, 0, gridCargaHorario);	
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, lblDescricao);
 		flexTableConteudo.setWidget(row++, 0, lblDescricaoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, lblObjetivo);
 		flexTableConteudo.setWidget(row++, 0, lblObjetivoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, lblProfessor);
 		flexTableConteudo.setWidget(row++, 0, lblProfessorDB);
 

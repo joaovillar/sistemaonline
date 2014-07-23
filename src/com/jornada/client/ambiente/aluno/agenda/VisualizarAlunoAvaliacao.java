@@ -35,7 +35,7 @@ import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
@@ -147,7 +147,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 		flexTableFiltrar.setCellPadding(3);
 		flexTableFiltrar.setBorderWidth(0);		
 		flexTableFiltrar.setWidget(0, 0, mpPager);
-		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, txtSearch);
 		flexTableFiltrar.setWidget(0, 3, btnFiltrar);	
 		

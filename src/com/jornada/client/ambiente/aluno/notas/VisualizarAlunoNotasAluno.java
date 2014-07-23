@@ -38,7 +38,7 @@ import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.TipoUsuario;
@@ -171,7 +171,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		int row=1;
 		flexTableFiltrar.setWidget(row, 0, lblNomeCurso);
 		flexTableFiltrar.setWidget(row, 1, listBoxCurso);	
-		flexTableFiltrar.setWidget(row, 2, new MpSpacePanel());
+		flexTableFiltrar.setWidget(row, 2, new MpSpaceVerticalPanel());
 		
 		if(usuarioLogado.getIdTipoUsuario()==TipoUsuario.ALUNO){
 			listBoxAlunosPorCurso.clear();
@@ -181,7 +181,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 			flexTableFiltrar.setWidget(row, 4, listBoxAlunosPorCurso);
 			flexTableFiltrar.setWidget(row, 5, txtFiltroAluno);
 			flexTableFiltrar.setWidget(row, 6, btnFiltrar);
-			flexTableFiltrar.setWidget(row, 7, new MpSpacePanel());
+			flexTableFiltrar.setWidget(row, 7, new MpSpaceVerticalPanel());
 			flexTableFiltrar.setWidget(row, 8, mpPanelAlunosLoading);
 		}
 		
@@ -199,7 +199,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		Grid gridBoletim = new Grid(2,1);		
 		gridBoletim.setBorderWidth(0);	
 //		gridBoletim.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable)+"px");
-		gridBoletim.setWidget(row++, 0, new MpSpacePanel());
+		gridBoletim.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		gridBoletim.setWidget(row, 0, vPanelBoletim);		
 		gridBoletimChart.setWidget(0, 0, gridBoletim);
 //		gridBoletimChart.setWidget(0, 1, chart);

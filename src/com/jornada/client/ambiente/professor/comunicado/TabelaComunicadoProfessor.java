@@ -42,7 +42,7 @@ import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
@@ -135,7 +135,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 		mpPager.setPageSize(8);		
 		
 		flexTableFiltrar.setWidget(0, 0, mpPager);
-		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, lblComunicado);
 		flexTableFiltrar.setWidget(0, 3, txtSearch);
 		flexTableFiltrar.setWidget(0, 4, btnFiltrar);

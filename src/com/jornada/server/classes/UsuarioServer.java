@@ -34,7 +34,7 @@ public class UsuarioServer{
 	public static String DB_SELECT_USUARIO_ID = "SELECT * FROM usuario where id_usuario=?;";
 	public static String DB_SELECT_USUARIO_LOGIN = "SELECT * FROM usuario, tipo_usuario where login=? and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario;";
 	public static String DB_DELETE = "delete from usuario where id_usuario=?";
-	public static String DB_SELECT_ALL_TIPO_USUARIOS = "SELECT * FROM tipo_usuario order by nome_tipo_usuario asc;";
+	public static String DB_SELECT_ALL_TIPO_USUARIOS = "SELECT * FROM tipo_usuario where is_visible=true order by nome_tipo_usuario asc;";
 	public static String DB_SELECT_TIPO_USUARIOS_POR_NOME = "SELECT * FROM tipo_usuario where nome_tipo_usuario=? ;";
 	public static String DB_SELECT_ILIKE_FILTRADO_POR_CURSO = 
 			"select * from usuario where id_usuario in "+

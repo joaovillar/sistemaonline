@@ -23,7 +23,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.ConteudoProgramatico;
@@ -66,7 +66,7 @@ public class MpScrollPanelConteudoProgramatico extends ScrollPanel{
 		gridNumeracao.setBorderWidth(0);		
 		int column=0;
 		gridNumeracao.setWidget(0, column++, lblNumeracao);
-		gridNumeracao.setWidget(0, column++, new MpSpacePanel());
+		gridNumeracao.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridNumeracao.setWidget(0, column++, lblNumeracaoDB);		
 		
 		FlexTable flexTableConteudo = new FlexTable();
@@ -82,13 +82,13 @@ public class MpScrollPanelConteudoProgramatico extends ScrollPanel{
 //		flexTableConteudo.setWidget(row++, 0, lblNumeracao);
 //		flexTableConteudo.setWidget(row++, 0, lblNumeracaoDB);
 		flexTableConteudo.setWidget(row++, 0, gridNumeracao);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, lblDescricao);
 		flexTableConteudo.setWidget(row++, 0, lblDescricaoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, lblObjetivo);
 		flexTableConteudo.setWidget(row++, 0, lblObjetivoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, new InlineHTML("&nbsp"));
 		flexTableConteudo.setWidget(row++, 0, lblAvaliacoes);
 
@@ -133,7 +133,7 @@ public class MpScrollPanelConteudoProgramatico extends ScrollPanel{
 		flexTableFiltrar.setCellPadding(3);
 		flexTableFiltrar.setBorderWidth(0);		
 		flexTableFiltrar.setWidget(0, 0, mpPager);
-		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, txtSearch);
 		flexTableFiltrar.setWidget(0, 3, btnFiltrar);	
 

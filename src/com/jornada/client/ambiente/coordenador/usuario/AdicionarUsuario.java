@@ -5,8 +5,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -19,7 +21,7 @@ import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceHorizontalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.FieldVerifier;
@@ -38,6 +40,7 @@ public class AdicionarUsuario extends VerticalPanel {
 	private TextBox txtPrimeiroNome;
 	private TextBox txtSobreNome;
 	private TextBox txtCPF;
+	private TextBox txtRG;
 	private TextBox txtEmail;
 	private MpDateBoxWithImage dataNascimento;
 	private TextBox txtTelefoneCelular;
@@ -79,7 +82,7 @@ public class AdicionarUsuario extends VerticalPanel {
 //		mpLoadingListTipoUsuario.show();
 //		mpLoadingListTipoUsuario.setVisible(false);
 
-		Grid layout = new Grid(11,3);
+		FlexTable layout = new FlexTable();
 		// layout.setStyleName("single_line_table");
 		// layout.setWidth("800px");
 		layout.setCellSpacing(3);
@@ -95,6 +98,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtPrimeiroNome = new TextBox();		
 		txtSobreNome = new TextBox(); 
 		txtCPF = new TextBox();
+		txtRG = new TextBox();
 		txtEmail = new TextBox();
 		dataNascimento = new MpDateBoxWithImage();
 		txtTelefoneCelular = new TextBox();
@@ -117,6 +121,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtPrimeiroNome.setStyleName("design_text_boxes");
 		txtSobreNome.setStyleName("design_text_boxes"); 
 		txtCPF.setStyleName("design_text_boxes");
+		txtRG.setStyleName("design_text_boxes");
 		txtEmail.setStyleName("design_text_boxes");
 //		dataNascimento.setStyleName("design_text_boxes");
 		txtTelefoneCelular.setStyleName("design_text_boxes");
@@ -128,17 +133,18 @@ public class AdicionarUsuario extends VerticalPanel {
 		
 		
 
-		Label lblPrimeiroNome = new Label(txtConstants.usuarioPrimeiroNome());
-		Label lblSobreNome = new Label(txtConstants.usuarioSobreNome());		
+		Label lblPrimeiroNome = new Label("* " + txtConstants.usuarioPrimeiroNome());
+		Label lblSobreNome = new Label("* " + txtConstants.usuarioSobreNome());		
 		Label lblCPF = new Label(txtConstants.usuarioCPF());		
-		Label lblEmail = new Label(txtConstants.usuarioEmail());		
+		Label lblRG = new Label("Registro(RG)");
+		Label lblEmail = new Label("* " + txtConstants.usuarioEmail());		
 		Label lblDataNascimento = new Label(txtConstants.usuarioDataNascimento());
 		Label lblTelefoneCelular = new Label(txtConstants.usuarioTelCelular());
 		Label lblTelefoneResidencial = new Label(txtConstants.usuarioTelResidencial());
 		Label lblTelefoneComercial = new Label(txtConstants.usuarioTelComercial());
 		Label lblTipoUsuario = new Label(txtConstants.usuarioTipo());
-		Label lblLogin = new Label(txtConstants.usuario());
-		Label lblSenha = new Label(txtConstants.usuarioSenha());
+		Label lblLogin = new Label("* " + txtConstants.usuario());
+		Label lblSenha = new Label("* " + txtConstants.usuarioSenha());
 		
 		lblErroPrimeiroNome = new MpLabelTextBoxError();
 		lblErroSobreNome = new MpLabelTextBoxError();
@@ -146,22 +152,25 @@ public class AdicionarUsuario extends VerticalPanel {
 		lblErroLogin = new MpLabelTextBoxError();
 		lblErroSenha = new MpLabelTextBoxError();
 		
-		lblPrimeiroNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		lblSobreNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblCPF.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		lblEmail.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblDataNascimento.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		lblTelefoneCelular.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblTelefoneResidencial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblTelefoneComercial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblTipoUsuario.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblLogin.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblSenha.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+	
+		lblPrimeiroNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);		
+		lblSobreNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblCPF.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);		
+		lblRG.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblEmail.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblDataNascimento.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);		
+		lblTelefoneCelular.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblTelefoneResidencial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblTelefoneComercial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblTipoUsuario.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblLogin.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblSenha.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		
 		lblTipoUsuario.setStyleName("design_label");		
 		lblPrimeiroNome.setStyleName("design_label");
 		lblSobreNome.setStyleName("design_label");
-		lblCPF.setStyleName("design_label");		
+		lblCPF.setStyleName("design_label");	
+		lblRG.setStyleName("design_label");	
 		lblEmail.setStyleName("design_label");
 		lblDataNascimento.setStyleName("design_label");
 		lblTelefoneCelular.setStyleName("design_label");
@@ -170,42 +179,52 @@ public class AdicionarUsuario extends VerticalPanel {
 		lblLogin.setStyleName("design_label");
 		lblSenha.setStyleName("design_label");		
 		
-		selectTipoUsuario.setWidth("350px");
-		txtPrimeiroNome.setWidth("350px");
-		txtSobreNome.setWidth("350px"); 
-		txtCPF.setWidth("350px");
-		txtEmail.setWidth("350px");
+		String strSizeField = "250px";
+		selectTipoUsuario.setWidth(strSizeField);
+		txtPrimeiroNome.setWidth(strSizeField);
+		txtSobreNome.setWidth(strSizeField); 
+		txtCPF.setWidth(strSizeField);
+		txtRG.setWidth(strSizeField);
+		txtEmail.setWidth(strSizeField);
 //		dataNascimento.setWidth("350px");
-		txtTelefoneCelular.setWidth("350px");
-		txtTelefoneResidencial.setWidth("350px");
-		txtTelefoneComercial.setWidth("350px");
-		selectTipoUsuario.setWidth("350px");
-		txtLogin.setWidth("350px");
-		txtSenha.setWidth("350px");
+		txtTelefoneCelular.setWidth(strSizeField);
+		txtTelefoneResidencial.setWidth(strSizeField);
+		txtTelefoneComercial.setWidth(strSizeField);
+		selectTipoUsuario.setWidth(strSizeField);
+		txtLogin.setWidth(strSizeField);
+		txtSenha.setWidth(strSizeField);
 		
 		dataNascimento.getDate().getDatePicker().setYearAndMonthDropdownVisible(true);
 		dataNascimento.getDate().getDatePicker().setYearArrowsVisible(true);
 
 
 		// Add some standard form options
+		String strInLineSpace = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		int row = 0;
 
 		layout.setWidget(row, 0, lblTipoUsuario); layout.setWidget(row++, 1, selectTipoUsuario);
-		layout.setWidget(row, 0, lblPrimeiroNome);layout.setWidget(row, 1, txtPrimeiroNome);layout.setWidget(row++, 2, lblErroPrimeiroNome);
-//		layout.setWidget(row++, 2, new InlineHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
-		layout.setWidget(row, 0, lblSobreNome);layout.setWidget(row, 1, txtSobreNome);layout.setWidget(row++, 2, lblErroSobreNome);
-		layout.setWidget(row, 0, lblEmail);layout.setWidget(row, 1, txtEmail);layout.setWidget(row++, 2, lblErroEmail);
-		layout.setWidget(row, 0, lblLogin);layout.setWidget(row, 1, txtLogin);layout.setWidget(row++, 2, lblErroLogin);
-		layout.setWidget(row, 0, lblSenha);layout.setWidget(row, 1, txtSenha);layout.setWidget(row++, 2, lblErroSenha);		
-		layout.setWidget(row, 0, lblCPF);layout.setWidget(row++, 1, txtCPF);	
+		
+		layout.setWidget(row, 0, lblPrimeiroNome);layout.setWidget(row, 1, txtPrimeiroNome);layout.setWidget(row, 2, lblErroPrimeiroNome);
+		layout.setWidget(row, 3, lblSobreNome);layout.setWidget(row, 4, txtSobreNome);layout.setWidget(row++, 5, lblErroSobreNome);
+		
+		layout.setWidget(row, 0, lblEmail);layout.setWidget(row, 1, txtEmail);layout.setWidget(row, 2, lblErroEmail);
+		layout.setWidget(row, 3, lblLogin);layout.setWidget(row, 4, txtLogin);layout.setWidget(row, 5, lblErroLogin);
+		layout.setWidget(row, 6, lblSenha);layout.setWidget(row, 7, txtSenha);layout.setWidget(row++, 8, lblErroSenha);	
+		
+		layout.setWidget(row, 0, lblCPF);layout.setWidget(row, 1, txtCPF);	
+		layout.setWidget(row, 2, new InlineHTML(strInLineSpace));
+		layout.setWidget(row, 3, lblRG);layout.setWidget(row++, 4, txtRG);	
+		
 		layout.setWidget(row, 0, lblDataNascimento);layout.setWidget(row++, 1, dataNascimento);
 //		DatePickerWithYearSelector dateYear = new DatePickerWithYearSelector();
 //		layout.setWidget(row, 0, lblDataNascimento);layout.setWidget(row++, 1, dateYear);
 //		layout.setWidget(row, 0, lblDataNascimento);layout.setWidget(row++, 1, date);
 		
-		layout.setWidget(row, 0, lblTelefoneCelular);layout.setWidget(row++, 1, txtTelefoneCelular);
-		layout.setWidget(row, 0, lblTelefoneResidencial);layout.setWidget(row++, 1, txtTelefoneResidencial);
-		layout.setWidget(row, 0, lblTelefoneComercial);layout.setWidget(row++, 1, txtTelefoneComercial);
+		layout.setWidget(row, 0, lblTelefoneCelular);layout.setWidget(row, 1, txtTelefoneCelular);
+		layout.setWidget(row, 2, new InlineHTML(strInLineSpace));
+		layout.setWidget(row, 3, lblTelefoneResidencial);layout.setWidget(row, 4, txtTelefoneResidencial);
+		layout.setWidget(row, 5,  new InlineHTML(strInLineSpace));
+		layout.setWidget(row, 6, lblTelefoneComercial);layout.setWidget(row++, 7, txtTelefoneComercial);
 		
 
 		MpImageButton btnSave = new MpImageButton(txtConstants.geralSalvar(), "images/save.png");
@@ -225,12 +244,12 @@ public class AdicionarUsuario extends VerticalPanel {
 			gridSave.setWidget(0, i++, mpLoadingSave);
 		}
 		
-		MpSpacePanel mpSpacePanel = new MpSpacePanel();
-		mpSpacePanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
+		MpSpaceHorizontalPanel mpSpaceHorizontalPanel = new MpSpaceHorizontalPanel();
+		mpSpaceHorizontalPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
 
 		vFormPanel.add(layout);
 		vFormPanel.add(gridSave);
-		vFormPanel.add(mpSpacePanel);
+		vFormPanel.add(mpSpaceHorizontalPanel);
 
 		
 		
@@ -343,7 +362,9 @@ public class AdicionarUsuario extends VerticalPanel {
 			lblErroPrimeiroNome.hideErroMessage();
 		}else{
 			isFirstNameOk=false;
-			lblErroPrimeiroNome.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuarioPrimeiroNome()));
+//			lblErroPrimeiroNome.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuarioPrimeiroNome()));
+			lblErroPrimeiroNome.showErrorMessage("");
+			lblErroPrimeiroNome.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuarioPrimeiroNome()));
 		}
 		
 		if(FieldVerifier.isValidName(txtSobreNome.getText())){
@@ -351,7 +372,9 @@ public class AdicionarUsuario extends VerticalPanel {
 			lblErroSobreNome.hideErroMessage();
 		}else{
 			isSobreNomeOk=false;
-			lblErroSobreNome.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuarioSobreNome()));
+//			lblErroSobreNome.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuarioSobreNome()));
+			lblErroSobreNome.showErrorMessage("");
+			lblErroSobreNome.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuarioSobreNome()));
 		}		
 		
 		if(FieldVerifier.isValidEmail(txtEmail.getText())){
@@ -359,7 +382,9 @@ public class AdicionarUsuario extends VerticalPanel {
 			lblErroEmail.hideErroMessage();
 		}else{
 			isEmailOk=false;
-			lblErroEmail.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuarioEmail()));
+//			lblErroEmail.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuarioEmail()));
+			lblErroEmail.showErrorMessage("");
+			lblErroEmail.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuarioEmail()));
 		}
 		
 		if(FieldVerifier.isValidName(txtLogin.getText())){
@@ -367,7 +392,9 @@ public class AdicionarUsuario extends VerticalPanel {
 			lblErroLogin.hideErroMessage();
 		}else{
 			isLoginOk=false;
-			lblErroLogin.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuario()));
+//			lblErroLogin.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuario()));
+			lblErroLogin.showErrorMessage("");
+			lblErroLogin.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuario()));
 		}		
 		
 		
@@ -376,7 +403,9 @@ public class AdicionarUsuario extends VerticalPanel {
 			lblErroSenha.hideErroMessage();
 		}else{
 			isSenhaOk=false;
-			lblErroSenha.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuarioSenha()));
+//			lblErroSenha.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.usuarioSenha()));
+			lblErroSenha.showErrorMessage("");
+			lblErroSenha.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuarioSenha()));
 		}			
 		
 		isFieldsOk = isFirstNameOk && isSobreNomeOk && isEmailOk && isLoginOk && isSenhaOk;

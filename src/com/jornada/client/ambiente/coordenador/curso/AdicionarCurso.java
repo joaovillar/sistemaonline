@@ -25,7 +25,7 @@ import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceCursoAsync;
@@ -191,8 +191,8 @@ public class AdicionarCurso extends VerticalPanel {
 			gridSave.setWidget(0, i++, hPanelLoading);
 		}
 
-		MpSpacePanel mpSpacePanel = new MpSpacePanel();
-		mpSpacePanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
+		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
+		mpSpaceVerticalPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
 		
 		
 		vPanelAddCursoDeTemplate.add(adicionarCursoDeUmTemplate);
@@ -206,7 +206,7 @@ public class AdicionarCurso extends VerticalPanel {
 		vFormPanel.add(vPanelAddNovoCurso);	
 		vFormPanel.add(vPanelAddCursoDeTemplate);
 //		vFormPanel.add(gridSave);		
-		vFormPanel.add(mpSpacePanel);
+		vFormPanel.add(mpSpaceVerticalPanel);
 
 		
 		

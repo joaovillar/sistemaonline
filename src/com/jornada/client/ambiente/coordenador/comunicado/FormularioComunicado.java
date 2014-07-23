@@ -30,7 +30,7 @@ import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.classes.widgets.textbox.MpRichTextArea;
 import com.jornada.client.classes.widgets.timepicker.MpTimePicker;
 import com.jornada.client.content.i18n.TextConstants;
@@ -99,13 +99,13 @@ public class FormularioComunicado extends VerticalPanel {
 		btnRetornarTelaAnterior.addClickHandler(new ClickHandlerCancelar());		
 		
 		vBodyPanel.add(btnRetornarTelaAnterior);
-		vBodyPanel.add(new MpSpacePanel());
+		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(drawPassoUmCamposTitulo());
-		vBodyPanel.add(new MpSpacePanel());
+		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(drawPassoDoisSelecionarImagem());
-		vBodyPanel.add(new MpSpacePanel());
+		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(drawPassoTresDescricao());
-		vBodyPanel.add(new MpSpacePanel());
+		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(drawPassoQuatroSubmeterComunicado());
 		
 		super.add(vBodyPanel);

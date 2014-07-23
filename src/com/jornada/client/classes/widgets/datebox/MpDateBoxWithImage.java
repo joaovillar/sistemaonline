@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 
 public class MpDateBoxWithImage extends Grid{
 	
@@ -35,7 +35,7 @@ public class MpDateBoxWithImage extends Grid{
 		
 		int column=0;
 		this.setWidget(0, column++, date);
-		this.setWidget(0, column++, new MpSpacePanel());		
+		this.setWidget(0, column++, new MpSpaceVerticalPanel());		
 		this.setWidget(0, column++, img);	
 		
 		HTMLTable.CellFormatter formatter = this.getCellFormatter();		

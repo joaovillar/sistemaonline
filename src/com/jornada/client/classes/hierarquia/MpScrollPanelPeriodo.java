@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.utility.MpUtilClient;
@@ -52,13 +52,13 @@ public class MpScrollPanelPeriodo extends ScrollPanel{
 		
 		int column=0;
 		gridData.setWidget(0, column++, lblDataInicialPeriodo);
-		gridData.setWidget(0, column++, new MpSpacePanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridData.setWidget(0, column++, lblDataInicialPeriodoDB);
-		gridData.setWidget(0, column++, new MpSpacePanel());
-		gridData.setWidget(0, column++, new MpSpacePanel());
-		gridData.setWidget(0, column++, new MpSpacePanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridData.setWidget(0, column++, lblDataFinalPeriodo);
-		gridData.setWidget(0, column++, new MpSpacePanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridData.setWidget(0, column++, lblDataFinalPeriodoDB);		
 		
 		FlexTable flexTableConteudo = new FlexTable();
@@ -73,10 +73,10 @@ public class MpScrollPanelPeriodo extends ScrollPanel{
 //		flexTable.setWidget(row, 0, lblNomePeriodo);flexTable.setWidget(row++, 1, lblNomePeriodoDB);
 		flexTableConteudo.setWidget(row++, 0, lblDescricaoPeriodo);
 		flexTableConteudo.setWidget(row++, 0, lblDescricaoPeriodoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, lblObjetivoPeriodo);
 		flexTableConteudo.setWidget(row++, 0, lblObjetivoPeriodoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 //		flexTableConteudo.setWidget(row++, 0, lblDataInicialPeriodo);flexTableConteudo.setWidget(row++, 0, lblDataInicialPeriodoDB);
 //		flexTableConteudo.setWidget(row++, 0, lblDataFinalPeriodo);flexTableConteudo.setWidget(row++, 0, lblDataFinalPeriodoDB);
 		flexTableConteudo.setWidget(row++, 0, gridData);

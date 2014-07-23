@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextBox;
 import com.jornada.client.classes.widgets.label.MpLabelError;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 
 public class MpTextBox extends Grid{
 	
@@ -36,9 +36,9 @@ public class MpTextBox extends Grid{
 		
 		int column=0;
 		this.setWidget(0, column++, textBox);
-		this.setWidget(0, column++, new MpSpacePanel());		
+		this.setWidget(0, column++, new MpSpaceVerticalPanel());		
 		this.setWidget(0, column++, img);		
-		this.setWidget(0, column++, new MpSpacePanel());
+		this.setWidget(0, column++, new MpSpaceVerticalPanel());
 		this.setWidget(0, column++, labelError);
 		
 	

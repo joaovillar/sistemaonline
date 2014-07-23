@@ -50,7 +50,7 @@ import com.jornada.client.classes.widgets.cells.MpTextAreaEditCell;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.FieldVerifier;
@@ -157,7 +157,7 @@ public class EditarCurso extends VerticalPanel {
 		
 		
 		flexTableFiltrar.setWidget(0, 0, mpPager);
-		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, lblNomeCurso);
 		flexTableFiltrar.setWidget(0, 3, txtSearch);
 		flexTableFiltrar.setWidget(0, 4, btnFiltrar);
