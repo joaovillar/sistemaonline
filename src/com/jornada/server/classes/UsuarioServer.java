@@ -97,7 +97,8 @@ public class UsuarioServer{
 	public static String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome asc";
 	public static String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome asc";
 	public static String DB_SELECT_ALL = "SELECT * FROM usuario order by primeiro_nome asc;";
-	public static String DB_SELECT_USUARIO_ID = "SELECT * FROM usuario where id_usuario=?;";
+//	public static String DB_SELECT_USUARIO_ID = "SELECT * FROM usuario where id_usuario=?;";
+	public static String DB_SELECT_USUARIO_ID = "select * from usuario, tipo_usuario where (id_usuario = ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome asc";
 	public static String DB_SELECT_USUARIO_LOGIN = "SELECT * FROM usuario, tipo_usuario where login=? and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario;";
 	public static String DB_DELETE = "delete from usuario where id_usuario=?";
 	public static String DB_SELECT_ALL_TIPO_USUARIOS = "SELECT * FROM tipo_usuario where is_visible=true order by nome_tipo_usuario asc;";

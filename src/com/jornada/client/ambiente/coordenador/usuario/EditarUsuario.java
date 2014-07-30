@@ -68,6 +68,7 @@ public class EditarUsuario extends VerticalPanel {
 	private AsyncCallback<ArrayList<Usuario>> callbackGetUsuariosFiltro;	
 
 	private CellTable<Usuario> cellTable;
+	private  SelectionModel<Usuario> selectionModel;
 	
 	public String cellTableSelected="";
 
@@ -167,9 +168,6 @@ public class EditarUsuario extends VerticalPanel {
 					mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroAtualizar() + " "+txtConstants.usuarioErroLoginDuplicado(strUsuario));
 					mpDialogBoxWarning.showDialog();					
 				}
-					
-
-				
 			}
 
 			public void onFailure(Throwable caught) {
@@ -184,9 +182,11 @@ public class EditarUsuario extends VerticalPanel {
 			public void onSuccess(Boolean success) {
 
 				if (success == true) {
-					cleanCellTable();
-					// SC.say("Periodo removido com sucesso.");
+//					cleanCellTable();
+//					 SC.say("Periodo removido com sucesso.");
 				} else {
+//					cleanCellTable();
+					callGetUsuarios();
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroRemover());
 					mpDialogBoxWarning.showDialog();
@@ -247,7 +247,7 @@ public class EditarUsuario extends VerticalPanel {
 		
 		
 		// Add a selection model so we can select cells.
-		final SelectionModel<Usuario> selectionModel = new SingleSelectionModel<Usuario>();
+		selectionModel = new SingleSelectionModel<Usuario>();
 		cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<Usuario> createDefaultManager());		
 		initTableColumns(selectionModel);
 
@@ -288,6 +288,8 @@ public class EditarUsuario extends VerticalPanel {
 			case Event.ONCLICK:
 
 				final Usuario object = (Usuario) context.getKey();
+				final int intSelectedIndex = context.getIndex(); 
+				
 				@SuppressWarnings("unused")
 				CloseHandler<PopupPanel> closeHandler;
 				
@@ -311,7 +313,12 @@ public class EditarUsuario extends VerticalPanel {
 									MpConfirmDialogBox x = (MpConfirmDialogBox) event.getSource();
 
 									if (x.primaryActionFired()) {
-										 GWTServiceUsuario.Util.getInstance().deleteUsuarioRow(object.getIdUsuario(), callbackDeleteRow);
+
+										GWTServiceUsuario.Util.getInstance().deleteUsuarioRow(object.getIdUsuario(), callbackDeleteRow);
+										
+										dataProvider.getList().remove(intSelectedIndex);
+										dataProvider.refresh();	
+										 
 									}
 								}
 							}
@@ -412,12 +419,22 @@ public class EditarUsuario extends VerticalPanel {
 			@Override
 			public void onSuccess(Usuario usuarioResult) {
 				// TODO Auto-generated method stub
-				ArrayList<Usuario> listUsuario = new ArrayList<Usuario>();
-				listUsuario.add(usuarioResult);
+//				ArrayList<Usuario> listUsuario = new ArrayList<Usuario>();
+//				listUsuario.add(usuarioResult);
 //				cellTable.setRowData(listUsuario);	
 				
 //				dataProvider.getList().set(0, usuarioResult);
-				dataProvider.setList(listUsuario);
+//				dataProvider.setList(listUsuario);
+				int i = 0;
+				while (i < dataProvider.getList().size()) {
+					int idUser = dataProvider.getList().get(i).getIdUsuario();
+					if (idUser == usuarioResult.getIdUsuario()) {
+						dataProvider.getList().set(i, usuarioResult);
+						dataProvider.refresh();
+						i=dataProvider.getList().size();
+					}
+					i++;
+				}
 			}
 			
 		});
