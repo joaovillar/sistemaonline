@@ -8,19 +8,41 @@ import com.google.gwt.view.client.ProvidesKey;
 public class Usuario implements Serializable, Comparable<Usuario>  {
 
 	private static final long serialVersionUID = 3304488184672078101L;
+	
+	
 	private int idUsuario;
 	private String login;
 	private String senha;
 	private String primeiroNome;
 	private String sobreNome;
-	private String cpf;
-	private Date dataNascimento;
-	private int idTipoUsuario;
+	private String cpf;	
 	private String email;
 	private String telefoneCelular;
 	private String telefoneResidencial;
-	private String telefoneComercial;	 
+	private String telefoneComercial;
+	private String  endereco;
+	private String numeroResidencia;
+	private String bairro;
+	private String cidade;
+	private String unidadeFederativa;
+	private String cep;
+	private Date dataMatricula;
+	private String rg;
+	private String sexo;
+	private String empresaOndeTrabalha;
+	private String cargo;
+	private boolean respAcademico;
+	private boolean respFinanceiro;
+	private String registroMatricula;
+	private String tipoPais;
+	private String situacaoResponsaveis;
+	private String situacaoResponsaveisOutros;
+
+	
+	private int idTipoUsuario;
 	private int idIdioma;
+	
+	private Date dataNascimento;
 	
 	private String sessionId;
 	private boolean loggedIn;
@@ -169,6 +191,142 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 
 	public void setIdioma(Idioma idioma) {
 		this.idioma = idioma;
+	}
+	
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+
+	public String getNumeroResidencia() {
+		return numeroResidencia;
+	}
+
+	public void setNumeroResidencia(String numeroResidencia) {
+		this.numeroResidencia = numeroResidencia;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getUnidadeFederativa() {
+		return unidadeFederativa;
+	}
+
+	public void setUnidadeFederativa(String unidadeFederativa) {
+		this.unidadeFederativa = unidadeFederativa;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public Date getDataMatricula() {
+		return dataMatricula;
+	}
+
+	public void setDataMatricula(Date dataMatricula) {
+		this.dataMatricula = dataMatricula;
+	}
+
+	public String getRg() {
+		return rg;
+	}
+
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public String getEmpresaOndeTrabalha() {
+		return empresaOndeTrabalha;
+	}
+
+	public void setEmpresaOndeTrabalha(String empresaOndeTrabalha) {
+		this.empresaOndeTrabalha = empresaOndeTrabalha;
+	}
+
+	public String getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+
+	public boolean isRespAcademico() {
+		return respAcademico;
+	}
+
+	public void setRespAcademico(boolean respAcademico) {
+		this.respAcademico = respAcademico;
+	}
+
+	public boolean isRespFinanceiro() {
+		return respFinanceiro;
+	}
+
+	public void setRespFinanceiro(boolean respFinanceiro) {
+		this.respFinanceiro = respFinanceiro;
+	}
+
+	public String getRegistroMatricula() {
+		return registroMatricula;
+	}
+
+	public void setRegistroMatricula(String registroMatricula) {
+		this.registroMatricula = registroMatricula;
+	}
+
+	public String getTipoPais() {
+		return tipoPais;
+	}
+
+	public void setTipoPais(String tipoPais) {
+		this.tipoPais = tipoPais;
+	}
+
+	public String getSituacaoResponsaveis() {
+		return situacaoResponsaveis;
+	}
+
+	public void setSituacaoResponsaveis(String situacaoResponsaveis) {
+		this.situacaoResponsaveis = situacaoResponsaveis;
+	}
+
+	public String getSituacaoResponsaveisOutros() {
+		return situacaoResponsaveisOutros;
+	}
+
+	public void setSituacaoResponsaveisOutros(String situacaoResponsaveisOutros) {
+		this.situacaoResponsaveisOutros = situacaoResponsaveisOutros;
 	}
 
 	@Override

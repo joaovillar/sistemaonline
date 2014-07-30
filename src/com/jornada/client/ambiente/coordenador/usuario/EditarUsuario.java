@@ -37,8 +37,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
 import com.jornada.client.ambiente.general.configuracao.DialogBoxSenha;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
@@ -59,9 +59,10 @@ public class EditarUsuario extends VerticalPanel {
 	
 	
 	private static final String IMAGE_DELETE = "images/delete.png";
+	private static final String IMAGE_EDIT = "images/comment_edit.png";
 	private static final String IMAGE_PASSWORD = "images/key.v2.16.png";
 
-	private AsyncCallback<Boolean> callbackUpdateRow;
+	private AsyncCallback<String> callbackUpdateRow;
 	private AsyncCallback<Boolean> callbackDeleteRow;
 //	private AsyncCallback<ArrayList<TipoUsuario>> callbackGetTipoUsuarios;	
 	private AsyncCallback<ArrayList<Usuario>> callbackGetUsuariosFiltro;	
@@ -86,9 +87,9 @@ public class EditarUsuario extends VerticalPanel {
 	private Column<Usuario, String> columnEmail;
 	private Column<Usuario, String> columnLogin;
 	private Column<Usuario, Date> columnDataNascimento;
-	private Column<Usuario, String> columnTelefoneCelular;
-	private Column<Usuario, String> columnTelefoneResidencial;
-	private Column<Usuario, String> columnTelefoneComercial;
+//	private Column<Usuario, String> columnTelefoneCelular;
+//	private Column<Usuario, String> columnTelefoneResidencial;
+//	private Column<Usuario, String> columnTelefoneComercial;
 	private Column<Usuario, String> columnTipoUsuario;
 //	private SingleSelectionModel<Usuario> selectionModel;
 	
@@ -153,11 +154,22 @@ public class EditarUsuario extends VerticalPanel {
 		
 		/************************* Begin Callback's *************************/
 		
-		callbackUpdateRow = new AsyncCallback<Boolean>() {
+		callbackUpdateRow = new AsyncCallback<String>() {
 
-			public void onSuccess(Boolean success) {
+			public void onSuccess(String success) {
+				
+				if(success.equals("true")){
+					getTelaInicialUsuario().getAssociarPaisAlunos().updateClientData();	
+				}else if(success.contains("duplicate key")){
+					String strUsuario = success.substring(success.indexOf("=(")+2);
+					strUsuario = strUsuario.substring(0,strUsuario.indexOf(")"));
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroAtualizar() + " "+txtConstants.usuarioErroLoginDuplicado(strUsuario));
+					mpDialogBoxWarning.showDialog();					
+				}
+					
 
-				getTelaInicialUsuario().getAssociarPaisAlunos().updateClientData();
+				
 			}
 
 			public void onFailure(Throwable caught) {
@@ -235,7 +247,7 @@ public class EditarUsuario extends VerticalPanel {
 		
 		
 		// Add a selection model so we can select cells.
-		final SelectionModel<Usuario> selectionModel = new MultiSelectionModel<Usuario>();
+		final SelectionModel<Usuario> selectionModel = new SingleSelectionModel<Usuario>();
 		cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<Usuario> createDefaultManager());		
 		initTableColumns(selectionModel);
 
@@ -282,7 +294,13 @@ public class EditarUsuario extends VerticalPanel {
 				if (value.equals(IMAGE_PASSWORD)) {
 //					System.out.println(object.getPrimeiroNome());
 					DialogBoxSenha.getInstance(object);
-				} else if (value.equals(IMAGE_DELETE)) {
+				}
+				else if (value.equals(IMAGE_EDIT)){
+//					MpDialogBoxAtualizarUsuario mpAtualizarUsuario = new MpDialogBoxAtualizarUsuario(telaInicialUsuario);
+//					mpAtualizarUsuario.showDialog();
+					MpDialogBoxAtualizarUsuario.getInstance(telaInicialUsuario, object);
+				}
+				else if (value.equals(IMAGE_DELETE)) {
 //					System.out.println(object.getPrimeiroNome());
 					MpConfirmDialogBox confirmationDialog = new MpConfirmDialogBox(
 							txtConstants.geralRemover(),txtConstants.usuarioDesejaRemover(object.getPrimeiroNome(),object.getSobreNome()),
@@ -315,7 +333,7 @@ public class EditarUsuario extends VerticalPanel {
 		
 		cellTable.setRowCount(0);
 		cellTable.redraw();
-//		cellTable.setPageStart(0);		
+		cellTable.setPageStart(0);		
 
 	    
 //		mpPager.setDisplay(cellTable);
@@ -376,6 +394,36 @@ public class EditarUsuario extends VerticalPanel {
 	
 	public void updateClientData(){		
 		cleanCellTable();		
+//		callGetUsuarios();
+	}
+	
+	public void updateClientDataRow(int idUsuario){		
+//		cleanCellTable();		
+//		callGetUsuarios();
+		
+		GWTServiceUsuario.Util.getInstance().getUsuarioPeloId(idUsuario, new AsyncCallback<Usuario>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				Window.alert(caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Usuario usuarioResult) {
+				// TODO Auto-generated method stub
+				ArrayList<Usuario> listUsuario = new ArrayList<Usuario>();
+				listUsuario.add(usuarioResult);
+//				cellTable.setRowData(listUsuario);	
+				
+//				dataProvider.getList().set(0, usuarioResult);
+				dataProvider.setList(listUsuario);
+			}
+			
+		});
+		
+		
+		
 	}
 
 
@@ -517,59 +565,55 @@ public class EditarUsuario extends VerticalPanel {
 		});
 		
 		
-		columnTelefoneCelular = new Column<Usuario, String>(
-				new EditTextCell()) {
-			@Override
-			public String getValue(Usuario object) {
-				return object.getTelefoneCelular();
-			}
-
-		};
-		columnTelefoneCelular.setFieldUpdater(new FieldUpdater<Usuario, String>() {
-			@Override
-			public void update(int index, Usuario object, String value) {
-				// Called when the user changes the value.
-				object.setTelefoneCelular(value);
-				GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object,callbackUpdateRow);
-			}
-		});
+//		columnTelefoneCelular = new Column<Usuario, String>(new EditTextCell()) {
+//			@Override
+//			public String getValue(Usuario object) {
+//				return object.getTelefoneCelular();
+//			}
+//
+//		};
+//		columnTelefoneCelular.setFieldUpdater(new FieldUpdater<Usuario, String>() {
+//			@Override
+//			public void update(int index, Usuario object, String value) {
+//				// Called when the user changes the value.
+//				object.setTelefoneCelular(value);
+//				GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object,callbackUpdateRow);
+//			}
+//		});
+//		
+//		columnTelefoneResidencial = new Column<Usuario, String>(new EditTextCell()) {
+//			@Override
+//			public String getValue(Usuario object) {
+//				return object.getTelefoneResidencial();
+//			}
+//
+//		};
+//		columnTelefoneResidencial.setFieldUpdater(new FieldUpdater<Usuario, String>() {
+//			@Override
+//			public void update(int index, Usuario object, String value) {
+//				// Called when the user changes the value.
+//				object.setTelefoneResidencial(value);
+//				GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object,callbackUpdateRow);
+//			}
+//		});		
+//		
+//		columnTelefoneComercial = new Column<Usuario, String>(new EditTextCell()) {
+//			@Override
+//			public String getValue(Usuario object) {
+//				return object.getTelefoneComercial();
+//			}
+//
+//		};
+//		columnTelefoneComercial.setFieldUpdater(new FieldUpdater<Usuario, String>() {
+//			@Override
+//			public void update(int index, Usuario object, String value) {
+//				// Called when the user changes the value.
+//				object.setTelefoneComercial(value);
+//				GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object,callbackUpdateRow);
+//			}
+//		});
 		
-		columnTelefoneResidencial = new Column<Usuario, String>(
-				new EditTextCell()) {
-			@Override
-			public String getValue(Usuario object) {
-				return object.getTelefoneResidencial();
-			}
-
-		};
-		columnTelefoneResidencial.setFieldUpdater(new FieldUpdater<Usuario, String>() {
-			@Override
-			public void update(int index, Usuario object, String value) {
-				// Called when the user changes the value.
-				object.setTelefoneResidencial(value);
-				GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object,callbackUpdateRow);
-			}
-		});		
-		
-		columnTelefoneComercial = new Column<Usuario, String>(
-				new EditTextCell()) {
-			@Override
-			public String getValue(Usuario object) {
-				return object.getTelefoneComercial();
-			}
-
-		};
-		columnTelefoneComercial.setFieldUpdater(new FieldUpdater<Usuario, String>() {
-			@Override
-			public void update(int index, Usuario object, String value) {
-				// Called when the user changes the value.
-				object.setTelefoneComercial(value);
-				GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object,callbackUpdateRow);
-			}
-		});
-		
-		columnLogin = new Column<Usuario, String>(
-				new EditTextCell()) {
+		columnLogin = new Column<Usuario, String>(new EditTextCell()) {
 			@Override
 			public String getValue(Usuario object) {
 				return object.getLogin();
@@ -627,6 +671,12 @@ public class EditarUsuario extends VerticalPanel {
 //			}
 //		});				
 		
+		Column<Usuario, String> editColumn = new Column<Usuario, String>(new MyImageCell()) {
+			@Override
+			public String getValue(Usuario object) {
+				return IMAGE_EDIT;
+			}
+		};
 		
 		Column<Usuario, String> removeColumn = new Column<Usuario, String>(new MyImageCell()) {
 			@Override
@@ -644,9 +694,10 @@ public class EditarUsuario extends VerticalPanel {
 		cellTable.addColumn(columnSenha, txtConstants.usuarioSenha());
 		cellTable.addColumn(columnCPF, txtConstants.usuarioCPF());
 		cellTable.addColumn(columnDataNascimento, txtConstants.usuarioDataNascimento());
-		cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
-		cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
-		cellTable.addColumn(columnTelefoneComercial, txtConstants.usuarioTelComercial());
+//		cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
+//		cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
+//		cellTable.addColumn(columnTelefoneComercial, txtConstants.usuarioTelComercial());
+		cellTable.addColumn(editColumn, txtConstants.geralEditar());
 		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
 
 		cellTable.getColumn(cellTable.getColumnIndex(columnTipoUsuario)).setCellStyleNames("edit-cell");
@@ -655,12 +706,14 @@ public class EditarUsuario extends VerticalPanel {
 		cellTable.getColumn(cellTable.getColumnIndex(columnCPF)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(columnEmail)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(columnDataNascimento)).setCellStyleNames("edit-cell");
-		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneCelular)).setCellStyleNames("edit-cell");
-		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("edit-cell");
-		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneComercial)).setCellStyleNames("edit-cell");
+//		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneCelular)).setCellStyleNames("edit-cell");
+//		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("edit-cell");
+//		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneComercial)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(columnLogin)).setCellStyleNames("edit-cell");		
 		cellTable.getColumn(cellTable.getColumnIndex(columnSenha)).setCellStyleNames("hand-over");
+		cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");
 		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");		
+		
 		
 	}
 
@@ -723,29 +776,29 @@ public class EditarUsuario extends VerticalPanel {
 	      }
 	    });
 	    
-		columnTelefoneResidencial.setSortable(true);
-	    sortHandler.setComparator(columnTelefoneResidencial, new Comparator<Usuario>() {
-	      @Override
-	      public int compare(Usuario o1, Usuario o2) {
-	        return o1.getTelefoneResidencial().compareTo(o2.getTelefoneResidencial());
-	      }
-	    });
-	    
-		columnTelefoneComercial.setSortable(true);
-	    sortHandler.setComparator(columnTelefoneComercial, new Comparator<Usuario>() {
-	      @Override
-	      public int compare(Usuario o1, Usuario o2) {
-	        return o1.getTelefoneComercial().compareTo(o2.getTelefoneComercial());
-	      }
-	    });
-	    
-		columnTelefoneCelular.setSortable(true);
-	    sortHandler.setComparator(columnTelefoneCelular, new Comparator<Usuario>() {
-	      @Override
-	      public int compare(Usuario o1, Usuario o2) {
-	        return o1.getTelefoneCelular().compareTo(o2.getTelefoneCelular());
-	      }
-	    });	   	    	    	    
+//		columnTelefoneResidencial.setSortable(true);
+//	    sortHandler.setComparator(columnTelefoneResidencial, new Comparator<Usuario>() {
+//	      @Override
+//	      public int compare(Usuario o1, Usuario o2) {
+//	        return o1.getTelefoneResidencial().compareTo(o2.getTelefoneResidencial());
+//	      }
+//	    });
+//	    
+//		columnTelefoneComercial.setSortable(true);
+//	    sortHandler.setComparator(columnTelefoneComercial, new Comparator<Usuario>() {
+//	      @Override
+//	      public int compare(Usuario o1, Usuario o2) {
+//	        return o1.getTelefoneComercial().compareTo(o2.getTelefoneComercial());
+//	      }
+//	    });
+//	    
+//		columnTelefoneCelular.setSortable(true);
+//	    sortHandler.setComparator(columnTelefoneCelular, new Comparator<Usuario>() {
+//	      @Override
+//	      public int compare(Usuario o1, Usuario o2) {
+//	        return o1.getTelefoneCelular().compareTo(o2.getTelefoneCelular());
+//	      }
+//	    });	   	    	    	    
 	    
 	    
 		

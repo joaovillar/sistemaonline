@@ -28,11 +28,11 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 
 	private static final long serialVersionUID = -1315036586990464191L;
 
-	public boolean AdicionarUsuario(Usuario usuario) {		
+	public String AdicionarUsuario(Usuario usuario) {		
 		return UsuarioServer.AdicionarUsuario(usuario);		
 	}
 
-	public boolean updateUsuarioRow(Usuario usuario){		
+	public String updateUsuarioRow(Usuario usuario){		
 		return UsuarioServer.updateUsuarioRow(usuario);
 	}
 	
@@ -110,7 +110,12 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 	
 	public ArrayList<Usuario> getTodosOsPaisDoAluno(int id_aluno){		
 		return UsuarioServer.getTodosOsPaisDoAluno(id_aluno);	
-	}		
+	}	
+	
+	
+	public Usuario getUsuarioPeloId(int idUsuario){
+		return UsuarioServer.getUsuarioPeloId(idUsuario);
+	}
 
 
 }
