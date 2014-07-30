@@ -390,12 +390,13 @@ public class DisciplinaServer {
 //			dataBase.createConnection();
 //			Connection connection = dataBase.getConnection();
 
-			int count = 0;
+			
 			
 			for (int i = 0; i < list_id_disciplina.size(); i++) {
 				
-				int id_disciplina = Integer.parseInt(list_id_disciplina.get(i));
+				int id_disciplina = Integer.parseInt(list_id_disciplina.get(i));				
 				PreparedStatement ps = conn.prepareStatement(DB_UPDATE_PROFESSOR_DISCIPLINA);
+				int count = 0;
 				ps.setInt(++count, id_professor);
 				ps.setInt(++count, id_disciplina);
 
