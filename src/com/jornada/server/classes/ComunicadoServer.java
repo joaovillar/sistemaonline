@@ -194,6 +194,7 @@ public class ComunicadoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -285,6 +286,7 @@ public class ComunicadoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -329,6 +331,7 @@ public class ComunicadoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();

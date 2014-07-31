@@ -2,6 +2,7 @@ package com.jornada.client.classes.listBoxes;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.ListBox;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.content.i18n.TextConstants;
 
 public class MpSelection extends ListBox{
@@ -38,5 +39,9 @@ public class MpSelection extends ListBox{
 	}
 	
 
+	protected void logoutAndRefreshPage() {
+		MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
+		mpDialogBox.showDialog();
+	}
 
 }

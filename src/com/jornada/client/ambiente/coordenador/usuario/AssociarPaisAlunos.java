@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.listBoxes.MpSelectionAluno;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
 import com.jornada.client.content.i18n.TextConstants;
@@ -213,9 +214,11 @@ public class AssociarPaisAlunos extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroBuscarPais());
-				mpDialogBoxWarning.showDialog();
+				MpDialogBoxRefreshPage mpDialogBoxRefreshPage = new MpDialogBoxRefreshPage();
+				mpDialogBoxRefreshPage.showDialog();
+//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//				mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroBuscarPais());
+//				mpDialogBoxWarning.showDialog();
 
 			}
 		};
@@ -240,9 +243,11 @@ public class AssociarPaisAlunos extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroBuscarPais());
-				mpDialogBoxWarning.showDialog();
+				MpDialogBoxRefreshPage mpDialogBoxRefreshPage = new MpDialogBoxRefreshPage();
+				mpDialogBoxRefreshPage.showDialog();
+//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//				mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroBuscarPais());
+//				mpDialogBoxWarning.showDialog();
 
 			}
 		};		

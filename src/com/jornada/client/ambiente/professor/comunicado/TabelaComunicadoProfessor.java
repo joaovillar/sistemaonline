@@ -40,8 +40,9 @@ import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
@@ -134,7 +135,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 		mpPager.setPageSize(8);		
 		
 		flexTableFiltrar.setWidget(0, 0, mpPager);
-		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, lblComunicado);
 		flexTableFiltrar.setWidget(0, 3, txtSearch);
 		flexTableFiltrar.setWidget(0, 4, btnFiltrar);
@@ -149,14 +150,18 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 				
 				mpPanelLoading.setVisible(false);
 				
-//				listaUsuarios = list;
+				if(list==null){
+					MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
+					mpDialogBox.showDialog();	
+				}
 				
 				dataProvider.getList().clear();
-				
+				cellTable.setRowCount(0);
 				for(int i=0;i<list.size();i++){
 					dataProvider.getList().add(list.get(i));
 				}
-		
+				addCellTableData(dataProvider);
+				cellTable.redraw();		
 
 			}
 
@@ -198,32 +203,32 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 	
 	protected void populateGrid() {
 		
-		GWTServiceComunicado.Util.getInstance().getComunicadosInterno("%" + txtSearch.getText() + "%",
+		GWTServiceComunicado.Util.getInstance().getComunicadosInterno("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
 		
-				new AsyncCallback<ArrayList<Comunicado>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-						mpDialogBoxWarning.setBodyText(txtConstants.comunicadoErroCarregar());
-					}
-
-					@Override
-					public void onSuccess(ArrayList<Comunicado> list) {
-					
-						dataProvider.getList().clear();
-						cellTable.setRowCount(0);
-						for(int i=0;i<list.size();i++){
-							dataProvider.getList().add(list.get(i));
-						}
-						
-						addCellTableData(dataProvider);
-						
-						cellTable.redraw();								
-
-
-					}
-				});
+//				new AsyncCallback<ArrayList<Comunicado>>() {
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//						mpDialogBoxWarning.setBodyText(txtConstants.comunicadoErroCarregar());
+//					}
+//
+//					@Override
+//					public void onSuccess(ArrayList<Comunicado> list) {
+//					
+//						dataProvider.getList().clear();
+//						cellTable.setRowCount(0);
+//						for(int i=0;i<list.size();i++){
+//							dataProvider.getList().add(list.get(i));
+//						}
+//						
+//						addCellTableData(dataProvider);
+//						
+//						cellTable.redraw();								
+//
+//
+//					}
+//				});
 	}	
 	
 	

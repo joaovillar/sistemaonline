@@ -29,12 +29,18 @@ public class MpSelectionCursoAmbienteProfessor extends MpSelection {
 				}		
 
 				setVisibleItemCount(1);
-
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionCursoAmbienteProfessor.this);
+				
+				try {
+					DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionCursoAmbienteProfessor.this);
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
+					System.out.println("Error:" + ex.getMessage());
+				}
 				
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 

@@ -49,7 +49,7 @@ import com.jornada.client.classes.widgets.cells.MpStyledSelectionCellPresenca;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAula;
 import com.jornada.client.service.GWTServicePresenca;
@@ -552,7 +552,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		flexTableFiltrarAluno.setCellPadding(3);
 		flexTableFiltrarAluno.setBorderWidth(0);		
 		flexTableFiltrarAluno.setWidget(0, 0, mpPager);
-		flexTableFiltrarAluno.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrarAluno.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrarAluno.setWidget(0, 2, lblAluno);
 		flexTableFiltrarAluno.setWidget(0, 3, txtSearch);
 		flexTableFiltrarAluno.setWidget(0, 4, btnFiltrar);
@@ -563,13 +563,13 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		vPanel.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanel.add(cellTable);
 		
-		MpSpacePanel mpSpacePanel = new MpSpacePanel();
+		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
 		
 		VerticalPanel vPanelInScroll = new VerticalPanel();
 		vPanelInScroll.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanelInScroll.add(flexTableFiltrarAluno);
 		vPanelInScroll.add(vPanel);
-		vPanelInScroll.add(mpSpacePanel);
+		vPanelInScroll.add(mpSpaceVerticalPanel);
 		scrollPanel.clear();
 		scrollPanel.add(vPanelInScroll);
 		

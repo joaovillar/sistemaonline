@@ -47,7 +47,7 @@ import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
@@ -138,7 +138,7 @@ public class TabelaComunicados extends VerticalPanel{
 		mpPager.setPageSize(8);		
 		
 		flexTableFiltrar.setWidget(0, 0, mpPager);
-		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, lblComunicado);
 		flexTableFiltrar.setWidget(0, 3, txtSearch);
 		flexTableFiltrar.setWidget(0, 4, btnFiltrar);
@@ -161,19 +161,13 @@ public class TabelaComunicados extends VerticalPanel{
 
 			public void onSuccess(ArrayList<Comunicado> list) {
 				
-//				mpPanelLoading.setVisible(false);
-//			
-//				dataProvider.getList().clear();
-//				
-//				for(int i=0;i<list.size();i++){
-//					dataProvider.getList().add(list.get(i));
-//				}
-				
 				mpPanelLoading.setVisible(false);	
+				
 				if(list==null){
 					MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
 					mpDialogBox.showDialog();	
 				}
+				
 				dataProvider.getList().clear();
 				cellTable.setRowCount(0);
 				for(int i=0;i<list.size();i++){

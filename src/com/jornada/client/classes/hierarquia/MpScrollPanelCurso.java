@@ -24,7 +24,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Usuario;
@@ -83,13 +83,13 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		gridData.setBorderWidth(0);		
 		int column=0;
 		gridData.setWidget(0, column++, lblDataInicialCurso);
-		gridData.setWidget(0, column++, new MpSpacePanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridData.setWidget(0, column++, lblDataInicialCursoDB);
-		gridData.setWidget(0, column++, new MpSpacePanel());
-		gridData.setWidget(0, column++, new MpSpacePanel());
-		gridData.setWidget(0, column++, new MpSpacePanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridData.setWidget(0, column++, lblDataFinalCurso);
-		gridData.setWidget(0, column++, new MpSpacePanel());
+		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridData.setWidget(0, column++, lblDataFinalCursoDB);
 		
 		
@@ -99,13 +99,13 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		gridMediaPresenca.setBorderWidth(0);		
 		column=0;
 		gridMediaPresenca.setWidget(0, column++, lblMediaNotaCurso);
-		gridMediaPresenca.setWidget(0, column++, new MpSpacePanel());
+		gridMediaPresenca.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridMediaPresenca.setWidget(0, column++, lblMediaNotaCursoDB);
-		gridMediaPresenca.setWidget(0, column++, new MpSpacePanel());
-		gridMediaPresenca.setWidget(0, column++, new MpSpacePanel());
-		gridMediaPresenca.setWidget(0, column++, new MpSpacePanel());
+		gridMediaPresenca.setWidget(0, column++, new MpSpaceVerticalPanel());
+		gridMediaPresenca.setWidget(0, column++, new MpSpaceVerticalPanel());
+		gridMediaPresenca.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridMediaPresenca.setWidget(0, column++, lblPorcentagemPresencaCurso);
-		gridMediaPresenca.setWidget(0, column++, new MpSpacePanel());
+		gridMediaPresenca.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridMediaPresenca.setWidget(0, column++, lblPorcentagemPresencaCursoDB);
 		
 		
@@ -118,12 +118,12 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		int row=0;
 		flexTableConteudo.setWidget(row++, 0, lblDescricaoCurso);
 		flexTableConteudo.setWidget(row++, 0, lblDescricaoCursoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, lblEmentaCurso);
 		flexTableConteudo.setWidget(row++, 0, lblEmentaCursoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, gridMediaPresenca);
-		flexTableConteudo.setWidget(row++, 0, new MpSpacePanel());		
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());		
 		
 		flexTableConteudo.setWidget(row++, 0, gridData);
 		
@@ -170,7 +170,7 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		flexTableFiltrar.setCellPadding(3);
 		flexTableFiltrar.setBorderWidth(0);		
 		flexTableFiltrar.setWidget(0, 0, mpPager);
-		flexTableFiltrar.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, txtSearch);
 		flexTableFiltrar.setWidget(0, 3, btnFiltrar);
 		

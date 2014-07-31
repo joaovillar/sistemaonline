@@ -35,7 +35,7 @@ import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServicePresenca;
 import com.jornada.shared.classes.Aula;
@@ -378,7 +378,7 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 		
 		flexTableFiltrarAluno.setWidget(0, 0, mpPager);
-		flexTableFiltrarAluno.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrarAluno.setWidget(0, 1, new MpSpaceVerticalPanel());
 //		flexTableFiltrarAluno.setWidget(0, 2, lblAluno);
 		flexTableFiltrarAluno.setWidget(0, 3, txtSearch);
 		flexTableFiltrarAluno.setWidget(0, 4, btnFiltrar);
@@ -395,13 +395,13 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		vPanel.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanel.add(cellTable);
 		
-		MpSpacePanel mpSpacePanel = new MpSpacePanel();
+		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
 		
 		VerticalPanel vPanelInScroll = new VerticalPanel();
 		vPanelInScroll.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanelInScroll.add(flexTableFiltrarAluno);
 		vPanelInScroll.add(vPanel);
-		vPanelInScroll.add(mpSpacePanel);
+		vPanelInScroll.add(mpSpaceVerticalPanel);
 		scrollPanel.clear();
 		scrollPanel.add(vPanelInScroll);
 		

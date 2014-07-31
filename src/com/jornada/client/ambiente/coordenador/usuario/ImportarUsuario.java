@@ -37,7 +37,7 @@ import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.classes.Usuario;
@@ -239,12 +239,12 @@ public class ImportarUsuario extends VerticalPanel {
 			gridSave.setWidget(0, i++, mpLoadingSave);
 		}
 		
-		MpSpacePanel mpSpacePanel = new MpSpacePanel();
-		mpSpacePanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
+		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
+		mpSpaceVerticalPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
 
 		vFormPanel.add(grid);
 		vFormPanel.add(gridSave);
-		vFormPanel.add(mpSpacePanel);
+		vFormPanel.add(mpSpaceVerticalPanel);
 		
 		mpPanel.addPage(vFormPanel);
 		

@@ -28,6 +28,9 @@ public class TelaInicialUsuario extends Composite{
 		if(uniqueInstance==null){
 			uniqueInstance = new TelaInicialUsuario();
 		}
+//		else{
+//			uniqueInstance.adicionarUsuario.u
+//		}
 		
 		return uniqueInstance;
 	}		
@@ -37,7 +40,7 @@ public class TelaInicialUsuario extends Composite{
 		TextConstants txtConstants = GWT.create(TextConstants.class);
 		
 		
-		adicionarUsuario = new AdicionarUsuario(this);
+		adicionarUsuario = AdicionarUsuario.getInstanceAdicionar(this);
 		editarUsuario = new EditarUsuario(this);
 		associarPaisAlunos = new AssociarPaisAlunos();
 		importarUsuario = new ImportarUsuario(this);

@@ -204,6 +204,13 @@ h1 {
 	font-family: Arial, Helvetica, sans-serif;
 	vertical-align: top;
 }
+.label_rodape_link {
+	cursor: pointer;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	vertical-align: top;
+}
+
 .design_text_boxes {
   background-color: #ffffff;
   border-left: 1px solid;
@@ -217,7 +224,21 @@ h1 {
   font-size:11px;  
   font-family:Arial;
   height:18px;
+}
 
+.design_text_boxes_erro {
+  background-color: rgb(255, 155, 155);
+  border-left: 1px solid;
+  border-left-color: gray;
+  border-top: 1px solid;
+  border-top-color: gray;
+  border-right: 1px solid;
+  border-right-color: gray;
+  border-bottom: 1px solid;
+  border-bottom-color: gray;
+  font-size:11px;  
+  font-family:Arial;
+  height:18px;
 }
 
 .design_text_area_cell_table {
@@ -818,6 +839,7 @@ background-size: 100%;
 .imageCenter{
 	vertical-align: middle;
 }
+
 
 .imageCenterDateBox{
 	vertical-align: middle;

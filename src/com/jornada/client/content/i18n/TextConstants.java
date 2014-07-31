@@ -65,7 +65,9 @@ public interface TextConstants extends Messages {
     /******MainFooter Begin******/
     String footerPolitica();
     String footerUsoInterno();
-    String footerEmail();
+    String footerEmailSuporte();
+    String footerEmailSuporteMsg();
+    String footerEmailEndereco();
     String footerLicensa();
     String footerBrowser();    
     /******MainFooter End******/
@@ -367,6 +369,27 @@ public interface TextConstants extends Messages {
 	String usuarioListaUsuariosInvalidos();
 	String usuarioPlanilhaImportadoComSucesso();
 	String usuarioErroImportarUsuarios();
+	String usuarioRespAcademico();
+	String usuarioRespFinanceiro();
+	String usuarioDataMatricula();
+	String usuarioMatricula();
+	String usuarioRG();
+	String usuarioSexo();
+	String usuarioEndereco(); 
+	String usuarioNumRes();
+	String usuarioBairro();
+	String usuarioCidade();
+	String usuarioEstado();
+	String usuarioCep();
+	String usuarioEmpresa(); 
+	String usuarioCargo();
+	String usuarioResponsavel();
+	String usuarioTipoPai();
+	String usuarioSituacaoDosPais(); 
+	String usuarioCasados();
+	String usuarioSeparados();
+	String usuarioOutros();	
+	String usuarioErroLoginDuplicado(String login);
 	/*******Usuários FIM*******/
 	
 	
@@ -568,4 +591,49 @@ public interface TextConstants extends Messages {
 	String ajudaText2();
 	String ajudaText3();	
 	/*******AJUDA END*******/
+	
+	
+	/*******ESTADOS BEGIN*******/
+	String ufAcre();
+	String ufAlagoas();
+	String ufAmapa();
+	String ufAmazonas();   
+	String ufBahia(); 
+	String ufCeara();
+	String ufDistritoFederal();
+	String ufEspiritoSanto();
+	String ufGoias();
+	String ufMaranhao();  
+	String ufMatoGrosso();
+	String ufMatoGrossoDoSul();
+	String ufMinasGerais();
+	String ufPara();
+	String ufParaiba();  
+	String ufParana();
+	String ufPernambuco();
+	String ufPiaui();
+	String ufRioDeJaneiro();
+	String ufRioGrandeDoSul();
+	String ufRioGrandeDoNorte();
+	String ufRondonia();
+	String ufRoraima();
+	String ufSantaCatarina();  
+	String ufSaoPaulo();
+	String ufSergipe();  
+	String ufTocantins();  
+	/*******ESTADOS END*******/
+	
+	/*******Tipos Pais BEGIN*******/
+	String tipoPaiMae();
+	String tipoPaiPai();
+	String tipoPaiMadastra(); 
+	String tipoPaiPadastro();
+	String tipoPaiOutros();
+	/*******Tipos Pais END*******/	
+	
+	/*******Sexo BEGIN*******/
+	String sexoFeminino();
+	String sexoMasculino(); 
+	/*******Sexo END*******/
+
 }

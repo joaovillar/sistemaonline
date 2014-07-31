@@ -30,7 +30,7 @@ import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionCursoAmbien
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.TipoUsuario;
@@ -136,10 +136,10 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		int row=0;
 		gridFiltrar.setWidget(row, 0, lblNomeCurso);
 		gridFiltrar.setWidget(row, 1, listBoxCurso);
-		gridFiltrar.setWidget(row, 2, new MpSpacePanel());
+		gridFiltrar.setWidget(row, 2, new MpSpaceVerticalPanel());
 		gridFiltrar.setWidget(row, 3, lblNomeAluno);
 		gridFiltrar.setWidget(row, 4, listBoxAlunosPorCurso);
-		gridFiltrar.setWidget(row, 5, new MpSpacePanel());
+		gridFiltrar.setWidget(row, 5, new MpSpaceVerticalPanel());
 		gridFiltrar.setWidget(row, 6, mpPanelAlunosLoading);
 //		gridFiltrar.setWidget(row, 2, txtFiltroAluno);
 //		gridFiltrar.setWidget(row, 3, btnFiltrar);

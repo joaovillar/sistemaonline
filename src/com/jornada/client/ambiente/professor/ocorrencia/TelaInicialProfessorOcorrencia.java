@@ -33,6 +33,7 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 		}else{
 			uniqueInstance.adicionarOcorrencia.updateClientData();
 			uniqueInstance.editarOcorrencia.updateClientData();
+			uniqueInstance.visualizarOcorrencia.updateClientData();
 		}
 		
 		return uniqueInstance;

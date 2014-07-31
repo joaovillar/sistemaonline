@@ -25,7 +25,7 @@ import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceTopico;
 import com.jornada.shared.FieldVerifier;
@@ -168,13 +168,13 @@ public class AdicionarTopico extends VerticalPanel {
 			gridSave.setWidget(0, i++, hPanelLoading);
 		}
 		
-		MpSpacePanel mpSpacePanel = new MpSpacePanel();
-		mpSpacePanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
+		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
+		mpSpaceVerticalPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
 
 		vFormPanel.add(layout);
 		vFormPanel.add(gridSave);
 		
-		vFormPanel.add(mpSpacePanel);
+		vFormPanel.add(mpSpaceVerticalPanel);
 
 		
 		

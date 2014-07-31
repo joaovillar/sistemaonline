@@ -43,7 +43,7 @@ import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServicePresenca;
 import com.jornada.shared.FieldVerifier;
@@ -269,7 +269,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 		
 		flexTableFiltrarAluno.setWidget(0, 0, mpPager);
-		flexTableFiltrarAluno.setWidget(0, 1, new MpSpacePanel());
+		flexTableFiltrarAluno.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrarAluno.setWidget(0, 2, lblAluno);
 		flexTableFiltrarAluno.setWidget(0, 3, txtSearch);
 		flexTableFiltrarAluno.setWidget(0, 4, btnFiltrar);
@@ -302,7 +302,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		vFormPanel.add(flexTableFiltrarAluno);
 		vFormPanel.add(vPanel);
 		vFormPanel.add(gridSave);
-		vFormPanel.add(new MpSpacePanel());
+		vFormPanel.add(new MpSpaceVerticalPanel());
 		
 		
 		vFormPanel.setCellHorizontalAlignment(gridSave, ALIGN_CENTER);

@@ -34,7 +34,7 @@ import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
-import com.jornada.client.classes.widgets.panel.MpSpacePanel;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.classes.widgets.timepicker.MpTimePicker;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceOcorrencia;
@@ -115,17 +115,17 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	
 	public void abrirTelaCadastro(){
 		vBodyPanel.add(mpPanelFormularioOcorrencia());
-		vBodyPanel.add(new MpSpacePanel());
+		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(mpPanelAssociarAlunos());
-		vBodyPanel.add(new MpSpacePanel());
+		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(gridBotaoSalvar());
 	}
 	
 	public void criarTelaEditar(EditarOcorrencia editarOcorrencia){
 		vBodyPanel.add(mpPanelFormularioOcorrencia());
-		vBodyPanel.add(new MpSpacePanel());
+		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(mpPanelAssociarAlunos());
-		vBodyPanel.add(new MpSpacePanel());
+		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(gridBotaoEditar());
 		this.editarOcorrencia = editarOcorrencia;
 	}
