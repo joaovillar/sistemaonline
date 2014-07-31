@@ -24,7 +24,8 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	
 	private String sessionId;
 	private boolean loggedIn;
-	
+	private boolean primeiroLogin;
+
 	private TipoUsuario tipoUsuario;
 	private Idioma idioma;
 
@@ -169,6 +170,14 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 
 	public void setIdioma(Idioma idioma) {
 		this.idioma = idioma;
+	}
+	
+	public boolean isPrimeiroLogin() {
+		return primeiroLogin;
+	}
+
+	public void setPrimeiroLogin(boolean primeiroLogin) {
+		this.primeiroLogin = primeiroLogin;
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class UsuarioServer{
 //	public static String DB_UPDATE = "UPDATE usuario set primeiro_nome=?, sobre_nome=?, cpf=?, data_nascimento=?, id_tipo_usuario=?, email=?, telefone_celular=?, telefone_residencial=?, telefone_comercial=?, login=?, senha=? where id_usuario=?";	
 	public static String DB_UPDATE = "UPDATE usuario set primeiro_nome=?, sobre_nome=?, cpf=?, data_nascimento=?, id_tipo_usuario=?, email=?, telefone_celular=?, telefone_residencial=?, telefone_comercial=?, login=? where id_usuario=?";
 	public static String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
-	public static String DB_UPDATE_SENHA = "UPDATE usuario set senha=? where id_usuario=?";
+	public static String DB_UPDATE_SENHA = "UPDATE usuario set senha=?, primeiro_login=false where id_usuario=?";
 	public static String DB_SELECT_ILIKE = "SELECT * FROM usuario where (primeiro_nome ilike ?) order by primeiro_nome asc";
 	public static String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario where (<change> ilike ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome asc";
 	public static String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome asc";
@@ -863,6 +863,7 @@ public class UsuarioServer{
 			usuario.setTelefoneComercial(rs.getString("telefone_comercial"));
 			usuario.setLogin(rs.getString("login"));
 			usuario.setSenha(rs.getString("senha"));
+			usuario.setPrimeiroLogin(rs.getBoolean("primeiro_login"));
 			
 			usuario.setIdIdioma((rs.getInt("id_idioma")==0)? 1 : rs.getInt("id_idioma"));
 			usuario.getTipoUsuario().setIdTipoUsuario(usuario.getIdTipoUsuario());

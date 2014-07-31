@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.jornada.client.ambiente.general.configuracao.DialogBoxPrimeiroLogin;
+import com.jornada.client.ambiente.general.configuracao.DialogBoxSenha;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
@@ -233,6 +235,10 @@ public class MainEntryPoint implements EntryPoint {
 		                    	if(object==null){
 		                        	mpPanelLoading.setVisible(false);
 		                            Window.alert(txtConstants.loginAcessoNegado());
+		                    	}
+		                    	else if (object.isPrimeiroLogin()){
+		                    		mpPanelLoading.setVisible(false);
+		                    		DialogBoxPrimeiroLogin.getInstance(object);
 		                    	}
 		                    	else if (object.getLoggedIn())
 		                        {
