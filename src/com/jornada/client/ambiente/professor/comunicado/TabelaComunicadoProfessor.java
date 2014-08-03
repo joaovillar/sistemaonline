@@ -166,6 +166,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 			}
 
 			public void onFailure(Throwable caught) {
+				mpPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.comunicadoErroCarregar());
 				mpDialogBoxWarning.showDialog();

@@ -147,6 +147,8 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelProfessorLoading.setVisible(false);
+				mpPanelDisciplinaLoading.setVisible(false);	
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroBuscarProfessores());
 				mpDialogBoxWarning.showDialog();
@@ -264,6 +266,8 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelProfessorLoading.setVisible(false);
+				mpPanelDisciplinaLoading.setVisible(false);					
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroCarregar());
 				mpDialogBoxWarning.showDialog();
@@ -292,6 +296,8 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelProfessorLoading.setVisible(false);
+				mpPanelDisciplinaLoading.setVisible(false);					
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroCarregar());
 				mpDialogBoxWarning.showDialog();
@@ -332,6 +338,9 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		callbackAssociarDisciplinaAoProfessor = new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
+				mpPanelProfessorLoading.setVisible(false);
+				mpPanelDisciplinaLoading.setVisible(false);					
+				mpPanelAssociandoLoading.setVisible(false);				
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroAssociarProfessor());
 				mpDialogBoxWarning.showDialog();
@@ -341,9 +350,9 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 			public void onSuccess(Boolean result) {
 				
 				mpPanelProfessorLoading.setVisible(false);
-				mpPanelDisciplinaLoading.setVisible(false);	
-				
+				mpPanelDisciplinaLoading.setVisible(false);					
 				mpPanelAssociandoLoading.setVisible(false);
+				
 				if(result.booleanValue()){
 				mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
 				mpDialogBoxConfirm.setBodyText(txtConstants.disciplinaAssociadas());

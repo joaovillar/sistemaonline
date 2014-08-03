@@ -280,6 +280,7 @@ public class FormularioComunicado extends VerticalPanel {
 		callbackAddComunicado = new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
+				mpPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.comunicadoErroSalvar());
 				mpDialogBoxWarning.showDialog();

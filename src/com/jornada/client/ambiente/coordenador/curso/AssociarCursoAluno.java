@@ -278,6 +278,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelAlunoLoading.setVisible(false);	
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroCarregar());
 				mpDialogBoxWarning.showDialog();
@@ -305,6 +306,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelCursoLoading.setVisible(false);	
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroCarregar());
 				mpDialogBoxWarning.showDialog();
@@ -348,6 +350,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 		callbackAssociarAlunoAoCurso = new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
+				mpPanelAssociandoLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAssociarAluno());
 				mpDialogBoxWarning.showDialog();

@@ -157,6 +157,7 @@ public class EditarNotaPorAluno extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelAlunosLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.notaErroBuscarAluno());
 				mpDialogBoxWarning.showDialog();

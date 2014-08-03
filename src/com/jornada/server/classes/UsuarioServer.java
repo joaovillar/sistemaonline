@@ -15,9 +15,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.jornada.ConfigJornada;
 import com.jornada.server.classes.password.BCrypt;
+import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.list.UsuarioErroImportar;
 
 public class UsuarioServer{
 
@@ -103,6 +105,7 @@ public class UsuarioServer{
 	public static String DB_DELETE = "delete from usuario where id_usuario=?";
 	public static String DB_SELECT_ALL_TIPO_USUARIOS = "SELECT * FROM tipo_usuario where is_visible=true order by nome_tipo_usuario asc;";
 	public static String DB_SELECT_TIPO_USUARIOS_POR_NOME = "SELECT * FROM tipo_usuario where nome_tipo_usuario=? ;";
+	public static String DB_SELECT_TIPO_USUARIOS_POR_ID = "SELECT * FROM tipo_usuario where id_tipo_usuario=? ;";
 	public static String DB_SELECT_ILIKE_FILTRADO_POR_CURSO = 
 			"select * from usuario where id_usuario in "+
 			"( select id_usuario from rel_curso_usuario where id_curso=? ) "+
@@ -387,83 +390,28 @@ public class UsuarioServer{
 		return success;
 	}		
 	
-	public static ArrayList<Usuario> importarUsuariosUsandoExcel(String strFileName){
+	public static ArrayList<UsuarioErroImportar> importarUsuariosUsandoExcel(String strFileName){
 	    Workbook wb;
-	    Sheet sheet;
-	    Row row;
 
 //	    String strMessage;
 	    
-		int COLUNA_TIPO_USUARIO =0;
-	    int COLUNA_PRIMEIRO_NOME=1;
-	    int COLUNA_SOBRE_NOME=2;
-	    int COLUNA_EMAIL=3;
-	    int COLUNA_USUARIO=4;	
-	    int COLUNA_SENHA=5;
-	    int COLUNA_CPF=6;
-	    int COLUNA_TELEFONE_CELULAR=7;
-	    int COLUNA_TELEFONE_RESIDENCIAL=8;	
-	    int COLUNA_TELEFONE_COMERCIAL=9;
+	    ArrayList<UsuarioErroImportar> arrayUsuarioError = new ArrayList<UsuarioErroImportar>();
 	    
-	    ArrayList<Usuario> arrayUsuarioError = new ArrayList<Usuario>();
+	    int SHEET_ALUNO = 0;
+	    int SHEET_COORDENADOR = 1;
+	    int SHEET_PAIS = 2;
+	    int SHEET_PROFESSOR = 3;
 
 	    
 		try {
 
 			wb = new XSSFWorkbook("excel/download/"+strFileName);
-//			wb = new XSSFWorkbook("c:/temp/ImportarUsuarios.xlsx");
-			sheet = wb.getSheetAt(0);
 			
-			System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
-			System.out.println("LastRowNum:"+sheet.getLastRowNum());
-			System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
-			
-			
-			
-			for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
-				
-				row = sheet.getRow(i);
-				Cell cellTipoUsuario = row.getCell(COLUNA_TIPO_USUARIO);
-				Cell cellPrimeiroNome = row.getCell(COLUNA_PRIMEIRO_NOME);
-				Cell cellSobreNome = row.getCell(COLUNA_SOBRE_NOME);
-				Cell cellEmail = row.getCell(COLUNA_EMAIL);
-				Cell cellUsuario = row.getCell(COLUNA_USUARIO);
-				Cell cellSenha = row.getCell(COLUNA_SENHA);
-				Cell cellCPF = row.getCell(COLUNA_CPF);
-				Cell cellTelCelular = row.getCell(COLUNA_TELEFONE_CELULAR);
-				Cell cellTelResidencial = row.getCell(COLUNA_TELEFONE_RESIDENCIAL);
-				Cell cellTelComercial = row.getCell(COLUNA_TELEFONE_COMERCIAL);
-				
-				Usuario usuario = new Usuario();
-				
-				TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuario((cellTipoUsuario.getStringCellValue()==null)?"":cellTipoUsuario.getStringCellValue());
-				
-				String senha="";				
-				if((cellSenha==null)|| (cellSenha.getStringCellValue().isEmpty())){
-					senha = ConfigJornada.getProperty("config.senha.inicial");
-				}
-				String senhaHashed = BCrypt.hashpw(senha, BCrypt.gensalt());
-				
-				usuario.setTipoUsuario(tipoUsuario);
-				usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
-				usuario.setPrimeiroNome((cellPrimeiroNome==null)?"":cellPrimeiroNome.getStringCellValue());
-				usuario.setSobreNome((cellSobreNome==null)?"":cellSobreNome.getStringCellValue());
-				usuario.setEmail((cellEmail==null)?"":cellEmail.getStringCellValue());
-				usuario.setLogin((cellUsuario==null)?"":cellUsuario.getStringCellValue());
-				usuario.setSenha(senhaHashed);
-				usuario.setCpf((cellCPF==null)?"":cellCPF.getStringCellValue());
-				usuario.setTelefoneCelular((cellTelCelular==null)?"":cellTelCelular.getStringCellValue());
-				usuario.setTelefoneResidencial((cellTelResidencial==null)?"":cellTelResidencial.getStringCellValue());
-				usuario.setTelefoneComercial((cellTelComercial==null)?"":cellTelComercial.getStringCellValue());
-				
-//				arrayUsuario.add(usuario);
-				if(!UsuarioServer.AdicionarUsuario(usuario).equals("true")){
-					
-					arrayUsuarioError.add(usuario);
+			arrayUsuarioError.addAll(importarAlunos(wb.getSheetAt(SHEET_ALUNO)));
+			arrayUsuarioError.addAll(importarCoordenador(wb.getSheetAt(SHEET_COORDENADOR)));
+			arrayUsuarioError.addAll(importarPais(wb.getSheetAt(SHEET_PAIS)));
+			arrayUsuarioError.addAll(importarProfessor(wb.getSheetAt(SHEET_PROFESSOR)));
 
-				}
-
-			}
 			
 		} catch (Exception ex) {
 			System.out.println("Error Read Excel:"+ex.getMessage());
@@ -472,6 +420,692 @@ public class UsuarioServer{
 		
 		return arrayUsuarioError;
 	}
+	
+	
+	public static ArrayList<UsuarioErroImportar> importarAlunos(Sheet sheet){
+	    
+		int cv=0;
+		
+		 ArrayList<UsuarioErroImportar> arrayAlunoError = new ArrayList<UsuarioErroImportar>();
+		 
+	    Row row;
+
+				
+		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
+		System.out.println("LastRowNum:"+sheet.getLastRowNum());
+		System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
+		
+		for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
+			
+			String strStatusAddUsuario= "true";
+			String strCamposCorretos = "";
+			
+			row = sheet.getRow(i);
+			
+			Cell Registro_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Registro_Aluno = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Primeiro_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Sobre_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Email = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Usuario = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Senha = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Sexo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Endereco = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Num_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Bairro = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cidade = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Estado = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cep = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Celular = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Comercial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell CPF = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell RG = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Situacao_dos_Pais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);			
+			
+			
+			Registro_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+			Data_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+			Registro_Aluno.setCellType(Cell.CELL_TYPE_STRING);	
+			Primeiro_Nome.setCellType(Cell.CELL_TYPE_STRING);	
+			Sobre_Nome.setCellType(Cell.CELL_TYPE_STRING);	
+			Email.setCellType(Cell.CELL_TYPE_STRING);	
+			Usuario.setCellType(Cell.CELL_TYPE_STRING);	
+			Senha.setCellType(Cell.CELL_TYPE_STRING);	
+			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
+			Sexo.setCellType(Cell.CELL_TYPE_STRING);	
+			Endereco.setCellType(Cell.CELL_TYPE_STRING);	
+			Num_Residencial.setCellType(Cell.CELL_TYPE_STRING);	
+			Bairro.setCellType(Cell.CELL_TYPE_STRING);
+			Cidade.setCellType(Cell.CELL_TYPE_STRING);
+			Estado.setCellType(Cell.CELL_TYPE_STRING);
+			Cep.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Celular.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Residencial.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Comercial.setCellType(Cell.CELL_TYPE_STRING);
+			CPF.setCellType(Cell.CELL_TYPE_STRING);
+			RG.setCellType(Cell.CELL_TYPE_STRING);
+			Situacao_dos_Pais.setCellType(Cell.CELL_TYPE_STRING);
+			Situacao_dos_Pais_Outros.setCellType(Cell.CELL_TYPE_STRING);
+			
+			Usuario usuario = new Usuario();
+			
+			String senha="";				
+			if((Senha==null)|| (Senha.getStringCellValue().isEmpty())){
+				senha = ConfigJornada.getProperty("config.senha.inicial");
+			}
+			String senhaHashed = BCrypt.hashpw(senha, BCrypt.gensalt());
+			
+			
+			if(Primeiro_Nome.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Primeiro Nome é obrigatório || ";
+			}
+			if(Sobre_Nome.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
+			}
+			if(Email.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Email é obrigatório || ";
+			}
+			if(Usuario.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Usuario é obrigatório || ";
+			}			
+			
+
+
+			String strDataMatricula = Data_Matricula.getStringCellValue();
+			Date dataMatricula = MpUtilServer.convertStringToDate(strDataMatricula,"dd/MM/yyyy");
+			String strValidateDataMatricula = MpUtilServer.isThisDateValid(strDataMatricula, "dd/MM/yyyy");
+			if(!strValidateDataMatricula.equals("true")){
+				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
+			}
+			
+			
+			String strDataNascimento = Data_Nascimento.getStringCellValue();
+			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
+			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
+			if(!strValidateDataNascimento.equals("true")){
+				strCamposCorretos+="Data Matricula "+strValidateDataNascimento +" || ";
+			}
+
+			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.ALUNO); 
+			
+			usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
+			usuario.setTipoUsuario(tipoUsuario);
+			usuario.setRegistroMatricula( (Registro_Matricula==null) ? "" : Registro_Aluno.getStringCellValue() );	
+			usuario.setDataMatricula(dataMatricula);//(Formato : 25/12/2010)
+			usuario.setRegistroAluno( (Registro_Aluno==null) ? "" : Registro_Aluno.getStringCellValue() );	
+			usuario.setPrimeiroNome( (Primeiro_Nome==null) ? "" : Primeiro_Nome.getStringCellValue() );	
+			usuario.setSobreNome( (Sobre_Nome==null) ? "" : Sobre_Nome.getStringCellValue() );	
+			usuario.setEmail( (Email==null) ? "" : Email.getStringCellValue() );	
+			usuario.setLogin( (Usuario==null) ? "" : Usuario.getStringCellValue() );	
+			usuario.setSenha(senhaHashed);	
+			usuario.setDataNascimento(dataNascimento);// (Formato : 25/12/2010)	
+			usuario.setSexo( (Sexo==null) ? "" : Sexo.getStringCellValue() );	
+			usuario.setEndereco( (Endereco==null) ? "" : Endereco.getStringCellValue() );	
+			usuario.setNumeroResidencia( (Num_Residencial==null) ? "" : Num_Residencial.getStringCellValue() );	
+			usuario.setBairro( (Bairro==null) ? "" : Bairro.getStringCellValue() );
+			usuario.setCidade( (Cidade==null) ? "" : Cidade.getStringCellValue() );
+			usuario.setUnidadeFederativa( (Estado==null) ? "" : Estado.getStringCellValue());
+			usuario.setCep( (Cep==null) ? "" : Cep.getStringCellValue() );
+			usuario.setTelefoneCelular( (Tel_Celular==null) ? "" : Tel_Celular.getStringCellValue() );
+			usuario.setTelefoneResidencial( (Tel_Residencial==null) ? "" : Tel_Residencial.getStringCellValue() );
+			usuario.setTelefoneComercial( (Tel_Comercial==null) ? "" : Tel_Comercial.getStringCellValue() );
+			usuario.setCpf( (CPF==null) ? "" : CPF.getStringCellValue() );
+			usuario.setRg( (RG==null) ? "" : RG.getStringCellValue() );
+			usuario.setSituacaoResponsaveis( (Situacao_dos_Pais==null) ? "" : Situacao_dos_Pais.getStringCellValue() );
+			usuario.setSituacaoResponsaveisOutros( (Situacao_dos_Pais_Outros==null) ? "" : Situacao_dos_Pais_Outros.getStringCellValue() );			
+			
+//			arrayUsuario.add(usuario);
+			
+
+			if (strCamposCorretos.isEmpty()) {
+				strStatusAddUsuario = UsuarioServer.AdicionarUsuario(usuario);
+			}else{
+				strStatusAddUsuario = strCamposCorretos;
+			}
+
+
+			
+			if(!strStatusAddUsuario.equals("true")){				
+				
+				UsuarioErroImportar usuarioErroImportar = new UsuarioErroImportar();
+				
+				usuarioErroImportar.setIdTipoUsuario(usuario.getIdTipoUsuario());
+				usuarioErroImportar.setTipoUsuario(usuario.getTipoUsuario());
+				usuarioErroImportar.setPrimeiroNome(usuario.getPrimeiroNome());
+				usuarioErroImportar.setSobreNome(usuario.getSobreNome());
+				usuarioErroImportar.setEmail(usuario.getEmail());
+				usuarioErroImportar.setLogin(usuario.getLogin());
+				usuarioErroImportar.setErroImportar(strStatusAddUsuario);
+				
+				arrayAlunoError.add(usuarioErroImportar);
+
+			}
+
+		}
+		
+		return arrayAlunoError;
+
+	}
+	
+	public static ArrayList<UsuarioErroImportar> importarCoordenador(Sheet sheet){
+	    
+		int cv=0;
+		
+		ArrayList<UsuarioErroImportar> arrayUsuarioError = new ArrayList<UsuarioErroImportar>();
+		 
+	    Row row;
+				
+		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
+		System.out.println("LastRowNum:"+sheet.getLastRowNum());
+		System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
+		
+		for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
+			
+			String strStatusAddUsuario= "true";
+			String strCamposCorretos = "";
+			
+			row = sheet.getRow(i);
+			
+//			Cell Registro_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Registro_Aluno = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Primeiro_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Sobre_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Email = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Usuario = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Senha = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Sexo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Endereco = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Num_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Bairro = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cidade = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Estado = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cep = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Celular = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Comercial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell CPF = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell RG = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Situacao_dos_Pais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);			
+			
+			
+//			Registro_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+//			Data_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+//			Registro_Aluno.setCellType(Cell.CELL_TYPE_STRING);	
+			Primeiro_Nome.setCellType(Cell.CELL_TYPE_STRING);	
+			Sobre_Nome.setCellType(Cell.CELL_TYPE_STRING);	
+			Email.setCellType(Cell.CELL_TYPE_STRING);	
+			Usuario.setCellType(Cell.CELL_TYPE_STRING);	
+			Senha.setCellType(Cell.CELL_TYPE_STRING);	
+			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
+			Sexo.setCellType(Cell.CELL_TYPE_STRING);	
+			Endereco.setCellType(Cell.CELL_TYPE_STRING);	
+			Num_Residencial.setCellType(Cell.CELL_TYPE_STRING);	
+			Bairro.setCellType(Cell.CELL_TYPE_STRING);
+			Cidade.setCellType(Cell.CELL_TYPE_STRING);
+			Estado.setCellType(Cell.CELL_TYPE_STRING);
+			Cep.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Celular.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Residencial.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Comercial.setCellType(Cell.CELL_TYPE_STRING);
+			CPF.setCellType(Cell.CELL_TYPE_STRING);
+			RG.setCellType(Cell.CELL_TYPE_STRING);
+//			Situacao_dos_Pais.setCellType(Cell.CELL_TYPE_STRING);
+//			Situacao_dos_Pais_Outros.setCellType(Cell.CELL_TYPE_STRING);
+			
+			Usuario usuario = new Usuario();
+			
+			String senha="";				
+			if((Senha==null)|| (Senha.getStringCellValue().isEmpty())){
+				senha = ConfigJornada.getProperty("config.senha.inicial");
+			}
+			String senhaHashed = BCrypt.hashpw(senha, BCrypt.gensalt());
+			
+			
+			if(Primeiro_Nome.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Primeiro Nome é obrigatório || ";
+			}
+			if(Sobre_Nome.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
+			}
+			if(Email.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Email é obrigatório || ";
+			}
+			if(Usuario.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Usuario é obrigatório || ";
+			}			
+			
+
+
+//			String strDataMatricula = Data_Matricula.getStringCellValue();
+//			Date dataMatricula = MpUtilServer.convertStringToDate(strDataMatricula,"dd/MM/yyyy");
+//			String strValidateDataMatricula = MpUtilServer.isThisDateValid(strDataMatricula, "dd/MM/yyyy");
+//			if(!strValidateDataMatricula.equals("true")){
+//				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
+//			}
+			
+			
+			String strDataNascimento = Data_Nascimento.getStringCellValue();
+			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
+			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
+			if(!strValidateDataNascimento.equals("true")){
+				strCamposCorretos+="Data Matricula "+strValidateDataNascimento +" || ";
+			}
+			
+			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.COORDENADOR); 
+			
+			usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
+			usuario.setTipoUsuario(tipoUsuario);
+//			usuario.setRegistroMatricula( (Registro_Matricula==null) ? "" : Registro_Aluno.getStringCellValue() );	
+//			usuario.setDataMatricula(dataMatricula);//(Formato : 25/12/2010)
+//			usuario.setRegistroAluno( (Registro_Aluno==null) ? "" : Registro_Aluno.getStringCellValue() );	
+			usuario.setPrimeiroNome( (Primeiro_Nome==null) ? "" : Primeiro_Nome.getStringCellValue() );	
+			usuario.setSobreNome( (Sobre_Nome==null) ? "" : Sobre_Nome.getStringCellValue() );	
+			usuario.setEmail( (Email==null) ? "" : Email.getStringCellValue() );	
+			usuario.setLogin( (Usuario==null) ? "" : Usuario.getStringCellValue() );	
+			usuario.setSenha(senhaHashed);	
+			usuario.setDataNascimento(dataNascimento);// (Formato : 25/12/2010)	
+			usuario.setSexo( (Sexo==null) ? "" : Sexo.getStringCellValue() );	
+			usuario.setEndereco( (Endereco==null) ? "" : Endereco.getStringCellValue() );	
+			usuario.setNumeroResidencia( (Num_Residencial==null) ? "" : Num_Residencial.getStringCellValue() );	
+			usuario.setBairro( (Bairro==null) ? "" : Bairro.getStringCellValue() );
+			usuario.setCidade( (Cidade==null) ? "" : Cidade.getStringCellValue() );
+			usuario.setUnidadeFederativa( (Estado==null) ? "" : Estado.getStringCellValue());
+			usuario.setCep( (Cep==null) ? "" : Cep.getStringCellValue() );
+			usuario.setTelefoneCelular( (Tel_Celular==null) ? "" : Tel_Celular.getStringCellValue() );
+			usuario.setTelefoneResidencial( (Tel_Residencial==null) ? "" : Tel_Residencial.getStringCellValue() );
+			usuario.setTelefoneComercial( (Tel_Comercial==null) ? "" : Tel_Comercial.getStringCellValue() );
+			usuario.setCpf( (CPF==null) ? "" : CPF.getStringCellValue() );
+			usuario.setRg( (RG==null) ? "" : RG.getStringCellValue() );
+//			usuario.setSituacaoResponsaveis( (Situacao_dos_Pais==null) ? "" : Situacao_dos_Pais.getStringCellValue() );
+//			usuario.setSituacaoResponsaveisOutros( (Situacao_dos_Pais_Outros==null) ? "" : Situacao_dos_Pais_Outros.getStringCellValue() );			
+			
+			if (strCamposCorretos.isEmpty()) {
+				strStatusAddUsuario = UsuarioServer.AdicionarUsuario(usuario);
+			}else{
+				strStatusAddUsuario = strCamposCorretos;
+			}
+			
+			if(!strStatusAddUsuario.equals("true")){				
+				
+				UsuarioErroImportar usuarioErroImportar = new UsuarioErroImportar();
+				
+				usuarioErroImportar.setIdTipoUsuario(usuario.getIdTipoUsuario());
+				usuarioErroImportar.setTipoUsuario(usuario.getTipoUsuario());
+				usuarioErroImportar.setPrimeiroNome(usuario.getPrimeiroNome());
+				usuarioErroImportar.setSobreNome(usuario.getSobreNome());
+				usuarioErroImportar.setEmail(usuario.getEmail());
+				usuarioErroImportar.setLogin(usuario.getLogin());
+				usuarioErroImportar.setErroImportar(strStatusAddUsuario);
+				
+				arrayUsuarioError.add(usuarioErroImportar);
+
+			}
+
+		}
+		
+		return arrayUsuarioError;
+
+	}
+
+	public static ArrayList<UsuarioErroImportar> importarPais(Sheet sheet){
+	    
+		int cv=0;
+		
+		ArrayList<UsuarioErroImportar> arrayUsuarioError = new ArrayList<UsuarioErroImportar>();
+		 
+	    Row row;
+				
+		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
+		System.out.println("LastRowNum:"+sheet.getLastRowNum());
+		System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
+		
+		for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
+			
+			String strStatusAddUsuario= "true";
+			String strCamposCorretos = "";
+			
+			row = sheet.getRow(i);
+			
+//			Cell Registro_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Registro_Aluno = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Primeiro_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Sobre_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Email = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Usuario = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Senha = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Sexo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell TipoPais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Endereco = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Num_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Bairro = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cidade = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Estado = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cep = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Celular = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Comercial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell CPF = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell RG = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Empresa = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cargo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell RespAcademico = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell RespFinanceiro = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Situacao_dos_Pais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);			
+			
+			
+//			Registro_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+//			Data_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+//			Registro_Aluno.setCellType(Cell.CELL_TYPE_STRING);	
+			Primeiro_Nome.setCellType(Cell.CELL_TYPE_STRING);	
+			Sobre_Nome.setCellType(Cell.CELL_TYPE_STRING);	
+			Email.setCellType(Cell.CELL_TYPE_STRING);	
+			Usuario.setCellType(Cell.CELL_TYPE_STRING);	
+			Senha.setCellType(Cell.CELL_TYPE_STRING);	
+			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
+			Sexo.setCellType(Cell.CELL_TYPE_STRING);	
+			TipoPais.setCellType(Cell.CELL_TYPE_STRING);
+			Endereco.setCellType(Cell.CELL_TYPE_STRING);	
+			Num_Residencial.setCellType(Cell.CELL_TYPE_STRING);	
+			Bairro.setCellType(Cell.CELL_TYPE_STRING);
+			Cidade.setCellType(Cell.CELL_TYPE_STRING);
+			Estado.setCellType(Cell.CELL_TYPE_STRING);
+			Cep.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Celular.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Residencial.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Comercial.setCellType(Cell.CELL_TYPE_STRING);
+			CPF.setCellType(Cell.CELL_TYPE_STRING);
+			RG.setCellType(Cell.CELL_TYPE_STRING);
+			Empresa.setCellType(Cell.CELL_TYPE_STRING);
+			Cargo.setCellType(Cell.CELL_TYPE_STRING);
+			RespAcademico.setCellType(Cell.CELL_TYPE_STRING);
+			RespFinanceiro.setCellType(Cell.CELL_TYPE_STRING);
+			
+//			Situacao_dos_Pais.setCellType(Cell.CELL_TYPE_STRING);
+//			Situacao_dos_Pais_Outros.setCellType(Cell.CELL_TYPE_STRING);
+			
+			Usuario usuario = new Usuario();
+			
+			String senha="";				
+			if((Senha==null)|| (Senha.getStringCellValue().isEmpty())){
+				senha = ConfigJornada.getProperty("config.senha.inicial");
+			}
+			String senhaHashed = BCrypt.hashpw(senha, BCrypt.gensalt());
+			
+			
+			if(Primeiro_Nome.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Primeiro Nome é obrigatório || ";
+			}
+			if(Sobre_Nome.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
+			}
+			if(Email.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Email é obrigatório || ";
+			}
+			if(Usuario.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Usuario é obrigatório || ";
+			}
+			
+
+			boolean isRespAcademico=false;
+			if(RespAcademico.getStringCellValue().equals("Sim")){
+				isRespAcademico=true;
+			}
+
+			boolean isRespFinanceiro=false;
+			if(RespFinanceiro.getStringCellValue().equals("Sim")){
+				isRespFinanceiro=true;
+			}
+
+//			String strDataMatricula = Data_Matricula.getStringCellValue();
+//			Date dataMatricula = MpUtilServer.convertStringToDate(strDataMatricula,"dd/MM/yyyy");
+//			String strValidateDataMatricula = MpUtilServer.isThisDateValid(strDataMatricula, "dd/MM/yyyy");
+//			if(!strValidateDataMatricula.equals("true")){
+//				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
+//			}
+			
+			String strDataNascimento = Data_Nascimento.getStringCellValue();
+			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
+			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
+			if(!strValidateDataNascimento.equals("true")){
+				strCamposCorretos+="Data Matricula "+strValidateDataNascimento +" || ";
+			}
+			
+			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.PAIS); 
+			
+			usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
+			usuario.setTipoUsuario(tipoUsuario);
+//			usuario.setRegistroMatricula( (Registro_Matricula==null) ? "" : Registro_Aluno.getStringCellValue() );	
+//			usuario.setDataMatricula(dataMatricula);//(Formato : 25/12/2010)
+//			usuario.setRegistroAluno( (Registro_Aluno==null) ? "" : Registro_Aluno.getStringCellValue() );	
+			usuario.setPrimeiroNome( (Primeiro_Nome==null) ? "" : Primeiro_Nome.getStringCellValue() );	
+			usuario.setSobreNome( (Sobre_Nome==null) ? "" : Sobre_Nome.getStringCellValue() );	
+			usuario.setEmail( (Email==null) ? "" : Email.getStringCellValue() );	
+			usuario.setLogin( (Usuario==null) ? "" : Usuario.getStringCellValue() );	
+			usuario.setSenha(senhaHashed);	
+			usuario.setDataNascimento(dataNascimento);// (Formato : 25/12/2010)	
+			usuario.setSexo( (Sexo==null) ? "" : Sexo.getStringCellValue() );	
+			usuario.setTipoPais( (TipoPais==null) ? "" : TipoPais.getStringCellValue() );
+			usuario.setEndereco( (Endereco==null) ? "" : Endereco.getStringCellValue() );	
+			usuario.setNumeroResidencia( (Num_Residencial==null) ? "" : Num_Residencial.getStringCellValue() );	
+			usuario.setBairro( (Bairro==null) ? "" : Bairro.getStringCellValue() );
+			usuario.setCidade( (Cidade==null) ? "" : Cidade.getStringCellValue() );
+			usuario.setUnidadeFederativa( (Estado==null) ? "" : Estado.getStringCellValue());
+			usuario.setCep( (Cep==null) ? "" : Cep.getStringCellValue() );
+			usuario.setTelefoneCelular( (Tel_Celular==null) ? "" : Tel_Celular.getStringCellValue() );
+			usuario.setTelefoneResidencial( (Tel_Residencial==null) ? "" : Tel_Residencial.getStringCellValue() );
+			usuario.setTelefoneComercial( (Tel_Comercial==null) ? "" : Tel_Comercial.getStringCellValue() );
+			usuario.setCpf( (CPF==null) ? "" : CPF.getStringCellValue() );
+			usuario.setRg( (RG==null) ? "" : RG.getStringCellValue() );
+			usuario.setEmpresaOndeTrabalha( (Empresa==null) ? "" : Empresa.getStringCellValue() );
+			usuario.setCargo( (Cargo==null)? "" : Cargo.getStringCellValue() );
+			usuario.setRespAcademico(isRespAcademico);
+			usuario.setRespFinanceiro(isRespFinanceiro);
+			
+//			usuario.setSituacaoResponsaveis( (Situacao_dos_Pais==null) ? "" : Situacao_dos_Pais.getStringCellValue() );
+//			usuario.setSituacaoResponsaveisOutros( (Situacao_dos_Pais_Outros==null) ? "" : Situacao_dos_Pais_Outros.getStringCellValue() );			
+			
+			if (strCamposCorretos.isEmpty()) {
+				strStatusAddUsuario = UsuarioServer.AdicionarUsuario(usuario);
+			}else{
+				strStatusAddUsuario = strCamposCorretos;
+			}
+			
+			if(!strStatusAddUsuario.equals("true")){				
+				
+				UsuarioErroImportar usuarioErroImportar = new UsuarioErroImportar();
+				
+				usuarioErroImportar.setIdTipoUsuario(usuario.getIdTipoUsuario());
+				usuarioErroImportar.setTipoUsuario(usuario.getTipoUsuario());
+				usuarioErroImportar.setPrimeiroNome(usuario.getPrimeiroNome());
+				usuarioErroImportar.setSobreNome(usuario.getSobreNome());
+				usuarioErroImportar.setEmail(usuario.getEmail());
+				usuarioErroImportar.setLogin(usuario.getLogin());
+				usuarioErroImportar.setErroImportar(strStatusAddUsuario);
+				
+				arrayUsuarioError.add(usuarioErroImportar);
+
+			}
+
+		}
+		
+		return arrayUsuarioError;
+
+	}
+	
+
+	public static ArrayList<UsuarioErroImportar> importarProfessor(Sheet sheet){
+	    
+		int cv=0;
+		
+		ArrayList<UsuarioErroImportar> arrayUsuarioError = new ArrayList<UsuarioErroImportar>();
+		 
+	    Row row;
+				
+		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
+		System.out.println("LastRowNum:"+sheet.getLastRowNum());
+		System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
+		
+		for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
+			
+			String strStatusAddUsuario= "true";
+			String strCamposCorretos = "";
+			
+			row = sheet.getRow(i);
+			
+//			Cell Registro_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Registro_Aluno = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Primeiro_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Sobre_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Email = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Usuario = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Senha = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Sexo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Endereco = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Num_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Bairro = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cidade = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Estado = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Cep = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Celular = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell Tel_Comercial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell CPF = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell RG = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Situacao_dos_Pais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);			
+			
+			
+//			Registro_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+//			Data_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+//			Registro_Aluno.setCellType(Cell.CELL_TYPE_STRING);	
+			Primeiro_Nome.setCellType(Cell.CELL_TYPE_STRING);	
+			Sobre_Nome.setCellType(Cell.CELL_TYPE_STRING);	
+			Email.setCellType(Cell.CELL_TYPE_STRING);	
+			Usuario.setCellType(Cell.CELL_TYPE_STRING);	
+			Senha.setCellType(Cell.CELL_TYPE_STRING);	
+			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
+			Sexo.setCellType(Cell.CELL_TYPE_STRING);	
+			Endereco.setCellType(Cell.CELL_TYPE_STRING);	
+			Num_Residencial.setCellType(Cell.CELL_TYPE_STRING);	
+			Bairro.setCellType(Cell.CELL_TYPE_STRING);
+			Cidade.setCellType(Cell.CELL_TYPE_STRING);
+			Estado.setCellType(Cell.CELL_TYPE_STRING);
+			Cep.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Celular.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Residencial.setCellType(Cell.CELL_TYPE_STRING);
+			Tel_Comercial.setCellType(Cell.CELL_TYPE_STRING);
+			CPF.setCellType(Cell.CELL_TYPE_STRING);
+			RG.setCellType(Cell.CELL_TYPE_STRING);
+//			Situacao_dos_Pais.setCellType(Cell.CELL_TYPE_STRING);
+//			Situacao_dos_Pais_Outros.setCellType(Cell.CELL_TYPE_STRING);
+			
+			Usuario usuario = new Usuario();
+			
+			String senha="";				
+			if((Senha==null)|| (Senha.getStringCellValue().isEmpty())){
+				senha = ConfigJornada.getProperty("config.senha.inicial");
+			}
+			String senhaHashed = BCrypt.hashpw(senha, BCrypt.gensalt());
+			
+			
+			if(Primeiro_Nome.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Primeiro Nome é obrigatório || ";
+			}
+			if(Sobre_Nome.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
+			}
+			if(Email.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Email é obrigatório || ";
+			}
+			if(Usuario.getStringCellValue().isEmpty()){
+				strCamposCorretos+="Campo Usuario é obrigatório || ";
+			}			
+			
+
+
+//			String strDataMatricula = Data_Matricula.getStringCellValue();
+//			Date dataMatricula = MpUtilServer.convertStringToDate(strDataMatricula,"dd/MM/yyyy");
+//			String strValidateDataMatricula = MpUtilServer.isThisDateValid(strDataMatricula, "dd/MM/yyyy");
+//			if(!strValidateDataMatricula.equals("true")){
+//				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
+//			}
+			
+			
+			String strDataNascimento = Data_Nascimento.getStringCellValue();
+			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
+			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
+			if(!strValidateDataNascimento.equals("true")){
+				strCamposCorretos+="Data Matricula "+strValidateDataNascimento +" || ";
+			}
+			
+			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.COORDENADOR); 
+			
+			usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
+			usuario.setTipoUsuario(tipoUsuario);
+//			usuario.setRegistroMatricula( (Registro_Matricula==null) ? "" : Registro_Aluno.getStringCellValue() );	
+//			usuario.setDataMatricula(dataMatricula);//(Formato : 25/12/2010)
+//			usuario.setRegistroAluno( (Registro_Aluno==null) ? "" : Registro_Aluno.getStringCellValue() );	
+			usuario.setPrimeiroNome( (Primeiro_Nome==null) ? "" : Primeiro_Nome.getStringCellValue() );	
+			usuario.setSobreNome( (Sobre_Nome==null) ? "" : Sobre_Nome.getStringCellValue() );	
+			usuario.setEmail( (Email==null) ? "" : Email.getStringCellValue() );	
+			usuario.setLogin( (Usuario==null) ? "" : Usuario.getStringCellValue() );	
+			usuario.setSenha(senhaHashed);	
+			usuario.setDataNascimento(dataNascimento);// (Formato : 25/12/2010)	
+			usuario.setSexo( (Sexo==null) ? "" : Sexo.getStringCellValue() );	
+			usuario.setEndereco( (Endereco==null) ? "" : Endereco.getStringCellValue() );	
+			usuario.setNumeroResidencia( (Num_Residencial==null) ? "" : Num_Residencial.getStringCellValue() );	
+			usuario.setBairro( (Bairro==null) ? "" : Bairro.getStringCellValue() );
+			usuario.setCidade( (Cidade==null) ? "" : Cidade.getStringCellValue() );
+			usuario.setUnidadeFederativa( (Estado==null) ? "" : Estado.getStringCellValue());
+			usuario.setCep( (Cep==null) ? "" : Cep.getStringCellValue() );
+			usuario.setTelefoneCelular( (Tel_Celular==null) ? "" : Tel_Celular.getStringCellValue() );
+			usuario.setTelefoneResidencial( (Tel_Residencial==null) ? "" : Tel_Residencial.getStringCellValue() );
+			usuario.setTelefoneComercial( (Tel_Comercial==null) ? "" : Tel_Comercial.getStringCellValue() );
+			usuario.setCpf( (CPF==null) ? "" : CPF.getStringCellValue() );
+			usuario.setRg( (RG==null) ? "" : RG.getStringCellValue() );
+//			usuario.setSituacaoResponsaveis( (Situacao_dos_Pais==null) ? "" : Situacao_dos_Pais.getStringCellValue() );
+//			usuario.setSituacaoResponsaveisOutros( (Situacao_dos_Pais_Outros==null) ? "" : Situacao_dos_Pais_Outros.getStringCellValue() );			
+			
+			if (strCamposCorretos.isEmpty()) {
+				strStatusAddUsuario = UsuarioServer.AdicionarUsuario(usuario);
+			}else{
+				strStatusAddUsuario = strCamposCorretos;
+			}
+			
+			if(!strStatusAddUsuario.equals("true")){				
+				
+				UsuarioErroImportar usuarioErroImportar = new UsuarioErroImportar();
+				
+				usuarioErroImportar.setIdTipoUsuario(usuario.getIdTipoUsuario());
+				usuarioErroImportar.setTipoUsuario(usuario.getTipoUsuario());
+				usuarioErroImportar.setPrimeiroNome(usuario.getPrimeiroNome());
+				usuarioErroImportar.setSobreNome(usuario.getSobreNome());
+				usuarioErroImportar.setEmail(usuario.getEmail());
+				usuarioErroImportar.setLogin(usuario.getLogin());
+				usuarioErroImportar.setErroImportar(strStatusAddUsuario);
+				
+				arrayUsuarioError.add(usuarioErroImportar);
+
+			}
+
+		}
+		
+		return arrayUsuarioError;
+
+	}
+
 	
 	public static ArrayList<Usuario> getUsuarios() {
 
@@ -489,30 +1123,6 @@ public class UsuarioServer{
 			
 			
 			data = getUserParameters(ps.executeQuery());
-
-
-//			ResultSet rs = ps.executeQuery();
-//			while (rs.next()) 
-//			{
-//
-//				Usuario current = new Usuario();
-//
-//				current.setIdUsuario(rs.getInt("id_usuario"));
-//				current.setPrimeiroNome(rs.getString("primeiro_nome"));
-//				current.setSobreNome(rs.getString("sobre_nome"));
-//				current.setCpf(rs.getString("cpf"));
-//				current.setDataNascimento(rs.getDate("data_nascimento"));
-//				current.setIdTipoUsuario(rs.getInt("id_tipo_usuario"));
-//				current.setEmail(rs.getString("email"));
-//				current.setTelefoneCelular(rs.getString("telefone_celular"));
-//				current.setTelefoneResidencial(rs.getString("telefone_residencial"));
-//				current.setTelefoneComercial(rs.getString("telefone_comercial"));
-//				current.setLogin(rs.getString("login"));
-//				current.setSenha(rs.getString("senha"));
-//
-//
-//				data.add(current);
-//			}
 
 		} catch (SQLException sqlex) {
 			System.err.println(sqlex.getMessage());
@@ -949,6 +1559,38 @@ public class UsuarioServer{
 		return current;
 
 	}	
+	
+	public static TipoUsuario getTipoUsuarioPorId(int idTipoUsuario) {
+
+		TipoUsuario current=null;
+
+		Connection connection = ConnectionManager.getConnection();
+		try 
+		{
+
+			PreparedStatement ps = connection.prepareStatement(UsuarioServer.DB_SELECT_TIPO_USUARIOS_POR_ID);
+
+			ps.setInt(1, idTipoUsuario);
+			
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) 
+			{
+				 current = new TipoUsuario();
+
+				current.setIdTipoUsuario(rs.getInt("id_tipo_usuario"));
+				current.setNomeTipoUsuario(rs.getString("nome_tipo_usuario"));
+
+			}
+
+		} catch (SQLException sqlex) {
+			System.err.println(sqlex.getMessage());
+		} finally {
+			ConnectionManager.closeConnection(connection);
+		}
+
+		return current;
+
+	}
 		
 	public static ArrayList<Usuario> getUserParameters(ResultSet rs){
 

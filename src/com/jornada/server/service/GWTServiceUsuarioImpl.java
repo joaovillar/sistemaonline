@@ -21,6 +21,7 @@ import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.server.classes.UsuarioServer;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.list.UsuarioErroImportar;
 
 
 public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTServiceUsuario {
@@ -44,7 +45,7 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.deleteUsuarioRow(id_usuario);		
 	}	
 	
-	public ArrayList<Usuario> importarUsuariosUsandoExcel(String excelFile){
+	public ArrayList<UsuarioErroImportar> importarUsuariosUsandoExcel(String excelFile){
 		return UsuarioServer.importarUsuariosUsandoExcel(excelFile);
 	}
 	

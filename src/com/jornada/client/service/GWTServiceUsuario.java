@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.list.UsuarioErroImportar;
 
 @RemoteServiceRelativePath("GWTServiceUsuario")
 public interface GWTServiceUsuario extends RemoteService {
@@ -30,7 +31,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	public String updateUsuarioRow(Usuario usuario);	
 	public boolean atualizarSenha(int idUsuario, String senha);	
 	public boolean deleteUsuarioRow(int id_usuario);	
-	public ArrayList<Usuario> importarUsuariosUsandoExcel(String strFileName);
+	public ArrayList<UsuarioErroImportar> importarUsuariosUsandoExcel(String strFileName);
 	public ArrayList<Usuario> getUsuarios();	
 	public Usuario getUsuarioPeloId(int idUsuario);
 	public ArrayList<Usuario> getUsuarios(String strFilter);

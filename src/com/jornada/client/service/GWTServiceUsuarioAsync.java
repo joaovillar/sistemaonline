@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.list.UsuarioErroImportar;
 
 public interface GWTServiceUsuarioAsync {
 
@@ -12,7 +13,7 @@ public interface GWTServiceUsuarioAsync {
 	public void updateUsuarioRow(Usuario usuario, AsyncCallback<String> callback);	
 	public void atualizarSenha(int idUsuario, String senha, AsyncCallback<Boolean> callback);
 	public void deleteUsuarioRow(int id_usuario, AsyncCallback<Boolean> callback);	
-	public void importarUsuariosUsandoExcel(String strFileName, AsyncCallback<ArrayList<Usuario>> callback);
+	public void importarUsuariosUsandoExcel(String strFileName, AsyncCallback<ArrayList<UsuarioErroImportar>> callback);
 	public void getUsuarios(AsyncCallback<ArrayList<Usuario>> callback);	
 	public void getUsuarioPeloId(int idUsuario, AsyncCallback<Usuario> callback);
 	public void getUsuarios(String strFilter, AsyncCallback<ArrayList<Usuario>> callback);

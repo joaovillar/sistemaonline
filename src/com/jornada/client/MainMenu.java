@@ -500,9 +500,9 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			else if(mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.PROFESSOR){
 				this.linkFerramentaProfessor(false);
 			}
-			else if(mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.COORDENADOR){
-				this.linkFerramentaCoordenador(false);
-			}			
+//			else if(mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.COORDENADOR){
+//				this.linkFerramentaCoordenador(false);
+//			}			
 
 		}
 		
@@ -523,8 +523,10 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 	public void linkPaginaPrincipal(boolean showConnectionLabel) {
 
 		hPanel.clear();
-		
-		if (mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.ADMINISTRADOR) {
+
+		if (mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.ADMINISTRADOR 
+			||
+			mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.COORDENADOR) {
 
 			imgPrincipal = new Image("images/home-icon.png");
 			linkPrincipal = new Hyperlink(txtConstants.principal(), MENU_TOKEN_PRINCIPAL);

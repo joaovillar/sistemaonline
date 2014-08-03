@@ -253,6 +253,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		callbackAdd = new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
+				mpPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroSalvar());
 				mpDialogBoxWarning.showDialog();
@@ -393,6 +394,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroBuscarAluno());
 				mpDialogBoxWarning.showDialog();

@@ -8,13 +8,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.text.ParseException;
 
 public class MpUtilServer {
 	
 	public static final String FORMAT_HOUR="HH:mm a";
 	public static final String FORMAT_DATE="yyyy MMM,dd";
 	
-	
+	public static final String STATUS_TRUE="true";
 	
 	
 	public static String convertDateToString_old_old(Date date, String strLocale){
@@ -83,6 +84,18 @@ public class MpUtilServer {
 		return mydate.getTime();
 	}
 	
+	public static Date convertStringToDate(String strDate, String formatDate) {
+		Calendar mydate = new GregorianCalendar();
+		try {
+
+			Date thedate = new SimpleDateFormat(formatDate, Locale.ENGLISH).parse(strDate);
+			mydate.setTime(thedate);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			return null;
+		}
+		return mydate.getTime();
+	}	
 	
 	public static java.sql.Date convertStringToSqlDate(String strDate) {
 		try {
@@ -106,4 +119,29 @@ public class MpUtilServer {
 		
 	}
 
+	public static String isThisDateValid(String dateToValidate, String dateFromat) {
+
+		Locale locale = new Locale("pt", "BR");
+
+		if (dateToValidate == null) {
+			return "null";
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFromat, locale);
+		sdf.setLenient(false);
+
+		try {
+
+			// if not valid, it will throw ParseException
+			Date date = sdf.parse(dateToValidate);
+			System.out.println(date);
+
+		} catch (ParseException e) {
+			// e.printStackTrace();
+			// return false;
+			return e.getMessage();
+		}
+
+		return "true";
+	}
 }

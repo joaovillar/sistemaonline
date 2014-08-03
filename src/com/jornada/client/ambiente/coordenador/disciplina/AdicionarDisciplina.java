@@ -189,6 +189,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		callbackAddDisciplina = new AsyncCallback<Integer>() {
 
 			public void onFailure(Throwable caught) {
+				hPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroSalvar());
 				mpDialogBoxWarning.showDialog();

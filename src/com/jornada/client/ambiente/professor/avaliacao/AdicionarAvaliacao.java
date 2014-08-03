@@ -187,6 +187,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		callbackAddAvaliacao = new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
+				hPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroSalvar());
 				mpDialogBoxWarning.showDialog();

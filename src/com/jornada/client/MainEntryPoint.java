@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.general.configuracao.DialogBoxPrimeiroLogin;
-import com.jornada.client.ambiente.general.configuracao.DialogBoxSenha;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;

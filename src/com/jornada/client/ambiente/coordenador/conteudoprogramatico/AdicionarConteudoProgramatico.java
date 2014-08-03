@@ -170,6 +170,7 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 		callbackAddConteudoProgramatico = new AsyncCallback<Integer>() {
 
 			public void onFailure(Throwable caught) {
+				hPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.conteudoProgramaticoErroSalvar());
 				mpDialogBoxWarning.showDialog();

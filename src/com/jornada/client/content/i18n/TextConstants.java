@@ -570,6 +570,7 @@ public interface TextConstants extends Messages {
 	String geralNumeroInteiro();
 	String geralNumeroDouble();
 	String geralRecarregarAmbiente();
+	String geralErro();
 	/*******USO GERAL END*******/
 	
 	/*******CONFIGURACOES BEGIN*******/

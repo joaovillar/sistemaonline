@@ -8,10 +8,7 @@ import gwtupload.client.SingleUploader;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 
-import com.google.gwt.cell.client.DatePickerCell;
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -40,13 +37,13 @@ import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
-import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.list.UsuarioErroImportar;
 
 public class ImportarUsuario extends VerticalPanel {
 	
 	VerticalPanel vBodyPanel = new VerticalPanel();
 	
-	private AsyncCallback<ArrayList<Usuario>> callbackImportarUsuarios;
+	private AsyncCallback<ArrayList<UsuarioErroImportar>> callbackImportarUsuarios;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -55,19 +52,21 @@ public class ImportarUsuario extends VerticalPanel {
 	Label lblNomeArquivoUploaded;
 	String strNomeFisicoUploaded="";
 
-	private CellTable<Usuario> cellTable;
-	private ListDataProvider<Usuario> dataProvider;	
+	private CellTable<UsuarioErroImportar> cellTable;
+	private ListDataProvider<UsuarioErroImportar> dataProvider;	
 //	private MpSimplePager mpPager; 
-	private Column<Usuario, String> columnPrimeiroNome;
-	private Column<Usuario, String> columnSobreNome;
-	private Column<Usuario, String> columnCPF;
-	private Column<Usuario, String> columnEmail;
-	private Column<Usuario, String> columnLogin;
-	private Column<Usuario, Date> columnDataNascimento;
-	private Column<Usuario, String> columnTelefoneCelular;
-	private Column<Usuario, String> columnTelefoneResidencial;
-	private Column<Usuario, String> columnTelefoneComercial;
-	private Column<Usuario, String> columnTipoUsuario;	
+	private Column<UsuarioErroImportar, String> columnPrimeiroNome;
+	private Column<UsuarioErroImportar, String> columnSobreNome;
+
+	private Column<UsuarioErroImportar, String> columnEmail;
+	private Column<UsuarioErroImportar, String> columnLogin;
+	private Column<UsuarioErroImportar, String> columnErroImport;
+//	private Column<Usuario, String> columnCPF;
+//	private Column<Usuario, Date> columnDataNascimento;
+//	private Column<Usuario, String> columnTelefoneCelular;
+//	private Column<Usuario, String> columnTelefoneResidencial;
+//	private Column<Usuario, String> columnTelefoneComercial;
+	private Column<UsuarioErroImportar, String> columnTipoUsuario;	
 
 	
 	@SuppressWarnings("unused")
@@ -97,21 +96,21 @@ public class ImportarUsuario extends VerticalPanel {
 		/***********************Begin Callbacks**********************/
 
 		// Callback para adicionar Disciplina.
-		callbackImportarUsuarios = new AsyncCallback<ArrayList<Usuario>>() {
+		callbackImportarUsuarios = new AsyncCallback<ArrayList<UsuarioErroImportar>>() {
 
 			public void onFailure(Throwable caught) {
-				mpLoadingSave.setVisible(true);
+				mpLoadingSave.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroSalvar());
 				mpDialogBoxWarning.showDialog();
 			}
 
 			@Override
-			public void onSuccess(ArrayList<Usuario> arrayUsuario) {
+			public void onSuccess(ArrayList<UsuarioErroImportar> arrayUsuario) {
 				// lblLoading.setVisible(false);
 				mpLoadingSave.setVisible(false);
 
-				if (arrayUsuario==null) {
+				if (arrayUsuario==null || arrayUsuario.size()==0) {
 
 					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
 					mpDialogBoxConfirm.setBodyText(txtConstants.usuarioPlanilhaImportadoComSucesso());
@@ -227,7 +226,7 @@ public class ImportarUsuario extends VerticalPanel {
 		grid.setWidget(row, 0, lblSelecionarArquivo);grid.setWidget(row, 1, singleUploader);grid.setWidget(row, 2, lblNomeArquivoUploaded);
 
 		MpImageButton btnUploadFile = new MpImageButton(txtConstants.usuarioImportarArquivoExcel(), "images/arrow_down.16.png");
-		btnUploadFile.addClickHandler(new ClickHandlerSave());
+		btnUploadFile.addClickHandler(new ClickHandlerSubmitImportar());
 		
 
 		Grid gridSave = new Grid(1, 3);
@@ -273,9 +272,10 @@ public class ImportarUsuario extends VerticalPanel {
 	
 	/****************Begin Event Handlers*****************/
 	
-	private class ClickHandlerSave implements ClickHandler {
+	private class ClickHandlerSubmitImportar implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
+			vPassoTres.clear();
 			mpLoadingSave.setVisible(true);
 			GWTServiceUsuario.Util.getInstance().importarUsuariosUsandoExcel(strNomeFisicoUploaded, callbackImportarUsuarios);
 
@@ -313,9 +313,9 @@ public class ImportarUsuario extends VerticalPanel {
 	
 
 	  
-		private void addCellTableData(ListDataProvider<Usuario> dataProvider) {
+		private void addCellTableData(ListDataProvider<UsuarioErroImportar> dataProvider) {
 
-			ListHandler<Usuario> sortHandler = new ListHandler<Usuario>(dataProvider.getList());
+			ListHandler<UsuarioErroImportar> sortHandler = new ListHandler<UsuarioErroImportar>(dataProvider.getList());
 
 			cellTable.addColumnSortHandler(sortHandler);
 
@@ -323,212 +323,229 @@ public class ImportarUsuario extends VerticalPanel {
 
 		}
 
-		private void initTableColumns(final SelectionModel<Usuario> selectionModel) {
+		private void initTableColumns(final SelectionModel<UsuarioErroImportar> selectionModel) {
 			
 		    
-		    columnTipoUsuario = new Column<Usuario, String>(new TextCell()) {
+		    columnTipoUsuario = new Column<UsuarioErroImportar, String>(new TextCell()) {
 		      @Override
-		      public String getValue(Usuario object) {
+		      public String getValue(UsuarioErroImportar object) {
 		        return (object.getTipoUsuario()==null)?"":object.getTipoUsuario().getNomeTipoUsuario();
 		      }
 		    };
 		    
 		
-			columnPrimeiroNome = new Column<Usuario, String>(new TextCell()) {
+			columnPrimeiroNome = new Column<UsuarioErroImportar, String>(new TextCell()) {
 				@Override
-				public String getValue(Usuario object) {
+				public String getValue(UsuarioErroImportar object) {
 					return object.getPrimeiroNome();
 				}
 
 			};
 
 			
-			columnSobreNome = new Column<Usuario, String>(new TextCell()) {
+			columnSobreNome = new Column<UsuarioErroImportar, String>(new TextCell()) {
 				@Override
-				public String getValue(Usuario object) {
+				public String getValue(UsuarioErroImportar object) {
 					return object.getSobreNome();
 				}
 
 			};
 			
-			columnCPF = new Column<Usuario, String>(
-					new EditTextCell()) {
-				@Override
-				public String getValue(Usuario object) {
-					return object.getCpf();
-				}
-
-			};
+//			columnCPF = new Column<Usuario, String>(
+//					new EditTextCell()) {
+//				@Override
+//				public String getValue(Usuario object) {
+//					return object.getCpf();
+//				}
+//
+//			};
 			
-			columnEmail = new Column<Usuario, String>(new TextCell()) {
+			columnEmail = new Column<UsuarioErroImportar, String>(new TextCell()) {
 				@Override
-				public String getValue(Usuario object) {
+				public String getValue(UsuarioErroImportar object) {
 					return object.getEmail();
 				}
 
 			};
-
-			columnDataNascimento = new Column<Usuario, Date>(new DatePickerCell()) {
-				@Override
-				public Date getValue(Usuario object) {
-					return object.getDataNascimento();
-				}
-			};
 			
-			columnTelefoneCelular = new Column<Usuario, String>(
-					new EditTextCell()) {
-				@Override
-				public String getValue(Usuario object) {
-					return object.getTelefoneCelular();
-				}
-
-			};
+//			columnDataNascimento = new Column<Usuario, Date>(new DatePickerCell()) {
+//				@Override
+//				public Date getValue(Usuario object) {
+//					return object.getDataNascimento();
+//				}
+//			};
+//			
+//			columnTelefoneCelular = new Column<Usuario, String>(
+//					new EditTextCell()) {
+//				@Override
+//				public String getValue(Usuario object) {
+//					return object.getTelefoneCelular();
+//				}
+//
+//			};
+//			
+//			columnTelefoneResidencial = new Column<Usuario, String>(
+//					new EditTextCell()) {
+//				@Override
+//				public String getValue(Usuario object) {
+//					return object.getTelefoneResidencial();
+//				}
+//
+//			};
+//
+//			columnTelefoneComercial = new Column<Usuario, String>(
+//					new EditTextCell()) {
+//				@Override
+//				public String getValue(Usuario object) {
+//					return object.getTelefoneComercial();
+//				}
+//
+//			};
 			
-			columnTelefoneResidencial = new Column<Usuario, String>(
-					new EditTextCell()) {
+			columnLogin = new Column<UsuarioErroImportar, String>(new TextCell()) {
 				@Override
-				public String getValue(Usuario object) {
-					return object.getTelefoneResidencial();
-				}
-
-			};
-
-			columnTelefoneComercial = new Column<Usuario, String>(
-					new EditTextCell()) {
-				@Override
-				public String getValue(Usuario object) {
-					return object.getTelefoneComercial();
-				}
-
-			};
-			
-			columnLogin = new Column<Usuario, String>(
-					new EditTextCell()) {
-				@Override
-				public String getValue(Usuario object) {
+				public String getValue(UsuarioErroImportar object) {
 					return object.getLogin();
 				}
 
 			};
 			
-			Column<Usuario, String> columnSenha = new Column<Usuario, String>(new TextCell()) {
+//			Column<UsuarioErroImportar, String> columnSenha = new Column<UsuarioErroImportar, String>(new TextCell()) {
+//				@Override
+//				public String getValue(UsuarioErroImportar object) {
+//					return object.getSenha();
+//				}
+//
+//			};
+			
+			columnErroImport = new Column<UsuarioErroImportar, String>(new TextCell()) {
 				@Override
-				public String getValue(Usuario object) {
-					return object.getSenha();
+				public String getValue(UsuarioErroImportar object) {
+					return object.getErroImportar();
 				}
 
-			};
-		
+			};		
 
 			cellTable.addColumn(columnTipoUsuario, txtConstants.usuarioTipo());
 			cellTable.addColumn(columnPrimeiroNome, txtConstants.usuarioPrimeiroNome());
 			cellTable.addColumn(columnSobreNome,txtConstants.usuarioSobreNome());
 			cellTable.addColumn(columnEmail, txtConstants.usuarioEmail());
 			cellTable.addColumn(columnLogin, txtConstants.usuario());
-			cellTable.addColumn(columnSenha, txtConstants.usuarioSenha());
-			cellTable.addColumn(columnCPF, txtConstants.usuarioCPF());
-			cellTable.addColumn(columnDataNascimento, txtConstants.usuarioDataNascimento());
-			cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
-			cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
-			cellTable.addColumn(columnTelefoneComercial, txtConstants.usuarioTelComercial());
+//			cellTable.addColumn(columnSenha, txtConstants.usuarioSenha());
+			cellTable.addColumn(columnErroImport, txtConstants.geralErro());
+//			cellTable.addColumn(columnCPF, txtConstants.usuarioCPF());
+//			cellTable.addColumn(columnDataNascimento, txtConstants.usuarioDataNascimento());
+//			cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
+//			cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
+//			cellTable.addColumn(columnTelefoneComercial, txtConstants.usuarioTelComercial());
 
 			cellTable.getColumn(cellTable.getColumnIndex(columnTipoUsuario)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnPrimeiroNome)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnSobreNome)).setCellStyleNames("edit-cell");
-			cellTable.getColumn(cellTable.getColumnIndex(columnCPF)).setCellStyleNames("edit-cell");
+//			cellTable.getColumn(cellTable.getColumnIndex(columnCPF)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnEmail)).setCellStyleNames("edit-cell");
-			cellTable.getColumn(cellTable.getColumnIndex(columnDataNascimento)).setCellStyleNames("edit-cell");
-			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneCelular)).setCellStyleNames("edit-cell");
-			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("edit-cell");
-			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneComercial)).setCellStyleNames("edit-cell");
+//			cellTable.getColumn(cellTable.getColumnIndex(columnDataNascimento)).setCellStyleNames("edit-cell");
+//			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneCelular)).setCellStyleNames("edit-cell");
+//			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("edit-cell");
+//			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneComercial)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnLogin)).setCellStyleNames("edit-cell");		
-			cellTable.getColumn(cellTable.getColumnIndex(columnSenha)).setCellStyleNames("edit-cell");
+//			cellTable.getColumn(cellTable.getColumnIndex(columnSenha)).setCellStyleNames("edit-cell");
+			cellTable.getColumn(cellTable.getColumnIndex(columnErroImport)).setCellStyleNames("edit-cell");
 	
 			
 		}
 
-		private void initSortHandler(ListHandler<Usuario> sortHandler) {
+		private void initSortHandler(ListHandler<UsuarioErroImportar> sortHandler) {
 			
 			
 			columnTipoUsuario.setSortable(true);
-		    sortHandler.setComparator(columnTipoUsuario, new Comparator<Usuario>() {
+		    sortHandler.setComparator(columnTipoUsuario, new Comparator<UsuarioErroImportar>() {
 		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
+		      public int compare(UsuarioErroImportar o1, UsuarioErroImportar o2) {
 			        return o1.getTipoUsuario().getNomeTipoUsuario().compareTo(o2.getTipoUsuario().getNomeTipoUsuario());
 		      }
 		    });		    		
 			
 			columnPrimeiroNome.setSortable(true);
-		    sortHandler.setComparator(columnPrimeiroNome, new Comparator<Usuario>() {
+		    sortHandler.setComparator(columnPrimeiroNome, new Comparator<UsuarioErroImportar>() {
 		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
+		      public int compare(UsuarioErroImportar o1, UsuarioErroImportar o2) {
 		        return o1.getPrimeiroNome().compareTo(o2.getPrimeiroNome());
 		      }
 		    });			
 		    
 			columnSobreNome.setSortable(true);
-		    sortHandler.setComparator(columnSobreNome, new Comparator<Usuario>() {
+		    sortHandler.setComparator(columnSobreNome, new Comparator<UsuarioErroImportar>() {
 		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
+		      public int compare(UsuarioErroImportar o1, UsuarioErroImportar o2) {
 		        return o1.getSobreNome().compareTo(o2.getSobreNome());
 		      }
 		    });	
 		    
-			columnCPF.setSortable(true);
-		    sortHandler.setComparator(columnCPF, new Comparator<Usuario>() {
-		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
-		        return o1.getCpf().compareTo(o2.getCpf());
-		      }
-		    });		
+//			columnCPF.setSortable(true);
+//		    sortHandler.setComparator(columnCPF, new Comparator<Usuario>() {
+//		      @Override
+//		      public int compare(Usuario o1, Usuario o2) {
+//		        return o1.getCpf().compareTo(o2.getCpf());
+//		      }
+//		    });		
 		    
 			columnEmail.setSortable(true);
-		    sortHandler.setComparator(columnEmail, new Comparator<Usuario>() {
+		    sortHandler.setComparator(columnEmail, new Comparator<UsuarioErroImportar>() {
 		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
+		      public int compare(UsuarioErroImportar o1, UsuarioErroImportar o2) {
 		        return o1.getEmail().compareTo(o2.getEmail());
 		      }
 		    });	
 		    
 			columnLogin.setSortable(true);
-		    sortHandler.setComparator(columnLogin, new Comparator<Usuario>() {
+		    sortHandler.setComparator(columnLogin, new Comparator<UsuarioErroImportar>() {
 		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
+		      public int compare(UsuarioErroImportar o1, UsuarioErroImportar o2) {
 		        return o1.getLogin().compareTo(o2.getLogin());
+		      }
+		    });
+		    
+			columnErroImport.setSortable(true);
+		    sortHandler.setComparator(columnErroImport, new Comparator<UsuarioErroImportar>() {
+		      @Override
+		      public int compare(UsuarioErroImportar o1, UsuarioErroImportar o2) {
+		        return o1.getErroImportar().compareTo(o2.getErroImportar());
 		      }
 		    });		   
 		    
-			columnDataNascimento.setSortable(true);
-		    sortHandler.setComparator(columnDataNascimento, new Comparator<Usuario>() {
-		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
-		        return o1.getDataNascimento().compareTo(o2.getDataNascimento());
-		      }
-		    });
 		    
-			columnTelefoneResidencial.setSortable(true);
-		    sortHandler.setComparator(columnTelefoneResidencial, new Comparator<Usuario>() {
-		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
-		        return o1.getTelefoneResidencial().compareTo(o2.getTelefoneResidencial());
-		      }
-		    });
-		    
-			columnTelefoneComercial.setSortable(true);
-		    sortHandler.setComparator(columnTelefoneComercial, new Comparator<Usuario>() {
-		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
-		        return o1.getTelefoneComercial().compareTo(o2.getTelefoneComercial());
-		      }
-		    });
-		    
-			columnTelefoneCelular.setSortable(true);
-		    sortHandler.setComparator(columnTelefoneCelular, new Comparator<Usuario>() {
-		      @Override
-		      public int compare(Usuario o1, Usuario o2) {
-		        return o1.getTelefoneCelular().compareTo(o2.getTelefoneCelular());
-		      }
-		    });	   	    	    	    
+//			columnDataNascimento.setSortable(true);
+//		    sortHandler.setComparator(columnDataNascimento, new Comparator<Usuario>() {
+//		      @Override
+//		      public int compare(Usuario o1, Usuario o2) {
+//		        return o1.getDataNascimento().compareTo(o2.getDataNascimento());
+//		      }
+//		    });
+//		    
+//			columnTelefoneResidencial.setSortable(true);
+//		    sortHandler.setComparator(columnTelefoneResidencial, new Comparator<Usuario>() {
+//		      @Override
+//		      public int compare(Usuario o1, Usuario o2) {
+//		        return o1.getTelefoneResidencial().compareTo(o2.getTelefoneResidencial());
+//		      }
+//		    });
+//		    
+//			columnTelefoneComercial.setSortable(true);
+//		    sortHandler.setComparator(columnTelefoneComercial, new Comparator<Usuario>() {
+//		      @Override
+//		      public int compare(Usuario o1, Usuario o2) {
+//		        return o1.getTelefoneComercial().compareTo(o2.getTelefoneComercial());
+//		      }
+//		    });
+//		    
+//			columnTelefoneCelular.setSortable(true);
+//		    sortHandler.setComparator(columnTelefoneCelular, new Comparator<Usuario>() {
+//		      @Override
+//		      public int compare(Usuario o1, Usuario o2) {
+//		        return o1.getTelefoneCelular().compareTo(o2.getTelefoneCelular());
+//		      }
+//		    });	   	    	    	    
 		    
 		    
 			
@@ -537,7 +554,7 @@ public class ImportarUsuario extends VerticalPanel {
 		public VerticalPanel renderCellTable(){
 			
 
-			cellTable = new CellTable<Usuario>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
+			cellTable = new CellTable<UsuarioErroImportar>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
 
 			cellTable.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable-10)+ "px");
 		    cellTable.setAutoHeaderRefreshDisabled(true);
@@ -546,11 +563,11 @@ public class ImportarUsuario extends VerticalPanel {
 			
 			
 			// Add a selection model so we can select cells.
-			final SelectionModel<Usuario> selectionModel = new MultiSelectionModel<Usuario>();
-			cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<Usuario> createDefaultManager());		
+			final SelectionModel<UsuarioErroImportar> selectionModel = new MultiSelectionModel<UsuarioErroImportar>();
+			cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<UsuarioErroImportar> createDefaultManager());		
 			initTableColumns(selectionModel);
 			
-			dataProvider = new ListDataProvider<Usuario>();
+			dataProvider = new ListDataProvider<UsuarioErroImportar>();
 
 			dataProvider.addDataDisplay(cellTable);
 			

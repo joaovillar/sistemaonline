@@ -20,7 +20,7 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	private String telefoneCelular;
 	private String telefoneResidencial;
 	private String telefoneComercial;
-	private String  endereco;
+	private String endereco;
 	private String numeroResidencia;
 	private String bairro;
 	private String cidade;
@@ -37,6 +37,7 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	private String tipoPais;
 	private String situacaoResponsaveis;
 	private String situacaoResponsaveisOutros;
+	private String registroAluno;
 
 	
 	private int idTipoUsuario;
@@ -334,6 +335,14 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 
 	public void setSituacaoResponsaveisOutros(String situacaoResponsaveisOutros) {
 		this.situacaoResponsaveisOutros = situacaoResponsaveisOutros;
+	}
+	
+	public String getRegistroAluno() {
+		return registroAluno;
+	}
+
+	public void setRegistroAluno(String registroAluno) {
+		this.registroAluno = registroAluno;
 	}
 
 	@Override

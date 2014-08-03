@@ -176,6 +176,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 		callbackAddPeriodo = new AsyncCallback<Integer>() {
 
 			public void onFailure(Throwable caught) {
+				hPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.periodoErroSalvar());
 				mpDialogBoxWarning.showDialog();

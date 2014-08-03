@@ -1,18 +1,2 @@
 # Module jornada
 # RPC service class, partial path of RPC policy file
-com.jornada.client.service.GWTServiceComunicado, A42C47AB79B82D46A47E9761C36B6F1D.gwt.rpc
-com.jornada.client.service.GWTServiceTipoComunicado, 918858493EB9212CEE7E0E82F5585F5F.gwt.rpc
-com.jornada.client.service.GWTServiceCurso, C27655712E0E40759D34D6DF24BA0D38.gwt.rpc
-com.jornada.client.service.GWTServicePeriodo, 7345231AEFAE22303BD6049B7F471DA5.gwt.rpc
-com.jornada.client.service.GWTServiceDisciplina, C61B18E5275262A1A266A896DF9DCDBF.gwt.rpc
-com.jornada.client.service.GWTServiceIdioma, 60F0A402F975ADEA2280D77A9FB77B2C.gwt.rpc
-com.jornada.client.service.GWTServiceAula, 45392EBFB1D1ABA704BD49F428A463B7.gwt.rpc
-com.jornada.client.service.GWTServiceConteudoProgramatico, 93E70A0901627D5AA2C837DBDA778C90.gwt.rpc
-com.jornada.client.service.GWTServiceUsuario, 8443AAE80A7592E3291261DD61F6EFF1.gwt.rpc
-com.jornada.client.service.GWTServicePresenca, 812C1B3EC5C7FFA6AFCFE6C1949837CC.gwt.rpc
-com.jornada.client.service.GWTServiceNota, C4588D7758C66D37FD4428443DF74D1E.gwt.rpc
-com.jornada.client.service.GWTServiceOcorrencia, F162E218785402813090D8C6564F1992.gwt.rpc
-com.jornada.client.service.GWTServiceHierarquiaCurso, 28BF5744D3EA6C8129DD09FA45B55F8E.gwt.rpc
-com.jornada.client.service.GWTServiceAvaliacao, 959C7BCF9A40239C40CA254B3D53CBAF.gwt.rpc
-com.jornada.client.service.GWTServiceTopico, F8ACD6AC1282AA1A1ECCAE2232FEBF3F.gwt.rpc
-com.jornada.client.service.GWTServiceLogin, 56481B741050895B504E2BBC545B3F3C.gwt.rpc

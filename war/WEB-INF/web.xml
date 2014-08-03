@@ -146,6 +146,7 @@
   	<servlet-name>GWTServicePresenca</servlet-name>
   	<url-pattern>/jornada/GWTServicePresenca</url-pattern>
   </servlet-mapping>
+  
   <servlet>
   	<servlet-name>GWTServiceAula</servlet-name>
   	<servlet-class>com.jornada.server.service.GWTServiceAulaImpl</servlet-class>
@@ -155,5 +156,8 @@
   	<url-pattern>/jornada/GWTServiceAula</url-pattern>
   </servlet-mapping>  
   
-
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+  
 </web-app>

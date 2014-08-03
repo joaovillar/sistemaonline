@@ -214,6 +214,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelPaisLoading.setVisible(false);	
 				MpDialogBoxRefreshPage mpDialogBoxRefreshPage = new MpDialogBoxRefreshPage();
 				mpDialogBoxRefreshPage.showDialog();
 //				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
@@ -243,6 +244,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 			}
 			
 			public void onFailure(Throwable caught) {
+				mpPanelAlunoLoading.setVisible(false);
 				MpDialogBoxRefreshPage mpDialogBoxRefreshPage = new MpDialogBoxRefreshPage();
 				mpDialogBoxRefreshPage.showDialog();
 //				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
@@ -288,6 +290,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		callbackAssociarAlunoAosPais = new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
+				mpPanelAssociandoLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroAssociarPaisAluno());
 				mpDialogBoxWarning.showDialog();
