@@ -25,6 +25,7 @@ import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.content.config.ConfigClient;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Usuario;
@@ -33,6 +34,7 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 public class MpScrollPanelCurso extends ScrollPanel{
 	
 	protected static TextConstants txtConstants = GWT.create(TextConstants.class);
+	protected static ConfigClient configClient = GWT.create(ConfigClient.class);
 
 	private CellTable<Usuario> cellTable;
 	private TextBox txtSearch;
@@ -41,6 +43,11 @@ public class MpScrollPanelCurso extends ScrollPanel{
 	
 
 	public MpScrollPanelCurso(Curso object){
+		
+		boolean showEmail = Boolean.parseBoolean(configClient.hierarquiaShowCursoEmail());
+		boolean showDataNasc = Boolean.parseBoolean(configClient.hierarquiaShowCursoDataNascimento());
+		boolean showTelCelular = Boolean.parseBoolean(configClient.hierarquiaShowCursoTelCelular());
+		boolean showTelResidencial = Boolean.parseBoolean(configClient.hierarquiaShowCursoTelResidencial());
 		
 		Label lblNomeCurso = new Label(txtConstants.cursoNome());				
 		Label lblDescricaoCurso = new Label(txtConstants.cursoDescricao());				
@@ -269,21 +276,37 @@ public class MpScrollPanelCurso extends ScrollPanel{
 	    });							
 		
 		cellTable.addColumn(columnPrimeiroNome, txtConstants.usuarioPrimeiroNome());
-		cellTable.addColumn(columnSobreNome, txtConstants.usuarioSobreNome());
-//		cellTable.addColumn(columnCPF, txtConstants.usuarioCPF());
-		cellTable.addColumn(columnEmail, txtConstants.usuarioEmail());
-		cellTable.addColumn(columnDataNascimento, txtConstants.usuarioDataNascimento());
-		cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
-		cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
-		
-		
 		cellTable.getColumn(cellTable.getColumnIndex(columnPrimeiroNome)).setCellStyleNames("hand-over-default");
+		
+		cellTable.addColumn(columnSobreNome, txtConstants.usuarioSobreNome());
 		cellTable.getColumn(cellTable.getColumnIndex(columnSobreNome)).setCellStyleNames("hand-over-default");
-//		cellTable.getColumn(cellTable.getColumnIndex(columnCPF)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(columnEmail)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(columnDataNascimento)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneCelular)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("hand-over-default");		
+		
+		if(showEmail){
+			cellTable.addColumn(columnEmail, txtConstants.usuarioEmail());
+			cellTable.getColumn(cellTable.getColumnIndex(columnEmail)).setCellStyleNames("hand-over-default");
+		}
+		
+		if(showDataNasc){
+			cellTable.addColumn(columnDataNascimento, txtConstants.usuarioDataNascimento());
+			cellTable.getColumn(cellTable.getColumnIndex(columnDataNascimento)).setCellStyleNames("hand-over-default");
+		}
+		
+		if(showTelCelular){
+			cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
+			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneCelular)).setCellStyleNames("hand-over-default");
+		}
+
+		if(showTelResidencial){
+			cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
+			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("hand-over-default");
+		}
+		
+		
+		
+		
+		
+		
+				
 		
 		
 		
