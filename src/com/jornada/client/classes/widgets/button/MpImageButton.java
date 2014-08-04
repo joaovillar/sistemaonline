@@ -1,5 +1,7 @@
 package com.jornada.client.classes.widgets.button;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.DOM;
@@ -35,8 +37,8 @@ public class MpImageButton extends Button
     @Override
     public void setText(String text) {
 		if (!text.isEmpty()) {
-	    	@SuppressWarnings("deprecation")
-			com.google.gwt.user.client.Element span = DOM.createElement("span");
+//			com.google.gwt.user.client.Element span = DOM.createElement("span");
+	    	SpanElement span = Document.get().createSpanElement();
 	    	span.setInnerText("");
 			span.setInnerText(text);
 			span.getStyle().setPaddingLeft(5, Unit.PX);
