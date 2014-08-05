@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -421,18 +423,29 @@ public class UsuarioServer{
 		return arrayUsuarioError;
 	}
 	
+	private static String normalizeCellType(Cell cell) {
+		
+		 switch (cell.getCellType()) {
+		 case Cell.CELL_TYPE_STRING: return cell.getStringCellValue(); 
+		 case Cell.CELL_TYPE_NUMERIC:
+			 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			 java.util.Date d =  cell.getDateCellValue();
+			 String strDate = df.format(d);
+			 System.out.println("date is :- "+ strDate );
+			 return strDate;
+		 }
+		return "";
+	}
+	
 	
 	public static ArrayList<UsuarioErroImportar> importarAlunos(Sheet sheet){
-	    
-		int cv=0;
 		
 		 ArrayList<UsuarioErroImportar> arrayAlunoError = new ArrayList<UsuarioErroImportar>();
 		 
 	    Row row;
-
-				
-		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
-		System.out.println("LastRowNum:"+sheet.getLastRowNum());
+	    
+	    System.out.println("Aluno=====================");
+		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());		
 		System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
 		
 		for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
@@ -442,15 +455,21 @@ public class UsuarioServer{
 			
 			row = sheet.getRow(i);
 			
+
+			
+			int cv=0;
 			Cell Registro_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
-			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			String strDataMatricula = normalizeCellType(row.getCell(cv++, Row.CREATE_NULL_AS_BLANK));
+			
 			Cell Registro_Aluno = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Primeiro_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Sobre_Nome = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Email = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Usuario = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Senha = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
-			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			String strDataNascimento = normalizeCellType(row.getCell(cv++, Row.CREATE_NULL_AS_BLANK));
 			Cell Sexo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Endereco = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Num_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
@@ -468,14 +487,14 @@ public class UsuarioServer{
 			
 			
 			Registro_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
-			Data_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
+//			Data_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
 			Registro_Aluno.setCellType(Cell.CELL_TYPE_STRING);	
 			Primeiro_Nome.setCellType(Cell.CELL_TYPE_STRING);	
 			Sobre_Nome.setCellType(Cell.CELL_TYPE_STRING);	
 			Email.setCellType(Cell.CELL_TYPE_STRING);	
 			Usuario.setCellType(Cell.CELL_TYPE_STRING);	
 			Senha.setCellType(Cell.CELL_TYPE_STRING);	
-			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
+//			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
 			Sexo.setCellType(Cell.CELL_TYPE_STRING);	
 			Endereco.setCellType(Cell.CELL_TYPE_STRING);	
 			Num_Residencial.setCellType(Cell.CELL_TYPE_STRING);	
@@ -512,18 +531,13 @@ public class UsuarioServer{
 			if(Usuario.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Usuario é obrigatório || ";
 			}			
-			
-
-
-			String strDataMatricula = Data_Matricula.getStringCellValue();
+						
 			Date dataMatricula = MpUtilServer.convertStringToDate(strDataMatricula,"dd/MM/yyyy");
 			String strValidateDataMatricula = MpUtilServer.isThisDateValid(strDataMatricula, "dd/MM/yyyy");
 			if(!strValidateDataMatricula.equals("true")){
 				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
 			}
 			
-			
-			String strDataNascimento = Data_Nascimento.getStringCellValue();
 			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
 			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
 			if(!strValidateDataNascimento.equals("true")){
@@ -566,8 +580,6 @@ public class UsuarioServer{
 			}else{
 				strStatusAddUsuario = strCamposCorretos;
 			}
-
-
 			
 			if(!strStatusAddUsuario.equals("true")){				
 				
@@ -593,14 +605,14 @@ public class UsuarioServer{
 	
 	public static ArrayList<UsuarioErroImportar> importarCoordenador(Sheet sheet){
 	    
-		int cv=0;
+
 		
 		ArrayList<UsuarioErroImportar> arrayUsuarioError = new ArrayList<UsuarioErroImportar>();
 		 
 	    Row row;
-				
-		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
-		System.out.println("LastRowNum:"+sheet.getLastRowNum());
+		
+	    System.out.println("Coordenador=====================");
+		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());		
 		System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
 		
 		for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
@@ -609,7 +621,7 @@ public class UsuarioServer{
 			String strCamposCorretos = "";
 			
 			row = sheet.getRow(i);
-			
+			int cv=0;
 //			Cell Registro_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Registro_Aluno = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
@@ -618,7 +630,8 @@ public class UsuarioServer{
 			Cell Email = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Usuario = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Senha = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
-			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			String strDataNascimento = normalizeCellType(row.getCell(cv++, Row.CREATE_NULL_AS_BLANK));
 			Cell Sexo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Endereco = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Num_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
@@ -643,7 +656,7 @@ public class UsuarioServer{
 			Email.setCellType(Cell.CELL_TYPE_STRING);	
 			Usuario.setCellType(Cell.CELL_TYPE_STRING);	
 			Senha.setCellType(Cell.CELL_TYPE_STRING);	
-			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
+//			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
 			Sexo.setCellType(Cell.CELL_TYPE_STRING);	
 			Endereco.setCellType(Cell.CELL_TYPE_STRING);	
 			Num_Residencial.setCellType(Cell.CELL_TYPE_STRING);	
@@ -691,7 +704,7 @@ public class UsuarioServer{
 //			}
 			
 			
-			String strDataNascimento = Data_Nascimento.getStringCellValue();
+			
 			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
 			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
 			if(!strValidateDataNascimento.equals("true")){
@@ -756,14 +769,14 @@ public class UsuarioServer{
 
 	public static ArrayList<UsuarioErroImportar> importarPais(Sheet sheet){
 	    
-		int cv=0;
+
 		
 		ArrayList<UsuarioErroImportar> arrayUsuarioError = new ArrayList<UsuarioErroImportar>();
 		 
 	    Row row;
-				
-		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
-		System.out.println("LastRowNum:"+sheet.getLastRowNum());
+		
+	    System.out.println("Pais=====================");
+		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());		
 		System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
 		
 		for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
@@ -772,7 +785,7 @@ public class UsuarioServer{
 			String strCamposCorretos = "";
 			
 			row = sheet.getRow(i);
-			
+			int cv=0;
 //			Cell Registro_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Registro_Aluno = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
@@ -781,7 +794,8 @@ public class UsuarioServer{
 			Cell Email = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Usuario = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Senha = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
-			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			String strDataNascimento = normalizeCellType(row.getCell(cv++, Row.CREATE_NULL_AS_BLANK));
 			Cell Sexo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell TipoPais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Endereco = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
@@ -811,7 +825,7 @@ public class UsuarioServer{
 			Email.setCellType(Cell.CELL_TYPE_STRING);	
 			Usuario.setCellType(Cell.CELL_TYPE_STRING);	
 			Senha.setCellType(Cell.CELL_TYPE_STRING);	
-			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
+//			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
 			Sexo.setCellType(Cell.CELL_TYPE_STRING);	
 			TipoPais.setCellType(Cell.CELL_TYPE_STRING);
 			Endereco.setCellType(Cell.CELL_TYPE_STRING);	
@@ -873,7 +887,7 @@ public class UsuarioServer{
 //				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
 //			}
 			
-			String strDataNascimento = Data_Nascimento.getStringCellValue();
+			
 			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
 			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
 			if(!strValidateDataNascimento.equals("true")){
@@ -941,18 +955,17 @@ public class UsuarioServer{
 		return arrayUsuarioError;
 
 	}
-	
 
 	public static ArrayList<UsuarioErroImportar> importarProfessor(Sheet sheet){
 	    
-		int cv=0;
+		
 		
 		ArrayList<UsuarioErroImportar> arrayUsuarioError = new ArrayList<UsuarioErroImportar>();
 		 
 	    Row row;
-				
-		System.out.println("FirstRowNum:"+sheet.getFirstRowNum());
-		System.out.println("LastRowNum:"+sheet.getLastRowNum());
+		
+	    System.out.println("Professor=====================");
+	    System.out.println("FirstRowNum:"+sheet.getFirstRowNum());		
 		System.out.println("PhysicalNumberOfRows:"+sheet.getPhysicalNumberOfRows());
 		
 		for(int i=1;i<sheet.getPhysicalNumberOfRows();i++){
@@ -961,7 +974,7 @@ public class UsuarioServer{
 			String strCamposCorretos = "";
 			
 			row = sheet.getRow(i);
-			
+			int cv=0;
 //			Cell Registro_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Data_Matricula = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Registro_Aluno = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
@@ -970,7 +983,8 @@ public class UsuarioServer{
 			Cell Email = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Usuario = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Senha = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
-			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+//			Cell Data_Nascimento = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			String strDataNascimento = normalizeCellType(row.getCell(cv++, Row.CREATE_NULL_AS_BLANK));
 			Cell Sexo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Endereco = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Num_Residencial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
@@ -995,7 +1009,7 @@ public class UsuarioServer{
 			Email.setCellType(Cell.CELL_TYPE_STRING);	
 			Usuario.setCellType(Cell.CELL_TYPE_STRING);	
 			Senha.setCellType(Cell.CELL_TYPE_STRING);	
-			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
+//			Data_Nascimento.setCellType(Cell.CELL_TYPE_STRING);	
 			Sexo.setCellType(Cell.CELL_TYPE_STRING);	
 			Endereco.setCellType(Cell.CELL_TYPE_STRING);	
 			Num_Residencial.setCellType(Cell.CELL_TYPE_STRING);	
@@ -1042,8 +1056,6 @@ public class UsuarioServer{
 //				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
 //			}
 			
-			
-			String strDataNascimento = Data_Nascimento.getStringCellValue();
 			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
 			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
 			if(!strValidateDataNascimento.equals("true")){
