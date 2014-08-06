@@ -4,6 +4,7 @@ import com.jornada.shared.classes.Usuario;
 
 public class UsuarioErroImportar extends Usuario{
 	
+	
 	private static final long serialVersionUID = 6521080930409916886L;
 	
 	private String erroImportar;
