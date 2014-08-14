@@ -16,9 +16,22 @@ import com.jornada.shared.classes.Usuario;
 
 public class EmailFrameWork {
 
-	public void sendMail(ArrayList<Usuario> users) {
-		final String username = "paisonline.ci.suporte@gmail.com";
-		final String password = "paisonline.ricardo";
+	public void sendMail(ArrayList<String> emailList, String subject, String content) {
+		//final String username = "paisonline.ci.suporte@gmail.com";
+		//final String password = "paisonline.ricardo";
+		final String username = "jaovillar@gmail.com";
+		final String password = "846213Mega";
+		String emails = "";
+		boolean first = true;
+		
+		for(String email : emailList){
+			if(first){
+				emails = email;
+				first = false;
+			}else{
+				emails = emails + ", " + email;
+			}
+		}
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -38,9 +51,9 @@ public class EmailFrameWork {
 			message.setFrom(new InternetAddress(username));
 
 			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse(EmailServer.getUserEmail(users)));
-			message.setSubject("Meu primeiro email");
-			message.setContent("<br>Primeiro Email</br>",
+					InternetAddress.parse(emails));
+			message.setSubject(subject);
+			message.setContent(content,
 					"text/html; charset=utf-8");
 			Transport.send(message);
 			System.out.println("Deu certo");
