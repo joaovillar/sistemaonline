@@ -11,24 +11,22 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.jornada.server.classes.EmailServer;
-import com.jornada.shared.classes.Usuario;
-
 public class EmailFrameWork {
 
-	public void sendMail(ArrayList<String> emailList, String subject, String content) {
-		//final String username = "paisonline.ci.suporte@gmail.com";
-		//final String password = "paisonline.ricardo";
-		final String username = "jaovillar@gmail.com";
-		final String password = "846213Mega";
+	public void sendMail(ArrayList<String> emailList, String subject,
+			String content) {
+
+		final String username = "paisonline.ci.suporte@gmail.com";
+		final String password = "paisonline.ricardo";
+
 		String emails = "";
 		boolean first = true;
-		
-		for(String email : emailList){
-			if(first){
+
+		for (String email : emailList) {
+			if (first) {
 				emails = email;
 				first = false;
-			}else{
+			} else {
 				emails = emails + ", " + email;
 			}
 		}
@@ -53,8 +51,7 @@ public class EmailFrameWork {
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(emails));
 			message.setSubject(subject);
-			message.setContent(content,
-					"text/html; charset=utf-8");
+			message.setContent(content, "text/html; charset=utf-8");
 			Transport.send(message);
 			System.out.println("Deu certo");
 
