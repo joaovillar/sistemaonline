@@ -21,40 +21,42 @@ import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.server.classes.ComunicadoServer;
 import com.jornada.shared.classes.Comunicado;
 
-public class GWTServiceComunicadoImpl extends RemoteServiceServlet implements GWTServiceComunicado {
+public class GWTServiceComunicadoImpl extends RemoteServiceServlet implements
+		GWTServiceComunicado {
 
 	private static final long serialVersionUID = 6710411400591010766L;
 
-	
-	public boolean AdicionarComunicado(Comunicado object) {		
-		return ComunicadoServer.AdicionarComunicado(object);		
+	public boolean AdicionarComunicado(Comunicado object,
+			ArrayList<Integer> userIdList) {
+		return ComunicadoServer.AdicionarComunicado(object, userIdList);
 	}
-	
-	public boolean AtualizarComunicado(Comunicado object) {		
-		return ComunicadoServer.AtualizarComunicado(object);		
+
+	public boolean AtualizarComunicado(Comunicado object,
+			ArrayList<Integer> userIdList) {
+		return ComunicadoServer.AtualizarComunicado(object, userIdList);
 	}
-	
-	public boolean deleteComunicadoRow(int id_comunicado){		
-		return ComunicadoServer.deleteComunicadoRow(id_comunicado);		
-	}	
-	
+
+	public boolean deleteComunicadoRow(int id_comunicado) {
+		return ComunicadoServer.deleteComunicadoRow(id_comunicado);
+	}
+
 	@Override
-	public ArrayList<Comunicado> getComunicados() {		
+	public ArrayList<Comunicado> getComunicados() {
 		return ComunicadoServer.getComunicados();
 	}
-	
+
 	@Override
-	public ArrayList<Comunicado> getComunicados(String strFilter) {		
+	public ArrayList<Comunicado> getComunicados(String strFilter) {
 		return ComunicadoServer.getComunicados(strFilter);
-	}	
-	
+	}
+
 	@Override
-	public ArrayList<Comunicado> getComunicadosExterno(String strFilter) {		
+	public ArrayList<Comunicado> getComunicadosExterno(String strFilter) {
 		return ComunicadoServer.getComunicadosExterno(strFilter);
-	}	
-	
+	}
+
 	@Override
-	public ArrayList<Comunicado> getComunicadosInterno(String strFilter) {		
+	public ArrayList<Comunicado> getComunicadosInterno(String strFilter) {
 		return ComunicadoServer.getComunicadosInterno(strFilter);
 	}
 }

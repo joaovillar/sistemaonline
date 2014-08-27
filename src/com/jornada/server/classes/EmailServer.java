@@ -9,12 +9,17 @@ import java.util.HashMap;
 
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.server.framework.EmailFrameWork;
+import com.jornada.shared.classes.Comunicado;
 import com.jornada.shared.classes.Usuario;
 
 public class EmailServer {
 
 	private static String DB_GET_USER_EMAIL = "SELECT email FROM usuario where usuario.id_usuario in (";
-	private static String DB_GET_TEACHERS_EMAIL = "SELECT primeiro_nome, sobre_nome, email FROM usuario where usuario.id_tipo_usuario in (1,2,6)";
+	private static String DB_GET_USERS_EMAIL = "SELECT primeiro_nome, sobre_nome, id_usuario FROM usuario";
+	private static String DB_GET_USERS_EMAIL_BY_ID = "SELECT email FROM usuario where id_usuario in (";
+	private static String DB_GET_USERS_BY_COMUNICATION = "SELECT primeiro_nome, sobre_nome "
+			+ "FROM usuario u, rel_comunicado_usuario rcu "
+			+ "WHERE rcu.id_usuario = u.id_usuario and rcu.id_comunicado = ?";
 
 	public static String getUserEmail(ArrayList<Usuario> users) {
 
@@ -59,25 +64,25 @@ public class EmailServer {
 		return emailList;
 
 	}
-	
-	public static HashMap<String,String> getTeachersEmail() {
 
-		HashMap<String,String> emailList = new HashMap<String,String>();
+	public static HashMap<String, Integer> getUsersIdlList() {
+
+		HashMap<String, Integer> emailList = new HashMap<String, Integer>();
 		String name;
 
 		Connection conn = ConnectionManager.getConnection();
 
 		try {
 
-			PreparedStatement ps = conn.prepareStatement(DB_GET_TEACHERS_EMAIL);
+			PreparedStatement ps = conn.prepareStatement(DB_GET_USERS_EMAIL);
 
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
 				name = rs.getString("primeiro_nome");
 				name = name + " " + rs.getString("sobre_nome");
-				if(!rs.getString("email").isEmpty()){
-					emailList.put(name, rs.getString("email"));
+				if (!rs.getString("id_usuario").isEmpty()) {
+					emailList.put(name, rs.getInt("id_usuario"));
 				}
 			}
 
@@ -90,13 +95,80 @@ public class EmailServer {
 		return emailList;
 
 	}
-	
-	public static Boolean sendEmail(ArrayList<String> emailList, String subject, String content) {
+
+	public static Boolean sendMailByUserId(ArrayList<Integer> userList,
+			String subject, String content) {
 		EmailFrameWork emailFramework = new EmailFrameWork();
-		
-		emailFramework.sendMail(emailList, subject, content);
-		
+
+		emailFramework.sendMailByUserId(userList, subject, content);
+
 		return true;
+	}
+
+	public static ArrayList<String> getEmailListByUserId(
+			ArrayList<Integer> userIdList) {
+		ArrayList<String> emailList = new ArrayList<String>();
+
+		Boolean firstUser = true;
+
+		for (Integer id : userIdList) {
+			if (firstUser) {
+				DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + id;
+				firstUser = false;
+			} else {
+				DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + "," + id;
+			}
+		}
+
+		firstUser = true;
+		DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + ");";
+
+		Connection conn = ConnectionManager.getConnection();
+
+		try {
+
+			PreparedStatement ps = conn
+					.prepareStatement(DB_GET_USERS_EMAIL_BY_ID);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				emailList.add(rs.getString("email"));
+			}
+
+		} catch (SQLException sqlex) {
+			System.err.println(sqlex.getMessage());
+		} finally {
+			ConnectionManager.closeConnection(conn);
+		}
+
+		return emailList;
+	}
+
+	public static ArrayList<String> getComucidadoEmailList(Comunicado comunicado) {
+
+		ArrayList<String> userList = new ArrayList<String>();
+		Connection conn = ConnectionManager.getConnection();
+		try {
+
+			PreparedStatement ps = conn
+					.prepareStatement(DB_GET_USERS_BY_COMUNICATION);
+			ps.setInt(1, comunicado.getIdComunicado());
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				String userName = rs.getString("primeiro_nome") + " "
+						+ rs.getString("sobre_nome");
+				userList.add(userName);
+			}
+
+		} catch (SQLException sqlex) {
+			System.err.println(sqlex.getMessage());
+		} finally {
+			ConnectionManager.closeConnection(conn);
+		}
+		return userList;
 	}
 
 }

@@ -66,7 +66,7 @@ public class FormularioComunicado extends VerticalPanel {
 	private String strNomeImagem = "";
 
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-	private HashMap<String, String> emailList = new HashMap<String, String>();
+	private HashMap<String, Integer> emailList = new HashMap<String, Integer>();
 
 	private MultiBox multiBox;
 	private TextBox txtAssunto;
@@ -168,7 +168,7 @@ public class FormularioComunicado extends VerticalPanel {
 			public void onChange(ChangeEvent event) {
 				if (listBoxTipoComunicados.getItemText(
 						(listBoxTipoComunicados.getSelectedIndex())).equals(
-						"Comunicado Professores")) {
+						"Comunicado Usuarios")) {
 					lblFromEmail.setVisible(true);
 					multiBox.setVisible(true);
 				} else {
@@ -409,13 +409,12 @@ public class FormularioComunicado extends VerticalPanel {
 			}
 		};
 
-		GWTServiceEmail.Util.getInstance().getTeachersEmailList(
-				new AsyncCallback<HashMap<String, String>>() {
+		GWTServiceEmail.Util.getInstance().getUsersIdlList(
+				new AsyncCallback<HashMap<String, Integer>>() {
 
-					public void onSuccess(
-							HashMap<String, String> teacherEmailList) {
-						emailList = teacherEmailList;
-						for (String key : teacherEmailList.keySet()) {
+					public void onSuccess(HashMap<String, Integer> UserEmailList) {
+						emailList = UserEmailList;
+						for (String key : UserEmailList.keySet()) {
 							oracle.add(key);
 						}
 
@@ -468,36 +467,41 @@ public class FormularioComunicado extends VerticalPanel {
 				object.setIdTipoComunicado(intIdTipoComunicado);
 				object.setNomeImagem(strNomeImagem);
 
+				ArrayList<Integer> userEmailList = new ArrayList<Integer>();
+
+				if (object.getIdTipoComunicado() == 8) {
+					String[] userList = multiBox.getList().getElement()
+							.getString().split(" x ");
+
+					for (int i = 0; i < userList.length - 1; i++) {
+						String key = userList[i]
+								.replace(
+										"<ul class=\"multiValueSuggestBox-list\">",
+										"")
+								.replace(
+										"<li class=\"multiValueSuggestBox-token\">",
+										"").replace("<p>", "")
+								.replace("</p>", "").replace("<span>", "")
+								.replace("</span>", "").replace("</li>", "");
+
+						userEmailList.add(emailList.get(key));
+					}
+
+					sendMailByUserId(userEmailList, txtAssunto.getText(),
+							mpRichTextDescricao.getTextArea().getHTML()
+									.toString());
+				}
+
 				if (btnAdicionarComunicado.isVisible()) {
 					GWTServiceComunicado.Util.getInstance()
-							.AdicionarComunicado(object, callbackAddComunicado);
+							.AdicionarComunicado(object, userEmailList,
+									callbackAddComunicado);
 				} else if (btnAtualizarComunicado.isVisible()) {
 					object.setIdComunicado(comunicado.getIdComunicado());
 					GWTServiceComunicado.Util.getInstance()
-							.AtualizarComunicado(object, callbackAddComunicado);
+							.AtualizarComunicado(object, userEmailList,
+									callbackAddComunicado);
 				}
-
-				ArrayList<String> teacherEmailList = new ArrayList<String>();
-				String[] teacherList = multiBox.getList().getElement()
-						.getString().split(" x ");
-
-				for (int i = 0; i < teacherList.length - 1; i++) {
-					String key = teacherList[i]
-							.replace(
-									"<ul class=\"multiValueSuggestBox-list\">",
-									"")
-							.replace(
-									"<li class=\"multiValueSuggestBox-token\">",
-									"").replace("<p>", "").replace("</p>", "")
-							.replace("<span>", "").replace("</span>", "")
-							.replace("</li>", "");
-
-					teacherEmailList.add(emailList.get(key));
-				}
-
-				sendEmail(teacherEmailList, txtAssunto.getText(),
-						mpRichTextDescricao.getTextArea().getHTML().toString());
-
 			}
 
 		}
@@ -533,6 +537,23 @@ public class FormularioComunicado extends VerticalPanel {
 	public void openFormularioParaAtualizar(Comunicado comunicado) {
 
 		setComunicado(comunicado);
+
+		multiBox.clearList();
+
+		GWTServiceEmail.Util.getInstance().getComucidadoEmailList(comunicado,
+				new AsyncCallback<ArrayList<String>>() {
+
+					public void onSuccess(ArrayList<String> userNameList) {
+						for (String userName : userNameList) {
+							multiBox.addItem(userName);
+						}
+
+					}
+
+					public void onFailure(Throwable cautch) {
+
+					}
+				});
 
 		btnAtualizarComunicado.setVisible(true);
 		btnAdicionarComunicado.setVisible(false);
@@ -586,7 +607,6 @@ public class FormularioComunicado extends VerticalPanel {
 		}
 
 		setVisible(true);
-
 	}
 
 	public void openFormularioParaAdicionar() {
@@ -664,9 +684,9 @@ public class FormularioComunicado extends VerticalPanel {
 		panelImages.clear();
 	}
 
-	private void sendEmail(ArrayList<String> emailList, String subject,
+	private void sendMailByUserId(ArrayList<Integer> userList, String subject,
 			String content) {
-		GWTServiceEmail.Util.getInstance().sendEmail(emailList, subject,
+		GWTServiceEmail.Util.getInstance().sendMailByUserId(userList, subject,
 				content, new AsyncCallback<Boolean>() {
 
 					public void onSuccess(Boolean state) {

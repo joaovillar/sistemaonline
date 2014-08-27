@@ -11,13 +11,21 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.jornada.server.classes.EmailServer;
+
 public class EmailFrameWork {
 
-	public void sendMail(ArrayList<String> emailList, String subject,
+	public void sendMailByUserId(ArrayList<Integer> userList, String subject,
 			String content) {
 
-		final String username = "paisonline.ci.suporte@gmail.com";
-		final String password = "paisonline.ricardo";
+		// final String username = "paisonline.ci.suporte@gmail.com";
+		// final String password = "paisonline.ricardo";
+
+		final String username = "jaovillar@gmail.com";
+		final String password = "joao846213Mega";
+
+		ArrayList<String> emailList = EmailServer
+				.getEmailListByUserId(userList);
 
 		String emails = "";
 		boolean first = true;

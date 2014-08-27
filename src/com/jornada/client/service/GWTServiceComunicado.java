@@ -24,20 +24,26 @@ import com.jornada.shared.classes.Comunicado;
 @RemoteServiceRelativePath("GWTServiceComunicado")
 public interface GWTServiceComunicado extends RemoteService {
 
+	public boolean AdicionarComunicado(Comunicado object,
+			ArrayList<Integer> userIdList);
 
-	
-	public boolean AdicionarComunicado(Comunicado object);
-	public boolean AtualizarComunicado(Comunicado object);
+	public boolean AtualizarComunicado(Comunicado object,
+			ArrayList<Integer> userIdList);
+
 	public boolean deleteComunicadoRow(int id_comunicado);
+
 	public ArrayList<Comunicado> getComunicados();
+
 	public ArrayList<Comunicado> getComunicados(String strFilter);
+
 	public ArrayList<Comunicado> getComunicadosExterno(String strFilter);
+
 	public ArrayList<Comunicado> getComunicadosInterno(String strFilter);
-	
-	
+
 	public static class Util {
 		private static GWTServiceComunicadoAsync instance;
-		public static GWTServiceComunicadoAsync getInstance(){
+
+		public static GWTServiceComunicadoAsync getInstance() {
 			if (instance == null) {
 				instance = GWT.create(GWTServiceComunicado.class);
 			}

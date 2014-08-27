@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBox;
 
 public class MultiBox extends Composite {
-	List<String> itemsSelected = new ArrayList<String>();
+	private List<String> itemsSelected = new ArrayList<String>();
 	List<ListItem> itemsHighlighted = new ArrayList<ListItem>();
 
 	private final BulletList list;
@@ -50,9 +50,9 @@ public class MultiBox extends Composite {
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_ENTER:
 
-					if (itemBox.getValue().contains("@")) {
-						deselectItem(itemBox, list);
-					}
+					// if (itemBox.getValue().contains("@")) {
+					deselectItem(itemBox, list);
+					// }
 					break;
 
 				case KeyCodes.KEY_BACKSPACE:
@@ -137,6 +137,39 @@ public class MultiBox extends Composite {
 		}
 	}
 
+	public void addItem(String user) {
+
+		final ListItem displayItem = new ListItem();
+		displayItem.setStyleName("multiValueSuggestBox-token");
+		Paragraph p = new Paragraph(user);
+
+		displayItem.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent clickEvent) {
+				if (itemsHighlighted.contains(displayItem)) {
+					displayItem.removeStyleDependentName("selected");
+					itemsHighlighted.remove(displayItem);
+				} else {
+					displayItem.addStyleDependentName("selected");
+					itemsHighlighted.add(displayItem);
+				}
+			}
+		});
+
+		Span span = new Span(" x ");
+		span.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent clickEvent) {
+				removeListItem(displayItem, list);
+			}
+		});
+
+		displayItem.add(p);
+		displayItem.add(span);
+
+		itemsSelected.add(user);
+
+		list.insert(displayItem, list.getWidgetCount() - 1);
+	}
+
 	private void removeListItem(ListItem displayItem, BulletList list) {
 		itemsSelected.remove(displayItem.getWidget(0).getElement()
 				.getInnerHTML());
@@ -145,5 +178,11 @@ public class MultiBox extends Composite {
 
 	public BulletList getList() {
 		return list;
+	}
+
+	public void clearList() {
+		list.clear();
+		list.setStyleName("multiValueSuggestBox-list");
+		list.add(item);
 	}
 }
