@@ -51,12 +51,12 @@ public class GWTServiceComunicadoImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public ArrayList<Comunicado> getComunicadosExterno(String strFilter) {
-		return ComunicadoServer.getComunicadosExterno(strFilter);
+	public ArrayList<Comunicado> getComunicadosExterno(String strFilter, int idUsuario) {
+		return ComunicadoServer.getComunicadosExterno(strFilter, idUsuario);
 	}
 
 	@Override
-	public ArrayList<Comunicado> getComunicadosInterno(String strFilter) {
-		return ComunicadoServer.getComunicadosInterno(strFilter);
+	public ArrayList<Comunicado> getComunicadosInterno(String strFilter, int idUsuario) {
+		return ComunicadoServer.getComunicadosInterno(strFilter, idUsuario);
 	}
 }

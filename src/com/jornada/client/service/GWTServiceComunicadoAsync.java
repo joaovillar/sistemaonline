@@ -21,10 +21,10 @@ public interface GWTServiceComunicadoAsync {
 	public void getComunicados(String strFilter,
 			AsyncCallback<ArrayList<Comunicado>> callback);
 
-	public void getComunicadosExterno(String strFilter,
+	public void getComunicadosExterno(String strFilter, int idUsuario,
 			AsyncCallback<ArrayList<Comunicado>> callback);
 
-	public void getComunicadosInterno(String strFilter,
+	public void getComunicadosInterno(String strFilter, int idUsuario,
 			AsyncCallback<ArrayList<Comunicado>> callback);
 
 }

@@ -36,9 +36,9 @@ public interface GWTServiceComunicado extends RemoteService {
 
 	public ArrayList<Comunicado> getComunicados(String strFilter);
 
-	public ArrayList<Comunicado> getComunicadosExterno(String strFilter);
+	public ArrayList<Comunicado> getComunicadosExterno(String strFilter, int idUsuario);
 
-	public ArrayList<Comunicado> getComunicadosInterno(String strFilter);
+	public ArrayList<Comunicado> getComunicadosInterno(String strFilter, int idUsuario);
 
 	public static class Util {
 		private static GWTServiceComunicadoAsync instance;

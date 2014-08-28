@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.jornada.client.MainView;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
 
@@ -22,22 +23,24 @@ public class TelaInicialAlunoComunicado extends Composite{
 	
 	private TabelaAlunoComunicado tabelaAlunoComunicado;
 //	private VisualizarAgenda visualizarAgenda;
+	
+	private MainView mainView;
 
 
 	
 	private static TelaInicialAlunoComunicado uniqueInstance;
-	public static TelaInicialAlunoComunicado getInstance(){
+	public static TelaInicialAlunoComunicado getInstance(MainView mainView){
 		
 		if(uniqueInstance==null){
-			uniqueInstance = new TelaInicialAlunoComunicado();
+			uniqueInstance = new TelaInicialAlunoComunicado(mainView);
 		}
 		
 		return uniqueInstance;
 	}		
 
-	private TelaInicialAlunoComunicado() {
+	private TelaInicialAlunoComunicado(MainView mainView) {
 		
-		
+		this.mainView = mainView;
 		this.tabelaAlunoComunicado = TabelaAlunoComunicado.getInstance(this);
 	
 		
@@ -57,6 +60,10 @@ public class TelaInicialAlunoComunicado extends Composite{
 				
      	initWidget(verticalPanelPage);
 		
+	}
+	
+	public MainView getMainView(){
+		return mainView;
 	}
 	
 	

@@ -43,6 +43,9 @@ public class ComunicadoServer {
 
 	public static String DB_INSERT_REL_COMUNICADO_USUARIO = "INSERT INTO rel_comunicado_usuario ( id_comunicado, id_usuario ) VALUES (";
 	public static String DB_GET_USER_ID_BY_REL_COMUNICADO_USUARIO = "SELECT id_usuario FROM rel_comunicado_usuario WHERE id_comunicado = ?";
+	public static String DB_GET_COMUNICADO_PESSOAL = "SELECT c.id_comunicado, c.assunto, c.descricao, c.id_tipo_comunicado, c.id_escola, c.data, c.hora, c.nome_imagem "
+			+ "FROM comunicado c, rel_comunicado_usuario rcu "
+			+ "WHERE c.id_comunicado = rcu.id_comunicado and rcu.id_usuario = ?;";
 
 	public static boolean AdicionarComunicado(Comunicado object,
 			ArrayList<Integer> userIdList) {
@@ -350,7 +353,8 @@ public class ComunicadoServer {
 
 	}
 
-	public static ArrayList<Comunicado> getComunicadosExterno(String strFilter) {
+	public static ArrayList<Comunicado> getComunicadosExterno(String strFilter,
+			int idUsuario) {
 
 		ArrayList<Comunicado> data = new ArrayList<Comunicado>();
 		// JornadaDataBase dataBase = new JornadaDataBase();
@@ -385,6 +389,30 @@ public class ComunicadoServer {
 				data.add(currentObject);
 			}
 
+			PreparedStatement ps2 = conn
+					.prepareStatement(DB_GET_COMUNICADO_PESSOAL);
+			ps2.setInt(1, idUsuario);
+
+			ResultSet rs2 = ps2.executeQuery();
+
+			while (rs2.next()) {
+				Comunicado currentObject = new Comunicado();
+
+				currentObject.setIdComunicado(rs2.getInt("id_comunicado"));
+				currentObject.setIdTipoComunicado(rs2
+						.getInt("id_tipo_comunicado"));
+				currentObject.setIdEscola(rs2.getInt("id_escola"));
+				currentObject.setAssunto(rs2.getString("assunto"));
+				currentObject.setDescricao(rs2.getString("descricao"));
+				currentObject.setData(MpUtilServer.convertDateToString(rs2
+						.getDate("data")));
+				currentObject.setHora(MpUtilServer.convertTimeToString(rs2
+						.getTime("hora")));
+				currentObject.setNomeImagem(rs2.getString("nome_imagem"));
+
+				data.add(currentObject);
+			}
+
 		} catch (SQLException sqlex) {
 			data = null;
 			System.err.println(sqlex.getMessage());
@@ -397,7 +425,8 @@ public class ComunicadoServer {
 
 	}
 
-	public static ArrayList<Comunicado> getComunicadosInterno(String strFilter) {
+	public static ArrayList<Comunicado> getComunicadosInterno(String strFilter,
+			int idUsuario) {
 
 		ArrayList<Comunicado> data = new ArrayList<Comunicado>();
 		// JornadaDataBase dataBase = new JornadaDataBase();
@@ -428,6 +457,30 @@ public class ComunicadoServer {
 				currentObject.setHora(MpUtilServer.convertTimeToString(rs
 						.getTime("hora")));
 				currentObject.setNomeImagem(rs.getString("nome_imagem"));
+
+				data.add(currentObject);
+			}
+
+			PreparedStatement ps2 = conn
+					.prepareStatement(DB_GET_COMUNICADO_PESSOAL);
+			ps2.setInt(1, idUsuario);
+
+			ResultSet rs2 = ps2.executeQuery();
+
+			while (rs2.next()) {
+				Comunicado currentObject = new Comunicado();
+
+				currentObject.setIdComunicado(rs2.getInt("id_comunicado"));
+				currentObject.setIdTipoComunicado(rs2
+						.getInt("id_tipo_comunicado"));
+				currentObject.setIdEscola(rs2.getInt("id_escola"));
+				currentObject.setAssunto(rs2.getString("assunto"));
+				currentObject.setDescricao(rs2.getString("descricao"));
+				currentObject.setData(MpUtilServer.convertDateToString(rs2
+						.getDate("data")));
+				currentObject.setHora(MpUtilServer.convertTimeToString(rs2
+						.getTime("hora")));
+				currentObject.setNomeImagem(rs2.getString("nome_imagem"));
 
 				data.add(currentObject);
 			}

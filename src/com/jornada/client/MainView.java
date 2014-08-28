@@ -420,7 +420,7 @@ public class MainView extends Composite implements HistoryListener{
 		this.vPanelBody.clear();
 		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 
-		TelaInicialComunicadoProfessor telaInicialComunicadoProfessor = TelaInicialComunicadoProfessor.getInstance();
+		TelaInicialComunicadoProfessor telaInicialComunicadoProfessor = TelaInicialComunicadoProfessor.getInstance(this);
 		
 		this.vPanelBody.add(telaInicialComunicadoProfessor);
 		this.vPanelMenu.setVisible(true);		
@@ -507,7 +507,7 @@ public class MainView extends Composite implements HistoryListener{
 		this.vPanelBody.clear();
 		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 
-		TelaInicialAlunoComunicado telaInicialAlunoComunicado = TelaInicialAlunoComunicado.getInstance();
+		TelaInicialAlunoComunicado telaInicialAlunoComunicado = TelaInicialAlunoComunicado.getInstance(this);
 		
 		this.vPanelBody.add(telaInicialAlunoComunicado);
 		this.vPanelMenu.setVisible(true);		
@@ -577,7 +577,7 @@ public class MainView extends Composite implements HistoryListener{
 		this.vPanelBody.clear();
 		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 
-		TelaInicialAlunoComunicado telaInicialAlunoComunicado = TelaInicialAlunoComunicado.getInstance();
+		TelaInicialAlunoComunicado telaInicialAlunoComunicado = TelaInicialAlunoComunicado.getInstance(this);
 		
 		this.vPanelBody.add(telaInicialAlunoComunicado);
 		this.vPanelMenu.setVisible(true);		
