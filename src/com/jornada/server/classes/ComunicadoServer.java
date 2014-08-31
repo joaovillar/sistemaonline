@@ -90,7 +90,7 @@ public class ComunicadoServer {
 			}
 
 			if (object.getIdTipoComunicado() == 8) {
-				HashSet hs = new HashSet();
+				HashSet<Integer> hs = new HashSet<Integer>();
 				hs.addAll(userIdList);
 				userIdList.clear();
 				userIdList.addAll(hs);
@@ -179,7 +179,7 @@ public class ComunicadoServer {
 
 			if (object.getIdTipoComunicado() == 8) {
 
-				HashSet hs = new HashSet();
+				HashSet<Integer> hs = new HashSet<Integer>();
 				hs.addAll(userIdList);
 				userIdList.clear();
 				userIdList.addAll(hs);

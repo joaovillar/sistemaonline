@@ -6,15 +6,18 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class BulletList extends ComplexPanel {
 	
-	public BulletList() {
+	@SuppressWarnings("deprecation")
+    public BulletList() {
 		setElement(DOM.createElement("UL"));
 	}
 
-	public void add(Widget w) {
+	@SuppressWarnings("deprecation")
+    public void add(Widget w) {
 		super.add(w, getElement());
 	}
 
-	public void insert(Widget w, int beforeIndex) {
+	@SuppressWarnings("deprecation")
+    public void insert(Widget w, int beforeIndex) {
 		super.insert(w, getElement(), beforeIndex, true);
 	}
 
