@@ -146,7 +146,6 @@
   	<servlet-name>GWTServicePresenca</servlet-name>
   	<url-pattern>/jornada/GWTServicePresenca</url-pattern>
   </servlet-mapping>
-  
   <servlet>
   	<servlet-name>GWTServiceAula</servlet-name>
   	<servlet-class>com.jornada.server.service.GWTServiceAulaImpl</servlet-class>
@@ -154,11 +153,16 @@
   <servlet-mapping>
   	<servlet-name>GWTServiceAula</servlet-name>
   	<url-pattern>/jornada/GWTServiceAula</url-pattern>
-  </servlet-mapping>  
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>GWTServiceEmail</servlet-name>
+  	<servlet-class>com.jornada.server.service.GWTServiceEmailImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GWTServiceEmail</servlet-name>
+  	<url-pattern>/jornada/GWTServiceEmail</url-pattern>
+  </servlet-mapping>
   
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
     <servlet>
     	<servlet-name>GWTServiceUnidadeEscola</servlet-name>
     	<servlet-class>com.jornada.server.service.GWTServiceUnidadeEscolaImpl</servlet-class>
@@ -167,5 +171,5 @@
     	<servlet-name>GWTServiceUnidadeEscola</servlet-name>
     	<url-pattern>/jornada/GWTServiceUnidadeEscola</url-pattern>
     </servlet-mapping>
-  
+
 </web-app>
