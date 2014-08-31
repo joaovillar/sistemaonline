@@ -40,6 +40,7 @@ import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
@@ -160,7 +161,9 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 				MpUtilClient.isRefreshRequired(list);
 
 				if (list == null) {
-					mpDialogBox.showDialog();
+				    MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
+				    mpDialogBox.showDialog();
+				}
 
 				dataProvider.getList().clear();
 				cellTable.setRowCount(0);
@@ -407,9 +410,9 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 //		scrollPanel.setSize(Integer.toString(TelaInicialComunicadoProfessor.intWidthTable+30)+"px",Integer.toString(TelaInicialComunicadoProfessor.intHeightTable+70)+"px");
 		scrollPanel.setHeight(Integer.toString(TelaInicialComunicadoProfessor.intHeightTable+70)+"px");
 		scrollPanel.setWidth("100%");
-								+ "px",
-						Integer.toString(TelaInicialComunicadoProfessor.intHeightTable + 70)
-								+ "px");
+//								+ "px",
+//						Integer.toString(TelaInicialComunicadoProfessor.intHeightTable + 70)
+//								+ "px");
 		scrollPanel.setAlwaysShowScrollBars(false);
 		scrollPanel.add(cellTable);
 

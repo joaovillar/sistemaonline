@@ -135,11 +135,11 @@ public class FormularioComunicado extends VerticalPanel {
 	@SuppressWarnings("deprecation")
 	public MpPanelPageMainView drawPassoUmCamposTitulo() {
 
-		MpPanelPageMainView mpPanel = new MpPanelPageMainView(
+	    MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.comunicadoInsiraComunicado(), "/images/insert_header.png");
 //		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
 		mpPanel.setWidth("100%");
-		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)
-				+ "px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)
+//				+ "px");
 
 		// Add a title to the form
 		txtAssunto = new TextBox();
@@ -267,11 +267,11 @@ public class FormularioComunicado extends VerticalPanel {
 
 	public MpPanelPageMainView drawPassoDoisSelecionarImagem() {
 
-		MpPanelPageMainView mpPanel = new MpPanelPageMainView(
+	    MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.comunicadoSelecionaImagem(), "images/picture_16.png");
 //		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
 		mpPanel.setWidth("100%");
-		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)
-				+ "px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)
+//				+ "px");
 		mpPanel.setHeight("70px");
 
 		Grid grid = new Grid(1, 3);
@@ -306,11 +306,11 @@ public class FormularioComunicado extends VerticalPanel {
 
 	public MpPanelPageMainView drawPassoTresDescricao() {
 
-		MpPanelPageMainView mpPanel = new MpPanelPageMainView(
+	    MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.comunicadoInsiraDescricao(), "images/note_2add.png");
 //		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
 		mpPanel.setWidth("100%");
-		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)
-				+ "px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)
+//				+ "px");
 
 		Grid grid = new Grid(1, 2);
 		grid.setCellSpacing(3);
@@ -350,7 +350,7 @@ public class FormularioComunicado extends VerticalPanel {
 		vPanel.setWidth("100%");
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 //		vPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
-				+ "px");
+//				+ "px");
 
 		btnAdicionarComunicado = new MpImageButton(ADICIONAR, "images/save.png");
 		btnAdicionarComunicado.addClickHandler(new ClickHandlerSave());

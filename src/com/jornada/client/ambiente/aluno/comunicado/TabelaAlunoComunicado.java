@@ -413,9 +413,9 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 //		scrollPanel.setSize(Integer.toString(TelaInicialAlunoComunicado.intWidthTable+30)+"px",Integer.toString(TelaInicialAlunoComunicado.intHeightTable+70)+"px");
 		scrollPanel.setHeight(Integer.toString(TelaInicialAlunoComunicado.intHeightTable+70)+"px");
 		scrollPanel.setWidth("100%");
-								+ "px",
-						Integer.toString(TelaInicialAlunoComunicado.intHeightTable + 70)
-								+ "px");
+//								+ "px",
+//						Integer.toString(TelaInicialAlunoComunicado.intHeightTable + 70)
+//								+ "px");
 		scrollPanel.setAlwaysShowScrollBars(false);
 		scrollPanel.add(cellTable);
 
