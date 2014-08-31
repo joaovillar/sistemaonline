@@ -21,8 +21,8 @@ public class EmailFrameWork {
 		// final String username = "paisonline.ci.suporte@gmail.com";
 		// final String password = "paisonline.ricardo";
 
-		final String username = "jaovillar@gmail.com";
-		final String password = "joao846213Mega";
+        final String username = "XXXXXX@XXXXXX.XXX";
+        final String password = "XXXXXX";
 
 		ArrayList<String> emailList = EmailServer
 				.getEmailListByUserId(userList);
