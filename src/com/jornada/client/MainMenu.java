@@ -34,6 +34,14 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     private Hyperlink linkFerramentaCoordenadorComunicado;
     private Image imgFerramentaCoordenadorComunicado;     
     
+    public static final String MENU_TOKEN_FERRAMENTA_COORDENADOR_OCORRENCIA = txtConstants.menuTokenFerramentaCoordenadorOcorrencia();
+    private Hyperlink linkCoordenadorOcorrencia;
+    private Image imgCoordenadorOcorrencia;       
+
+    public static final String MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO_ADMIN = txtConstants.menuTokenFerramentaCoordenadorCursoAdmin();
+    private Hyperlink linkFerramentaCoordenadorCursoAdmin;
+    private Image imgFerramentaCoordenadorCursoAdmin;
+    
     public static final String MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO = txtConstants.menuTokenFerramentaCoordenadorCurso();
     private Hyperlink linkFerramentaCoordenadorCurso;
     private Image imgFerramentaCoordenadorCurso;
@@ -215,11 +223,18 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaCoordenador(false);
-			mainView.openAdminEscola();		
+			mainView.openAdminEscola();
+		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO_ADMIN)) {
+			this.linkPaginaPrincipal(true);
+			this.linkFerramentaCoordenador(true);
+			this.linkFerramentaCoordenadorCursoAdmin(false);
+			mainView.openAdminEscolaCurso();		
+			
 		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO)) {
 				
 				this.linkPaginaPrincipal(true);
 				this.linkFerramentaCoordenador(true);
+				this.linkFerramentaCoordenadorCursoAdmin(true);
 				this.linkFerramentaCoordenadorCurso();
 				 if(isFirstEventFire == true){
 					 isFirstEventFire = false;
@@ -230,6 +245,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 				
 				this.linkPaginaPrincipal(true);
 				this.linkFerramentaCoordenador(true);
+				this.linkFerramentaCoordenadorCursoAdmin(true);
 				this.linkFerramentaCoordenadorPeriodo();
 				if (isFirstEventFire == true) {
 					isFirstEventFire = false;
@@ -239,6 +255,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_DISCIPLINA)) {
 				this.linkPaginaPrincipal(true);
 				this.linkFerramentaCoordenador(true);
+				this.linkFerramentaCoordenadorCursoAdmin(true);
 				this.linkFerramentaCoordenadorDisciplina();
 				if (isFirstEventFire == true) {
 					isFirstEventFire = false;
@@ -248,6 +265,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_CONTEUDO_PROGRAMATICO)) {
 				this.linkPaginaPrincipal(true);
 				this.linkFerramentaCoordenador(true);
+				this.linkFerramentaCoordenadorCursoAdmin(true);
 				this.linkFerramentaCoordenadorConteudoProgramatico();
 				if (isFirstEventFire == true) {
 					isFirstEventFire = false;
@@ -259,6 +277,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaCoordenador(true);
+			this.linkFerramentaCoordenadorCursoAdmin(true);
 			this.linkFerramentaCoordenadorTopico();
 	
 			if (isFirstEventFire == true) {
@@ -285,6 +304,16 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			this.linkFerramentaCoordenadorComunicados();
 			mainView.openCadastroComunicado();	
 		}
+		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_OCORRENCIA)) {
+			this.linkPaginaPrincipal(true);			
+			this.linkFerramentaCoordenador(true);
+			this.linkFerramentaCoordenadorOcorrencia();
+			if (isFirstEventFire == true) {
+				isFirstEventFire = false;
+				mainView.openCadastroCoordenadorOcorrencia();
+			}	
+				
+		}				
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_DIARIO)) {
 		
 			this.linkPaginaPrincipal(true);			
@@ -560,6 +589,22 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 		
 	}
 	
+	public void linkFerramentaCoordenadorCursoAdmin(boolean showConnectionLabel){		
+		
+	    imgFerramentaCoordenadorCursoAdmin = new Image("images/address_book_new.16.16.png");
+	    linkFerramentaCoordenadorCursoAdmin = new Hyperlink(txtConstants.cursoAdmin(), MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO_ADMIN);	    
+	    linkFerramentaCoordenadorCursoAdmin.setStyleName("a");
+	    
+        hPanel.add(imgFerramentaCoordenadorCursoAdmin);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkFerramentaCoordenadorCursoAdmin);
+        
+        if(showConnectionLabel==true){
+        	this.connectionLabel();        	
+        }
+	
+	}
+	
 	
 	public void linkFerramentaCoordenadorCurso(){		
 		
@@ -657,6 +702,18 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(linkFerramentaCoordenadorComunicado);
 
 	}	
+	
+	public void linkFerramentaCoordenadorOcorrencia(){
+
+	    imgCoordenadorOcorrencia = new Image("images/ocorrencia_16.png");
+	    linkCoordenadorOcorrencia = new Hyperlink(txtConstants.coordenadorAmbienteOcorrencia(), MENU_TOKEN_FERRAMENTA_COORDENADOR_OCORRENCIA);
+	    linkCoordenadorOcorrencia.setStyleName("a");
+	    
+        hPanel.add(imgCoordenadorOcorrencia);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkCoordenadorOcorrencia);
+
+	}		
 	
 	public void linkFerramentaCoordenadorDiario(){
 	    imgFerramentaCoordenadorDiario = new Image("images/programs_group_ii.16.png");

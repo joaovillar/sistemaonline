@@ -25,22 +25,25 @@ public class MpSelectionAlunoAmbientePais extends MpSelection {
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Usuario>>() {
 			public void onSuccess(ArrayList<Usuario> lista) {
-				
-				finishLoadingListBox();		
-
-				for (Usuario object : lista) {
-					addItem(object.getPrimeiroNome() + " "+object.getSobreNome(),Integer.toString(object.getIdUsuario()));
-					listBoxAux.addItem(object.getPrimeiroNome() + " "+object.getSobreNome(),Integer.toString(object.getIdUsuario()));
-				}		
-
-				setVisibleItemCount(1);
-
-//				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionAlunoAmbientePais.this);
 				try {
-					DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionAlunoAmbientePais.this);
+					finishLoadingListBox();
+
+					for (Usuario object : lista) {
+						addItem(object.getPrimeiroNome() + " "+ object.getSobreNome(),Integer.toString(object.getIdUsuario()));
+						listBoxAux.addItem(object.getPrimeiroNome() + " "+ object.getSobreNome(),Integer.toString(object.getIdUsuario()));
+					}
+
+					setVisibleItemCount(1);
+
+					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
+					// MpSelectionAlunoAmbientePais.this);
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionAlunoAmbientePais.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+					}
 				} catch (Exception ex) {
 					logoutAndRefreshPage();
-					System.out.println("Error:" + ex.getMessage());
 				}
 				
 			}

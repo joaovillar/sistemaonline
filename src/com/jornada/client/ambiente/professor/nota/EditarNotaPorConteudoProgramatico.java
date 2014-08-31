@@ -45,6 +45,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.Nota;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 	
@@ -134,7 +135,8 @@ public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 //		Label lblEmpty2 = new Label("Por favor, selecione um Conteúdo Programático.");
 
 		cellTable = new CellTable<Nota>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialNota.intWidthTable-900)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialNota.intWidthTable-900)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setEmptyTableWidget(lblEmpty);
@@ -173,7 +175,9 @@ public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 		
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialNota.intWidthTable+30)+"px",Integer.toString(TelaInicialNota.intHeightTable-240)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialNota.intWidthTable+30)+"px",Integer.toString(TelaInicialNota.intHeightTable-240)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialNota.intHeightTable-240)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);		
 
@@ -184,6 +188,8 @@ public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 		vPanelEditGrid.add(new InlineHTML("&nbsp;"));
 		vPanelEditGrid.add(flexTableFiltrar);
 		vPanelEditGrid.add(scrollPanel);
+		
+//		vPanelEditGrid.setWidth("100%");
 
 
 		/************************* Begin Callback's *************************/
@@ -191,6 +197,12 @@ public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 		callbackUpdateRow = new AsyncCallback<Boolean>() {
 
 			public void onSuccess(Boolean success) {
+				if(success==false){
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.notaErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
+					mpDialogBoxWarning.showDialog();
+					
+				}
 
 			}
 
@@ -203,6 +215,7 @@ public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 
 		/*********************** End Callbacks **********************/
 
+		this.setWidth("100%");
 		super.add(vPanelEditGrid);
 		
 	}
@@ -321,7 +334,7 @@ public class EditarNotaPorConteudoProgramatico extends VerticalPanel {
 						}
 						@Override
 						public void onSuccess(ArrayList<Nota> list) {
-
+							MpUtilClient.isRefreshRequired(list);
 							mpPanelLoading.setVisible(false);
 							dataProvider.getList().clear();
 							finalDataProvider.getList().clear();

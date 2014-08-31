@@ -3,11 +3,18 @@ package com.jornada.client.ambiente.professor.ocorrencia;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.DatePickerCell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,14 +22,20 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -37,12 +50,14 @@ import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriod
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
+import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceOcorrencia;
-import com.jornada.shared.classes.OcorrenciaAluno;
+import com.jornada.shared.classes.RelUsuarioOcorrencia;
+import com.jornada.shared.classes.ocorrencia.OcorrenciaAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class VisualizarOcorrencia extends VerticalPanel {
@@ -51,9 +66,11 @@ public class VisualizarOcorrencia extends VerticalPanel {
 
 //	private AsyncCallback<Boolean> callbackUpdateRow;
 //	private AsyncCallback<Boolean> callbackDelete;
+	private int intSelectedIndexToDelete;
 
 	private CellTable<OcorrenciaAluno> cellTable;
 	private Column<OcorrenciaAluno, Boolean> paiCienteColumn;
+	private Column<OcorrenciaAluno, Boolean> liberarLeituraPaiColumn;
 	private Column<OcorrenciaAluno, String> nomeAlunoColumn;
 	private Column<OcorrenciaAluno, String> assuntoColumn;
 	private Column<OcorrenciaAluno, String> descricaoColumn;
@@ -97,6 +114,7 @@ public class VisualizarOcorrencia extends VerticalPanel {
 		vPanelEditarOcorrencia = new VerticalPanel();
 		
 		vPanelVisualizarTabela = new VerticalPanel();
+		vPanelVisualizarTabela.setWidth("100%");
 		vPanelVisualizarTabela.add(abrirTelaVisualizar());
 
 		
@@ -108,10 +126,11 @@ public class VisualizarOcorrencia extends VerticalPanel {
 		
 		
 		vPanelEditarOcorrencia.add(vPanelVisualizarTabela);
+		vPanelEditarOcorrencia.setWidth("100%");
 //		vPanelEditarOcorrencia.add(vPanelEditarDetalhes);
 //		
 
-
+		this.setWidth("100%");
 		super.add(vPanelEditarOcorrencia);
 		
 	}
@@ -156,7 +175,8 @@ public class VisualizarOcorrencia extends VerticalPanel {
 		Label lblEmpty = new Label(txtConstants.ocorrenciaSelecionarConteudo());
 
 		cellTable = new CellTable<OcorrenciaAluno>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setLoadingIndicator(lblEmpty);
@@ -194,7 +214,9 @@ public class VisualizarOcorrencia extends VerticalPanel {
 		flexTableFiltrar.setWidget(0, 3, btnFiltrar);					
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable-180)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable-180)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable-180)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);			
 		
@@ -204,7 +226,7 @@ public class VisualizarOcorrencia extends VerticalPanel {
 //		vPanelEdit.add(mpPager);
 		vPanelEdit.add(flexTableFiltrar);
 		vPanelEdit.add(scrollPanel);
-
+		vPanelEdit.setWidth("100%");
 
 		/************************* Begin Callback's *************************/
 
@@ -323,7 +345,7 @@ public class VisualizarOcorrencia extends VerticalPanel {
 
 						@Override
 						public void onSuccess(ArrayList<OcorrenciaAluno> list) {
-
+							MpUtilClient.isRefreshRequired(list);
 							mpPanelLoading.setVisible(false);
 							dataProvider.getList().clear();
 							arrayListBackup.clear();
@@ -449,7 +471,27 @@ public class VisualizarOcorrencia extends VerticalPanel {
 
 
 	private void initTableColumns(final SelectionModel<OcorrenciaAluno> selectionModel) {
+
+		liberarLeituraPaiColumn = new Column<OcorrenciaAluno, Boolean>(new CheckboxCell(true, true)) {
+			@Override
+			public Boolean getValue(OcorrenciaAluno object) {
+				return object.isLiberarLeituraPai();
+			}
+		};
 		
+		liberarLeituraPaiColumn.setFieldUpdater(new FieldUpdater<OcorrenciaAluno, Boolean>() {
+	        public void update(int index, OcorrenciaAluno object, Boolean value) {
+	        	object.setLiberarLeituraPai(value);
+	        	
+	        	RelUsuarioOcorrencia ruo = new RelUsuarioOcorrencia();
+	        	ruo.setIdOcorrencia(object.getIdOcorrencia());
+	        	ruo.setIdUsuario(object.getIdUsuario());
+	        	ruo.setLiberarLeituraPai(object.isLiberarLeituraPai());
+	        	
+	        	GWTServiceOcorrencia.Util.getInstance().AtualizarLiberarPaiLeitura(ruo, new callbackUpdateRow());
+	        }
+	    });	
+
 		
 		
 		paiCienteColumn = new Column<OcorrenciaAluno, Boolean>(new CheckboxCell(true, false)) {
@@ -511,7 +553,8 @@ public class VisualizarOcorrencia extends VerticalPanel {
 		dataColumn = new Column<OcorrenciaAluno, Date>(new DatePickerCell()) {
 			@Override
 			public Date getValue(OcorrenciaAluno object) {
-				return MpUtilClient.convertStringToDate(object.getData());
+//				return MpUtilClient.convertStringToDate(object.getData());
+				return object.getData();
 			}
 		};
 //		dataColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, Date>() {
@@ -553,14 +596,15 @@ public class VisualizarOcorrencia extends VerticalPanel {
 //			}
 //		};		    
 //
-//		Column<Ocorrencia, String> removeColumn = new Column<Ocorrencia, String>(new MyImageCell()) {
-//			@Override
-//			public String getValue(Ocorrencia object) {
-//				return "images/delete.png";
-//			}
-//		};
+		Column<OcorrenciaAluno, String> removeColumn = new Column<OcorrenciaAluno, String>(new MyImageCellDelete()) {
+			@Override
+			public String getValue(OcorrenciaAluno object) {
+				return "images/delete.png";
+			}
+		};
 
 
+	    cellTable.addColumn(liberarLeituraPaiColumn, txtConstants.ocorrenciaLiberarLeituraPai());
 	    cellTable.addColumn(paiCienteColumn, txtConstants.ocorrenciaPaiCiente());
 	    cellTable.addColumn(nomeAlunoColumn, txtConstants.alunoNome());
 		cellTable.addColumn(assuntoColumn, txtConstants.ocorrencia());
@@ -568,21 +612,32 @@ public class VisualizarOcorrencia extends VerticalPanel {
 		cellTable.addColumn(dataColumn, txtConstants.ocorrenciaData());
 		cellTable.addColumn(horaColumn, txtConstants.ocorrenciaHora());
 //		cellTable.addColumn(editColumn, txtConstants.ocorrenciaEditarDetalhes());
-//		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
+		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
 //		cellTable.setColumnWidth(editColumn, "100px");
-//		cellTable.setColumnWidth(removeColumn, "70px");
+		cellTable.setColumnWidth(removeColumn, "70px");
 
+		cellTable.getColumn(cellTable.getColumnIndex(liberarLeituraPaiColumn)).setCellStyleNames("css-checkbox");
 		cellTable.getColumn(cellTable.getColumnIndex(paiCienteColumn)).setCellStyleNames("css-checkbox");
 		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("edit-cell");
 //		cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");		
-//		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");		
+		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");		
 		
 		
 	}
 
 	public void initSortHandler(ListHandler<OcorrenciaAluno> sortHandler) {
 		
+		
+		liberarLeituraPaiColumn.setSortable(true);
+		sortHandler.setComparator(liberarLeituraPaiColumn,new Comparator<OcorrenciaAluno>() {
+			@Override
+			public int compare(OcorrenciaAluno o1, OcorrenciaAluno o2) {
+				Boolean booO1 = o1.isLiberarLeituraPai();
+				Boolean booO2 = o2.isLiberarLeituraPai();
+				return booO1.compareTo(booO2);
+			}
+		});			
 		
 		paiCienteColumn.setSortable(true);
 		sortHandler.setComparator(paiCienteColumn,new Comparator<OcorrenciaAluno>() {
@@ -675,11 +730,11 @@ public class VisualizarOcorrencia extends VerticalPanel {
 					String strNomeAluno = dataProvider.getList().get(i).getUsuario().getPrimeiroNome() + " " + dataProvider.getList().get(i).getUsuario().getSobreNome();
 					String strOcorrencia = dataProvider.getList().get(i).getAssunto();
 					String strDescricao = dataProvider.getList().get(i).getDescricao();
-//					String strData = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getData(), "EEEE, MMMM dd, yyyy");
+					String strData = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getData(), "EEEE, MMMM dd, yyyy");
 //					String strData = dataProvider.getList().get(i).getData();
 					
-					Date date = MpUtilClient.convertStringToDate(dataProvider.getList().get(i).getData());					
-					String strData = MpUtilClient.convertDateToString(date, "EEEE, MMMM dd, yyyy");					
+//					Date date = MpUtilClient.convertStringToDate(dataProvider.getList().get(i).getData());					
+//					String strData = MpUtilClient.convertDateToString(date, "EEEE, MMMM dd, yyyy");		
 					
 					String strHora = dataProvider.getList().get(i).getHora();
 
@@ -708,7 +763,100 @@ public class VisualizarOcorrencia extends VerticalPanel {
 			}
 			cellTable.setPageStart(0);
 		}
+		
+		
+		private class MyImageCellDelete extends ImageCell {
+
+			@Override
+			public Set<String> getConsumedEvents() {
+				Set<String> consumedEvents = new HashSet<String>();
+				consumedEvents.add("click");
+				return consumedEvents;
+			}
+
+			@Override
+			public void onBrowserEvent(Context context, Element parent,String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
+				switch (DOM.eventGetType((Event) event)) {
+				case Event.ONCLICK:
+					
+					final OcorrenciaAluno object = (OcorrenciaAluno) context.getKey();
+					intSelectedIndexToDelete = context.getIndex();
+					@SuppressWarnings("unused")
+					CloseHandler<PopupPanel> closeHandler;
+
+					MpConfirmDialogBox confirmationDialog = new MpConfirmDialogBox(
+							txtConstants.geralRemover(), txtConstants.ocorrenciaDesejaRemover(object.getAssunto()), txtConstants.geralSim(), txtConstants.geralNao(),
+
+							closeHandler = new CloseHandler<PopupPanel>() {
+
+								public void onClose(CloseEvent<PopupPanel> event) {
+
+									MpConfirmDialogBox x = (MpConfirmDialogBox) event.getSource();
+
+									if (x.primaryActionFired()) {
+
+										GWTServiceOcorrencia.Util.getInstance().deletarRelacionamentoUsuarioOcorrencia(object.getIdOcorrencia(), object.getIdUsuario(), new callbackDelete());
+									}
+								}
+							}
+
+					);
+					confirmationDialog.paint();
+					break;
+
+				default:
+					Window.alert("Test default");
+					break;
+				}
+			}
+
+		}		
+		
+		
+		
 	/***************************************BEGIN Filterting CellTable***************************************/		
+
+		private class callbackUpdateRow implements AsyncCallback<Boolean> {
+
+			public void onSuccess(Boolean success) {
+//				paiCienteColumn.getValue(object);
+				System.out.println("success");
+
+			}
+
+			public void onFailure(Throwable caught) {
+				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
+				mpDialogBoxWarning.showDialog();
+			}
+		};
+		
+		
+		private class callbackDelete implements AsyncCallback<Boolean> {
+
+			public void onSuccess(Boolean success) {
+
+				if (success == true) {
+//					populateGridOcorrencia();
+					dataProvider.getList().remove(intSelectedIndexToDelete);
+					dataProvider.refresh();	
+					telaInicialProfessorOcorrencia.updateEditarOcorrenciaPopulateGrid();
+					telaInicialProfessorOcorrencia.updateAprovarOcorrenciaPopulateGrid();
+				} else {
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
+					mpDialogBoxWarning.showDialog();
+				}
+
+			}
+			
+			public void onFailure(Throwable caught) {
+				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
+				mpDialogBoxWarning.showDialog();
+
+			}
+		};			
 
 }
 

@@ -20,20 +20,22 @@ public class MpSelectionIdiomas extends MpSelection {
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Idioma>>() {
 			public void onSuccess(ArrayList<Idioma> lista) {
-				
-				finishLoadingListBox();		
-
-				for (Idioma object : lista) {
-					addItem(object.getNomeIdioma(),object.getLocale());
-				}		
-
-				setVisibleItemCount(1);
-
 				try {
-					DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionIdiomas.this);
+					finishLoadingListBox();
+
+					for (Idioma object : lista) {
+						addItem(object.getNomeIdioma(), object.getLocale());
+					}
+
+					setVisibleItemCount(1);
+
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionIdiomas.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+					}
 				} catch (Exception ex) {
 					logoutAndRefreshPage();
-					System.out.println("Error:" + ex.getMessage());
 				}
 				
 			}

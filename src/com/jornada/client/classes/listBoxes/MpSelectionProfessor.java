@@ -28,20 +28,34 @@ public class MpSelectionProfessor extends MpSelection {
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Usuario>>() {
 			public void onSuccess(ArrayList<Usuario> lista) {
 				
-				finishLoadingListBox();		
+				try{
+					finishLoadingListBox();
 
-				for (Usuario object : lista) {
-					addItem(object.getPrimeiroNome() + " "+object.getSobreNome(),Integer.toString(object.getIdUsuario()));
-					listBoxAux.addItem(object.getPrimeiroNome() + " "+object.getSobreNome(),Integer.toString(object.getIdUsuario()));
-				}		
+					for (Usuario object : lista) {
+						addItem(object.getPrimeiroNome() + " " + object.getSobreNome(), Integer.toString(object.getIdUsuario()));
+						listBoxAux.addItem(object.getPrimeiroNome() + " " + object.getSobreNome(), Integer.toString(object.getIdUsuario()));
+					}
 
-				setVisibleItemCount(1);
+					setVisibleItemCount(1);
 
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionProfessor.this);
+					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
+					// MpSelectionProfessor.this);
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionProfessor.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+						System.out.println("Error:" + ex.getMessage());
+					}
+				
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
+				}
+				
 				
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 

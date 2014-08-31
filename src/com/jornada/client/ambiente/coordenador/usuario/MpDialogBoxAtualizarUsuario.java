@@ -25,7 +25,7 @@ public class MpDialogBoxAtualizarUsuario extends DecoratedPopupPanel implements 
 	public static MpDialogBoxAtualizarUsuario getInstance(TelaInicialUsuario telaInicialUsuario, Usuario usuario){
 		
 		if(uniqueInstance==null){
-			uniqueInstance = new MpDialogBoxAtualizarUsuario(telaInicialUsuario, usuario);
+			uniqueInstance = new MpDialogBoxAtualizarUsuario(telaInicialUsuario);
 			uniqueInstance.showDialog(usuario);
 		}else{
 			uniqueInstance.showDialog(usuario);
@@ -35,7 +35,7 @@ public class MpDialogBoxAtualizarUsuario extends DecoratedPopupPanel implements 
 		
 	}
 
-	private MpDialogBoxAtualizarUsuario(TelaInicialUsuario telaInicialUsuario, Usuario usuario) {
+	private MpDialogBoxAtualizarUsuario(TelaInicialUsuario telaInicialUsuario) {
 		this.telaInicialUsuario = telaInicialUsuario;
 //		this.usuario = usuario;
 //		this.setAutoHideEnabled(true);
@@ -47,7 +47,7 @@ public class MpDialogBoxAtualizarUsuario extends DecoratedPopupPanel implements 
 		// title = txtConstants.geralAviso();
 //		setText(txtConstants.geralAviso());
 
-		Button closeButton = new Button("Fechar Janela", this);
+		Button closeButton = new Button(txtConstants.geralFecharJanela(), this);
 		// closeButton.ad
 		closeButton.addKeyUpHandler(new EnterKeyUpHandler());
 		closeButton.setFocus(true);
@@ -90,8 +90,6 @@ public class MpDialogBoxAtualizarUsuario extends DecoratedPopupPanel implements 
 			}
 		}
 	}
-
-
-
+	
 	  
 }

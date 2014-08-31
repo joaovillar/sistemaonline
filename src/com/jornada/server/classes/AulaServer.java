@@ -92,6 +92,7 @@ public class AulaServer {
 			PreparedStatement ps = conn.prepareStatement(DB_SELECT_AULA);			
 			data = getParameters(ps.executeQuery());
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
@@ -108,6 +109,7 @@ public class AulaServer {
 			ps.setInt(++count, idDisciplina);
 			data = getParameters(ps.executeQuery());
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
@@ -115,10 +117,6 @@ public class AulaServer {
 		return data;
 	}	
 		
-	
-	
-	
-	
 	private static ArrayList<Aula> getParameters(ResultSet rs){
 
 		ArrayList<Aula> data = new ArrayList<Aula>();
@@ -133,6 +131,7 @@ public class AulaServer {
 			data.add(object);
 		}
 		}catch(Exception ex){
+			data=null;
 			System.err.println(ex.getMessage());
 		}		
 		return data;

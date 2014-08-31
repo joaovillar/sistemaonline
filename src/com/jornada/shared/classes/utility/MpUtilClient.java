@@ -1,9 +1,11 @@
 package com.jornada.shared.classes.utility;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 
 public class MpUtilClient {
 	
@@ -92,6 +94,20 @@ public class MpUtilClient {
 			strHora = strHora + " AM";
 		}
 		return strHora;
+	}
+	
+	public static void isRefreshRequired(ArrayList<?> list){
+		if(list==null) {
+			MpDialogBoxRefreshPage mp = new MpDialogBoxRefreshPage();
+			mp.showDialog();
+		}
+	}
+	
+	public static void isRefreshRequired(String[][] list){
+		if(list==null) {
+			MpDialogBoxRefreshPage mp = new MpDialogBoxRefreshPage();
+			mp.showDialog();
+		}
 	}
 
 }

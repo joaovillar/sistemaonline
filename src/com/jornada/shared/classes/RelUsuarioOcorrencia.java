@@ -10,6 +10,7 @@ public class RelUsuarioOcorrencia implements Serializable {
 	private int idUsuario;
 	private int idOcorrencia;
 	private boolean paiCiente;	
+	private boolean liberarLeituraPai;
 	
 	public RelUsuarioOcorrencia(){
 		
@@ -45,6 +46,14 @@ public class RelUsuarioOcorrencia implements Serializable {
 
 	public void setPaiCiente(boolean paiCiente) {
 		this.paiCiente = paiCiente;
+	}
+
+	public boolean isLiberarLeituraPai() {
+		return liberarLeituraPai;
+	}
+
+	public void setLiberarLeituraPai(boolean liberarLeituraPai) {
+		this.liberarLeituraPai = liberarLeituraPai;
 	}
 	
 	

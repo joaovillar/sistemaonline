@@ -14,6 +14,8 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -27,6 +29,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DatePicker;
+import com.jornada.client.ambiente.general.agenda.MpDialogBoxAppointment;
 import com.jornada.client.classes.animation.ElementFader;
 import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionCursoAmbientePais;
 import com.jornada.client.classes.widgets.button.MpImageButton;
@@ -37,6 +40,7 @@ import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceCursoAsync;
 import com.jornada.shared.classes.CursoAvaliacao;
+import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 
@@ -61,6 +65,8 @@ public class VisualizarPaisAgenda extends VerticalPanel {
 	
 	private static VisualizarPaisAgenda uniqueInstance;
 	
+	private ArrayList<CursoAvaliacao> listCursoAvaliacao;
+	
 	
 	public static VisualizarPaisAgenda getInstance(TelaInicialPaisAgenda telaInicialPaisAgenda){
 		
@@ -73,6 +79,8 @@ public class VisualizarPaisAgenda extends VerticalPanel {
 	private VisualizarPaisAgenda(final TelaInicialPaisAgenda telaInicialPaisAgenda) {
 		
 		this.telaInicialPaisAgenda = telaInicialPaisAgenda;
+		
+		listCursoAvaliacao = new ArrayList<CursoAvaliacao>();
 
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -130,7 +138,9 @@ public class VisualizarPaisAgenda extends VerticalPanel {
 		calendar.setDate(new Date()); //calendar date, not required
 		calendar.setDays(7); //number of days displayed at a time, not required
 		calendar.setView(CalendarViews.DAY);
-		calendar.setSize(Integer.toString(TelaInicialPaisAgenda.intWidthTable-50)+ "px",Integer.toString(TelaInicialPaisAgenda.intHeightTable+60)+"px");
+//		calendar.setSize(Integer.toString(TelaInicialPaisAgenda.intWidthTable-50)+ "px",Integer.toString(TelaInicialPaisAgenda.intHeightTable+60)+"px");
+		calendar.setHeight(Integer.toString(TelaInicialPaisAgenda.intHeightTable+60)+"px");
+		calendar.setWidth("100%");
 
 		
 		CalendarFormat.INSTANCE.setDayOfMonthFormat(txtConstants.agendaSetDayOfMonthFormat());
@@ -176,8 +186,9 @@ public class VisualizarPaisAgenda extends VerticalPanel {
 		vPanelEditGrid.setHeight(Integer.toString(TelaInicialPaisAgenda.intHeightTable+100)+"px");
 		vPanelEditGrid.add(gridComboBox);
 		vPanelEditGrid.add(calendar);		
+		vPanelEditGrid.setWidth("100%");
 		
-
+		this.setWidth("100%");
 		super.add(vPanelEditGrid);
 
 	}
@@ -204,9 +215,16 @@ public class VisualizarPaisAgenda extends VerticalPanel {
 
 					@Override
 					public void onSuccess(ArrayList<CursoAvaliacao> list) {
+						MpUtilClient.isRefreshRequired(list);
+						listCursoAvaliacao.clear();
+						listCursoAvaliacao.addAll(list);
+						
 						mpPanelLoading.setVisible(false);	
 						
 						calendar.clearAppointments();
+
+						
+						calendar.addOpenHandler(new doubleClickOpenAppointment());
 						
 						
 						for(CursoAvaliacao object : list){
@@ -229,29 +247,26 @@ public class VisualizarPaisAgenda extends VerticalPanel {
 							appt.setStart(startDateTime);
 							appt.setEnd(endDateTime);
 							appt.setReadOnly(true);
-
+							appt.setId(Integer.toString(object.getIdAvaliacao()));
 							
-							appt.setDescription(object.getNomeAvaliacao());
-							String strDescription="";
+							appt.setDescription(object.getAssuntoAvaliacao());
 
-							if(object.getIdTipoAvaliacao()==CursoAvaliacao.INT_TRABALHO_GRUPO || object.getIdTipoAvaliacao()==CursoAvaliacao.INT_TRABALHO_INDIVIDUAL){
-								strDescription = txtConstants.agendaTrabalho()+" "+object.getNomeDisciplina();
+							if(object.getIdTipoAvaliacao()==TipoAvaliacao.INT_TRABALHO_GRUPO || object.getIdTipoAvaliacao()==TipoAvaliacao.INT_TRABALHO_INDIVIDUAL){
+								appt.setTitle(txtConstants.agendaTrabalho()+" "+object.getNomeDisciplina());
 								appt.setStyle(AppointmentStyle.YELLOW);	
-							}else if(object.getIdTipoAvaliacao()==CursoAvaliacao.INT_PROVA_INDIVIDUAL || object.getIdTipoAvaliacao()==CursoAvaliacao.INT_PROVA_GRUPO){
-								strDescription = txtConstants.agendaProva()+" "+object.getNomeDisciplina();
+							}else if(object.getIdTipoAvaliacao()==TipoAvaliacao.INT_PROVA_INDIVIDUAL || object.getIdTipoAvaliacao()==TipoAvaliacao.INT_PROVA_GRUPO){
+								appt.setTitle(txtConstants.agendaProva()+" "+object.getNomeDisciplina());
 								appt.setStyle(AppointmentStyle.RED);	
-							}else if(object.getIdTipoAvaliacao()==CursoAvaliacao.INT_EXERCICIO_FIXACAO){
-								strDescription = txtConstants.agendaExercicio()+" "+object.getNomeDisciplina();
-								appt.setStyle(AppointmentStyle.BLUE);	
+							}else if(object.getIdTipoAvaliacao()==TipoAvaliacao.INT_EXERCICIO_FIXACAO){
+								appt.setTitle(txtConstants.agendaExercicio()+" "+object.getNomeDisciplina());
+								appt.setStyle(AppointmentStyle.BLUE);
 							}
-							appt.setTitle(strDescription);
-							
-							
+
 							calendar.addAppointment(appt);
 							
 						}
 												
-						
+						calendar.scrollToHour(8);
 
 					}
 				});
@@ -300,5 +315,21 @@ public class VisualizarPaisAgenda extends VerticalPanel {
 	}
 	
 
+	private class doubleClickOpenAppointment implements OpenHandler<Appointment>{
+		  @Override
+		  public void onOpen(OpenEvent<Appointment> event) {
+			  
+			int idAvaliacao  = Integer.parseInt(event.getTarget().getId());
+			CursoAvaliacao cursoAvaliacao = new CursoAvaliacao();
+			for(CursoAvaliacao ca : listCursoAvaliacao){
+				if(ca.getIdAvaliacao()==idAvaliacao){
+					cursoAvaliacao = ca;
+					break;
+				}
+			}
+			  
+		    MpDialogBoxAppointment.getInstance(cursoAvaliacao);
+		  }             
+		};
 	
 }

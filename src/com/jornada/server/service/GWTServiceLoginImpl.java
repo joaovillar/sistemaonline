@@ -32,7 +32,10 @@ public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServ
 	
 	public Usuario loginServer(String login, String password)    {
 		
-		ConnectionManager.configureConnPool();
+//		boolean isBoneCP = ConnectionManager.isBoneCPConnection();
+//		if(isBoneCP){
+			ConnectionManager.configureConnPool();
+//		}
 		
 		//validate username and password
 		Usuario user = UsuarioServer.getUsuarioPeloLogin(login);
@@ -61,12 +64,12 @@ public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServ
     }
 	
     public void logout()    {
-    	ConnectionManager.shutdownConnPool();
+//    	ConnectionManager.shutdownConnPool();
         deleteUserFromSession();
     }
 	
 	
-	private Usuario getUserAlreadyFromSession()
+	public Usuario getUserAlreadyFromSession()
     {
 		Usuario user = null;
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
@@ -80,6 +83,26 @@ public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServ
         }
         return user;
     }	
+	
+	public Boolean isSessionStillActive(Usuario usuario){
+		boolean isStilValid=false;
+//		Usuario user = null;
+        HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
+        HttpSession session = httpServletRequest.getSession();
+        Object userObj = session.getAttribute("user");
+        if (userObj != null && userObj instanceof Usuario)
+        {
+        	if(((Usuario) userObj).getIdUsuario()==usuario.getIdUsuario()){
+        		isStilValid=true;
+        	}else{
+        		isStilValid=false;
+        	}
+        }else{
+        	isStilValid=false;
+        }
+        
+		return isStilValid;
+	}
 	
 	private void storeUserInSession(Usuario user)
     {

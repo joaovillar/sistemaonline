@@ -1,5 +1,7 @@
 package com.jornada.client.ambiente.coordenador.usuario;
 
+
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -14,22 +16,26 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
-import com.jornada.client.classes.listBoxes.MpListBoxEstados;
-import com.jornada.client.classes.listBoxes.MpListBoxSexo;
-import com.jornada.client.classes.listBoxes.MpListBoxTipoPais;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoUsuario;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxEstados;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxSexo;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxTipoPais;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionUnidadeEscola;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.label.MpLabelLeft;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceHorizontalPanel;
+import com.jornada.client.classes.widgets.textbox.MpPasswordTextBox;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
+import com.jornada.client.content.config.ConfigClient;
 import com.jornada.client.content.i18n.TextConstants;
+import com.jornada.client.framework.Print;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.TipoUsuario;
@@ -41,6 +47,7 @@ public class AdicionarUsuario extends VerticalPanel {
 	
 	// private AsyncCallback<ArrayList<TipoUsuario>>
 	// callBackPopulateTipoUsuarioComboBox;
+	private VerticalPanel vFormPanel;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -50,81 +57,87 @@ public class AdicionarUsuario extends VerticalPanel {
 
 	FlexTable flexTable;
 
-	private TextBox txtPrimeiroNome;
-	private TextBox txtSobreNome;
-	private TextBox txtCpf;
-	private TextBox txtRg;
-	private TextBox txtLogin;
-	private PasswordTextBox txtSenha;
-	private TextBox txtEmail;
+	private MpTextBox txtPrimeiroNome;
+	private MpTextBox txtSobreNome;
+	private MpTextBox txtCpf;
+	private MpTextBox txtRg;
+	private MpTextBox txtLogin;
+	private MpPasswordTextBox txtSenha;
+	private MpTextBox txtEmail;
 	private MpDateBoxWithImage dataNascimento;
-	private TextBox txtTelefoneCelular;
-	private TextBox txtTelefoneResidencial;
-	private TextBox txtTelefoneComercial;
-	private TextBox txtEndereco;
-	private TextBox txtNumRes;
-	private TextBox txtBairro;
-	private TextBox txtCidade;
-	private TextBox txtCep;
+	private MpTextBox txtTelefoneCelular;
+	private MpTextBox txtTelefoneResidencial;
+	private MpTextBox txtTelefoneComercial;
+	private MpTextBox txtEndereco;
+	private MpTextBox txtNumRes;
+	private MpTextBox txtBairro;
+	private MpTextBox txtCidade;
+	private MpTextBox txtCep;
 	private MpSelectionTipoUsuario selectTipoUsuario;
 	private MpListBoxEstados selectEstados;
 	private MpListBoxSexo selectSexo;
 	private MpListBoxTipoPais selectTipoPais;
+	private MpSelectionUnidadeEscola selectUnidadeEscola;
 
 	private int HIDE_ALUNO_MATRICULA;
 	private int HIDE_ALUNO_SITUACAO_PAIS;
 	private int HIDE_PAIS_RESPONSAVEIS;
 
-	Label lblPrimeiroNome;
-	Label lblSobreNome;
-	Label lblCPF;
-	Label lblRG;
-	Label lblSexo;
-	Label lblEmail;
-	Label lblDataNascimento;
-	Label lblTelefoneCelular;
-	Label lblTelefoneResidencial;
-	Label lblTelefoneComercial;
-	Label lblTipoUsuario;
-	Label lblLogin;
-	Label lblSenha;
-	Label lblEndereco;
-	Label lblNumRes;
-	Label lblBairro;
-	Label lblCidade;
-	Label lblEstado;
-	Label lblCep;
-	Label lblEmpresa;
-	Label lblCargo;
+	MpLabelLeft lblPrimeiroNome;
+	MpLabelLeft lblSobreNome;
+	MpLabelLeft lblCPF;
+	MpLabelLeft lblRG;
+	MpLabelLeft lblSexo;
+	MpLabelLeft lblEmail;
+	MpLabelLeft lblDataNascimento;
+	MpLabelLeft lblTelefoneCelular;
+	MpLabelLeft lblTelefoneResidencial;
+	MpLabelLeft lblTelefoneComercial;
+	MpLabelLeft lblTipoUsuario;
+	MpLabelLeft lblLogin;
+	MpLabelLeft lblSenha;
+	MpLabelLeft lblEndereco;
+	MpLabelLeft lblNumRes;
+	MpLabelLeft lblBairro;
+	MpLabelLeft lblCidade;
+	MpLabelLeft lblEstado;
+	MpLabelLeft lblCep;
+	MpLabelLeft lblEmpresa;
+	MpLabelLeft lblCargo;
+	MpLabelLeft lblUnidadeEscola;
 
 	// Se for Pai
-	private TextBox txtEmpresa;
-	private TextBox txtCargo;
-	private Label lblResponsavel;
-	private Label lblTipoPais;
+	private MpTextBox txtEmpresa;
+	private MpTextBox txtCargo;
+	private MpLabelLeft lblResponsavel;
+	private MpLabelLeft lblTipoPais;
 	private CheckBox checkBoxRespFinanceiro;
 	private CheckBox checkBoxRespAcademico;
 	private Grid gridResponsavel;
 
 	// Se for aluno
-	private Label lblMatricula;
-	private Label lblDataMatr;
-	private Label lblSituacaoDosResp;
-	private TextBox txtMatricula;
-	private TextBox txtSituacaoPaisOutros;
+	private MpLabelLeft lblMatricula;
+	private MpLabelLeft lblDataMatr;
+	private MpLabelLeft lblSituacaoDosResp;
+	private MpTextBox txtMatricula;
+	private MpTextBox txtSituacaoPaisOutros;
 	private Grid gridSituacaoResp;
 	private RadioButton radioButtonCasados;
 	private RadioButton radioButtonSeparados;
 	private RadioButton radioButtonOutros;
 	private MpDateBoxWithImage dataMatr;
+	private MpLabelLeft lblRegistroAluno;
+	private MpTextBox txtRegistroAluno;
 
 	boolean isAdicionarOperation = false;
+	boolean isFirstLoad=false;
 	 private Usuario usuarioParaAtualizar;
 
 	@SuppressWarnings("unused")
 	private TelaInicialUsuario telaInicialUsuario;
 
-	TextConstants txtConstants;
+	TextConstants txtConstants = GWT.create(TextConstants.class);
+	ConfigClient clientConfig = GWT.create(ConfigClient.class);
 
 	private static AdicionarUsuario uniqueInstanceAdicionar;
 	private static AdicionarUsuario uniqueInstanceAtualizar;
@@ -143,8 +156,16 @@ public class AdicionarUsuario extends VerticalPanel {
 
 		
 		if (uniqueInstanceAtualizar == null) {
+			
+
 			uniqueInstanceAtualizar = new AdicionarUsuario(telaInicialUsuario,false);
 			uniqueInstanceAtualizar.usuarioParaAtualizar = usuario;
+			uniqueInstanceAtualizar.isFirstLoad=true;
+//			uniqueInstanceAtualizar.popularUsuario(usuario);
+
+			
+			
+			
 			
 		} else {
 			uniqueInstanceAtualizar.usuarioParaAtualizar = usuario;
@@ -158,7 +179,7 @@ public class AdicionarUsuario extends VerticalPanel {
 	@SuppressWarnings("deprecation")
 	private AdicionarUsuario(final TelaInicialUsuario telaInicialUsuario, final boolean isAdicionarOperation) {
 
-		txtConstants = GWT.create(TextConstants.class);
+		
 		
 		this.isAdicionarOperation = isAdicionarOperation;
 
@@ -171,164 +192,96 @@ public class AdicionarUsuario extends VerticalPanel {
 		mpLoadingSave.setVisible(false);
 
 		// Add a title to the form
-		txtMatricula = new TextBox();
+		txtMatricula = new MpTextBox();
+		txtRegistroAluno = new MpTextBox();
 		dataMatr = new MpDateBoxWithImage();
-		txtPrimeiroNome = new TextBox();
-		txtSobreNome = new TextBox();
-		txtCpf = new TextBox();
-		txtRg = new TextBox();
-		txtEmail = new TextBox();
+		txtPrimeiroNome = new MpTextBox();
+		txtSobreNome = new MpTextBox();
+		txtCpf = new MpTextBox();
+		txtRg = new MpTextBox();
+		txtEmail = new MpTextBox();
 		dataNascimento = new MpDateBoxWithImage();
-		txtTelefoneCelular = new TextBox();
-		txtTelefoneResidencial = new TextBox();
-		txtTelefoneComercial = new TextBox();
-		txtLogin = new TextBox();
-		txtSenha = new PasswordTextBox();
-		txtEndereco = new TextBox();
-		txtNumRes = new TextBox();
-		txtBairro = new TextBox();
-		txtCidade = new TextBox();
-		txtCep = new TextBox();
-		txtEmpresa = new TextBox();
-		txtCargo = new TextBox();
-		txtSituacaoPaisOutros = new TextBox();
+		txtTelefoneCelular = new MpTextBox();
+		txtTelefoneResidencial = new MpTextBox();
+		txtTelefoneComercial = new MpTextBox();
+		txtLogin = new MpTextBox();
+		txtSenha = new MpPasswordTextBox();
+		txtEndereco = new MpTextBox();
+		txtNumRes = new MpTextBox();
+		txtBairro = new MpTextBox();
+		txtCidade = new MpTextBox();
+		txtCep = new MpTextBox();
+		txtEmpresa = new MpTextBox();
+		txtCargo = new MpTextBox();
+		txtSituacaoPaisOutros = new MpTextBox();
 
 		checkBoxRespFinanceiro = new CheckBox(txtConstants.usuarioRespFinanceiro());
 		checkBoxRespAcademico = new CheckBox(txtConstants.usuarioRespAcademico());
 
-		// txtMatricula.setVisible(false);
-		// txtEmpresa.setVisible(false);
-		// txtCargo.setVisible(false);
-
 		selectTipoUsuario = new MpSelectionTipoUsuario();
+		selectUnidadeEscola = new MpSelectionUnidadeEscola();
 		selectEstados = new MpListBoxEstados();
 		selectSexo = new MpListBoxSexo();
 		selectTipoPais = new MpListBoxTipoPais();
 
+
 		selectTipoPais.setVisible(false);
 
 		selectTipoUsuario.addChangeHandler(new MpTipoUsuarioChangeHandler());
+		selectUnidadeEscola.addChangeHandler(new MpUnidadeEscolaChangeHandler());
 
 		dataNascimento.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
-		dataNascimento.getDate().setWidth("170px");
+		dataNascimento.getDate().setWidth("180px");
 		dataMatr.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
-		dataMatr.getDate().setWidth("170px");
+		dataMatr.getDate().setWidth("180px");
 
-		txtMatricula.setStyleName("design_text_boxes");
-		txtPrimeiroNome.setStyleName("design_text_boxes");
-		txtSobreNome.setStyleName("design_text_boxes");
-		txtCpf.setStyleName("design_text_boxes");
-		txtRg.setStyleName("design_text_boxes");
-		txtEmail.setStyleName("design_text_boxes");
-		txtTelefoneCelular.setStyleName("design_text_boxes");
-		txtTelefoneResidencial.setStyleName("design_text_boxes");
-		txtTelefoneComercial.setStyleName("design_text_boxes");
-		selectTipoUsuario.setStyleName("design_text_boxes");
-		selectEstados.setStyleName("design_text_boxes");
-		txtLogin.setStyleName("design_text_boxes");
-		txtSenha.setStyleName("design_text_boxes");
-		txtEndereco.setStyleName("design_text_boxes");
-		txtNumRes.setStyleName("design_text_boxes");
-		txtBairro.setStyleName("design_text_boxes");
-		txtCidade.setStyleName("design_text_boxes");
-		txtCep.setStyleName("design_text_boxes");
-		txtEmpresa.setStyleName("design_text_boxes");
-		txtCargo.setStyleName("design_text_boxes");
-		txtSituacaoPaisOutros.setStyleName("design_text_boxes");
 
-		lblDataMatr = new Label(txtConstants.usuarioDataMatricula());
-		lblMatricula = new Label(txtConstants.usuarioMatricula());
-		lblPrimeiroNome = new Label(txtConstants.usuarioPrimeiroNome());
-		lblSobreNome = new Label(txtConstants.usuarioSobreNome());
-		lblCPF = new Label(txtConstants.usuarioCPF());
-		lblRG = new Label(txtConstants.usuarioRG());
-		lblSexo = new Label(txtConstants.usuarioSexo());
-		lblEmail = new Label(txtConstants.usuarioEmail());
-		lblDataNascimento = new Label(txtConstants.usuarioDataNascimento());
-		lblTelefoneCelular = new Label(txtConstants.usuarioTelCelular());
-		lblTelefoneResidencial = new Label(txtConstants.usuarioTelResidencial());
-		lblTelefoneComercial = new Label(txtConstants.usuarioTelComercial());
-		lblTipoUsuario = new Label(txtConstants.usuarioTipo());
-		lblLogin = new Label(txtConstants.usuario());
-		lblSenha = new Label(txtConstants.usuarioSenha());
-		lblEndereco = new Label(txtConstants.usuarioEndereco());
-		lblNumRes = new Label(txtConstants.usuarioNumRes());
-		lblBairro = new Label(txtConstants.usuarioBairro());
-		lblCidade = new Label(txtConstants.usuarioCidade());
-		lblEstado = new Label(txtConstants.usuarioEstado());
-		lblCep = new Label(txtConstants.usuarioCep());
-		lblEmpresa = new Label(txtConstants.usuarioEmpresa());
-		lblCargo = new Label(txtConstants.usuarioCargo());
-		lblResponsavel = new Label(txtConstants.usuarioResponsavel());
-		lblTipoPais = new Label(txtConstants.usuarioTipoPai());
-		lblSituacaoDosResp = new Label(txtConstants.usuarioSituacaoDosPais());
+		lblUnidadeEscola = new MpLabelLeft(txtConstants.usuarioUnidadeEscola());
+		lblDataMatr = new MpLabelLeft(txtConstants.usuarioDataMatricula());
+		lblMatricula = new MpLabelLeft(txtConstants.usuarioMatricula());
+		lblRegistroAluno = new MpLabelLeft(txtConstants.usuarioRegistroAluno());
+		lblPrimeiroNome = new MpLabelLeft(txtConstants.usuarioPrimeiroNome());
+		lblSobreNome = new MpLabelLeft(txtConstants.usuarioSobreNome());
+		lblCPF = new MpLabelLeft(txtConstants.usuarioCPF());
+		lblRG = new MpLabelLeft(txtConstants.usuarioRG());
+		lblSexo = new MpLabelLeft(txtConstants.usuarioSexo());
+		lblEmail = new MpLabelLeft(txtConstants.usuarioEmail());
+		lblDataNascimento = new MpLabelLeft(txtConstants.usuarioDataNascimento());
+		lblTelefoneCelular = new MpLabelLeft(txtConstants.usuarioTelCelular());
+		lblTelefoneResidencial = new MpLabelLeft(txtConstants.usuarioTelResidencial());
+		lblTelefoneComercial = new MpLabelLeft(txtConstants.usuarioTelComercial());
+		lblTipoUsuario = new MpLabelLeft(txtConstants.usuarioTipo());
+		lblLogin = new MpLabelLeft(txtConstants.usuario());
+		lblSenha = new MpLabelLeft(txtConstants.usuarioSenha());
+		lblEndereco = new MpLabelLeft(txtConstants.usuarioEndereco());
+		lblNumRes = new MpLabelLeft(txtConstants.usuarioNumRes());
+		lblBairro = new MpLabelLeft(txtConstants.usuarioBairro());
+		lblCidade = new MpLabelLeft(txtConstants.usuarioCidade());
+		lblEstado = new MpLabelLeft(txtConstants.usuarioEstado());
+		lblCep = new MpLabelLeft(txtConstants.usuarioCep());
+		lblEmpresa = new MpLabelLeft(txtConstants.usuarioEmpresa());
+		lblCargo = new MpLabelLeft(txtConstants.usuarioCargo());
+		lblResponsavel = new MpLabelLeft(txtConstants.usuarioResponsavel());
+		lblTipoPais = new MpLabelLeft(txtConstants.usuarioTipoPai());
+		lblSituacaoDosResp = new MpLabelLeft(txtConstants.usuarioSituacaoDosPais());
+		
 
 		radioButtonCasados = new RadioButton("useTemplate", txtConstants.usuarioCasados());
 		radioButtonSeparados = new RadioButton("useTemplate", txtConstants.usuarioSeparados());
 		radioButtonOutros = new RadioButton("useTemplate", txtConstants.usuarioOutros());
 		radioButtonCasados.setValue(true);
 
-		Image imgPrimeiroNome = new Image("images/bullet-red-icon.png");
-		Image imgSobreNome = new Image("images/bullet-red-icon.png");
-		Image imgLogin = new Image("images/bullet-red-icon.png");
-		Image imgSenha = new Image("images/bullet-red-icon.png");
-		Image imgEmail = new Image("images/bullet-red-icon.png");
-
-		lblDataMatr.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblMatricula.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblPrimeiroNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblSobreNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblCPF.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblRG.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblSexo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblEmail.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblDataNascimento.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblTelefoneCelular.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblTelefoneResidencial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblTelefoneComercial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblTipoUsuario.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblLogin.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblSenha.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblEndereco.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblNumRes.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblBairro.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblCidade.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblEstado.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblCep.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblEmpresa.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblCargo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblTipoPais.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblSituacaoDosResp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-
-		lblTipoUsuario.setStyleName("design_label");
-		lblDataMatr.setStyleName("design_label");
-		lblMatricula.setStyleName("design_label");
-		lblPrimeiroNome.setStyleName("design_label");
-		lblSobreNome.setStyleName("design_label");
-		lblCPF.setStyleName("design_label");
-		lblRG.setStyleName("design_label");
-		lblSexo.setStyleName("design_label");
-		lblEmail.setStyleName("design_label");
-		lblDataNascimento.setStyleName("design_label");
-		lblTelefoneCelular.setStyleName("design_label");
-		lblTelefoneResidencial.setStyleName("design_label");
-		lblTelefoneComercial.setStyleName("design_label");
-		lblLogin.setStyleName("design_label");
-		lblSenha.setStyleName("design_label");
-		lblEndereco.setStyleName("design_label");
-		lblNumRes.setStyleName("design_label");
-		lblBairro.setStyleName("design_label");
-		lblCidade.setStyleName("design_label");
-		lblEstado.setStyleName("design_label");
-		lblCep.setStyleName("design_label");
-		lblEmpresa.setStyleName("design_label");
-		lblCargo.setStyleName("design_label");
-		lblTipoPais.setStyleName("design_label");
-		lblSituacaoDosResp.setStyleName("design_label");
+		Image imgPrimeiroNome = new Image("images/bullet_red.png");
+		Image imgSobreNome = new Image("images/bullet_red.png");
+		Image imgLogin = new Image("images/bullet_red.png");
+		Image imgSenha = new Image("images/bullet_red.png");
+		Image imgEmail = new Image("images/bullet_red.png");
 
 		String strSizeField = "250px";
 		selectTipoUsuario.setWidth(strSizeField);
+		selectUnidadeEscola.setWidth(strSizeField);
 		txtMatricula.setWidth(strSizeField);
+		txtRegistroAluno.setWidth(strSizeField);
 		txtPrimeiroNome.setWidth(strSizeField);
 		txtSobreNome.setWidth(strSizeField);
 		txtCpf.setWidth(strSizeField);
@@ -337,7 +290,6 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtTelefoneCelular.setWidth(strSizeField);
 		txtTelefoneResidencial.setWidth(strSizeField);
 		txtTelefoneComercial.setWidth(strSizeField);
-		selectTipoUsuario.setWidth(strSizeField);
 		txtLogin.setWidth(strSizeField);
 		txtSenha.setWidth(strSizeField);
 		txtEndereco.setWidth(strSizeField);
@@ -374,12 +326,24 @@ public class AdicionarUsuario extends VerticalPanel {
 		int row = 0;
 
 		flexTable = new FlexTable();
+		flexTable.getElement().setId("flexTable");
 		flexTable.setCellSpacing(3);
 		flexTable.setCellPadding(3);
 		flexTable.setBorderWidth(0);
 		flexTable.setSize(Integer.toString(TelaInicialUsuario.intWidthTable),Integer.toString(TelaInicialUsuario.intHeightTable));
-		flexTable.setWidget(row, 0, lblTipoUsuario);
-		flexTable.setWidget(row++, 1, selectTipoUsuario);
+		
+		boolean showUnidadeEscola = Boolean.valueOf(clientConfig.usuarioShowUnidadeEscola());	
+		if (showUnidadeEscola) {
+			flexTable.setWidget(row, 0, lblTipoUsuario);
+			flexTable.setWidget(row, 1, selectTipoUsuario);
+			flexTable.setWidget(row, 2, new InlineHTML(strInLineSpace));
+			flexTable.setWidget(row, 3, lblUnidadeEscola);
+			flexTable.setWidget(row++, 4, selectUnidadeEscola);
+		} else {
+			flexTable.setWidget(row, 0, lblTipoUsuario);
+			flexTable.setWidget(row++, 1, selectTipoUsuario);
+
+		}
 
 		// flexTable.setWidget(row, 0, new InlineHTML("<b>Dados" + strLine+
 		// "</b>"));
@@ -395,7 +359,10 @@ public class AdicionarUsuario extends VerticalPanel {
 		flexTable.setWidget(row, 1, txtMatricula);
 		flexTable.setWidget(row, 2, new InlineHTML(strInLineSpace));
 		flexTable.setWidget(row, 3, lblDataMatr);
-		flexTable.setWidget(row++, 4, dataMatr);
+		flexTable.setWidget(row, 4, dataMatr);
+		flexTable.setWidget(row, 5, new InlineHTML(strInLineSpace));
+		flexTable.setWidget(row, 6, lblRegistroAluno);
+		flexTable.setWidget(row++, 7, txtRegistroAluno);
 
 		flexTable.setWidget(row, 0, lblPrimeiroNome);
 		flexTable.setWidget(row, 1, txtPrimeiroNome);
@@ -404,15 +371,15 @@ public class AdicionarUsuario extends VerticalPanel {
 		flexTable.setWidget(row, 4, txtSobreNome);
 		flexTable.setWidget(row++, 5, imgSobreNome);
 
-		flexTable.setWidget(row, 0, lblEmail);
-		flexTable.setWidget(row, 1, txtEmail);
-		flexTable.setWidget(row, 2, imgEmail);
-		flexTable.setWidget(row, 3, lblLogin);
-		flexTable.setWidget(row, 4, txtLogin);
-		flexTable.setWidget(row, 5, imgLogin);
-		flexTable.setWidget(row, 6, lblSenha);
-		flexTable.setWidget(row, 7, txtSenha);
-		flexTable.setWidget(row++, 8, imgSenha);
+		flexTable.setWidget(row, 0, lblLogin);
+		flexTable.setWidget(row, 1, txtLogin);
+		flexTable.setWidget(row, 2, imgLogin);
+		flexTable.setWidget(row, 3, lblSenha);
+		flexTable.setWidget(row, 4, txtSenha);
+		flexTable.setWidget(row, 5, imgSenha);
+		flexTable.setWidget(row, 6, lblEmail);
+		flexTable.setWidget(row++, 7, txtEmail);
+
 
 		flexTable.setWidget(row, 0, lblDataNascimento);
 		flexTable.setWidget(row, 1, dataNascimento);
@@ -500,19 +467,23 @@ public class AdicionarUsuario extends VerticalPanel {
 		btnSave.addClickHandler(new ClickHandlerSave());
 		MpImageButton btnClean = new MpImageButton(txtConstants.geralLimpar(),"images/erase.png");
 		btnClean.addClickHandler(new ClickHandlerClean());
+		MpImageButton btnPrinter = new MpImageButton(txtConstants.geralImprimir(),"images/Print.16.png");
+		btnPrinter.addClickHandler(new ClickHandlerPrint());
+
+//		Image imgExcel = new Image("images/excel.24.png");
 
 
+		vFormPanel = new VerticalPanel();
+		vFormPanel.getElement().setId("vFormPanel");
 
-
-		VerticalPanel vFormPanel = new VerticalPanel();
-
-		Grid gridSave = new Grid(1, 3);
+		Grid gridSave = new Grid(1, 4);
 		gridSave.setCellSpacing(2);
 		gridSave.setCellPadding(2);
 		{
 			int i = 0;
 			gridSave.setWidget(0, i++, btnSave);
 			gridSave.setWidget(0, i++, btnClean);
+			gridSave.setWidget(0, i++, btnPrinter);
 			gridSave.setWidget(0, i++, mpLoadingSave);
 		}
 
@@ -553,8 +524,7 @@ public class AdicionarUsuario extends VerticalPanel {
 						telaInicialUsuario.getEditarUsuario().updateClientDataRow(usuarioParaAtualizar.getIdUsuario());
 						telaInicialUsuario.getAssociarPaisAlunos().updateClientData();						
 					}
-
-				}else if(success.contains("duplicate key")){
+				}else if(success.contains(Usuario.DB_UNIQUE_LOGIN)){
 					String strUsuario = success.substring(success.indexOf("=(")+2);
 					strUsuario = strUsuario.substring(0,strUsuario.indexOf(")"));
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
@@ -564,6 +534,10 @@ public class AdicionarUsuario extends VerticalPanel {
 						mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroAtualizar() + " "+txtConstants.usuarioErroLoginDuplicado(strUsuario));
 					}					
 					mpDialogBoxWarning.showDialog();	
+				}else{
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroSalvar()+" "+txtConstants.geralRecarregarAmbiente());
+					mpDialogBoxWarning.showDialog();					
 				}
 			}
 		};
@@ -605,13 +579,16 @@ public class AdicionarUsuario extends VerticalPanel {
 		if (isAdicionarOperation == true) {
 			lblSenha.setVisible(true);
 			txtSenha.setVisible(true);
+			
 			imgSenha.setVisible(true);			
 			btnClean.setVisible(true);
+			btnPrinter.setVisible(false);
 		} else {
 			lblSenha.setVisible(false);
 			txtSenha.setVisible(false);
 			imgSenha.setVisible(false);
 			btnClean.setVisible(false);
+			btnPrinter.setVisible(true);
 		}
 
 
@@ -628,10 +605,11 @@ public class AdicionarUsuario extends VerticalPanel {
 			if (checkFieldsValidator()) {
 				mpLoadingSave.setVisible(true);
 
-				int intTipoUsuario = Integer.parseInt(selectTipoUsuario.getValue(selectTipoUsuario.getSelectedIndex()));
+				int intIdTipoUsuario = Integer.parseInt(selectTipoUsuario.getValue(selectTipoUsuario.getSelectedIndex()));
 				String unidadeFederativa = selectEstados.getValue(selectEstados.getSelectedIndex());
 				String sexo = selectSexo.getValue(selectSexo.getSelectedIndex());
 				String tipoPais = selectTipoPais.getValue(selectTipoPais.getSelectedIndex());
+				int intIdUnidadeEscola = Integer.parseInt(selectUnidadeEscola.getValue(selectUnidadeEscola.getSelectedIndex()));
 				boolean respAcademico = checkBoxRespAcademico.getValue();
 				boolean respFinanceiro = checkBoxRespFinanceiro.getValue();
 				boolean situacaoResponsaveisCasados = radioButtonCasados.getValue();
@@ -650,11 +628,12 @@ public class AdicionarUsuario extends VerticalPanel {
 
 				Usuario usuario = new Usuario();
 
+				usuario.setIdUnidadeEscola(intIdUnidadeEscola);
 				usuario.setPrimeiroNome(txtPrimeiroNome.getText());
 				usuario.setSobreNome(txtSobreNome.getText());
 				usuario.setCpf(txtCpf.getText());
 				usuario.setDataNascimento(dataNascimento.getDate().getValue());
-				usuario.setIdTipoUsuario(intTipoUsuario);
+				usuario.setIdTipoUsuario(intIdTipoUsuario);
 				usuario.setEmail(txtEmail.getText());
 				usuario.setTelefoneCelular(txtTelefoneCelular.getText());
 				usuario.setTelefoneResidencial(txtTelefoneResidencial.getText());
@@ -670,12 +649,13 @@ public class AdicionarUsuario extends VerticalPanel {
 				usuario.setRg(txtRg.getText());
 				usuario.setSexo(sexo);
 
-				if (intTipoUsuario == TipoUsuario.ALUNO) {
+				if (intIdTipoUsuario == TipoUsuario.ALUNO) {
 					usuario.setRegistroMatricula(txtMatricula.getText());
+					usuario.setRegistroAluno(txtRegistroAluno.getText());
 					usuario.setDataMatricula(dataMatr.getDate().getValue());
 					usuario.setSituacaoResponsaveis(strSitResp);
 					usuario.setSituacaoResponsaveisOutros(strSitRespOutros);
-				} else if (intTipoUsuario == TipoUsuario.PAIS) {
+				} else if (intIdTipoUsuario == TipoUsuario.PAIS) {
 					usuario.setEmpresaOndeTrabalha(txtEmpresa.getText());
 					usuario.setCargo(txtCargo.getText());
 					usuario.setRespAcademico(respAcademico);
@@ -703,13 +683,30 @@ public class AdicionarUsuario extends VerticalPanel {
 		}
 	}
 
+	
+	private class ClickHandlerPrint implements ClickHandler {
+		@Override
+		public void onClick(ClickEvent event) {
+
+			FlexTable flexTableTitle = new FlexTable();
+			flexTableTitle.setBorderWidth(0);
+			flexTableTitle.setWidth("100%");
+			Label lblCadastro = new Label(txtConstants.usuarioRegistro());
+			flexTableTitle.setWidget(0, 0, lblCadastro);
+			flexTableTitle.getCellFormatter().setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
+			flexTableTitle.setStyleName("designTree");		
+			
+			Print.it("<link type='text/css' rel='stylesheet' href='Jornada.css'>", flexTableTitle.getElement(), flexTable.getElement());  
+
+		}
+	}
 	/**************** End Event Handlers *****************/
 
 	public boolean checkFieldsValidator() {
 
 		boolean isFieldsOk = false;
 		boolean isFirstNameOk = false;
-		boolean isEmailOk = false;
+		//boolean isEmailOk = false;
 		boolean isLoginOk = false;
 		boolean isSenhaOk = false;
 		boolean isSobreNomeOk = false;
@@ -730,13 +727,13 @@ public class AdicionarUsuario extends VerticalPanel {
 			txtSobreNome.setStyleName("design_text_boxes_erro");
 		}
 
-		if (FieldVerifier.isValidEmail(txtEmail.getText())) {
-			isEmailOk = true;
-			txtEmail.setStyleName("design_text_boxes");
-		} else {
-			isEmailOk = false;
-			txtEmail.setStyleName("design_text_boxes_erro");
-		}
+//		if (FieldVerifier.isValidEmail(txtEmail.getText())) {
+//			isEmailOk = true;
+//			txtEmail.setStyleName("design_text_boxes");
+//		} else {
+//			isEmailOk = false;
+//			txtEmail.setStyleName("design_text_boxes_erro");
+//		}
 
 		if (FieldVerifier.isValidName(txtLogin.getText())) {
 			isLoginOk = true;
@@ -758,7 +755,7 @@ public class AdicionarUsuario extends VerticalPanel {
 			isSenhaOk=true;
 		}
 
-		isFieldsOk = isFirstNameOk && isSobreNomeOk && isEmailOk && isLoginOk && isSenhaOk;
+		isFieldsOk = isFirstNameOk && isSobreNomeOk && isLoginOk && isSenhaOk;
 
 		return isFieldsOk;
 	}
@@ -767,11 +764,12 @@ public class AdicionarUsuario extends VerticalPanel {
 
 		txtPrimeiroNome.setStyleName("design_text_boxes");
 		txtSobreNome.setStyleName("design_text_boxes");
-		txtEmail.setStyleName("design_text_boxes");
+//		txtEmail.setStyleName("design_text_boxes");
 		txtLogin.setStyleName("design_text_boxes");
 		txtSenha.setStyleName("design_text_boxes");
 
 		txtMatricula.setValue("");
+		txtRegistroAluno.setValue("");
 		txtPrimeiroNome.setValue("");
 		txtSobreNome.setValue("");
 		txtCpf.setValue("");
@@ -800,24 +798,50 @@ public class AdicionarUsuario extends VerticalPanel {
 
 	private class MpTipoUsuarioChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
-			
-			int intTipoUsuario = Integer.parseInt(selectTipoUsuario.getValue(selectTipoUsuario.getSelectedIndex()));
 
+			int intTipoUsuario = Integer.parseInt(selectTipoUsuario.getValue(selectTipoUsuario.getSelectedIndex()));
+			
 			if (isAdicionarOperation == true) {
 				showCamposDeAcordoTipoUsuario(intTipoUsuario);
 			} else {
-				usuarioParaAtualizar.setIdTipoUsuario(intTipoUsuario);
-				uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);
+				
+//				if(isFirstLoad){
+//					isFirstLoad=false;
+//					uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);
+					
+
+					
+//				}else{
+					showCamposDeAcordoTipoUsuario(intTipoUsuario);
+//				}
+//				usuarioParaAtualizar.setIdTipoUsuario(intTipoUsuario);
+//				uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);
+//				showCamposDeAcordoTipoUsuario(intTipoUsuario);
 			}
 
 		}
 	}
+	
+	private class MpUnidadeEscolaChangeHandler implements ChangeHandler {
+		public void onChange(ChangeEvent event) {
+
+			if (isAdicionarOperation == false) {
+				if(isFirstLoad){
+					isFirstLoad=false;
+					uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);					
+				}
+			} 
+		}
+	}
+	
+	
 
 	private void popularUsuario(Usuario usuario) {
 
 		cleanFields();
 
 		txtMatricula.setValue(usuario.getRegistroMatricula());
+		txtRegistroAluno.setValue(usuario.getRegistroAluno());
 		txtPrimeiroNome.setValue(usuario.getPrimeiroNome());
 		txtSobreNome.setValue(usuario.getSobreNome());
 		txtEmail.setValue(usuario.getEmail());
@@ -840,12 +864,14 @@ public class AdicionarUsuario extends VerticalPanel {
 		selectSexo.setSelectItem(usuario.getSexo());
 		selectEstados.setSelectItem(usuario.getUnidadeFederativa());
 		selectTipoPais.setSelectItem(usuario.getTipoPais());
-
+		selectUnidadeEscola.setSelectItem(usuario.getIdUnidadeEscola());
+		
 		dataNascimento.getDate().setValue(usuario.getDataNascimento());
 		dataMatr.getDate().setValue(usuario.getDataMatricula());
-
+		
 		checkBoxRespAcademico.setValue(usuario.isRespAcademico());
-		checkBoxRespAcademico.setValue(usuario.isRespFinanceiro());
+		checkBoxRespFinanceiro.setValue(usuario.isRespFinanceiro());
+
 
 		if (usuario.getSituacaoResponsaveis() != null) {
 			if (usuario.getSituacaoResponsaveis().equals("casados")) {
@@ -853,7 +879,7 @@ public class AdicionarUsuario extends VerticalPanel {
 			} else if (usuario.getSituacaoResponsaveis().equals("separados")) {
 				radioButtonSeparados.setValue(true);
 			} else {
-				radioButtonOutros.setValue(true);
+				radioButtonOutros.setEnabled(true);
 				txtSituacaoPaisOutros.setValue(usuario .getSituacaoResponsaveisOutros());
 			}
 		}

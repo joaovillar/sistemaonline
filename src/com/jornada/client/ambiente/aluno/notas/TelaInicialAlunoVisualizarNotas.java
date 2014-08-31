@@ -40,39 +40,19 @@ public class TelaInicialAlunoVisualizarNotas extends Composite{
 		
 //		visualizarAlunoNotasAluno = new VisualizarAlunoNotasAluno(this);
 		visualizarAlunoNotasAluno = VisualizarAlunoNotasAluno.getInstance(this);
-//		editarNota = new EditarNota(this);
-//		RootLayoutPanel layoutPanel = 
-//		layoutPanel.setSize("100%", "100%");
 		
-		
-		
-		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
+
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
-//		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
 		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
 		tabLayoutPanel.getElement().getStyle().setBorderWidth(10.0, Unit.PX);
 		
-//		tabLayoutPanel.setWidth("100%");//
-		tabLayoutPanel.setPixelSize(intWidthTable, intHeightTable);
-//		tabLayoutPanel.setHeight(Integer.toString(intHeightTable)+"px");
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable)+"px");
 		tabLayoutPanel.setAnimationDuration(500);
 		tabLayoutPanel.setAnimationVertical(true);
 		
 		tabLayoutPanel.add(visualizarAlunoNotasAluno, new MpHeaderWidget(txtConstants.alunoAmbienteNotas(), "images/chart-icon_16.png"));
-//		stackPanel.add(editarVisualizarNotas, createHeaderWidget("Notas por Conteúdo Programático", "images/comment_edit.png"));				
 
-		
-//		layoutPanel.setWidgetVisible(tabLayoutPanel, true);
-		
-//		VerticalPanel verticalPanelPage = new VerticalPanel();	
-//		verticalPanelPage.setBorderWidth(1);
-////		verticalPanelPage.setSize("100%", "100%");
-//		verticalPanelPage.add(tabLayoutPanel);
-//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
-				
-		
-//		RootLayoutPanel.get().add(tabLayoutPanel);
-		
+	
      	initWidget(tabLayoutPanel);
 		
 	}

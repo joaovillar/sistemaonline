@@ -12,7 +12,8 @@ public interface GWTServiceUsuarioAsync {
 	public void AdicionarUsuario(Usuario usuario, AsyncCallback<String> callback);	
 	public void updateUsuarioRow(Usuario usuario, AsyncCallback<String> callback);	
 	public void atualizarSenha(int idUsuario, String senha, AsyncCallback<Boolean> callback);
-	public void deleteUsuarioRow(int id_usuario, AsyncCallback<Boolean> callback);	
+	public void deleteUsuarioRow(int id_usuario, AsyncCallback<Boolean> callback);
+	public void gerarExcelUsuario(AsyncCallback<String> asyncCallback);
 	public void importarUsuariosUsandoExcel(String strFileName, AsyncCallback<ArrayList<UsuarioErroImportar>> callback);
 	public void getUsuarios(AsyncCallback<ArrayList<Usuario>> callback);	
 	public void getUsuarioPeloId(int idUsuario, AsyncCallback<Usuario> callback);
@@ -26,6 +27,8 @@ public interface GWTServiceUsuarioAsync {
 	public void getFilhoDoPaiAmbientePais(Usuario usuarioPai, AsyncCallback<ArrayList<Usuario>> callback);		
 	public void getTipoUsuarios(AsyncCallback<ArrayList<TipoUsuario>> callbackGetTipoUsuarios);
 	public void associarPaisAoAluno(int id_aluno, ArrayList<String> list_id_pais, AsyncCallback<Boolean> callback);
-	public void getTodosOsPaisDoAluno(int id_aluno, AsyncCallback<ArrayList<Usuario>> callback);	
+	public void getTodosOsPaisDoAluno(int id_aluno, AsyncCallback<ArrayList<Usuario>> callback);
+//	public void getPagePrint(String strHtmlPage, AsyncCallback<String> callback);
+		
 
 }

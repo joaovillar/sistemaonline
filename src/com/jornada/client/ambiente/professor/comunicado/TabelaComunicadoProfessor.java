@@ -40,12 +40,12 @@ import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
-import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class TabelaComunicadoProfessor extends VerticalPanel{
 	
@@ -89,6 +89,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 		this.telaInicialComunicadoProfessor=telaInicialComunicadoProfessor;
 		
 		vPanelBody = new VerticalPanel();
+		vPanelBody.setWidth("100%");
 		
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -119,7 +120,8 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 		
 		
 		cellTable = new CellTable<Comunicado>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialComunicadoProfessor.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialComunicadoProfessor.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		
@@ -148,12 +150,9 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 
 			public void onSuccess(ArrayList<Comunicado> list) {
 				
-				mpPanelLoading.setVisible(false);
+				MpUtilClient.isRefreshRequired(list);
 				
-				if(list==null){
-					MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
-					mpDialogBox.showDialog();	
-				}
+				mpPanelLoading.setVisible(false);
 				
 				dataProvider.getList().clear();
 				cellTable.setRowCount(0);
@@ -175,7 +174,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 		};			
 
 		
-		
+		this.setWidth("100%");
 		super.add(vPanelBody);
 		populateGrid();
 	}
@@ -382,7 +381,9 @@ public class TabelaComunicadoProfessor extends VerticalPanel{
 	public void openTabelaComunicados(){
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialComunicadoProfessor.intWidthTable+30)+"px",Integer.toString(TelaInicialComunicadoProfessor.intHeightTable+70)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialComunicadoProfessor.intWidthTable+30)+"px",Integer.toString(TelaInicialComunicadoProfessor.intHeightTable+70)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialComunicadoProfessor.intHeightTable+70)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);			
 		

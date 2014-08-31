@@ -46,6 +46,7 @@ import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class TabelaAlunoComunicado extends VerticalPanel{
 	
@@ -89,6 +90,7 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		this.telaInicialAlunoComunicado=telaInicialAlunoComunicado;
 		
 		vPanelBody = new VerticalPanel();
+		vPanelBody.setWidth("100%");
 		
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -119,7 +121,8 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		
 		
 		cellTable = new CellTable<Comunicado>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialAlunoComunicado.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialAlunoComunicado.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		
@@ -147,6 +150,8 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		callbackGetComunicadosFiltro = new AsyncCallback<ArrayList<Comunicado>>() {
 
 			public void onSuccess(ArrayList<Comunicado> list) {
+				
+				MpUtilClient.isRefreshRequired(list);
 				
 				mpPanelLoading.setVisible(false);	
 				
@@ -178,7 +183,7 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 		};			
 
 		
-		
+		this.setWidth("100%");
 		super.add(vPanelBody);
 		populateGrid();
 	}
@@ -385,7 +390,9 @@ public class TabelaAlunoComunicado extends VerticalPanel{
 	public void openTabelaComunicados(){
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialAlunoComunicado.intWidthTable+30)+"px",Integer.toString(TelaInicialAlunoComunicado.intHeightTable+70)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialAlunoComunicado.intWidthTable+30)+"px",Integer.toString(TelaInicialAlunoComunicado.intHeightTable+70)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialAlunoComunicado.intHeightTable+70)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);			
 		

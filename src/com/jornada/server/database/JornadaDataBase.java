@@ -13,7 +13,7 @@ public class JornadaDataBase {
 	private static String driver, url, host, portNumber, database, userName,password, connectionUrl;
 	private static Throwable initializationException;
 	@SuppressWarnings("unused")
-	private Statement stm;
+	private static Statement stm;
 	private static Connection connection;
 
 	static {
@@ -33,10 +33,10 @@ public class JornadaDataBase {
 			System.out.println(ex.getMessage());
 		}
 	}
-
+	
 	public void close() {
 
-		if (this.getConnection() != null) {
+		if (getConnection() != null) {
 			try {
 				connection.close();
 			} catch (SQLException ex) {
@@ -50,11 +50,7 @@ public class JornadaDataBase {
 			if (JornadaDataBase.initializationException == null) {
 				try {
 					// create the connection
-					connection = DriverManager.getConnection(JornadaDataBase.connectionUrl,
-							JornadaDataBase.userName, JornadaDataBase.password);
-
-					// TODO statement should not be created here (no where this
-					// class)
+					connection = DriverManager.getConnection(JornadaDataBase.connectionUrl,JornadaDataBase.userName, JornadaDataBase.password);
 					stm = connection.createStatement();
 				} catch (SQLException e) {
 					throw new RuntimeException(
@@ -77,8 +73,5 @@ public class JornadaDataBase {
 //		return conn;
 //	}
 	
-	public void createConnection() {
-
-	}
 
 }

@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
-import com.jornada.client.classes.listBoxes.MpListBoxMediaNota;
-import com.jornada.client.classes.listBoxes.MpListBoxPorcentagemPresenca;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxMediaNota;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPorcentagemPresenca;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -240,7 +240,7 @@ public class AdicionarCurso extends VerticalPanel {
 				} else {
 					hPanelLoading.setVisible(false);
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar());
+					mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar()+" "+txtConstants.geralRegarregarPagina());
 					mpDialogBoxWarning.showDialog();
 				}
 			}

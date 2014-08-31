@@ -8,6 +8,13 @@ class OcorrenciaAux {
 	private int idPeriodo;
 	private int idDisciplina;
 	private int idConteudoProgramatico;
+	
+	private String nomeCurso;
+	private String nomePeriodo;
+	private String nomeDisciplina;
+	private String nomeConteudoProgramatico;
+	
+	
 	private Ocorrencia ocorrencia;
 	
 	public OcorrenciaAux(){
@@ -53,6 +60,40 @@ class OcorrenciaAux {
 	public void setOcorrencia(Ocorrencia ocorrencia) {
 		this.ocorrencia = ocorrencia;
 	}
+
+	public String getNomeCurso() {
+		return nomeCurso;
+	}
+
+	public void setNomeCurso(String nomeCurso) {
+		this.nomeCurso = nomeCurso;
+	}
+
+	public String getNomePeriodo() {
+		return nomePeriodo;
+	}
+
+	public void setNomePeriodo(String nomePeriodo) {
+		this.nomePeriodo = nomePeriodo;
+	}
+
+	public String getNomeDisciplina() {
+		return nomeDisciplina;
+	}
+
+	public void setNomeDisciplina(String nomeDisciplina) {
+		this.nomeDisciplina = nomeDisciplina;
+	}
+
+	public String getNomeConteudoProgramatico() {
+		return nomeConteudoProgramatico;
+	}
+
+	public void setNomeConteudoProgramatico(String nomeConteudoProgramatico) {
+		this.nomeConteudoProgramatico = nomeConteudoProgramatico;
+	}
+
+
 
 	
 	

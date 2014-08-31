@@ -30,6 +30,7 @@ import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 
 public class EditarNotaPorAluno extends VerticalPanel{
@@ -142,15 +143,14 @@ public class EditarNotaPorAluno extends VerticalPanel{
 		callbackGetAlunosFiltro = new AsyncCallback<ArrayList<Usuario>>() {
 
 			public void onSuccess(ArrayList<Usuario> list) {
-				
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelAlunosLoading.setVisible(false);
-//				mpPanelDisciplinaLoading.setVisible(false);	
 				
-				listBoxAluno.clear();
-				for(int i=0;i<list.size();i++){
-					Usuario usuario = list.get(i);
-					listBoxAluno.addItem(usuario.getPrimeiroNome()+" "+usuario.getSobreNome(), Integer.toString(usuario.getIdUsuario()));
-				}
+					listBoxAluno.clear();
+					for (int i = 0; i < list.size(); i++) {
+						Usuario usuario = list.get(i);
+						listBoxAluno.addItem(usuario.getPrimeiroNome() + " "+ usuario.getSobreNome(),Integer.toString(usuario.getIdUsuario()));
+					}
 				
 //				popularDisciplinasAssociadas();
 				

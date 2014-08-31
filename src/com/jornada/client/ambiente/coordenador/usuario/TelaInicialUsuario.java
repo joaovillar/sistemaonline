@@ -3,9 +3,7 @@ package com.jornada.client.ambiente.coordenador.usuario;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
 
@@ -46,23 +44,24 @@ public class TelaInicialUsuario extends Composite{
 		importarUsuario = new ImportarUsuario(this);
 		
 		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
-		TabLayoutPanel stackPanel = new TabLayoutPanel(2.5, Unit.EM);		
-		stackPanel.setPixelSize(intWidthTable+50, intHeightTable+50);
-		stackPanel.setAnimationDuration(500);
-		stackPanel.setAnimationVertical(true);
+		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
+//		stackPanel.setPixelSize(intWidthTable+50, intHeightTable+50);
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable+50)+"px");
+		tabLayoutPanel.setAnimationDuration(500);
+		tabLayoutPanel.setAnimationVertical(true);
 		
 //		stackPanel.add(adicionarUsuario, createHeaderWidget(txtConstants.usuarioAdicionar(), "images/plus-circle.png"));
-		stackPanel.add(adicionarUsuario, new MpHeaderWidget(txtConstants.usuarioAdicionar(), "images/plus-circle.png"));
-		stackPanel.add(editarUsuario, new MpHeaderWidget(txtConstants.usuarioEditar(), "images/comment_edit.png"));
-		stackPanel.add(associarPaisAlunos, new MpHeaderWidget(txtConstants.usuarioAssociarPaisAlunos(), "images/group-add-icon_16.png"));		
-		stackPanel.add(importarUsuario, new MpHeaderWidget(txtConstants.usuarioImportar(), "images/001_22.16.png"));
+		tabLayoutPanel.add(adicionarUsuario, new MpHeaderWidget(txtConstants.usuarioAdicionar(), "images/plus-circle.png"));
+		tabLayoutPanel.add(editarUsuario, new MpHeaderWidget(txtConstants.usuarioEditar(), "images/comment_edit.png"));
+		tabLayoutPanel.add(associarPaisAlunos, new MpHeaderWidget(txtConstants.usuarioAssociarPaisAlunos(), "images/group-add-icon_16.png"));		
+		tabLayoutPanel.add(importarUsuario, new MpHeaderWidget(txtConstants.usuarioImportar(), "images/001_22.16.png"));
 		
-		
-		VerticalPanel verticalPanelPage = new VerticalPanel();		
-		verticalPanelPage.add(stackPanel);
-		verticalPanelPage.add(new InlineHTML("&nbsp;"));
+//		
+//		VerticalPanel verticalPanelPage = new VerticalPanel();		
+//		verticalPanelPage.add(tabLayoutPanel);
+//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
 
-     	initWidget(verticalPanelPage);
+     	initWidget(tabLayoutPanel);
 		
 	}
 	

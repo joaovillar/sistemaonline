@@ -14,40 +14,28 @@ public class GWTServiceTopicoImpl extends RemoteServiceServlet implements GWTSer
 	 */
 	private static final long serialVersionUID = -6025243781664719984L;
 
-	public int Adicionar(Topico topico) {
-		
-		return TopicoServer.Adicionar(topico);	
-		
+	public int Adicionar(Topico topico) {		
+		return TopicoServer.Adicionar(topico);		
 	}
 	
-	public ArrayList<Topico> getTopicoPeloConteudoProgramatico(int idConteudoProgramatico) {
-		
+	public ArrayList<Topico> getTopicoPeloConteudoProgramatico(int idConteudoProgramatico) {		
 		return TopicoServer.getTopicos(idConteudoProgramatico);
-
 	}	
 	
-	public ArrayList<Topico> getConteudoProgramaticos(String strFilter) {
-		
+	public ArrayList<Topico> getConteudoProgramaticos(String strFilter) {		
 		return TopicoServer.getTopicos(strFilter);
-
 	}
 	
-	public ArrayList<Topico> getTopicos() {
-		
+	public ArrayList<Topico> getTopicos() {		
 		return TopicoServer.getTopicos();
-
 	}	
 	
 	public boolean deleteTopicoRow(int id_topico) {
-
 		return TopicoServer.deleteTopicoRow(id_topico);
-
 	}
 	
 	public boolean updateTopicoRow(Topico topico) {
-
 		return TopicoServer.updateTopicoRow(topico);
-
 	}
 
 	

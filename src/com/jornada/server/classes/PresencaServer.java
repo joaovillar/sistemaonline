@@ -103,6 +103,7 @@ public class PresencaServer {
 			PreparedStatement ps = conn.prepareStatement(DB_SELECT_PRESENCA);			
 			data = getParameters(ps.executeQuery());
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
@@ -124,6 +125,7 @@ public class PresencaServer {
 			presenca.setTipoPresenca(TipoPresencaServer.getTipoPresenca(presenca.getIdTipoPresenca()));
 			
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
@@ -141,6 +143,7 @@ public class PresencaServer {
 			data = getParameters(ps.executeQuery());
 			
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
@@ -159,6 +162,7 @@ public class PresencaServer {
 			data = getParameters(ps.executeQuery());
 			
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);

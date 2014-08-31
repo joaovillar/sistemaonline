@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
-import com.jornada.client.ambiente.coordenador.disciplina.TelaInicialDisciplina;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoComunicado;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
@@ -107,7 +106,10 @@ public class FormularioComunicado extends VerticalPanel {
 		vBodyPanel.add(drawPassoTresDescricao());
 		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(drawPassoQuatroSubmeterComunicado());
+		vBodyPanel.setWidth("100%");
+		vBodyPanel.setBorderWidth(0);
 		
+		this.setWidth("100%");
 		super.add(vBodyPanel);
 	}
 	
@@ -118,7 +120,8 @@ public class FormularioComunicado extends VerticalPanel {
 	public MpPanelPageMainView drawPassoUmCamposTitulo(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.comunicadoInsiraComunicado(), "images/insert_header.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 
 
@@ -157,21 +160,25 @@ public class FormularioComunicado extends VerticalPanel {
 
 		mpTimePicker = new MpTimePicker(7,22);
 		
-		Grid grid = new Grid(4,3);
-		grid.setCellSpacing(3);
-		grid.setCellPadding(3);
-		grid.setBorderWidth(0);
-		grid.setSize(Integer.toString(TelaInicialComunicado.intWidthTable),Integer.toString(TelaInicialComunicado.intHeightTable));		
+		FlexTable flexTable = new FlexTable();		
+		flexTable.setCellSpacing(3);
+		flexTable.setCellPadding(3);
+		flexTable.setBorderWidth(0);
+//		grid.setSize(Integer.toString(TelaInicialComunicado.intWidthTable),Integer.toString(TelaInicialComunicado.intHeightTable));		
+//		grid.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable)+"px");
+//		flexTable.setWidth("100%");
 
 		int row = 0;
 		
-		grid.setWidget(row, 0, lblTipoComunicado);grid.setWidget(row++, 1, listBoxTipoComunicados);		
-		grid.setWidget(row, 0, lblAssunto);grid.setWidget(row, 1, txtAssunto);grid.setWidget(row++, 2, lblErroComunicado); 	
-		grid.setWidget(row, 0, lblDataInicial); grid.setWidget(row++, 1, mpDateBoxData);		
-		grid.setWidget(row, 0, lblHora);grid.setWidget(row++, 1, mpTimePicker);
+		flexTable.setWidget(row, 0, lblTipoComunicado);flexTable.setWidget(row++, 1, listBoxTipoComunicados);		
+		flexTable.setWidget(row, 0, lblAssunto);flexTable.setWidget(row, 1, txtAssunto);flexTable.setWidget(row++, 2, lblErroComunicado); 	
+		flexTable.setWidget(row, 0, lblDataInicial); flexTable.setWidget(row++, 1, mpDateBoxData);		
+		flexTable.setWidget(row, 0, lblHora);flexTable.setWidget(row++, 1, mpTimePicker);
+		
+		
 		
 
-		mpPanel.add(grid);
+		mpPanel.add(flexTable);
 		
 		return mpPanel;
 		
@@ -180,14 +187,17 @@ public class FormularioComunicado extends VerticalPanel {
 	public MpPanelPageMainView drawPassoDoisSelecionarImagem(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.comunicadoSelecionaImagem(), "images/picture_16.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		mpPanel.setHeight("70px");
 		
 		Grid grid = new Grid(1,3);
 		grid.setCellSpacing(3);
 		grid.setCellPadding(3);
 		grid.setBorderWidth(0);
-		grid.setSize(Integer.toString(TelaInicialComunicado.intWidthTable),Integer.toString(TelaInicialComunicado.intHeightTable));
+//		grid.setSize(Integer.toString(TelaInicialComunicado.intWidthTable),Integer.toString(TelaInicialComunicado.intHeightTable));
+//		grid.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable)+"px");
+		grid.setWidth("100%");
 		
 		Grid vPanelImagem = new Grid(1,2);
 		vPanelImagem.setSize("15px", "73px");
@@ -212,13 +222,16 @@ public class FormularioComunicado extends VerticalPanel {
 	public MpPanelPageMainView drawPassoTresDescricao(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.comunicadoInsiraDescricao(), "images/note_2add.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 		Grid grid = new Grid(1,2);
 		grid.setCellSpacing(3);
 		grid.setCellPadding(3);
 		grid.setBorderWidth(0);
-		grid.setSize(Integer.toString(TelaInicialComunicado.intWidthTable),Integer.toString(TelaInicialComunicado.intHeightTable));
+//		grid.setSize(Integer.toString(TelaInicialComunicado.intWidthTable),Integer.toString(TelaInicialComunicado.intHeightTable));
+//		grid.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable)+"px");
+//		grid.setWidth("100%");
 
 
 		Label lblDescricaoCurso = new Label(txtConstants.cursoDescricao());
@@ -244,10 +257,12 @@ public class FormularioComunicado extends VerticalPanel {
 		flexTable.setCellSpacing(2);
 		flexTable.setCellPadding(2);
 		flexTable.setBorderWidth(0);		
+//		flexTable.setWidth("100%");
 		
 		VerticalPanel vPanel = new VerticalPanel();
+		vPanel.setWidth("100%");
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		vPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+//		vPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
 
 		btnAdicionarComunicado = new MpImageButton(ADICIONAR, "images/save.png");
 		btnAdicionarComunicado.addClickHandler(new ClickHandlerSave());
@@ -470,7 +485,7 @@ public class FormularioComunicado extends VerticalPanel {
 	        UploadedInfo info = uploader.getServerInfo();
 
 	        
-	        strNomeImagem = info.message;
+	        strNomeImagem = uploader.getServerMessage().getMessage();
 
 	        System.out.println("uploader.getFileInput().getName() " + uploader.getFileInput().getName());
 	        System.out.println("File name " + info.name);
@@ -478,7 +493,8 @@ public class FormularioComunicado extends VerticalPanel {
 	        System.out.println("File size " + info.size);
 
 	        // You can send any customized message and parse it 
-	        System.out.println("Server message " + info.message);
+	        System.out.println("Server message: " + uploader.getServerMessage().getMessage());
+//	        System.out.println("Server message " + info.message);
 	      }
 	    }
 	  };

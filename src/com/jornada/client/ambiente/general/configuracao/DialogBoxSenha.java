@@ -74,8 +74,8 @@ public class DialogBoxSenha extends DialogBox {
 //		setTitle("Idioma");
 		VerticalPanel vBody = new VerticalPanel();
 		
-		Label lblNovaSenha = new Label("Nova Senha");
-		Label lblConfirmarNovaSenha = new Label("Confirmar Senha");		
+		Label lblNovaSenha = new Label(txtConstants.loginNovaSenha());
+		Label lblConfirmarNovaSenha = new Label(txtConstants.loginConfirmarSenha());		
 		
 		lblNovaSenha.setStyleName("design_label");
 		lblConfirmarNovaSenha.setStyleName("design_label");

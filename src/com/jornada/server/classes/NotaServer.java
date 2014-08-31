@@ -143,6 +143,7 @@ public class NotaServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -155,7 +156,7 @@ public class NotaServer {
 	
 	public static ArrayList<TabelaBoletim> getBoletimNotasPorAlunoPorCurso(int idCurso, int idTipoUsuario, int idUsuario){
 		
-		ArrayList<TabelaBoletim> listData = new ArrayList<TabelaBoletim>();
+		ArrayList<TabelaBoletim> data = new ArrayList<TabelaBoletim>();
 		
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection conn = ConnectionManager.getConnection();
@@ -186,17 +187,18 @@ public class NotaServer {
 				current.setNomeAvaliacao(rs.getString("assunto"));
 				current.setNota(rs.getString("nota"));				
 
-				listData.add(current);
+				data.add(current);
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(conn);
 		}
 		
-		return listData;
+		return data;
 	}
 	
 	

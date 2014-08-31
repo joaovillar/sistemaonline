@@ -14,6 +14,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -29,6 +30,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class AssociarPaisAlunos extends VerticalPanel{
 	
@@ -69,19 +71,22 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		mpPanelPaisLoading.show();
 		mpPanelPaisLoading.setVisible(false);
 
-		mpPanelAssociandoLoading.setTxtLoading(txtConstants.geralCarregando());
+		mpPanelAssociandoLoading.setTxtLoading("");
 		mpPanelAssociandoLoading.show();
 		mpPanelAssociandoLoading.setVisible(false);
 		
 		
 		VerticalPanel vBodyPanel = new VerticalPanel();
+		vBodyPanel.setWidth("100%");
+		
 		
 		vBodyPanel.add(drawPassoUmSelecioneAluno());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
 		vBodyPanel.add(drawPassoDoisSelecionePais());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
-		vBodyPanel.add(drawPassoTresSubmeterAssociacao());		
+//		vBodyPanel.add(drawPassoTresSubmeterAssociacao());		
 		
+		setWidth("100%");
 		super.add(vBodyPanel);			
 		
 	}
@@ -90,7 +95,8 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	public MpPanelPageMainView drawPassoUmSelecioneAluno(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.usuarioSelecioneAluno(), "images/elementary_school_16.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 		Grid gridFiltrar = new Grid(1,5);		
 		gridFiltrar.setCellSpacing(3);
@@ -128,12 +134,13 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	public MpPanelPageMainView drawPassoDoisSelecionePais(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.usuarioSelecionaPais(), "images/people.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
-		Grid gridFiltrar = new Grid(1,4);		
-		gridFiltrar.setCellSpacing(3);
-		gridFiltrar.setCellPadding(3);
-		gridFiltrar.setBorderWidth(0);		
+		FlexTable flexTableFiltrar = new FlexTable();		
+		flexTableFiltrar.setCellSpacing(3);
+		flexTableFiltrar.setCellPadding(3);
+		flexTableFiltrar.setBorderWidth(0);		
 		
 		Label lblFiltrarPais = new Label(txtConstants.usuarioNomePais());
 		txtFiltroPais = new TextBox();		
@@ -145,16 +152,16 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		lblFiltrarPais.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
 		txtFiltroPais.setStyleName("design_text_boxes");		
 		
-		gridFiltrar.setWidget(0, 0, lblFiltrarPais);
-		gridFiltrar.setWidget(0, 1, txtFiltroPais);
-		gridFiltrar.setWidget(0, 2, btnFiltrar);
-		gridFiltrar.setWidget(0, 3, mpPanelPaisLoading);
+		flexTableFiltrar.setWidget(0, 0, lblFiltrarPais);
+		flexTableFiltrar.setWidget(0, 1, txtFiltroPais);
+		flexTableFiltrar.setWidget(0, 2, btnFiltrar);
+		flexTableFiltrar.setWidget(0, 3, mpPanelPaisLoading);
 		
 		
-		Grid gridBotoes = new Grid(2,1);
-		gridBotoes.setCellSpacing(3);
-		gridBotoes.setCellPadding(3);
-		gridBotoes.setBorderWidth(0);
+		FlexTable flexTableBotoes = new FlexTable();
+		flexTableBotoes.setCellSpacing(3);
+		flexTableBotoes.setCellPadding(3);
+		flexTableBotoes.setBorderWidth(0);
 		
 		MpImageButton mpButtonParaEsquerda = new MpImageButton("", "images/resultset_previous.png");
 		MpImageButton mpButtonParaDireita = new MpImageButton("", "images/resultset_next.png");
@@ -162,13 +169,13 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		mpButtonParaDireita.addClickHandler(new ClickHandlerPaisParaDireita());
 		mpButtonParaEsquerda.addClickHandler(new ClickHandlerPaisParaEsquerda());		
 		
-		gridBotoes.setWidget(0, 0, mpButtonParaDireita);
-		gridBotoes.setWidget(1, 0, mpButtonParaEsquerda);		
+		flexTableBotoes.setWidget(0, 0, mpButtonParaDireita);
+		flexTableBotoes.setWidget(1, 0, mpButtonParaEsquerda);		
 		
-		Grid gridSelecionar = new Grid(2,3);
-		gridSelecionar.setCellSpacing(3);
-		gridSelecionar.setCellPadding(3);
-		gridSelecionar.setBorderWidth(0);		
+		FlexTable flexTable = new FlexTable();
+		flexTable.setCellSpacing(3);
+		flexTable.setCellPadding(3);
+		flexTable.setBorderWidth(0);		
 
 		Label lblAluno = new Label(txtConstants.usuarioPaisAssociados());
 		lblAluno.setStyleName("design_label");
@@ -185,19 +192,23 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	    multiBoxPaisAssociado.setVisibleItemCount(10);	
 	    multiBoxPaisAssociado.setStyleName("design_text_boxes");
 	    
-	    gridSelecionar.setWidget(0, 0, gridFiltrar);
-	    gridSelecionar.setWidget(0, 1, new InlineHTML("&nbsp;"));
-	    gridSelecionar.setWidget(0, 2, lblAluno);
-	    gridSelecionar.setWidget(1, 0, multiBoxPaisFiltrado);
-	    gridSelecionar.setWidget(1, 1, gridBotoes);
-	    gridSelecionar.setWidget(1, 2, multiBoxPaisAssociado);	    
+	    flexTable.setWidget(0, 0, flexTableFiltrar);
+	    flexTable.setWidget(0, 1, new InlineHTML("&nbsp;"));
+	    flexTable.setWidget(0, 2, lblAluno);
+	    flexTable.setWidget(1, 0, multiBoxPaisFiltrado);
+	    flexTable.setWidget(1, 1, flexTableBotoes);
+	    flexTable.setWidget(1, 2, multiBoxPaisAssociado);	 
+	    flexTable.setWidget(2,0,new InlineHTML("&nbsp;"));
+	    flexTable.setWidget(3,0,drawPassoTresSubmeterAssociacao());
+	    flexTable.getFlexCellFormatter().setColSpan(3, 0, 3);
+	    flexTable.getFlexCellFormatter().setAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 		
-	    mpPanel.add(gridSelecionar);
+	    mpPanel.add(flexTable);
 	    
 		callbackGetPaisFiltro = new AsyncCallback<ArrayList<Usuario>>() {
 
 			public void onSuccess(ArrayList<Usuario> list) {
-				
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelPaisLoading.setVisible(false);				
 				
 				//Begin Cleaning fields
@@ -228,7 +239,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		callbackGetPaisAssociados = new AsyncCallback<ArrayList<Usuario>>() {
 
 			public void onSuccess(ArrayList<Usuario> list) {
-				
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelAlunoLoading.setVisible(false);				
 				
 				//Begin Cleaning fields
@@ -259,10 +270,6 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	
 	
 	public VerticalPanel drawPassoTresSubmeterAssociacao(){
-		
-//		MpPanelPageMainView mpPanel = new MpPanelPageMainView("3 - Por favor, clique no botao submeter para finalizar a associacao", "images/categorycheck.png");
-//		mpPanel.setWidth(Integer.toString(CadastroCurso.intWidthTable)+"px");
-		
 
 		FlexTable flexTable = new FlexTable();	
 		flexTable.setCellSpacing(3);
@@ -270,9 +277,10 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		flexTable.setBorderWidth(0);		
 
 		
-		VerticalPanel vPanel = new VerticalPanel();
+		VerticalPanel vPanel = new VerticalPanel();		
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		vPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+		vPanel.setWidth("100");
+//		vPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
 
 		MpImageButton btnSubmeterAssociacao = new MpImageButton(txtConstants.usuarioAssociarPaisAluno(), "images/image002.png");
 		btnSubmeterAssociacao.addClickHandler(new ClickHandlerSubmeterAssociarPaisAoAluno());		
@@ -280,7 +288,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 
 		flexTable.setWidget(0, 0, btnSubmeterAssociacao);
 		flexTable.setWidget(0, 1, mpPanelAssociandoLoading);
-		flexTable.setWidget(0, 2, new InlineHTML("&nbsp;"));
+//		flexTable.setWidget(0, 2, new InlineHTML("&nbsp;"));
 
 		vPanel.add(flexTable);
 		vPanel.add(new InlineHTML("&nbsp;"));
@@ -460,3 +468,4 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	
 
 }
+

@@ -111,6 +111,7 @@ public class PeriodoServer {
 		
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -145,6 +146,7 @@ public class PeriodoServer {
 			data = getPeriodoParameters(psPeriodo.executeQuery());
 			
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -175,6 +177,7 @@ public class PeriodoServer {
 			data = getPeriodoParameters(psPeriodo.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -203,6 +206,7 @@ public class PeriodoServer {
 			data = getPeriodoParameters(psPeriodo.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -231,6 +235,7 @@ public class PeriodoServer {
 			data = getPeriodoParameters(psPeriodo.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -343,6 +348,7 @@ public class PeriodoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			currentPeriodo=null;
 			System.err.println(sqlex.getMessage());
 		}
 		

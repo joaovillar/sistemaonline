@@ -41,6 +41,7 @@ public class TipoComunicadoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();

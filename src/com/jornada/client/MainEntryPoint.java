@@ -48,9 +48,15 @@ public class MainEntryPoint implements EntryPoint {
 	TextConstants txtConstants;
 	
 
-	public void onModuleLoad() {	
+	public void onModuleLoad() {
 		
 		txtConstants = GWT.create(TextConstants.class);
+		
+		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
+		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
+		mpPanelLoading.setTxtLoading(txtConstants.geralCarregando());
+		mpPanelLoading.show();
+		mpPanelLoading.setVisible(false);	
 	    
 		vPanelPage = new VerticalPanel();
 		vPanelPage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -72,6 +78,8 @@ public class MainEntryPoint implements EntryPoint {
 		
 		RootPanel.get().add(vPanelPage);	
 		
+
+		
 	  }
 	
 	
@@ -87,12 +95,6 @@ public class MainEntryPoint implements EntryPoint {
 	
 	
 	public void displayLoginPage(){
-		
-		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
-		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
-		mpPanelLoading.setTxtLoading(txtConstants.geralCarregando());
-		mpPanelLoading.show();
-		mpPanelLoading.setVisible(false);			
 		
 		MpPanelLogin mpPanelLogin = new MpPanelLogin(txtConstants.loginAcessarEscola(), "images/sign_in.png");
 
@@ -166,14 +168,17 @@ public class MainEntryPoint implements EntryPoint {
 	         @Override
 	         public void onFailure(Throwable caught)
 	         {
+	        	 mpPanelLoading.setVisible(false);
 	        	 displayLoginPage();
 	         }
 	  
 	         @Override
 	         public void onSuccess(Usuario user)
 	         {
+	        	 
 	             if (user == null)
 	             {
+	            	 mpPanelLoading.setVisible(false);
 	                 displayLoginPage();
 //                 	mpPanelLoading.setVisible(false);
 //                    Window.alert(txtConstants.loginAcessoNegado());
@@ -190,6 +195,7 @@ public class MainEntryPoint implements EntryPoint {
 
 	                 } else
 	                 {
+	                	 mpPanelLoading.setVisible(false);
 	                	 displayLoginPage();
 	                 }
 	             }

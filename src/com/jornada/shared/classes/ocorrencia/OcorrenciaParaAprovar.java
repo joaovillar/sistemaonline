@@ -1,8 +1,9 @@
-package com.jornada.shared.classes;
+package com.jornada.shared.classes.ocorrencia;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class OcorrenciaAluno implements Serializable{
+public class OcorrenciaParaAprovar implements Serializable{
 
 	private static final long serialVersionUID = 5726512755511867012L;
 	
@@ -10,19 +11,18 @@ public class OcorrenciaAluno implements Serializable{
 	private String nomePeriodo;
 	private String nomeDisciplina;
 	private String nomeConteudoProgramatico;
+	private String usuarioPrimeiroNome;
+	private String usuarioSobreNome;
 	private int idOcorrencia;
 	private int idUsuario;
 	private String assunto;
 	private String descricao;
-	private String data;
+	private Date data;
 	private String hora;
 	private boolean paiCiente;
-	private Usuario usuario;
+	private boolean liberarLeituraPai;
 		
-	public OcorrenciaAluno(){
-		
-		usuario = new Usuario();
-		
+	public OcorrenciaParaAprovar(){		
 	}
 
 	public String getNomeCurso() {
@@ -73,11 +73,11 @@ public class OcorrenciaAluno implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public String getData() {
+	public Date getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(Date data) {
 		this.data = data;
 	}
 
@@ -113,15 +113,30 @@ public class OcorrenciaAluno implements Serializable{
 		this.idUsuario = idUsuario;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public boolean isLiberarLeituraPai() {
+		return liberarLeituraPai;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setLiberarLeituraPai(boolean liberarLeituraPai) {
+		this.liberarLeituraPai = liberarLeituraPai;
+	}
+
+	public String getUsuarioPrimeiroNome() {
+		return usuarioPrimeiroNome;
+	}
+
+	public void setUsuarioPrimeiroNome(String usuarioPrimeiroNome) {
+		this.usuarioPrimeiroNome = usuarioPrimeiroNome;
+	}
+
+	public String getUsuarioSobreNome() {
+		return usuarioSobreNome;
+	}
+
+	public void setUsuarioSobreNome(String usuarioSobreNome) {
+		this.usuarioSobreNome = usuarioSobreNome;
 	}
 	
 	
 	
-
 }

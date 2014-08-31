@@ -56,6 +56,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceTopico;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.Topico;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class EditarTopico extends VerticalPanel {
 
@@ -138,7 +139,8 @@ public class EditarTopico extends VerticalPanel {
 //		Label lblEmpty2 = new Label("Por favor, selecione um Conteúdo Programático.");
 
 		cellTable = new CellTable<Topico>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialTopico.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialTopico.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setEmptyTableWidget(lblEmpty);
@@ -154,7 +156,9 @@ public class EditarTopico extends VerticalPanel {
 		mpPager.setPageSize(15);
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialTopico.intWidthTable+30)+"px",Integer.toString(TelaInicialTopico.intHeightTable-180)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialTopico.intWidthTable+30)+"px",Integer.toString(TelaInicialTopico.intHeightTable-180)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialTopico.intHeightTable-180)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);		
 		
@@ -184,6 +188,7 @@ public class EditarTopico extends VerticalPanel {
 //		vPanelEditGrid.add(mpPager);
 		vPanelEditGrid.add(flexTableFiltrar);
 		vPanelEditGrid.add(scrollPanel);
+		vPanelEditGrid.setWidth("100%");
 
 
 		/************************* Begin Callback's *************************/
@@ -191,6 +196,11 @@ public class EditarTopico extends VerticalPanel {
 		callbackUpdateRow = new AsyncCallback<Boolean>() {
 
 			public void onSuccess(Boolean success) {
+				if(success==false){
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.topicoErroAtualizar()+ " "+txtConstants.geralRegarregarPagina());
+					mpDialogBoxWarning.showDialog();					
+				}
 
 			}
 
@@ -224,6 +234,7 @@ public class EditarTopico extends VerticalPanel {
 		};
 		/*********************** End Callbacks **********************/
 
+		setWidth("100%");
 		super.add(vPanelEditGrid);
 		
 	}
@@ -354,7 +365,7 @@ public class EditarTopico extends VerticalPanel {
 
 						@Override
 						public void onSuccess(ArrayList<Topico> list) {
-
+							MpUtilClient.isRefreshRequired(list);
 							mpPanelLoading.setVisible(false);
 							dataProvider.getList().clear();
 							arrayListBackup.clear();

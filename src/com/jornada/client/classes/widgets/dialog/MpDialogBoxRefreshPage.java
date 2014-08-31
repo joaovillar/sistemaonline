@@ -28,7 +28,7 @@ public class MpDialogBoxRefreshPage extends DialogBox implements ClickListener {
 	
 //	private String title; 
 	private String bodyText;
-	private String TYPE_MESSAGE;	
+//	private String TYPE_MESSAGE;	
 	
 	static TextConstants txtConstants = GWT.create(TextConstants.class);
 	
@@ -41,7 +41,7 @@ public class MpDialogBoxRefreshPage extends DialogBox implements ClickListener {
 
 //		title = txtConstants.geralAviso();
 		setText(txtConstants.geralAviso());
-		TYPE_MESSAGE = MpDialogBox.TYPE_WARNING;
+//		TYPE_MESSAGE = MpDialogBox.TYPE_WARNING;
 		bodyText = txtConstants.geralRecarregarAmbiente();
 		
 		 
@@ -64,13 +64,13 @@ public class MpDialogBoxRefreshPage extends DialogBox implements ClickListener {
 		    HorizontalPanel horizontalPanel = new HorizontalPanel();
 		    dock.add(horizontalPanel, DockPanel.NORTH);
 		    
-		    String strImgAddress="";
-		    if(TYPE_MESSAGE.equals(TYPE_CONFIRMATION)){
-		    	strImgAddress = "images/image002.png";
-		    }
-		    else if(TYPE_MESSAGE.equals(TYPE_WARNING)){
-		    	strImgAddress = "images/refresh-icon.png";
-		    }		    
+		    String strImgAddress="images/refresh-icon.png";
+//		    if(TYPE_MESSAGE.equals(TYPE_CONFIRMATION)){
+//		    	strImgAddress = "images/image002.png";
+//		    }
+//		    else if(TYPE_MESSAGE.equals(TYPE_WARNING)){
+//		    	strImgAddress = "images/refresh-icon.png";
+//		    }		    
 		    
 		    Image image = new Image(strImgAddress);
 		    horizontalPanel.add(image);

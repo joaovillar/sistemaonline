@@ -40,7 +40,7 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceOcorrencia;
-import com.jornada.shared.classes.OcorrenciaAluno;
+import com.jornada.shared.classes.ocorrencia.OcorrenciaAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class VisualizarPaisOcorrencia extends VerticalPanel {
@@ -119,7 +119,8 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 		Label lblEmpty1 = new Label(txtConstants.ocorrenciaNehumaOcorrencia());
 
 		cellTable = new CellTable<OcorrenciaAluno>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialPaisOcorrencia.intWidthTable)+ "px");		
+//		cellTable.setWidth(Integer.toString(TelaInicialPaisOcorrencia.intWidthTable)+ "px");		
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 
@@ -158,7 +159,9 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 		
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialPaisOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialPaisOcorrencia.intHeightTable-110)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialPaisOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialPaisOcorrencia.intHeightTable-110)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialPaisOcorrencia.intHeightTable-110)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);	
 		
@@ -167,16 +170,25 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 //		vPanelEditGrid.add(mpPager);
 		vPanelEditGrid.add(flexTableFiltrar);
 		vPanelEditGrid.add(scrollPanel);
+		vPanelEditGrid.setWidth("100%");
 		
 		
 		callbackUpdateRow = new AsyncCallback<Boolean>() {
 
 			public void onSuccess(Boolean success) {
+				mpPanelLoading.setVisible(false);	
 //				paiCienteColumn.getValue(object);
+				if(success==false){
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
+					mpDialogBoxWarning.showDialog();
+					
+				}
 
 			}
 
 			public void onFailure(Throwable caught) {
+				mpPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
 				mpDialogBoxWarning.showDialog();
@@ -185,7 +197,7 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 
 
 
-
+		this.setWidth("100%");
 		super.add(vPanelEditGrid);
 
 	}
@@ -216,6 +228,7 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 
 					@Override
 					public void onSuccess(ArrayList<OcorrenciaAluno> list) {
+						MpUtilClient.isRefreshRequired(list);
 						mpPanelLoading.setVisible(false);	
 						dataProvider.getList().clear();
 						arrayListBackup.clear();
@@ -311,7 +324,8 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 		dataColumn = new Column<OcorrenciaAluno, Date>(new DatePickerCell()) {
 			@Override
 			public Date getValue(OcorrenciaAluno object) {			    
-				return MpUtilClient.convertStringToDate(object.getData());
+//				return MpUtilClient.convertStringToDate(object.getData());
+				return object.getData();
 			}
 		};	
 
@@ -461,8 +475,8 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 
 					String strOcorrencia = dataProvider.getList().get(i).getAssunto();
 					String strDescricao = dataProvider.getList().get(i).getDescricao();
-//					String strData = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getData(), "EEEE, MMMM dd, yyyy");
-					String strData = dataProvider.getList().get(i).getData();
+					String strData = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getData(), "EEEE, MMMM dd, yyyy");
+//					String strData = dataProvider.getList().get(i).getData();
 					String strHora = dataProvider.getList().get(i).getHora();
 					String strCurso = dataProvider.getList().get(i).getNomeCurso();
 					String strPeriodo = dataProvider.getList().get(i).getNomePeriodo();

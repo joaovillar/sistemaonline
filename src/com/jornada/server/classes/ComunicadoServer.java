@@ -32,8 +32,6 @@ public class ComunicadoServer {
 			"  id_tipo_comunicado="+Integer.toString(TipoComunicado.MURAL)+" ) " +
 			"and (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
 	
-
-	
 	
 	public static boolean AdicionarComunicado(Comunicado object) {
 
@@ -50,6 +48,7 @@ public class ComunicadoServer {
 //			if (object.getData() == null) {
 //				object.setData(null);
 //			}
+			
 
 			int count = 0;
 			PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_INSERT_COMUNICADO);
@@ -97,7 +96,9 @@ public class ComunicadoServer {
 //				object.setData(date);
 //			}
 			
-		
+
+//			String nomeImagem= object.getNomeImagem().replace(strRemoveImageAddress, "");
+			
 			//"UPDATE comunicado set assunto=?, descricao=?, data=?, hora=?, id_tipo_comunicado=? where id_comunicado=?;";
 			int count = 0;
 			PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_UPDATE_COMUNICADO);
@@ -111,6 +112,7 @@ public class ComunicadoServer {
 			
 			ps.setInt(++count, object.getIdTipoComunicado());
 			ps.setString(++count, object.getNomeImagem());
+//			ps.setString(++count, nomeImagem);
 			ps.setInt(++count, object.getIdComunicado());
 
 			int numberUpdate = ps.executeUpdate();

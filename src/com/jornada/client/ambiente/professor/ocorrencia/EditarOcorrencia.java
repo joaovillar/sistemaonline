@@ -78,17 +78,18 @@ public class EditarOcorrencia extends VerticalPanel {
 	private ListDataProvider<Ocorrencia> dataProvider = new ListDataProvider<Ocorrencia>();	
 	
 	private TextBox txtSearch;
-	ArrayList<Ocorrencia> arrayListBackup = new ArrayList<Ocorrencia>();
+	private ArrayList<Ocorrencia> arrayListBackup = new ArrayList<Ocorrencia>();
 
 	private MpSelectionCursoAmbienteProfessor listBoxCurso;
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;	
 	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
 	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;
 	
+	private int intSelectedIndexToDelete;
 	
-	MpPanelLoading mpPanelLoading = new MpPanelLoading("images/radar.gif");
-	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
-	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
+	private MpPanelLoading mpPanelLoading = new MpPanelLoading("images/radar.gif");
+	private MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
+	private MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	
 	private LinkedHashMap<String, String> listaHora = new LinkedHashMap<String, String>();
 	
@@ -113,21 +114,24 @@ public class EditarOcorrencia extends VerticalPanel {
 		vPanelEditarOcorrencia = new VerticalPanel();
 		
 		vPanelEditarTabela = new VerticalPanel();
+		vPanelEditarTabela.setWidth("100%");
 		vPanelEditarTabela.add(abrirTelaEditar());
 
 		
 		adicionarOcorrencia = new AdicionarOcorrencia(this.telaInicialProfessorOcorrencia, EnumOcorrencia.EDITAR);
 		adicionarOcorrencia.criarTelaEditar(EditarOcorrencia.this);
-		vPanelEditarDetalhes = new VerticalPanel();		
+		vPanelEditarDetalhes = new VerticalPanel();
+		vPanelEditarDetalhes.setWidth("100%");
 		vPanelEditarDetalhes.add(adicionarOcorrencia);
 		vPanelEditarDetalhes.setVisible(false);
 		
 		
 		vPanelEditarOcorrencia.add(vPanelEditarTabela);
 		vPanelEditarOcorrencia.add(vPanelEditarDetalhes);
-//		
+		vPanelEditarOcorrencia.setWidth("100%");
+		vPanelEditarOcorrencia.setBorderWidth(0);
 
-
+		this.setWidth("100%");
 		super.add(vPanelEditarOcorrencia);
 		
 	}
@@ -172,7 +176,8 @@ public class EditarOcorrencia extends VerticalPanel {
 		Label lblEmpty = new Label(txtConstants.ocorrenciaSelecionarConteudo());
 
 		cellTable = new CellTable<Ocorrencia>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setLoadingIndicator(lblEmpty);
@@ -209,7 +214,9 @@ public class EditarOcorrencia extends VerticalPanel {
 		flexTableFiltrar.setWidget(0, 3, btnFiltrar);		
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable-180)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable-180)+"px");
+		scrollPanel.setWidth("100%");
+		scrollPanel.setHeight(Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable-180)+"px");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);			
 		
@@ -219,6 +226,8 @@ public class EditarOcorrencia extends VerticalPanel {
 //		vPanelEdit.add(mpPager);
 		vPanelEdit.add(flexTableFiltrar);
 		vPanelEdit.add(scrollPanel);
+		vPanelEdit.setWidth("100%");
+		vPanelEdit.setBorderWidth(0);
 
 
 		/************************* Begin Callback's *************************/
@@ -241,7 +250,11 @@ public class EditarOcorrencia extends VerticalPanel {
 			public void onSuccess(Boolean success) {
 
 				if (success == true) {
-					populateGridOcorrencia();
+//					populateGridOcorrencia();
+					dataProvider.getList().remove(intSelectedIndexToDelete);
+					dataProvider.refresh();	
+					telaInicialProfessorOcorrencia.updateVisualizarOcorrenciaPopulateGrid();
+					telaInicialProfessorOcorrencia.updateAprovarOcorrenciaPopulateGrid();
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroAtualizar());
@@ -338,7 +351,7 @@ public class EditarOcorrencia extends VerticalPanel {
 
 						@Override
 						public void onSuccess(ArrayList<Ocorrencia> list) {
-
+							MpUtilClient.isRefreshRequired(list);
 							mpPanelLoading.setVisible(false);
 							dataProvider.getList().clear();
 							arrayListBackup.clear();
@@ -381,6 +394,12 @@ public class EditarOcorrencia extends VerticalPanel {
 				ocorrenciaAux.setIdPeriodo(Integer.parseInt(listBoxPeriodo.getValue(listBoxPeriodo.getSelectedIndex())));
 				ocorrenciaAux.setIdDisciplina(Integer.parseInt(listBoxDisciplina.getValue(listBoxDisciplina.getSelectedIndex())));
 				ocorrenciaAux.setIdConteudoProgramatico(Integer.parseInt(listBoxConteudoProgramatico.getValue(listBoxConteudoProgramatico.getSelectedIndex())));
+				
+				ocorrenciaAux.setNomeCurso(listBoxCurso.getItemText(listBoxCurso.getSelectedIndex()));
+				ocorrenciaAux.setNomePeriodo(listBoxPeriodo.getItemText(listBoxPeriodo.getSelectedIndex()));
+				ocorrenciaAux.setNomeDisciplina(listBoxDisciplina.getItemText(listBoxDisciplina.getSelectedIndex()));
+				ocorrenciaAux.setNomeConteudoProgramatico(listBoxConteudoProgramatico.getItemText(listBoxConteudoProgramatico.getSelectedIndex()));
+				
 				ocorrenciaAux.setOcorrencia(object);
 
 				adicionarOcorrencia.popularCampos(ocorrenciaAux);
@@ -412,6 +431,8 @@ public class EditarOcorrencia extends VerticalPanel {
 			switch (DOM.eventGetType((Event) event)) {
 			case Event.ONCLICK:
 				final Ocorrencia object = (Ocorrencia) context.getKey();
+				intSelectedIndexToDelete = context.getIndex();
+
 				@SuppressWarnings("unused")
 				CloseHandler<PopupPanel> closeHandler;
 
@@ -428,6 +449,7 @@ public class EditarOcorrencia extends VerticalPanel {
 
 //									GWTServiceTopico.Util.getInstance().deleteTopicoRow(object.getIdTopico(), callbackDelete);
 									GWTServiceOcorrencia.Util.getInstance().deleteOcorrenciaRow(object.getIdOcorrencia(), callbackDelete);
+
 
 								}
 							}
@@ -508,15 +530,17 @@ public class EditarOcorrencia extends VerticalPanel {
 		dataColumn = new Column<Ocorrencia, Date>(new DatePickerCell()) {
 			@Override
 			public Date getValue(Ocorrencia object) {
-				return MpUtilClient.convertStringToDate(object.getData());
+//				return MpUtilClient.convertStringToDate(object.getData());
+				return object.getData();
 			}
 		};
 		dataColumn.setFieldUpdater(new FieldUpdater<Ocorrencia, Date>() {
 			@Override
 			public void update(int index, Ocorrencia object, Date value) {
 				// Called when the user changes the value.
-				object.setData(MpUtilClient.convertDateToString(value));
+//				object.setData(MpUtilClient.convertDateToString(value));
 //				GWTServiceAvaliacao.Util.getInstance().updateRow(object,callbackUpdateRow);
+				object.setData(value);
 				GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(object, callbackUpdateRow);
 			}
 		});	
@@ -650,8 +674,9 @@ public class EditarOcorrencia extends VerticalPanel {
 					String strAssunto = dataProvider.getList().get(i).getAssunto();			
 					String strDescricao = dataProvider.getList().get(i).getDescricao();
 					
-					Date date = MpUtilClient.convertStringToDate(dataProvider.getList().get(i).getData());					
-					String strData = MpUtilClient.convertDateToString(date, "EEEE, MMMM dd, yyyy");
+//					Date date = MpUtilClient.convertStringToDate(dataProvider.getList().get(i).getData());					
+//					String strData = MpUtilClient.convertDateToString(date, "EEEE, MMMM dd, yyyy");
+					String strData = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getData(), "EEEE, MMMM dd, yyyy");
 
 					String strHora = dataProvider.getList().get(i).getHora();
 					String strJuntaTexto = strAssunto.toUpperCase() + " " + strDescricao.toUpperCase() ;

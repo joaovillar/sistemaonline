@@ -3,9 +3,7 @@ package com.jornada.client.ambiente.professor.topico;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.MainView;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
@@ -41,19 +39,20 @@ public class TelaInicialTopicoProfessor extends Composite {
 		adicionarTopicoProfessor = new AdicionarTopicoProfessor(this);
 		editarTopicoProfessor = new EditarTopicoProfessor(this);
 
-		TabLayoutPanel stackPanel = new TabLayoutPanel(2.5, Unit.EM);
-		stackPanel.setPixelSize(intWidthTable + 50, intHeightTable);
-		stackPanel.setAnimationDuration(500);
-		stackPanel.setAnimationVertical(true);
+		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);
+//		stackPanel.setPixelSize(intWidthTable + 50, intHeightTable);
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable)+"px");
+		tabLayoutPanel.setAnimationDuration(500);
+		tabLayoutPanel.setAnimationVertical(true);
 
-		stackPanel.add(adicionarTopicoProfessor, new MpHeaderWidget(txtConstants.topicoAdicionar(),"images/plus-circle.png"));
-		stackPanel.add(editarTopicoProfessor, new MpHeaderWidget(txtConstants.topicoEditar(),"images/comment_edit.png"));
+		tabLayoutPanel.add(adicionarTopicoProfessor, new MpHeaderWidget(txtConstants.topicoAdicionar(),"images/plus-circle.png"));
+		tabLayoutPanel.add(editarTopicoProfessor, new MpHeaderWidget(txtConstants.topicoEditar(),"images/comment_edit.png"));
 
-		VerticalPanel verticalPanelPage = new VerticalPanel();
-		verticalPanelPage.add(stackPanel);
-		verticalPanelPage.add(new InlineHTML("&nbsp;"));
+//		VerticalPanel verticalPanelPage = new VerticalPanel();
+//		verticalPanelPage.add(stackPanel);
+//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
 
-		initWidget(verticalPanelPage);
+		initWidget(tabLayoutPanel);
 
 	}
 

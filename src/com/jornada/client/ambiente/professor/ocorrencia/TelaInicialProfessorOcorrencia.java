@@ -3,12 +3,11 @@ package com.jornada.client.ambiente.professor.ocorrencia;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.MainView;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
+import com.jornada.shared.classes.TipoUsuario;
 
 public class TelaInicialProfessorOcorrencia extends Composite{
 	
@@ -21,6 +20,7 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 	private AdicionarOcorrencia adicionarOcorrencia;
 	private EditarOcorrencia editarOcorrencia;
 	private VisualizarOcorrencia visualizarOcorrencia;
+	private AprovarOcorrencia aprovarOcorrencia;
 	
 	private MainView mainView;
 
@@ -48,23 +48,33 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 		editarOcorrencia = new EditarOcorrencia(this);
 		visualizarOcorrencia = new VisualizarOcorrencia(this);
 		
+		if(mainView.getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.COORDENADOR || mainView.getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.ADMINISTRADOR)
+		{
+			aprovarOcorrencia = AprovarOcorrencia.getInstance(this);
+		}
+		
 		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
-		TabLayoutPanel stackPanel = new TabLayoutPanel(2.5, Unit.EM);		
-		stackPanel.setPixelSize(intWidthTable+50, intHeightTable);
-		stackPanel.setAnimationDuration(500);
-		stackPanel.setAnimationVertical(true);
+		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
+//		stackPanel.setPixelSize(intWidthTable+50, intHeightTable);
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable)+"px");
+		tabLayoutPanel.setAnimationDuration(500);
+		tabLayoutPanel.setAnimationVertical(true);
 
 		
-		stackPanel.add(adicionarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaAdicionarNovaOcorrencia(), "images/plus-circle.png"));
-		stackPanel.add(editarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaEditar(), "images/comment_edit.png"));				
-		stackPanel.add(visualizarOcorrencia, new MpHeaderWidget("Visualizar Ocorrências", "images/organizacao.png"));
+		tabLayoutPanel.add(adicionarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaAdicionarNovaOcorrencia(), "images/plus-circle.png"));
+		tabLayoutPanel.add(editarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaEditar(), "images/comment_edit.png"));				
+		tabLayoutPanel.add(visualizarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaVisualizar(), "images/organizacao.png"));
+		
+		if(mainView.getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.COORDENADOR || mainView.getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.ADMINISTRADOR){
+			tabLayoutPanel.add(aprovarOcorrencia, new MpHeaderWidget(txtConstants.ocorrenciaAprovar(), "images/image002.png"));
+		}
 		
 		
-		VerticalPanel verticalPanelPage = new VerticalPanel();		
-		verticalPanelPage.add(stackPanel);
-		verticalPanelPage.add(new InlineHTML("&nbsp;"));
+//		VerticalPanel verticalPanelPage = new VerticalPanel();		
+//		verticalPanelPage.add(stackPanel);
+//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
 				
-     	initWidget(verticalPanelPage);
+     	initWidget(tabLayoutPanel);
 		
 	}
 	
@@ -83,6 +93,14 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 	protected void updateVisualizarOcorrenciaPopulateGrid(){
 //		editarOcorrencia.populateGridOcorrencia();
 		visualizarOcorrencia.populateGridOcorrencia();
+	}
+	
+	protected void updateAprovarOcorrenciaPopulateGrid(){
+//		editarOcorrencia.populateGridOcorrencia();
+		if(mainView.getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.COORDENADOR || mainView.getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.ADMINISTRADOR)
+		{
+			aprovarOcorrencia.populateGrid();
+		}
 	}
 
 }

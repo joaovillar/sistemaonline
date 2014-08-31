@@ -131,6 +131,7 @@ public class DisciplinaServer {
 			data = getDisciplinaParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
@@ -152,6 +153,7 @@ public class DisciplinaServer {
 			data = getDisciplinaParameters(ps.executeQuery());		
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
@@ -173,6 +175,7 @@ public class DisciplinaServer {
 			data = getDisciplinaParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);			
@@ -196,12 +199,12 @@ public class DisciplinaServer {
 			
 			int count=0;
 			ps.setInt(++count, id_periodo);	
-			ps.setString(++count, strSearch);	
-			
+			ps.setString(++count, strSearch);			
 			
 			data = getDisciplinaParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -232,25 +235,8 @@ public class DisciplinaServer {
 			
 			data = getDisciplinaParameters(ps.executeQuery());
 
-//			ResultSet rs = ps.executeQuery();
-//			while (rs.next()) 
-//			{
-//
-//				Disciplina currentDisciplina = new Disciplina();
-//				
-//				currentDisciplina.setIdPeriodo(rs.getInt("id_periodo"));
-//				currentDisciplina.setIdDisciplina(rs.getInt("id_disciplina"));
-//				currentDisciplina.setIdUsuario(rs.getInt("id_usuario"));
-//				currentDisciplina.setNome(rs.getString("nome_disciplina"));				
-//				currentDisciplina.setCargaHoraria(rs.getInt("carga_horaria"));
-//				currentDisciplina.setDescricao(rs.getString("descricao"));
-//				currentDisciplina.setObjetivo(rs.getString("objetivo"));
-////				currentCurso.put("id_departamento", rs.getDate("id_departamento"));
-//
-//				data.add(currentDisciplina);
-//			}
-
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -298,6 +284,7 @@ public class DisciplinaServer {
 //			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();

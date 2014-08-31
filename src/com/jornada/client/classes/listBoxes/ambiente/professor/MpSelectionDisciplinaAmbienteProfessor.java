@@ -25,20 +25,31 @@ public class MpSelectionDisciplinaAmbienteProfessor extends MpSelection {
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Disciplina>>() {
 			public void onSuccess(ArrayList<Disciplina> lista) {
-				
-				finishLoadingListBox();		
+				try {
+					finishLoadingListBox();
 
-				for (Disciplina object : lista) {
-					addItem(object.getNome(),Integer.toString(object.getIdDisciplina()));
-				}		
+					for (Disciplina object : lista) {
+						addItem(object.getNome(),Integer.toString(object.getIdDisciplina()));
+					}
 
-				setVisibleItemCount(1);
+					setVisibleItemCount(1);
 
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionDisciplinaAmbienteProfessor.this);
-				
+					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
+					// MpSelectionDisciplinaAmbienteProfessor.this);
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionDisciplinaAmbienteProfessor.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+					}
+
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
+				}
+
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 

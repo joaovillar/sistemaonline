@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
-import com.jornada.client.ambiente.coordenador.usuario.TelaInicialUsuario;
+import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.MpSelectionConteudoProgramatico;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
@@ -49,7 +49,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	
 	static TextConstants txtConstants = GWT.create(TextConstants.class);
 
-	private AsyncCallback<Boolean> callbackAdd;
+//	private AsyncCallback<Boolean> callbackAdd;
 	
 	private OcorrenciaAux ocorrenciaAux;
 	
@@ -67,6 +67,11 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
 	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;	
 	private MpSelectionConteudoProgramatico listBoxConteudo;	
+	
+	private MpSelection listBoxCursoUpdate;
+	private MpSelection listBoxPeriodoUpdate;
+	private MpSelection listBoxDisciplinaUpdate;	
+	private MpSelection listBoxConteudoUpdate;		
 	
 	private ListBox multiBoxAlunosFiltrado;
 	private ListBox multiBoxAlunosAssociado;	
@@ -86,7 +91,11 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	
 	private TelaInicialProfessorOcorrencia telaInicialProfessorOcorrencia;
 	private EnumOcorrencia enumOcorrencia;
+	
+	
+	
 
+	
 	public AdicionarOcorrencia(TelaInicialProfessorOcorrencia telaInicialProfessorOcorrencia, EnumOcorrencia enumOcorrencia) {
 		
 		this.telaInicialProfessorOcorrencia = telaInicialProfessorOcorrencia;
@@ -100,6 +109,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		mpPanelLoading.setVisible(false);
 		
 		vBodyPanel = new VerticalPanel();
+		vBodyPanel.setWidth("100%");
 		
 		if (enumOcorrencia == EnumOcorrencia.ADICIONAR) {
 			abrirTelaCadastro();
@@ -108,7 +118,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 
 		}
 		
-		
+		this.setWidth("100%");
 		super.add(vBodyPanel);
 
 	}
@@ -118,35 +128,42 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(mpPanelAssociarAlunos());
 		vBodyPanel.add(new MpSpaceVerticalPanel());
-		vBodyPanel.add(gridBotaoSalvar());
+//		vBodyPanel.add(gridBotaoSalvar());
 	}
 	
 	public void criarTelaEditar(EditarOcorrencia editarOcorrencia){
-		vBodyPanel.add(mpPanelFormularioOcorrencia());
+		vBodyPanel.add(mpPanelFormularioOcorrenciaUpdate());
 		vBodyPanel.add(new MpSpaceVerticalPanel());
 		vBodyPanel.add(mpPanelAssociarAlunos());
 		vBodyPanel.add(new MpSpaceVerticalPanel());
-		vBodyPanel.add(gridBotaoEditar());
+//		vBodyPanel.add(gridBotaoEditar());
 		this.editarOcorrencia = editarOcorrencia;
 	}
 	
 	public void popularCampos(OcorrenciaAux ocorrenciaAux){
 		
 		this.ocorrenciaAux = ocorrenciaAux;
-		listBoxCurso.setSelectItem(this.ocorrenciaAux.getIdCurso());
-		listBoxPeriodo.setSelectItem(this.ocorrenciaAux.getIdPeriodo());
-		listBoxDisciplina.setSelectItem(this.ocorrenciaAux.getIdDisciplina());
-		listBoxConteudo.setSelectItem(this.ocorrenciaAux.getIdConteudoProgramatico());
 		
-		listBoxCurso.setEnabled(false);
-		listBoxPeriodo.setEnabled(false);
-		listBoxDisciplina.setEnabled(false);
-		listBoxConteudo.setEnabled(false);		
+//		listBoxCurso.setSelectItem(this.ocorrenciaAux.getIdCurso());
+//		listBoxPeriodo.setSelectItem(this.ocorrenciaAux.getIdPeriodo());
+//		listBoxDisciplina.setSelectItem(this.ocorrenciaAux.getIdDisciplina());
+//		listBoxConteudo.setSelectItem(this.ocorrenciaAux.getIdConteudoProgramatico());
+		
+		listBoxCursoUpdate.addItem(this.ocorrenciaAux.getNomeCurso(), Integer.toString(this.ocorrenciaAux.getIdCurso()));
+		listBoxPeriodoUpdate.addItem(this.ocorrenciaAux.getNomePeriodo(), Integer.toString(this.ocorrenciaAux.getIdPeriodo()));
+		listBoxDisciplinaUpdate.addItem(this.ocorrenciaAux.getNomeDisciplina(), Integer.toString(this.ocorrenciaAux.getIdDisciplina()));
+		listBoxConteudoUpdate.addItem(this.ocorrenciaAux.getNomeConteudoProgramatico(), Integer.toString(this.ocorrenciaAux.getIdConteudoProgramatico()));
+		
+		listBoxCursoUpdate.setEnabled(false);
+		listBoxPeriodoUpdate.setEnabled(false);
+		listBoxDisciplinaUpdate.setEnabled(false);
+		listBoxConteudoUpdate.setEnabled(false);		
 		
 		txtAssunto.setText(this.ocorrenciaAux.getOcorrencia().getAssunto());
 		txtDescricao.setText(this.ocorrenciaAux.getOcorrencia().getDescricao());
-//		mpDateBoxData.getDate().setValue(this.ocorrenciaAux.getOcorrencia().getData());
-		mpDateBoxData.getDate().setValue(MpUtilClient.convertStringToDate(this.ocorrenciaAux.getOcorrencia().getData()));
+//		mpDateBoxData.getDate().setValue(MpUtilClient.convertStringToDate(this.ocorrenciaAux.getOcorrencia().getData()));
+		//TODO investigate
+		mpDateBoxData.getDate().setValue(this.ocorrenciaAux.getOcorrencia().getData());
 		mpTimePicker.setTime(MpUtilClient.convertStringToTime(this.ocorrenciaAux.getOcorrencia().getHora()));	
 		
 		multiBoxAlunosAssociado.clear();
@@ -164,13 +181,14 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	public MpPanelPageMainView mpPanelFormularioOcorrencia(){
 		
 		MpPanelPageMainView mpPanelForm = new MpPanelPageMainView(txtConstants.ocorrenciaPreencherCampo(), "images/note2_delete.png");
-		mpPanelForm.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+//		mpPanelForm.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+		mpPanelForm.setWidth("100%");
 		
 		FlexTable layout = new FlexTable();
 		layout.setCellSpacing(2);
 		layout.setCellPadding(2);
 		layout.setBorderWidth(0);
-		layout.setSize(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable),Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable));
+//		layout.setSize(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable),Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable));
 		FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 
 		cellFormatter.setColSpan(0, 0, 0);
@@ -248,67 +266,107 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		mpPanelForm.add(layout);
 		
 		/***********************Begin Callbacks**********************/
-
-		// Callback para adicionar Curso.
-		callbackAdd = new AsyncCallback<Boolean>() {
-
-			public void onFailure(Throwable caught) {
-				mpPanelLoading.setVisible(false);
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroSalvar());
-				mpDialogBoxWarning.showDialog();
-			}
-
-			@Override
-			public void onSuccess(Boolean result) {
-				// lblLoading.setVisible(false);
-				mpPanelLoading.setVisible(false);
-				boolean isSuccess = result;
-				if (isSuccess) {
-
-					int intIdConteudo = listBoxConteudo.getSelectedIndex();
-					intIdConteudo = Integer.parseInt(listBoxConteudo.getValue(intIdConteudo));					
-					
-					if (enumOcorrencia == EnumOcorrencia.ADICIONAR) {
-//						editarOcorrencia.populateGridOcorrencia();
-//						editarOcorrencia.updateClientData();
-						telaInicialProfessorOcorrencia.updateEditarOcorrenciaPopulateGrid();
-						telaInicialProfessorOcorrencia.updateVisualizarOcorrenciaPopulateGrid();
-						cleanFields();
-						mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
-						mpDialogBoxConfirm.setBodyText(txtConstants.ocorrenciaSalva());						
-					}
-					else if (enumOcorrencia == EnumOcorrencia.EDITAR) {
-//						editarOcorrencia.populateGridOcorrencia();
-						telaInicialProfessorOcorrencia.updateEditarOcorrenciaPopulateGrid();
-						telaInicialProfessorOcorrencia.updateVisualizarOcorrenciaPopulateGrid();
-						editarOcorrencia.vPanelEditarDetalhes.setVisible(false);
-						editarOcorrencia.vPanelEditarTabela.setVisible(true);
-						mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
-						mpDialogBoxConfirm.setBodyText(txtConstants.ocorrenciaAtualizada());
-					}
-					
-					mpDialogBoxConfirm.showDialog();
-		
-					
-				} else {
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroSalvar());
-					mpDialogBoxWarning.showDialog();
-				}
-			}
-		};
-
-
 		/***********************End Callbacks**********************/
 		return mpPanelForm;
 		
 	}
 	
+	@SuppressWarnings("deprecation")
+	public MpPanelPageMainView mpPanelFormularioOcorrenciaUpdate(){
+		
+		MpPanelPageMainView mpPanelForm = new MpPanelPageMainView(txtConstants.ocorrenciaPreencherCampo(), "images/note2_delete.png");
+//		mpPanelForm.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+		mpPanelForm.setWidth("100%");
+		
+		FlexTable layout = new FlexTable();
+		layout.setCellSpacing(2);
+		layout.setCellPadding(2);
+		layout.setBorderWidth(0);
+//		layout.setSize(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable),Integer.toString(TelaInicialProfessorOcorrencia.intHeightTable));
+		FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
+
+		cellFormatter.setColSpan(0, 0, 0);
+		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
+		
+		listBoxCursoUpdate = new MpSelection();		
+		listBoxPeriodoUpdate = new MpSelection();		
+		listBoxDisciplinaUpdate = new MpSelection();		
+		listBoxConteudoUpdate = new MpSelection();
+		
+		
+		txtAssunto = new TextBox();
+		txtDescricao = new TextArea();
+		mpDateBoxData = new MpDateBoxWithImage();		
+		mpTimePicker = new MpTimePicker(7,22);		
+		
+
+		txtAssunto.setStyleName("design_text_boxes");
+		txtDescricao.setStyleName("design_text_boxes");
+//		mpDateBoxData.setStyleName("design_text_boxes");
+		mpDateBoxData.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
+
+		
+		Label lblCurso = new Label(txtConstants.curso());
+		Label lblPeriodo = new Label(txtConstants.periodo());
+		Label lblDisciplina = new Label(txtConstants.disciplina());
+		Label lblConteudo = new Label(txtConstants.conteudoProgramatico());
+		Label lblAssunto = new Label(txtConstants.ocorrencia());		
+		Label lblDescricao = new Label(txtConstants.ocorrenciaDescricao());
+		Label lblData = new Label(txtConstants.ocorrenciaData());
+		Label lblHorario = new Label(txtConstants.ocorrenciaHora());
+		
+		lblErroOcorrencia = new MpLabelTextBoxError();
+		lblErroConteudo = new MpLabelTextBoxError();
+		lblErroData = new MpLabelTextBoxError();
+
+		
+		lblCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblPeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblDisciplina.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblConteudo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblAssunto.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblDescricao.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblData.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
+		lblHorario.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		
+		lblCurso.setStyleName("design_label");
+		lblPeriodo.setStyleName("design_label");
+		lblDisciplina.setStyleName("design_label");
+		lblConteudo.setStyleName("design_label");
+		lblAssunto.setStyleName("design_label");
+		lblDescricao.setStyleName("design_label");
+		lblData.setStyleName("design_label");
+		lblHorario.setStyleName("design_label");
+		txtAssunto.setWidth("350px");
+		txtDescricao.setSize("350px", "50px");
+		mpDateBoxData.getDate().setWidth("170px");
+
+
+		// Add some standard form options
+		int row = 1;
+		layout.setWidget(row, 0, lblCurso);layout.setWidget(row++, 1, listBoxCursoUpdate);
+		layout.setWidget(row, 0, lblPeriodo);layout.setWidget(row++, 1, listBoxPeriodoUpdate);		
+		layout.setWidget(row, 0, lblDisciplina);layout.setWidget(row++, 1, listBoxDisciplinaUpdate);		
+		layout.setWidget(row, 0, lblConteudo);layout.setWidget(row, 1, listBoxConteudoUpdate);layout.setWidget(row++, 2, lblErroConteudo);
+		
+		layout.setWidget(row, 0, lblAssunto);layout.setWidget(row, 1, txtAssunto);layout.setWidget(row++, 2, lblErroOcorrencia);
+		layout.setWidget(row, 0, lblDescricao);layout.setWidget(row++, 1, txtDescricao);
+		layout.setWidget(row, 0, lblData);layout.setWidget(row, 1, mpDateBoxData);layout.setWidget(row++, 2, lblErroData);
+		layout.setWidget(row, 0, lblHorario);layout.setWidget(row++, 1, mpTimePicker);
+
+		mpPanelForm.add(layout);
+		
+		/***********************Begin Callbacks**********************/
+		/***********************End Callbacks**********************/
+		return mpPanelForm;
+		
+	}	
+	
 	public MpPanelPageMainView mpPanelAssociarAlunos(){
 		
 		MpPanelPageMainView mpPanelAssociarAluno = new MpPanelPageMainView(txtConstants.ocorrenciaSelecionarAlunoEnviar(), "images/elementary_school_16.png");
-		mpPanelAssociarAluno.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+//		mpPanelAssociarAluno.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+		mpPanelAssociarAluno.setWidth("100%");
 		
 		Grid gridFiltrar = new Grid(1,4);		
 		gridFiltrar.setCellSpacing(3);
@@ -345,10 +403,10 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		gridBotoes.setWidget(0, 0, mpButtonParaDireita);
 		gridBotoes.setWidget(1, 0, mpButtonParaEsquerda);		
 		
-		Grid gridSelecionar = new Grid(2,3);
-		gridSelecionar.setCellSpacing(3);
-		gridSelecionar.setCellPadding(3);
-		gridSelecionar.setBorderWidth(0);		
+		FlexTable flexTable = new FlexTable();
+		flexTable.setCellSpacing(3);
+		flexTable.setCellPadding(3);
+		flexTable.setBorderWidth(0);		
 
 		Label lblAluno = new Label(txtConstants.ocorrenciaAlunosAssociados());
 		lblAluno.setStyleName("design_label");
@@ -365,19 +423,28 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	    multiBoxAlunosAssociado.setVisibleItemCount(10);	
 	    multiBoxAlunosAssociado.setStyleName("design_text_boxes");
 	    
-	    gridSelecionar.setWidget(0, 0, gridFiltrar);
-	    gridSelecionar.setWidget(0, 1, new InlineHTML("&nbsp;"));
-	    gridSelecionar.setWidget(0, 2, lblAluno);
-	    gridSelecionar.setWidget(1, 0, multiBoxAlunosFiltrado);
-	    gridSelecionar.setWidget(1, 1, gridBotoes);
-	    gridSelecionar.setWidget(1, 2, multiBoxAlunosAssociado);	    
-		
-	    mpPanelAssociarAluno.add(gridSelecionar);
+	    flexTable.setWidget(0, 0, gridFiltrar);
+	    flexTable.setWidget(0, 1, new InlineHTML("&nbsp;"));
+	    flexTable.setWidget(0, 2, lblAluno);
+	    flexTable.setWidget(1, 0, multiBoxAlunosFiltrado);
+	    flexTable.setWidget(1, 1, gridBotoes);
+	    flexTable.setWidget(1, 2, multiBoxAlunosAssociado);	    
+	    
+	    flexTable.setWidget(2,0,new InlineHTML("&nbsp;"));	    
+	    
+		if (enumOcorrencia == EnumOcorrencia.ADICIONAR) {
+		    flexTable.setWidget(3,0,gridBotaoSalvar());
+		} else if (enumOcorrencia == EnumOcorrencia.EDITAR) {
+			flexTable.setWidget(3,0,gridBotaoEditar());		    
+		}
+		flexTable.getFlexCellFormatter().setColSpan(3, 0, 3);
+	    
+	    mpPanelAssociarAluno.add(flexTable);
 	    
 		callbackGetAlunosFiltro = new AsyncCallback<ArrayList<Usuario>>() {
 
 			public void onSuccess(ArrayList<Usuario> list) {
-				
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelLoading.setVisible(false);				
 				
 				//Begin Cleaning fields
@@ -410,8 +477,9 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	public VerticalPanel gridBotaoSalvar(){
 		
 		VerticalPanel vPanel = new VerticalPanel();
+		vPanel.setWidth("100%");
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		vPanel.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+"px");
+//		vPanel.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+"px");
 		
 		MpImageButton btnSave = new MpImageButton(txtConstants.ocorrenciaSalvarOcorrencia(), "images/save.png");
 		btnSave.addClickHandler(new ClickHandlerSave());
@@ -429,6 +497,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		}
 		
 		vPanel.add(gridSave);		
+		vPanel.add(new InlineHTML("&nbsp;"));
 		
 		return vPanel;
 	}
@@ -437,7 +506,8 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		vPanel.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+"px");
+//		vPanel.setWidth(Integer.toString(TelaInicialProfessorOcorrencia.intWidthTable)+"px");
+		vPanel.setWidth("100%");
 		
 		MpImageButton btnSave = new MpImageButton(txtConstants.geralAtualizar(), "images/save.png");
 		btnSave.addClickHandler(new ClickHandlerSave());
@@ -461,6 +531,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		}
 		
 		vPanel.add(gridSave);		
+		vPanel.add(new InlineHTML("&nbsp;"));
 		
 		return vPanel;
 	}
@@ -471,22 +542,28 @@ public class AdicionarOcorrencia extends VerticalPanel {
 
 		public void onClick(ClickEvent event) {
 			
-			int intIdConteudo = listBoxConteudo.getSelectedIndex();
+			
 
 		
 			if(checkFieldsValidator()){
 				
 				mpPanelLoading.setVisible(true);
 
-				intIdConteudo = Integer.parseInt(listBoxConteudo.getValue(intIdConteudo));
+				int intIdConteudo = 0;
+				
+				if(AdicionarOcorrencia.this.enumOcorrencia == EnumOcorrencia.ADICIONAR){
+					intIdConteudo = Integer.parseInt(listBoxConteudo.getValue(listBoxConteudo.getSelectedIndex()));
+				}else if(AdicionarOcorrencia.this.enumOcorrencia == EnumOcorrencia.EDITAR){
+					intIdConteudo = Integer.parseInt(listBoxConteudoUpdate.getValue(listBoxConteudoUpdate.getSelectedIndex()));
+				}
 				String strHora = mpTimePicker.getValue(mpTimePicker.getSelectedIndex());
 
 				Ocorrencia ocorrencia = new Ocorrencia();
 				ocorrencia.setAssunto(txtAssunto.getText());
 				ocorrencia.setDescricao(txtDescricao.getText());
-//				ocorrencia.setData(mpDateBoxData.getDate().getValue());
+				ocorrencia.setData(mpDateBoxData.getDate().getValue());
 //				ocorrencia.setHora(MpUtilClient.convertStringToTime(strHora));
-				ocorrencia.setData(MpUtilClient.convertDateToString(mpDateBoxData.getDate().getValue()));
+//				ocorrencia.setData(MpUtilClient.convertDateToString(mpDateBoxData.getDate().getValue()));
 				ocorrencia.setHora(strHora);
 				ocorrencia.setIdConteudoProgramatico(intIdConteudo);
 				
@@ -500,11 +577,11 @@ public class AdicionarOcorrencia extends VerticalPanel {
 				ocorrencia.setListUsuariosRelacionadosOcorrencia(listUsuario);
 				
 				if(AdicionarOcorrencia.this.enumOcorrencia == EnumOcorrencia.ADICIONAR){
-					GWTServiceOcorrencia.Util.getInstance().AdicionarOcorrencia(ocorrencia, callbackAdd);	
+					GWTServiceOcorrencia.Util.getInstance().AdicionarOcorrencia(ocorrencia, new callbackAdd());	
 				}
 				else if(AdicionarOcorrencia.this.enumOcorrencia == EnumOcorrencia.EDITAR){
 					ocorrencia.setIdOcorrencia(ocorrenciaAux.getOcorrencia().getIdOcorrencia());
-					GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(ocorrencia, callbackAdd);
+					GWTServiceOcorrencia.Util.getInstance().AtualizarOcorrencia(ocorrencia, new callbackAdd());
 				}
 				
 					
@@ -541,7 +618,10 @@ public class AdicionarOcorrencia extends VerticalPanel {
 			}
 			else{
 				int idPeriodo = Integer.parseInt(listBoxPeriodo.getValue(index));
-				listBoxDisciplina.populateComboBox(idPeriodo);				
+				if (enumOcorrencia == EnumOcorrencia.ADICIONAR){
+					listBoxDisciplina.populateComboBox(idPeriodo);					
+				}
+								
 			}
 		}  
 	}
@@ -554,7 +634,9 @@ public class AdicionarOcorrencia extends VerticalPanel {
 			}
 			else{
 				int idDisciplina= Integer.parseInt(listBoxDisciplina.getValue(index));
-				listBoxConteudo.populateComboBox(idDisciplina);				
+				if (enumOcorrencia == EnumOcorrencia.ADICIONAR){
+					listBoxConteudo.populateComboBox(idDisciplina);	
+				}
 			}
 		}  
 	}	
@@ -679,12 +761,15 @@ public class AdicionarOcorrencia extends VerticalPanel {
 			lblErroOcorrencia.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.ocorrencia()));
 		}		
 
-		
-		if(FieldVerifier.isValidListBoxSelectedValue(listBoxConteudo.getSelectedIndex())){
+		if (enumOcorrencia == EnumOcorrencia.ADICIONAR) {
+			if (FieldVerifier.isValidListBoxSelectedValue(listBoxConteudo.getSelectedIndex())) {
+				isConteudoOk = true;
+				lblErroConteudo.hideErroMessage();
+			} else {
+				lblErroConteudo.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.conteudoProgramatico()));
+			}
+		} else {
 			isConteudoOk=true;
-			lblErroConteudo.hideErroMessage();
-		}else{
-			lblErroConteudo.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.conteudoProgramatico()));
 		}
 		
 		if(FieldVerifier.isValidDate(mpDateBoxData.getDate().getTextBox().getValue())){
@@ -704,7 +789,57 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	
 	public void updateClientData(){
 		listBoxCurso.populateComboBox(this.telaInicialProfessorOcorrencia.getMainView().getUsuarioLogado());
-	}		
+	}
+	
+	
+	
+	private class callbackAdd implements AsyncCallback<Boolean> {
+
+		public void onFailure(Throwable caught) {
+			mpPanelLoading.setVisible(false);
+			mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+			mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroSalvar());
+			mpDialogBoxWarning.showDialog();
+		}
+
+		@Override
+		public void onSuccess(Boolean result) {
+			// lblLoading.setVisible(false);
+			mpPanelLoading.setVisible(false);
+			boolean isSuccess = result;
+			if (isSuccess) {
+
+				if (enumOcorrencia == EnumOcorrencia.ADICIONAR) {
+//					editarOcorrencia.populateGridOcorrencia();
+//					editarOcorrencia.updateClientData();
+					telaInicialProfessorOcorrencia.updateEditarOcorrenciaPopulateGrid();
+					telaInicialProfessorOcorrencia.updateVisualizarOcorrenciaPopulateGrid();
+					telaInicialProfessorOcorrencia.updateAprovarOcorrenciaPopulateGrid();
+					cleanFields();
+					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
+					mpDialogBoxConfirm.setBodyText(txtConstants.ocorrenciaSalva());						
+				}
+				else if (enumOcorrencia == EnumOcorrencia.EDITAR) {
+//					editarOcorrencia.populateGridOcorrencia();
+					telaInicialProfessorOcorrencia.updateEditarOcorrenciaPopulateGrid();
+					telaInicialProfessorOcorrencia.updateVisualizarOcorrenciaPopulateGrid();
+					telaInicialProfessorOcorrencia.updateAprovarOcorrenciaPopulateGrid();
+					editarOcorrencia.vPanelEditarDetalhes.setVisible(false);
+					editarOcorrencia.vPanelEditarTabela.setVisible(true);
+					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
+					mpDialogBoxConfirm.setBodyText(txtConstants.ocorrenciaAtualizada());
+				}
+				
+				mpDialogBoxConfirm.showDialog();
+	
+				
+			} else {
+				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+				mpDialogBoxWarning.setBodyText(txtConstants.ocorrenciaErroSalvar());
+				mpDialogBoxWarning.showDialog();
+			}
+		}
+	}
 	
 
 }

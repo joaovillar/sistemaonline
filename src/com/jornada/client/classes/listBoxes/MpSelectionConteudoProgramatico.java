@@ -20,20 +20,32 @@ public class MpSelectionConteudoProgramatico extends MpSelection {
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<ConteudoProgramatico>>() {
 			public void onSuccess(ArrayList<ConteudoProgramatico> lista) {
-				
-				finishLoadingListBox();		
+				try{
+					
+					finishLoadingListBox();
 
-				for (ConteudoProgramatico object : lista) {
-					addItem(object.getNome(),Integer.toString(object.getIdConteudoProgramatico()));
-				}		
+					for (ConteudoProgramatico object : lista) {
+						addItem(object.getNome(), Integer.toString(object.getIdConteudoProgramatico()));
+					}
 
-				setVisibleItemCount(1);
+					setVisibleItemCount(1);
 
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionConteudoProgramatico.this);
+					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
+					// MpSelectionConteudoProgramatico.this);
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionConteudoProgramatico.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+						System.out.println("Error:" + ex.getMessage());
+					}
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
+				}				
 				
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 

@@ -15,6 +15,7 @@ import com.jornada.client.ambiente.aluno.hierarquia.HierarquiaCursoAluno;
 import com.jornada.client.ambiente.aluno.notas.TelaInicialAlunoVisualizarNotas;
 import com.jornada.client.ambiente.aluno.ocorrencia.TelaInicialAlunoOcorrencia;
 import com.jornada.client.ambiente.coordenador.TelaInicialAdminEscola;
+import com.jornada.client.ambiente.coordenador.TelaInicialAdminEscolaCurso;
 import com.jornada.client.ambiente.coordenador.comunicado.TelaInicialComunicado;
 import com.jornada.client.ambiente.coordenador.conteudoprogramatico.TelaInicialConteudoProgramatico;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
@@ -219,6 +220,21 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}
 	
+	public void openAdminEscolaCurso(){
+
+		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO_ADMIN);
+		
+		this.vPanelBody.clear();
+//		new ElementFader().fade(vPanelBody.getElement(), 0, 1, 500);
+		
+		TelaInicialAdminEscolaCurso telaInicialAdminEscolaCurso = TelaInicialAdminEscolaCurso.getInstance(this);
+		
+		this.vPanelBody.add(telaInicialAdminEscolaCurso);
+		this.vPanelMenu.setVisible(true);
+
+		
+	}
+	
 	public void openCadastroCurso(){
 		
 		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO);
@@ -341,6 +357,17 @@ public class MainView extends Composite implements HistoryListener{
 
 		TelaInicialComunicado telaInicialComunicado = TelaInicialComunicado.getInstance();
 		this.vPanelBody.add(telaInicialComunicado);
+		this.vPanelMenu.setVisible(true);
+	}	
+	
+	public void openCadastroCoordenadorOcorrencia() {
+		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_OCORRENCIA);
+		// new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1300);
+		this.vPanelBody.clear();
+		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		
+		TelaInicialProfessorOcorrencia telaInicialOcorrencia = TelaInicialProfessorOcorrencia.getInstance(this);
+		this.vPanelBody.add(telaInicialOcorrencia);
 		this.vPanelMenu.setVisible(true);
 	}	
 	

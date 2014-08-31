@@ -18,21 +18,32 @@ public class MpSelectionPeriodo extends MpSelection {
 		/*********************** Begin Callbacks **********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Periodo>>() {
 			public void onSuccess(ArrayList<Periodo> lista) {
+				
+				try {
 
-				finishLoadingListBox();
+					finishLoadingListBox();
 
-				for (Periodo object : lista) {
-					addItem(object.getNomePeriodo(),
-							Integer.toString(object.getIdPeriodo()));
+					for (Periodo object : lista) {
+						addItem(object.getNomePeriodo(),Integer.toString(object.getIdPeriodo()));
+					}
+
+					setVisibleItemCount(1);
+
+					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionPeriodo.this);
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionPeriodo.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+						System.out.println("Error:" + ex.getMessage());
+					}
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
 				}
-
-				setVisibleItemCount(1);
-
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionPeriodo.this);
 
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 
@@ -43,7 +54,7 @@ public class MpSelectionPeriodo extends MpSelection {
 
 	}
 
-	public void populateComboBox(int idCurso) {
+	public void populateComboBox(int idCurso) {		
 		startLoadingListBox();
 		GWTServicePeriodo.Util.getInstance().getPeriodosPeloCurso(idCurso,callBackPopulateComboBox);
 	}

@@ -20,7 +20,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceOcorrencia;
 import com.jornada.server.classes.OcorrenciaServer;
 import com.jornada.shared.classes.Ocorrencia;
-import com.jornada.shared.classes.OcorrenciaAluno;
+import com.jornada.shared.classes.RelUsuarioOcorrencia;
+import com.jornada.shared.classes.ocorrencia.OcorrenciaAluno;
+import com.jornada.shared.classes.ocorrencia.OcorrenciaParaAprovar;
 
 public class GWTServiceOcorrenciaImpl extends RemoteServiceServlet implements GWTServiceOcorrencia {
 
@@ -38,9 +40,18 @@ public class GWTServiceOcorrenciaImpl extends RemoteServiceServlet implements GW
 		return OcorrenciaServer.AtualizarPaiCiente(object);
 	}	
 	
+	public boolean AtualizarLiberarPaiLeitura(RelUsuarioOcorrencia object) {		
+		return OcorrenciaServer.AtualizarLiberarLeituraPai(object);
+	}		
+	
 	public boolean deleteOcorrenciaRow(int id_ocorrencia){		
 		return OcorrenciaServer.deleteOcorrenciaRow(id_ocorrencia);		
 	}	
+	
+	public boolean deletarRelacionamentoUsuarioOcorrencia(int idOcorrencia, int idUsuario){		
+		return OcorrenciaServer.deletarRelacionamentoUsuarioOcorrencia(idOcorrencia, idUsuario);		
+	}	
+	
 	
 	@Override
 	public ArrayList<Ocorrencia> getOcorrencias() {		
@@ -59,6 +70,10 @@ public class GWTServiceOcorrenciaImpl extends RemoteServiceServlet implements GW
 	
 	public ArrayList<OcorrenciaAluno> getOcorrenciasPeloAluno(int idAluno){
 		return OcorrenciaServer.getOcorrenciasPeloAluno(idAluno);
+	}
+	
+	public ArrayList<OcorrenciaParaAprovar> getOcorrenciasParaAprovar(Boolean ehParaAprovar) {
+		return OcorrenciaServer.getOcorrenciasParaAprovar(ehParaAprovar);
 	}
 	
 	

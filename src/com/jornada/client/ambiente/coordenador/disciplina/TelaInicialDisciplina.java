@@ -5,9 +5,7 @@ package com.jornada.client.ambiente.coordenador.disciplina;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
 
@@ -44,21 +42,24 @@ public class TelaInicialDisciplina extends Composite{
 		 associarProfessorDisciplina = new AssociarProfessorDisciplina();
 		
 		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
-		TabLayoutPanel stackPanel = new TabLayoutPanel(2.5, Unit.EM);		
-		stackPanel.setPixelSize(intWidthTable+50, intHeightTable);
-		stackPanel.setAnimationDuration(500);
-		stackPanel.setAnimationVertical(true);
+		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
+//		stackPanel.setPixelSize(intWidthTable+50, intHeightTable);
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable)+"px");
 		
-		stackPanel.add(adicionarDisciplina, new MpHeaderWidget(txtConstants.disciplinaAdicionar(), "images/plus-circle.png"));
-		stackPanel.add(editarDisciplina, new MpHeaderWidget(txtConstants.disciplinaEditar(), "images/comment_edit.png"));
-		stackPanel.add(associarProfessorDisciplina, new MpHeaderWidget(txtConstants.disciplinaAdicionarProfessor(), "images/user1_add2_16.png"));
+		tabLayoutPanel.setAnimationDuration(500);
+		tabLayoutPanel.setAnimationVertical(true);
+		
+		tabLayoutPanel.add(adicionarDisciplina, new MpHeaderWidget(txtConstants.disciplinaAdicionar(), "images/plus-circle.png"));
+		tabLayoutPanel.add(editarDisciplina, new MpHeaderWidget(txtConstants.disciplinaEditar(), "images/comment_edit.png"));
+		tabLayoutPanel.add(associarProfessorDisciplina, new MpHeaderWidget(txtConstants.disciplinaAdicionarProfessor(), "images/user1_add2_16.png"));
 		
 		
-		VerticalPanel verticalPanelPage = new VerticalPanel();		
-		verticalPanelPage.add(stackPanel);
-		verticalPanelPage.add(new InlineHTML("&nbsp;"));
+//		VerticalPanel verticalPanelPage = new VerticalPanel();		
+//		verticalPanelPage.add(tabLayoutPanel);
+//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
 				
-     	initWidget(verticalPanelPage);
+		
+     	initWidget(tabLayoutPanel);
 		
 	}
 

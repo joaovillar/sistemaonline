@@ -19,20 +19,29 @@ public class MpSelectionTipoUsuario extends MpSelection {
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<TipoUsuario>>() {
 			public void onSuccess(ArrayList<TipoUsuario> lista) {
-				
-				finishLoadingListBox();		
+				try {
+					finishLoadingListBox();
 
-				for (TipoUsuario object : lista) {
-					addItem(object.getNomeTipoUsuario(),Integer.toString(object.getIdTipoUsuario()));
-				}		
+					for (TipoUsuario object : lista) {
+						addItem(object.getNomeTipoUsuario(),Integer.toString(object.getIdTipoUsuario()));
+					}
 
-				setVisibleItemCount(1);
+					setVisibleItemCount(1);
 
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionTipoUsuario.this);
-				
+					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
+					// MpSelectionTipoUsuario.this);
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionTipoUsuario.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+					}
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
+				}
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 //				listBoxCurso.addItem(new Label("Erro popular curso.").getText());
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());

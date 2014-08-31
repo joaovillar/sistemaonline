@@ -1,18 +1,19 @@
-package com.jornada.client.classes.listBoxes;
+package com.jornada.client.classes.listBoxes.ambiente.coordenador;
 
 import com.google.gwt.user.client.ui.ListBox;
+import com.jornada.client.classes.listBoxes.MpSelection;
 
-public class MpListBoxPorcentagemPresenca extends MpSelection {	
+public class MpListBoxMediaNota extends MpSelection {	
 	
 //	private AsyncCallback<ArrayList<Usuario>> callBackPopulateComboBox;
 	
 	private ListBox listBoxAux;
 	
 	
-	private static final int NOTA_PADRAO = 75;
+	private static final double NOTA_PADRAO = 6.0;
 
 	
-	public MpListBoxPorcentagemPresenca(){
+	public MpListBoxMediaNota(){
 				
 		setWidth("150px");		
 		
@@ -25,8 +26,8 @@ public class MpListBoxPorcentagemPresenca extends MpSelection {
 	
 	public void populateComboBox() {
 		
-		for(int i=0;i<=100;i=i+5){
-			String value = Integer.toString(i);
+		for(double i=0.0;i<=10;i=i+0.5){
+			String value = Double.toString(i);
 			addItem(value,value);
 			listBoxAux.addItem(value,value);
 			if(i==NOTA_PADRAO){

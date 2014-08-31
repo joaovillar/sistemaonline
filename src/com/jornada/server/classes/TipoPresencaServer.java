@@ -17,26 +17,28 @@ public class TipoPresencaServer {
 	
 	public static ArrayList<TipoPresenca> getTipoPresencas() {
 
-		ArrayList<TipoPresenca> arrayTipoPresenca = new ArrayList<TipoPresenca>();		
+		ArrayList<TipoPresenca> data = new ArrayList<TipoPresenca>();		
 
 		Connection conn = ConnectionManager.getConnection();
 		
 		try 
 		{
 			PreparedStatement ps = conn.prepareStatement(DB_SELECT);			
-			arrayTipoPresenca = getParameters(ps.executeQuery());
+			data = getParameters(ps.executeQuery());
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
 		}
-		return arrayTipoPresenca;
+		return data;
 	}
 	
 	
 	public static TipoPresenca getTipoPresenca(int idTipoPresenca) {
 
-		ArrayList<TipoPresenca> arrayTipoPresenca = new ArrayList<TipoPresenca>();		
+		ArrayList<TipoPresenca> data = new ArrayList<TipoPresenca>();		
+		TipoPresenca tipoPresenca = new TipoPresenca();
 
 		Connection conn = ConnectionManager.getConnection();
 		
@@ -46,13 +48,16 @@ public class TipoPresencaServer {
 			PreparedStatement ps = conn.prepareStatement(DB_SELECT_POR_ID_TIPO_PRESENCA);	
 			int count=0;
 			ps.setInt(++count, idTipoPresenca);			
-			arrayTipoPresenca = getParameters(ps.executeQuery());
+			data = getParameters(ps.executeQuery());
+			tipoPresenca = data.get(0);
 		} catch (SQLException sqlex) {
+			data=null;
+			tipoPresenca=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
 		}
-		return arrayTipoPresenca.get(0);
+		return tipoPresenca;
 	}
 	
 	

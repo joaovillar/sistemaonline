@@ -199,7 +199,8 @@ public class EditarAvaliacao extends VerticalPanel {
 //		Label lblEmpty2 = new Label("Por favor, selecione um Conteudo Programatico.");
 		
 		cellTable = new CellTable<Avaliacao>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialAvaliacao.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialAvaliacao.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setEmptyTableWidget(lblEmpty);
@@ -216,13 +217,18 @@ public class EditarAvaliacao extends VerticalPanel {
 		mpPager.setPageSize(15);
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialAvaliacao.intWidthTable+30)+"px",Integer.toString(TelaInicialAvaliacao.intHeightTable-180)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialAvaliacao.intWidthTable+30)+"px",Integer.toString(TelaInicialAvaliacao.intHeightTable-180)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialAvaliacao.intHeightTable-180)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);
 		
 		vPanelBody.add(mpPager);
 		vPanelBody.add(scrollPanel);
+		vPanelBody.setWidth("100%");
 		
+		
+		this.setWidth("100%");
 		populateGridAvaliacao();
 		
 	}
@@ -357,6 +363,7 @@ public class EditarAvaliacao extends VerticalPanel {
 
 						@Override
 						public void onSuccess(ArrayList<Avaliacao> list) {
+							MpUtilClient.isRefreshRequired(list);
 							mpPanelLoading.setVisible(false);
 							dataProvider.getList().clear();
 							cellTable.setRowCount(0);
@@ -386,6 +393,7 @@ public class EditarAvaliacao extends VerticalPanel {
 
 					@Override
 					public void onSuccess(ArrayList<TipoAvaliacao> list) {
+						MpUtilClient.isRefreshRequired(list);
 
 						for(TipoAvaliacao currentTipoUsuario : list){
 							String strIdTipoAvaliacao = Integer.toString(currentTipoUsuario.getIdTipoAvaliacao());

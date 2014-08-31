@@ -3,9 +3,7 @@ package com.jornada.client.ambiente.coordenador.curso;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.MainView;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
@@ -58,13 +56,13 @@ public class TelaInicialCurso extends Composite {
 		
 		
 		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
-		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
-		tabLayoutPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+40)+"px",Integer.toString(TelaInicialCurso.intHeightTable)+"px");
-
-//		tabLayoutPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
-//		tabLayoutPanel.setPixelSize(intWidthTable+50, intHeightTable);
+		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
+		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
+//		tabLayoutPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+40)+"px",Integer.toString(TelaInicialCurso.intHeightTable)+"px");
+		tabLayoutPanel.setHeight(Integer.toString(TelaInicialCurso.intHeightTable)+"px");
 		tabLayoutPanel.setAnimationDuration(500);
 		tabLayoutPanel.setAnimationVertical(true);
+
 		
 	
 		tabLayoutPanel.add(adicionarCurso, new MpHeaderWidget(txtConstants.cursoAdicionar(), "images/plus-circle.png"));
@@ -73,11 +71,12 @@ public class TelaInicialCurso extends Composite {
 //		tabLayoutPanel.add(associarCursoAluno, createHeaderWidget("Add Course using another one", "images/user1_add2_16.png"));
 		
 		
-		VerticalPanel verticalPanelPage = new VerticalPanel();		
-		verticalPanelPage.add(tabLayoutPanel);
-		verticalPanelPage.add(new InlineHTML("&nbsp;"));
+//		VerticalPanel verticalPanelPage = new VerticalPanel();		
+//		verticalPanelPage.add(tabLayoutPanel);
+//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
 				
-     	initWidget(verticalPanelPage);
+//     	initWidget(verticalPanelPage);
+		initWidget(tabLayoutPanel);	
 		
 	}
 	

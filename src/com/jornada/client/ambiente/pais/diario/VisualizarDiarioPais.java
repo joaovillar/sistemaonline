@@ -43,6 +43,7 @@ import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.presenca.TabelaPresencaAluno;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class VisualizarDiarioPais extends VerticalPanel {
 
@@ -80,7 +81,9 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		
 		scrollPanel.setAlwaysShowScrollBars(false);
 
-		scrollPanel.setSize(Integer.toString(TelaInicialDiarioPais.intWidthTable+30)+"px",Integer.toString(TelaInicialDiarioPais.intHeightTable-120)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialDiarioPais.intWidthTable+30)+"px",Integer.toString(TelaInicialDiarioPais.intHeightTable-120)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialDiarioPais.intHeightTable-120)+"px");
+		scrollPanel.setWidth("100%");
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
@@ -140,6 +143,7 @@ public class VisualizarDiarioPais extends VerticalPanel {
 
 		
 		vFormPanel.add(flexTableWithListBoxes);
+		vFormPanel.setWidth("100%");
 
 /***************************************Begin Callbacks***************************************/
 
@@ -149,6 +153,7 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		
 		initializeCellTable();
 		
+		this.setWidth("100%");
 		super.add(vFormPanel);
 
 	}
@@ -237,9 +242,9 @@ public class VisualizarDiarioPais extends VerticalPanel {
 				}
 
 				@Override
-				public void onSuccess(ArrayList<Periodo> arrayPeriodo) {
-					
-					ArrayList<TabelaPresencaAluno> listTabelaPresencaAluno = convertePeriodoParaTabela(arrayPeriodo);
+				public void onSuccess(ArrayList<Periodo> list) {
+					MpUtilClient.isRefreshRequired(list);
+					ArrayList<TabelaPresencaAluno> listTabelaPresencaAluno = convertePeriodoParaTabela(list);
 					
 					mpPanelLoadingAluno.setVisible(false);
 					dataProvider.getList().clear();
@@ -338,7 +343,8 @@ public class VisualizarDiarioPais extends VerticalPanel {
 	public void initializeCellTable(){
 		cellTable = new CellTable<TabelaPresencaAluno>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
 
-		cellTable.setWidth(Integer.toString(TelaInicialDiarioPais.intWidthTable)+ "px");		
+//		cellTable.setWidth(Integer.toString(TelaInicialDiarioPais.intWidthTable)+ "px");		
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		
@@ -385,27 +391,20 @@ public class VisualizarDiarioPais extends VerticalPanel {
 //		flexTableFiltrarAluno.setWidget(0, 5, mpPanelLoadingAluno);
 		
 		
-//		ScrollPanel scrollPanel = new ScrollPanel();
-//		scrollPanel.setSize(Integer.toString(TelaInicialAlunoOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialAlunoOcorrencia.intHeightTable-110)+"px");
-//		scrollPanel.setAlwaysShowScrollBars(true);		
-//		scrollPanel.add(cellTable);	
-		
-		VerticalPanel vPanel = new VerticalPanel();
-		vPanel.setHeight("100%");
-		vPanel.setCellVerticalAlignment(cellTable, ALIGN_TOP);
-		vPanel.add(cellTable);
-		
 		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
 		
 		VerticalPanel vPanelInScroll = new VerticalPanel();
+		vPanelInScroll.setBorderWidth(0);
+		vPanelInScroll.setWidth("100%");
 		vPanelInScroll.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanelInScroll.add(flexTableFiltrarAluno);
-		vPanelInScroll.add(vPanel);
+		vPanelInScroll.add(cellTable);
 		vPanelInScroll.add(mpSpaceVerticalPanel);
 		scrollPanel.clear();
 		scrollPanel.add(vPanelInScroll);
 		
 		vFormPanel.add(scrollPanel);
+
 		
 		mpPanelLoadingAluno.setVisible(false);
 		

@@ -14,6 +14,9 @@ public interface TextConstants extends Messages {
     String loginCampoVazio();
     String loginAcessoNegado();
     String loginErroSairSistema();
+    String loginNovaSenha();
+    String loginConfirmarSenha();
+    String loginPrimeiroLogin();
 	/******Logn End******/
     
     /******MainTitle Begin******/
@@ -26,6 +29,8 @@ public interface TextConstants extends Messages {
     String menuTokenPrincipal();
     String menuTokenFerramentaCoordenador();
     String menuTokenFerramentaCoordenadorComunicado();
+    String menuTokenFerramentaCoordenadorOcorrencia();
+    String menuTokenFerramentaCoordenadorCursoAdmin();
     String menuTokenFerramentaCoordenadorCurso();
     String menuTokenFerramentaCoordenadorPeriodo();
     String menuTokenFerramentaCoordenadorDisciplina();
@@ -87,6 +92,10 @@ public interface TextConstants extends Messages {
     String coordenadorAmbienteComunicado();
     String coordenadorAmbienteComunicadoCompText1();
     String coordenadorAmbienteComunicadoCompText2();
+    
+    String coordenadorAmbienteOcorrencia();
+    String coordenadorAmbienteOcorrenciaCompText1();
+    String coordenadorAmbienteOcorrenciaCompText2();
     
    /******AmbienteDoCoordenador End******/
     
@@ -228,7 +237,14 @@ public interface TextConstants extends Messages {
 	String cursoNavegacao();	
 	String cursoCompText1();
 	String cursoCompText2();
-	String cursoCompText3();
+	String cursoCompText3();	
+	String cursoAdmin();
+	String cursoAdminCompText1();
+	String cursoAdminCompText2();
+	String cursoAdminCompText3();
+	String cursoImportarAlunosDoCurso();
+	String cursoTodosAlunos();
+	
 	/*******Curso End*******/
 	
 	
@@ -250,7 +266,7 @@ public interface TextConstants extends Messages {
 	String periodoCompText1();
 	String periodoCompText2();
 	String periodoCompText3();
-	/*******Periodo FIM*******/
+	/*******Periodo End*******/
 	
 	
 	/*******Disciplina Begin*******/
@@ -280,7 +296,7 @@ public interface TextConstants extends Messages {
 	String disciplinaCompText1();
 	String disciplinaCompText2();
 	String disciplinaCompText3();
-	/*******Disciplina FIM*******/	
+	/*******Disciplina End*******/	
 	
 	/*******ConteudoProgramatico Begin*******/
 	String conteudoProgramatico();	
@@ -300,7 +316,7 @@ public interface TextConstants extends Messages {
 	String conteudoProgramaticoCompText1();
 	String conteudoProgramaticoCompText2();
 	String conteudoProgramaticoCompText3();
-	/*******ConteudoProgramatico FIM*******/	
+	/*******ConteudoProgramatico End*******/	
 	
 
 	/*******Tópicos Begin*******/
@@ -320,10 +336,10 @@ public interface TextConstants extends Messages {
 	String topicoCompText1();
 	String topicoCompText2();
 	String topicoCompText3();
-	/*******Tópicos FIM*******/
+	/*******Topicos End*******/
 	
 	
-	/*******Usuários Begin*******/
+	/*******Usuario Begin*******/
 	String usuario();
 	String usuarioAdicionar();
 	String usuarioEditar();
@@ -369,6 +385,7 @@ public interface TextConstants extends Messages {
 	String usuarioListaUsuariosInvalidos();
 	String usuarioPlanilhaImportadoComSucesso();
 	String usuarioErroImportarUsuarios();
+	String usuarioErroImportarUsuariosNull();
 	String usuarioRespAcademico();
 	String usuarioRespFinanceiro();
 	String usuarioDataMatricula();
@@ -390,7 +407,12 @@ public interface TextConstants extends Messages {
 	String usuarioSeparados();
 	String usuarioOutros();	
 	String usuarioErroLoginDuplicado(String login);
-	/*******Usuários FIM*******/
+	String usuarioRegistroAluno();
+	String usuarioUnidadeEscola();
+	String usuarioBaixarPlanilhaExcel();
+	String usuarioCliqueAquiParaBaixar();
+	String usuarioRegistro();
+	/*******Usuario End*******/
 	
 	
 	/*******Comunicado Begin*******/
@@ -425,7 +447,7 @@ public interface TextConstants extends Messages {
 	String alunoNome();
 	/*******Aluno End*******/
 	
-	/*******NOTA FIM*******/
+	/*******NOTA End*******/
 	String nota();
 	String notaSelecionarAluno();
 	String notaErroCarregar();
@@ -436,7 +458,7 @@ public interface TextConstants extends Messages {
 	String notaEditarNotasConteudoProgramatico();
 	String notaNehumaNotaComConteudoProgramatico();
 	String notaErroAtualizar();
-	/*******NOTA FIM*******/	
+	/*******NOTA End*******/	
 	
 	/*******PROFESSOR Begin*******/
 	String professor();
@@ -482,6 +504,7 @@ public interface TextConstants extends Messages {
 	String agendaSetAm();
 	String agendaSetPm();
 	String agendaSetNoon();
+	String agendaDetalhes();
 
 	/*******AGENDA END*******/
 	
@@ -496,8 +519,7 @@ public interface TextConstants extends Messages {
 	String ocorrenciaHora();
 	String ocorrenciaErroAtualizar();
 	String ocorrenciaErroCarregar();
-	String ocorrenciaErroBuscarAluno();
-	
+	String ocorrenciaErroBuscarAluno();	
 	String ocorrenciaErroSalvar();
 	String ocorrenciaSalva();
 	String ocorrenciaAtualizada();
@@ -512,7 +534,12 @@ public interface TextConstants extends Messages {
 	String ocorrenciaNomeDosAlunos();
 	String ocorrenciaSalvarOcorrencia();
 	String ocorrenciaErroSemUmConteudoProgramatico();
-	
+	String ocorrenciaLiberarLeituraPai();
+	String ocorrenciaFiltrar();
+	String ocorrenciaParaAprovar();
+	String ocorrenciaJaAprovadas();
+	String ocorrenciaVisualizar();
+	String ocorrenciaAprovar();
 	/*******Ocorrencia END*******/
 	
 	
@@ -571,6 +598,11 @@ public interface TextConstants extends Messages {
 	String geralNumeroDouble();
 	String geralRecarregarAmbiente();
 	String geralErro();
+	String geralFecharJanela();
+	String geralRegarregarPagina();
+	String geralBreakLine();
+	String geralImprimir();
+	String geralExcel();
 	/*******USO GERAL END*******/
 	
 	/*******CONFIGURACOES BEGIN*******/

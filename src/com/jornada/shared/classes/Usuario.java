@@ -10,6 +10,13 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	private static final long serialVersionUID = 3304488184672078101L;
 	
 	
+	public static final String DB_UNIQUE_LOGIN = "unique_login";
+	public static final String DB_PRIMEIRO_NOME = "primeiro_nome";
+	public static final String DB_SOBRE_NOME = "sobre_nome";
+	public static final String DB_EMAIL = "email";
+	public static final String DB_CPF = "cpf";
+	
+	
 	private int idUsuario;
 	private String login;
 	private String senha;
@@ -38,6 +45,7 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	private String situacaoResponsaveis;
 	private String situacaoResponsaveisOutros;
 	private String registroAluno;
+	private int idUnidadeEscola;
 
 	
 	private int idTipoUsuario;
@@ -51,10 +59,12 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 
 	private TipoUsuario tipoUsuario;
 	private Idioma idioma;
+	private UnidadeEscola unidadeEscola;
 
 	public Usuario() {
 		this.tipoUsuario = new TipoUsuario();
 		this.idioma = new Idioma();
+		this.unidadeEscola = new UnidadeEscola();
 
 	}
 
@@ -343,6 +353,25 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 
 	public void setRegistroAluno(String registroAluno) {
 		this.registroAluno = registroAluno;
+	}
+	
+	
+	
+
+	public UnidadeEscola getUnidadeEscola() {
+		return unidadeEscola;
+	}
+
+	public void setUnidadeEscola(UnidadeEscola unidadeEscola) {
+		this.unidadeEscola = unidadeEscola;
+	}
+
+	public int getIdUnidadeEscola() {
+		return idUnidadeEscola;
+	}
+
+	public void setIdUnidadeEscola(int idUnidadeEscola) {
+		this.idUnidadeEscola = idUnidadeEscola;
 	}
 
 	@Override

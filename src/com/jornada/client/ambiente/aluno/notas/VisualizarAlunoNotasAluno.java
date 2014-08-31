@@ -43,6 +43,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 
 
@@ -114,8 +115,10 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		vBodyPanel.add(drawPassoUmSelecioneAluno());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
 //		vBodyPanel.add(drawPassoDoisEditarNotasAluno());
+		vBodyPanel.setWidth("100%");
 
 		
+		this.setWidth("100%");
 		super.add(vBodyPanel);		
 		
 		
@@ -129,7 +132,8 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		MpPanelPageMainView mpPanelPasso1 = new MpPanelPageMainView(txtConstants.notaSelecionarAluno(), "images/user_male_black_red_16.png");
 //		VerticalPanel mpPanelPasso1 = new VerticalPanel();
 //		mpPanelPasso1.setWidth(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable)+"px");
-		mpPanelPasso1.setWidth(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable-20)+"px");
+//		mpPanelPasso1.setWidth(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable-20)+"px");
+		mpPanelPasso1.setWidth("100%");
 		mpPanelPasso1.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.intHeightTable-50)+"px");
 //		mpPanelPasso1.setSize(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable-200)+"px", Integer.toString(TelaInicialAlunoVisualizarNotas.intHeightTable-100)+"px");
 		
@@ -190,17 +194,21 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		gridBoletimChart.setBorderWidth(0);
 		gridBoletimChart.setCellPadding(2);
 		gridBoletimChart.setCellSpacing(2);
-		gridBoletimChart.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-180)+"px");
+//		gridBoletimChart.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-180)+"px");
+		gridBoletimChart.setHeight(Integer.toString(TelaInicialPeriodo.intHeightTable-180)+"px");
 		
 		
 
 		
 		row=0;		
 		Grid gridBoletim = new Grid(2,1);		
-		gridBoletim.setBorderWidth(0);	
+		
 //		gridBoletim.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable)+"px");
 		gridBoletim.setWidget(row++, 0, new MpSpaceVerticalPanel());
-		gridBoletim.setWidget(row, 0, vPanelBoletim);		
+		gridBoletim.setWidget(row, 0, vPanelBoletim);
+		
+		gridBoletimChart.setBorderWidth(0);
+		gridBoletimChart.setWidth("100%");
 		gridBoletimChart.setWidget(0, 0, gridBoletim);
 //		gridBoletimChart.setWidget(0, 1, chart);
 		
@@ -235,6 +243,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 
 			@Override
 			public void onSuccess(String[][] list) {
+				MpUtilClient.isRefreshRequired(list);
 				vPanelBoletim.clear();
 				mpPanelAlunosLoading.setVisible(false);
 				setList(list);

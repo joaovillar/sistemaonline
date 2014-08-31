@@ -41,6 +41,7 @@ import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.cells.MpStyledSelectionCell;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
@@ -51,6 +52,7 @@ import com.jornada.shared.classes.Aula;
 import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class AdicionarDiarioProfessor extends VerticalPanel {
 
@@ -111,7 +113,9 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		flexTable.setCellSpacing(3);
 		flexTable.setCellPadding(3);
 		flexTable.setBorderWidth(0);
-		flexTable.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable),Integer.toString(TelaInicialDiarioProfessor.intHeightTable));
+//		flexTable.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable),Integer.toString(TelaInicialDiarioProfessor.intHeightTable));
+//		flexTable.setHeight(Integer.toString(TelaInicialDiarioProfessor.intHeightTable)+"px");
+//		flexTable.setWidth("100%");
 		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 
 		// Add a title to the form
@@ -157,7 +161,8 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		flexTable.setWidget(row, 0, lblDisciplina);flexTable.setWidget(row, 1, listBoxDisciplina);flexTable.setWidget(row++, 2, lblErroDisciplina);
 		flexTable.setWidget(row, 0, lblDataInicial);flexTable.setWidget(row, 1, mpDateBoxInicial);flexTable.setWidget(row++, 2, lblErroDateBox);
 		
-
+		vFormPanel.setBorderWidth(0);
+		vFormPanel.setWidth("100%");
 		vFormPanel.add(flexTable);
 
 		/***********************Begin Callbacks**********************/
@@ -174,22 +179,28 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 
 			@Override
 			public void onSuccess(ArrayList<PresencaUsuarioAula> list) {
-				// lblLoading.setVisible(false);
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelLoadingSaving.setVisible(false);
-				pendingChanges.clear();
-				arrayListBackup.clear();
-				dataProvider.getList().clear();
 				
-				for(int i=0;i<list.size();i++){
-					dataProvider.getList().add(list.get(i));
-					arrayListBackup.add(list.get(i));
+				if (list == null) {
+					MpDialogBoxRefreshPage mpRefresh = new MpDialogBoxRefreshPage();
+					mpRefresh.showDialog();
+
+				} else {
+
+					pendingChanges.clear();
+					arrayListBackup.clear();
+					dataProvider.getList().clear();
+
+					for (int i = 0; i < list.size(); i++) {
+						dataProvider.getList().add(list.get(i));
+						arrayListBackup.add(list.get(i));
+					}
+
+					cleanGrid();
+
+					addCellTableData(dataProvider);				
 				}
-				
-		
-				cleanGrid();
-				
-				addCellTableData(dataProvider);				
-				
 
 			}
 		};
@@ -219,7 +230,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 				}else{
 					mpPanelLoadingSaving.setVisible(false);
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar()+"\n"+strResult);
+					mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar()+" "+txtConstants.geralRegarregarPagina());
 					mpDialogBoxWarning.showDialog();							
 					
 				}
@@ -233,6 +244,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		/***********************End Callbacks**********************/
 		populateComboBoxTipoPresenca();
 		
+		this.setWidth("100%");
 		super.add(vFormPanel);
 
 	}
@@ -240,7 +252,8 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	
 	public void initializeCellTable(){
 		cellTable = new CellTable<PresencaUsuarioAula>(10,GWT.<CellTableStyle> create(CellTableStyle.class),PresencaUsuarioAula.KEY_PROVIDER);
-		cellTable.setWidth(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+ "px");		
+//		cellTable.setWidth(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+ "px");		
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 
@@ -253,7 +266,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		
 		MpSimplePager mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
-		mpPager.setPageSize(10);
+//		mpPager.setPageSize(10);
 		
 		FlexTable flexTableFiltrarAluno = new FlexTable();		
 		flexTableFiltrarAluno.setCellSpacing(3);
@@ -290,11 +303,14 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable+30)+"px",Integer.toString(TelaInicialDiarioProfessor.intHeightTable-250)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable+30)+"px",Integer.toString(TelaInicialDiarioProfessor.intHeightTable-250)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialDiarioProfessor.intHeightTable-250)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);				
 		
 		VerticalPanel vPanel = new VerticalPanel();
+		vPanel.setWidth("100%");
 		vPanel.setHeight("280px");
 		vPanel.setCellVerticalAlignment(scrollPanel, ALIGN_TOP);
 		vPanel.add(scrollPanel);
@@ -303,6 +319,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		vFormPanel.add(vPanel);
 		vFormPanel.add(gridSave);
 		vFormPanel.add(new MpSpaceVerticalPanel());
+//		vFormPanel.setWidth("100%");
 		
 		
 		vFormPanel.setCellHorizontalAlignment(gridSave, ALIGN_CENTER);
@@ -585,7 +602,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 
 					@Override
 					public void onSuccess(ArrayList<TipoPresenca> list) {
-
+						MpUtilClient.isRefreshRequired(list);
 						for(TipoPresenca currentTipoPresenca : list){
 							String strIdTipoAvaliacao = Integer.toString(currentTipoPresenca.getIdTipoPresenca());
 							String strNomeTipoAvaliacao = currentTipoPresenca.getTipoPresenca();

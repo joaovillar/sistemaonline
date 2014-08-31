@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 
+import com.jornada.ConfigJornada;
 import com.jornada.server.classes.image.ImageCompressor;
 
 public class UploadServlet extends UploadAction {
@@ -65,12 +66,12 @@ public class UploadServlet extends UploadAction {
 					int end = item.getName().length();
 					String sufix = item.getName().substring(begin, end);
 					
-					String strDestinationFolder = "";
+					String strDestinationFolder = ConfigJornada.getProperty("config.download");
 					
 					if(isExcelFile(sufix)){
-						strDestinationFolder = "excel/download";
+						strDestinationFolder += ConfigJornada.getProperty("config.download.excel");
 					}else if(isImageFile(sufix)){
-						strDestinationFolder = "images/download";
+						strDestinationFolder += ConfigJornada.getProperty("config.download.image");
 					}
 					
 					
@@ -99,7 +100,13 @@ public class UploadServlet extends UploadAction {
 					receivedContentTypes.put(item.getFieldName(),item.getContentType());
 
 					// Send a customized message to the client.
-					response += file.getName();
+//					response += strDestinationFolder+file.getName();
+					if(isExcelFile(sufix)){
+						response += strDestinationFolder+file.getName();
+					}else if(isImageFile(sufix)){
+						response += file.getName();
+					}
+					
 
 				} catch (Exception e) {
 					throw new UploadActionException(e);
@@ -115,9 +122,9 @@ public class UploadServlet extends UploadAction {
 	}
 	
 	private boolean isExcelFile(String sufix){
-		if(sufix.equals(".xls")){
+		if(sufix.equalsIgnoreCase(".xls")){
 			return true;
-		}else if (sufix.equals(".xlsx")){
+		}else if (sufix.equalsIgnoreCase(".xlsx")){
 			return true;
 		}
 		else{
@@ -126,11 +133,11 @@ public class UploadServlet extends UploadAction {
 	}
 	
 	private boolean isImageFile(String sufix){
-		if(sufix.equals(".png")){
+		if(sufix.equalsIgnoreCase(".png")){
 			return true;
-		}else if (sufix.equals(".gif")){
+		}else if (sufix.equalsIgnoreCase(".gif")){
 			return true;
-		}else if(sufix.equals(".jpg")){
+		}else if(sufix.equalsIgnoreCase(".jpg")){
 			return true;
 		}			
 		else{

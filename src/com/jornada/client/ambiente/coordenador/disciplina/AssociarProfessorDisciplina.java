@@ -31,6 +31,7 @@ import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class AssociarProfessorDisciplina extends VerticalPanel{
 	
@@ -73,22 +74,24 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		mpPanelProfessorLoading.show();
 		mpPanelProfessorLoading.setVisible(false);
 		
-		mpPanelDisciplinaLoading.setTxtLoading(txtConstants.geralCarregando());
+		mpPanelDisciplinaLoading.setTxtLoading("");
 		mpPanelDisciplinaLoading.show();
 		mpPanelDisciplinaLoading.setVisible(false);
 
-		mpPanelAssociandoLoading.setTxtLoading(txtConstants.geralCarregando());
+		mpPanelAssociandoLoading.setTxtLoading("");
 		mpPanelAssociandoLoading.show();
 		mpPanelAssociandoLoading.setVisible(false);		
 		
 		VerticalPanel vBodyPanel = new VerticalPanel();
+		vBodyPanel.setWidth("100%");
 		
 		vBodyPanel.add(drawPassoUmSelecioneProfessor());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
 		vBodyPanel.add(drawPassoDoisSelecioneDisciplina());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
-		vBodyPanel.add(drawPassoTresSubmeterAssociacao());		
+//		vBodyPanel.add(drawPassoTresSubmeterAssociacao());		
 		
+		setWidth("100%");
 		super.add(vBodyPanel);		
 		
 		
@@ -100,7 +103,8 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.disciplinaSelecionarProfessor(), "images/Professor-icon_16.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 		FlexTable flexTableFiltrar = new FlexTable();		
 		flexTableFiltrar.setCellSpacing(3);
@@ -134,7 +138,7 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		callbackGetProfessoresFiltro = new AsyncCallback<ArrayList<Usuario>>() {
 
 			public void onSuccess(ArrayList<Usuario> list) {
-				
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelProfessorLoading.setVisible(false);
 				mpPanelDisciplinaLoading.setVisible(false);	
 				
@@ -166,7 +170,8 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 	public MpPanelPageMainView drawPassoDoisSelecioneDisciplina(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.disciplinaSelecionar(), "images/disciplina.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 		FlexTable flexTableFiltrar = new FlexTable();		
 		flexTableFiltrar.setCellSpacing(3);
@@ -243,6 +248,9 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 	    flexTableSelecionar.setWidget(2, 0, multiBoxDisciplinaFiltrado);
 	    flexTableSelecionar.setWidget(2, 1, flexTableBotoes);
 	    flexTableSelecionar.setWidget(2, 2, multiBoxDisciplinaAssociada);
+	    flexTableSelecionar.setWidget(3,0,new InlineHTML("&nbsp;"));
+	    flexTableSelecionar.setWidget(4,0,drawPassoTresSubmeterAssociacao());
+	    flexTableSelecionar.getFlexCellFormatter().setColSpan(4, 0, 3);
 	    
 		
 	    mpPanel.add(flexTableSelecionar);
@@ -250,7 +258,7 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		callbackGetDisciplinasFiltro = new AsyncCallback<ArrayList<Disciplina>>() {
 
 			public void onSuccess(ArrayList<Disciplina> list) {
-				
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelProfessorLoading.setVisible(false);
 				mpPanelDisciplinaLoading.setVisible(false);				
 				
@@ -279,7 +287,7 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		callbackGetDisciplinasAssociadas = new AsyncCallback<ArrayList<Disciplina>>() {
 
 			public void onSuccess(ArrayList<Disciplina> list) {
-				
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelProfessorLoading.setVisible(false);
 				mpPanelDisciplinaLoading.setVisible(false);					
 				
@@ -320,7 +328,8 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		vPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+//		vPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+		vPanel.setWidth("100%");
 
 		MpImageButton btnSubmeterAssociacao = new MpImageButton(txtConstants.disciplinaAssociarProfessores(), "images/image002.png");
 		btnSubmeterAssociacao.addClickHandler(new ClickHandlerSubmeterAssociarProfessorAsDisciplinas());		

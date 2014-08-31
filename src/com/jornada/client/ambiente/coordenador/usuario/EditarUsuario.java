@@ -30,6 +30,9 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -52,7 +55,9 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.TipoUsuario;
+import com.jornada.shared.classes.UnidadeEscola;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 
 public class EditarUsuario extends VerticalPanel {
@@ -128,11 +133,12 @@ public class EditarUsuario extends VerticalPanel {
 		txtSearch = new TextBox();
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
 		
-		selectCampoFiltrar.addItem(txtConstants.usuarioPrimeiroNome(),"primeiro_nome");
-		selectCampoFiltrar.addItem(txtConstants.usuarioSobreNome(),"sobre_nome");
-		selectCampoFiltrar.addItem(txtConstants.usuarioEmail(),"email");
-		selectCampoFiltrar.addItem(txtConstants.usuarioCPF(),"cpf");
-		selectCampoFiltrar.addItem(txtConstants.usuarioTipo(),"nome_tipo_usuario");
+		selectCampoFiltrar.addItem(txtConstants.usuarioPrimeiroNome(),Usuario.DB_PRIMEIRO_NOME);
+		selectCampoFiltrar.addItem(txtConstants.usuarioSobreNome(),Usuario.DB_SOBRE_NOME);
+		selectCampoFiltrar.addItem(txtConstants.usuarioEmail(),Usuario.DB_EMAIL);
+		selectCampoFiltrar.addItem(txtConstants.usuarioCPF(),Usuario.DB_CPF);
+		selectCampoFiltrar.addItem(txtConstants.usuarioTipo(),TipoUsuario.DB_NOME_TIPO_USUARIO);
+		selectCampoFiltrar.addItem(txtConstants.usuarioUnidadeEscola(),UnidadeEscola.DB_NOME_UNIDADE_ESCOLA);
 		
 		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
@@ -148,8 +154,9 @@ public class EditarUsuario extends VerticalPanel {
 
 		vPanelEditGrid = new VerticalPanel();		
 		vPanelEditGrid.add(flexTableFiltrar);	
+		vPanelEditGrid.setWidth("100%");
 		
-		
+		setWidth("100%");
 		super.add(vPanelEditGrid);		
 		//populateComboBoxTipoUsuario();
 		
@@ -157,16 +164,19 @@ public class EditarUsuario extends VerticalPanel {
 		
 		callbackUpdateRow = new AsyncCallback<String>() {
 
-			public void onSuccess(String success) {
-				
+			public void onSuccess(String success) {				
+
 				if(success.equals("true")){
 					getTelaInicialUsuario().getAssociarPaisAlunos().updateClientData();	
-				}else if(success.contains("duplicate key")){
+				}else if(success.contains(Usuario.DB_UNIQUE_LOGIN)){
 					String strUsuario = success.substring(success.indexOf("=(")+2);
 					strUsuario = strUsuario.substring(0,strUsuario.indexOf(")"));
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroAtualizar() + " "+txtConstants.usuarioErroLoginDuplicado(strUsuario));
 					mpDialogBoxWarning.showDialog();					
+				}else{
+					MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
+					mpDialogBox.showDialog();				
 				}
 			}
 
@@ -206,7 +216,7 @@ public class EditarUsuario extends VerticalPanel {
 		callbackGetUsuariosFiltro = new AsyncCallback<ArrayList<Usuario>>() {
 
 			public void onSuccess(ArrayList<Usuario> list) {
-				
+				MpUtilClient.isRefreshRequired(list);
 				mpPanelLoading.setVisible(false);
 				
 				cleanCellTable();
@@ -240,7 +250,9 @@ public class EditarUsuario extends VerticalPanel {
 
 		cellTable = new CellTable<Usuario>(15,GWT.<CellTableStyle> create(CellTableStyle.class));
 
-		cellTable.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+ "px");
+		cellTable.getElement().setId("celltable");
+		cellTable.setWidth("100%");
 	    cellTable.setAutoHeaderRefreshDisabled(true);
 	    cellTable.setAutoFooterRefreshDisabled(true);
 //	    cellTable.setPageSize(10);
@@ -262,13 +274,51 @@ public class EditarUsuario extends VerticalPanel {
 		/******** End Populate ********/
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialUsuario.intWidthTable+30)+"px",Integer.toString(TelaInicialUsuario.intHeightTable-80)+"px");
-		scrollPanel.setAlwaysShowScrollBars(false);		
+//		scrollPanel.setSize(Integer.toString(TelaInicialUsuario.intWidthTable+30)+"px",Integer.toString(TelaInicialUsuario.intHeightTable-80)+"px");
+		scrollPanel.setAlwaysShowScrollBars(false);	
+		scrollPanel.setHeight(Integer.toString(TelaInicialUsuario.intHeightTable-80)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.add(cellTable);
 
-		vPanelEditGrid.add(mpPager);
-		vPanelEditGrid.add(scrollPanel);
+//		HorizontalPanel hPanel = new HorizontalPanel();
+//		hPanel.add(mpPager);hPanel.add(new Image("images/excel.png"));hPanel.add(new Image("images/print.png"));
 		
+		Image imgExcel = new Image("images/excel.24.png");
+//		Image imgPrint = new Image("images/Print.24.v2.png");
+		
+		imgExcel.addClickHandler(new clickHandlerExcel());
+//		imgPrint.addClickHandler(new clickHandlerPrint());
+		imgExcel.setStyleName("hand-over");
+//		imgPrint.setStyleName("hand-over");
+		
+		imgExcel.setTitle(txtConstants.geralExcel());
+//		imgPrint.setTitle(txtConstants.geralImprimir());
+		
+		FlexTable flexTableImg = new FlexTable();
+		
+		int columnImg = 0;
+//		flexTableImg.setWidget(0, columnImg++, imgPrint);
+		flexTableImg.setWidget(0, columnImg++, new InlineHTML("&nbsp;"));
+		flexTableImg.setWidget(0, columnImg++, new InlineHTML("&nbsp;"));
+		flexTableImg.setWidget(0, columnImg++, imgExcel);
+		
+//		Label lbl = new Label("Testing...");
+		FlexTable flexTableMenu = new FlexTable();
+		flexTableMenu.setCellPadding(2);
+		flexTableMenu.setCellSpacing(2);
+		flexTableMenu.setBorderWidth(0);
+		flexTableMenu.setWidth("100%");		
+		flexTableMenu.setWidget(0, 0, mpPager);
+		flexTableMenu.setWidget(0, 1, flexTableImg);
+		flexTableMenu.getCellFormatter().setWidth(0, 0, "30%");
+		flexTableMenu.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
+
+		
+//		flexTableMenu.setWidget(0, 2, lbl);
+		
+		vPanelEditGrid.add(flexTableMenu);
+		vPanelEditGrid.add(scrollPanel);
+		vPanelEditGrid.setBorderWidth(0);
 //		super.add(vPanelEditGrid);		
 		
 	}	
@@ -338,9 +388,12 @@ public class EditarUsuario extends VerticalPanel {
 
 	protected void cleanCellTable() {
 		
-		cellTable.setRowCount(0);
+		
+		//cellTable.setRowCount(0);		
+		cellTable.setPageStart(0);
 		cellTable.redraw();
-		cellTable.setPageStart(0);		
+		dataProvider.refresh();
+		
 
 	    
 //		mpPager.setDisplay(cellTable);
@@ -363,7 +416,7 @@ public class EditarUsuario extends VerticalPanel {
 
 					@Override
 					public void onSuccess(ArrayList<TipoUsuario> list) {
-
+						MpUtilClient.isRefreshRequired(list);
 						for(TipoUsuario currentTipoUsuario : list){
 							String strIdTipoUsuario = Integer.toString(currentTipoUsuario.getIdTipoUsuario());
 							String strTipoUsuario = currentTipoUsuario.getNomeTipoUsuario();
@@ -401,7 +454,7 @@ public class EditarUsuario extends VerticalPanel {
 	
 	public void updateClientData(){		
 		cleanCellTable();		
-//		callGetUsuarios();
+		callGetUsuarios();
 	}
 	
 	public void updateClientDataRow(int idUsuario){		
@@ -553,14 +606,14 @@ public class EditarUsuario extends VerticalPanel {
 			@Override
 			public void update(int index, Usuario object, String value) {
 				// Called when the user changes the value.				
-				if (FieldVerifier.isValidEmail(value)) {
+//				if (FieldVerifier.isValidEmail(value)) {
 					object.setEmail(value);
 					GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object,callbackUpdateRow);
-				} else {
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.usuarioEmail()));
-					mpDialogBoxWarning.showDialog();
-				}	
+//				} else {
+//					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+//					mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.usuarioEmail()));
+//					mpDialogBoxWarning.showDialog();
+//				}	
 				
 			}
 		});
@@ -705,10 +758,10 @@ public class EditarUsuario extends VerticalPanel {
 
 		cellTable.addColumn(columnTipoUsuario, txtConstants.usuarioTipo());
 		cellTable.addColumn(columnPrimeiroNome, txtConstants.usuarioPrimeiroNome());
-		cellTable.addColumn(columnSobreNome,txtConstants.usuarioSobreNome());
-		cellTable.addColumn(columnEmail, txtConstants.usuarioEmail());
+		cellTable.addColumn(columnSobreNome,txtConstants.usuarioSobreNome());		
 		cellTable.addColumn(columnLogin, txtConstants.usuario());
 		cellTable.addColumn(columnSenha, txtConstants.usuarioSenha());
+		cellTable.addColumn(columnEmail, txtConstants.usuarioEmail());
 		cellTable.addColumn(columnCPF, txtConstants.usuarioCPF());
 		cellTable.addColumn(columnDataNascimento, txtConstants.usuarioDataNascimento());
 //		cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
@@ -820,6 +873,24 @@ public class EditarUsuario extends VerticalPanel {
 	    
 		
 	}
+	
+	
+	private class clickHandlerExcel implements ClickHandler{
+		@Override
+		public void onClick(ClickEvent event) {
+			MpDialogBoxExcel.getInstance();		 			
+		}
+	}
+	
+//	private class clickHandlerPrint implements ClickHandler{
+//		@Override
+//		public void onClick(ClickEvent event) {		 
+////			MpDialogBoxPrinter.getInstance(telaInicialUsuario,MpDialogBoxPrinter.OPERATION_TYPE_PRINT);
+////			String strCss = "<link type='text/css' rel='stylesheet' href='Jornada.css'>";
+//			 Print.it(Print.getPageStyle(),cellTable.getElement());
+//			
+//		}
+//	}
 	
 
 }

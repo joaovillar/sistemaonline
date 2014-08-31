@@ -45,6 +45,11 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.deleteUsuarioRow(id_usuario);		
 	}	
 	
+	
+	public String gerarExcelUsuario(){
+		return UsuarioServer.gerarExcelUsuario();
+	}
+	
 	public ArrayList<UsuarioErroImportar> importarUsuariosUsandoExcel(String excelFile){
 		return UsuarioServer.importarUsuariosUsandoExcel(excelFile);
 	}
@@ -57,8 +62,14 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.getUsuarios(strFilter);
 	}	
 	
-	public ArrayList<Usuario> getUsuarios(String strDBField, String strFilter) {				
-		return UsuarioServer.getUsuarios(strDBField, strFilter);
+	public ArrayList<Usuario> getUsuarios(String strDBField, String strFilter) {	
+		
+		if(strFilter.length()==2){
+			return UsuarioServer.getUsuarios();
+		}else{
+			return UsuarioServer.getUsuarios(strDBField, strFilter);	
+		}
+		
 	}		
 	
 	public ArrayList<Usuario> getAlunosPorCurso(int idCurso, String strFiltroUsuario) {				
@@ -117,6 +128,12 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 	public Usuario getUsuarioPeloId(int idUsuario){
 		return UsuarioServer.getUsuarioPeloId(idUsuario);
 	}
+	
+	
+//	public String getPagePrint(String strHtmlPage){
+//		
+//		return UsuarioServer.getPagePrint(strHtmlPage);
+//	}
 
 
 }

@@ -1,5 +1,6 @@
 package com.jornada.server.classes;
 
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,9 +11,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.jornada.ConfigJornada;
@@ -22,12 +28,14 @@ import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class UsuarioServer{
 
 	public static String DB_INSERT = 
 			"INSERT INTO usuario " +
 			"(" +
+			"id_unidade_escola," +
 			"primeiro_nome," +
 			"sobre_nome," +
 			"cpf," +
@@ -55,14 +63,16 @@ public class UsuarioServer{
 			"registro_matricula," +
 			"tipo_pais," +
 			"situacao_responsaveis," +
-			"situacao_responsaveis_outros" +			
+			"situacao_responsaveis_outros," +
+			"registro_aluno, " + 
+			"primeiro_login " +
 			") " +
 			"VALUES " +
-			"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
+			"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	
 	public static String DB_UPDATE = 
 			"UPDATE usuario set " +
+			"id_unidade_escola=?, " +
 			"primeiro_nome=?, " +
 			"sobre_nome=?, " +
 			"cpf=?, " +
@@ -89,15 +99,14 @@ public class UsuarioServer{
 			"registro_matricula=?, " +
 			"tipo_pais=?, " +
 			"situacao_responsaveis=?, " +
-			"situacao_responsaveis_outros=? " +			
+			"situacao_responsaveis_outros=?, " +
+			"registro_aluno=? " +		
 			"where id_usuario=?";
-	
-	
 	
 	public static String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
 	public static String DB_UPDATE_SENHA = "UPDATE usuario set senha=?, primeiro_login=false where id_usuario=?";
 	public static String DB_SELECT_ILIKE = "SELECT * FROM usuario where (primeiro_nome ilike ?) order by primeiro_nome asc";
-	public static String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario where (<change> ilike ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome asc";
+	public static String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario, unidade_escola where usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario and unidade_escola.id_unidade_escola=usuario.id_unidade_escola and (<change> ilike ?)  order by primeiro_nome asc";
 	public static String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome asc";
 	public static String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome asc";
 	public static String DB_SELECT_ALL = "SELECT * FROM usuario order by primeiro_nome asc;";
@@ -180,6 +189,7 @@ public class UsuarioServer{
 
 			int count = 0;
 			PreparedStatement insert = connection.prepareStatement(UsuarioServer.DB_INSERT);
+			insert.setInt(++count, usuario.getIdUnidadeEscola());
 			insert.setString(++count, usuario.getPrimeiroNome());
 			insert.setString(++count, usuario.getSobreNome());
 			insert.setString(++count, usuario.getCpf());
@@ -208,6 +218,8 @@ public class UsuarioServer{
 			insert.setString(++count, usuario.getTipoPais());
 			insert.setString(++count, usuario.getSituacaoResponsaveis());
 			insert.setString(++count, usuario.getSituacaoResponsaveisOutros());
+			insert.setString(++count, usuario.getRegistroAluno());			
+			insert.setBoolean(++count, true);
 
 			int numberUpdate = insert.executeUpdate();
 
@@ -238,6 +250,7 @@ public class UsuarioServer{
 			
 			int count = 0;
 			PreparedStatement update = connection.prepareStatement(UsuarioServer.DB_UPDATE);
+			update.setInt(++count, usuario.getIdUnidadeEscola());
 			update.setString(++count, usuario.getPrimeiroNome());
 			update.setString(++count, usuario.getSobreNome());
 			update.setString(++count, usuario.getCpf());
@@ -266,6 +279,8 @@ public class UsuarioServer{
 			update.setString(++count, usuario.getTipoPais());
 			update.setString(++count, usuario.getSituacaoResponsaveis());
 			update.setString(++count, usuario.getSituacaoResponsaveisOutros());
+			update.setString(++count, usuario.getRegistroAluno());
+
 						
 			update.setInt(++count, usuario.getIdUsuario());
 
@@ -392,8 +407,442 @@ public class UsuarioServer{
 		return success;
 	}		
 	
-	public static ArrayList<UsuarioErroImportar> importarUsuariosUsandoExcel(String strFileName){
-	    Workbook wb;
+	public static String gerarExcelUsuario(){
+		String strLong="";
+
+		XSSFWorkbook wb = new XSSFWorkbook();
+		
+		Font font = wb.createFont();
+        XSSFCellStyle style = wb.createCellStyle();
+        
+        font.setColor(IndexedColors.WHITE.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        font.setFontName("sans-serif");
+        style.setAlignment(CellStyle.ALIGN_CENTER);
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex());
+        style.setFont(font);
+        style.setBorderBottom(CellStyle.BORDER_THIN);
+        style.setBorderTop(CellStyle.BORDER_THIN);
+        style.setBorderLeft(CellStyle.BORDER_THIN);
+        style.setBorderRight(CellStyle.BORDER_THIN);
+		
+		///Creating Tabs
+		XSSFSheet sheetAdministrador = wb.createSheet("Administrador");
+		XSSFSheet sheetAlunos = wb.createSheet("Alunos");
+		XSSFSheet sheetCoordenador = wb.createSheet("Coordenador");
+		XSSFSheet sheetPais = wb.createSheet("Pais");
+		XSSFSheet sheetProfessor = wb.createSheet("Professor");
+		XSSFSheet sheetPaisAlunos = wb.createSheet("Associação Pais e Alunos");
+		
+        gerarExcelAdministrador(sheetAdministrador, font, style);
+        gerarExcelAluno(sheetAlunos, font, style);
+        gerarExcelCoordenador(sheetCoordenador, font, style);
+        gerarExcelPais(sheetPais, font, style);
+        gerarExcelProfessor(sheetProfessor, font, style);
+        gerarExcelPaisAlunos(sheetPaisAlunos, font, style);
+        
+		try {
+			Date data = new Date();
+			strLong += "GerarExcelUsuarios_" + Long.toString(data.getTime())+ ".xlsx";
+			FileOutputStream out = new FileOutputStream(ConfigJornada.getProperty("config.download")+ ConfigJornada.getProperty("config.download.excel") + strLong);
+			wb.write(out);
+			out.close();
+			out.flush();
+		} catch (Exception ex) {
+			System.out.print("Error Excel:" + ex.getMessage());
+		}
+        
+        return ConfigJornada.getProperty("config.download.excel")+strLong;
+		
+	}
+	
+	public static void gerarExcelAdministrador(Sheet sheet, Font font, XSSFCellStyle style ){
+				
+		ArrayList<Usuario> listUsuarios = UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.ADMINISTRADOR);
+		
+		Row row = sheet.createRow((short) 0);		
+		
+		int intColumn=0;
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Unidade");
+        row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
+        row.createCell((short) intColumn++).setCellValue("Sobre Nome");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Email");        
+        row.createCell((short) intColumn++).setCellValue("Data Nascimento");
+        row.createCell((short) intColumn++).setCellValue("Sexo");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Num Res");
+        row.createCell((short) intColumn++).setCellValue("Bairro");
+        row.createCell((short) intColumn++).setCellValue("Cidade");
+        row.createCell((short) intColumn++).setCellValue("UF");
+        row.createCell((short) intColumn++).setCellValue("Cep");
+        row.createCell((short) intColumn++).setCellValue("Tel Celular");
+        row.createCell((short) intColumn++).setCellValue("Tel Res");
+        row.createCell((short) intColumn++).setCellValue("Tel Com");
+        row.createCell((short) intColumn++).setCellValue("CPF");
+        row.createCell((short) intColumn++).setCellValue("RG");
+
+
+		for (int i = 0; i < intColumn; i++) {
+			row.getCell((short) i).setCellStyle(style);
+		}
+        
+        
+        for(int i=0;i<listUsuarios.size();i++){
+        	Usuario usuario = listUsuarios.get(i);
+        	row = sheet.createRow((short) i+1);
+        	
+        	intColumn=0;
+       	
+    		row.createCell((short) intColumn++).setCellValue(usuario.getTipoUsuario().getNomeTipoUsuario());
+    		row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeEscola().getNomeUnidadeEscola());
+            row.createCell((short) intColumn++).setCellValue(usuario.getPrimeiroNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getSobreNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getLogin());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEmail());        
+            row.createCell((short) intColumn++).setCellValue((usuario.getDataNascimento()==null)?"":MpUtilServer.convertDateToString(usuario.getDataNascimento()));
+            row.createCell((short) intColumn++).setCellValue(usuario.getSexo());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEndereco());
+            row.createCell((short) intColumn++).setCellValue(usuario.getNumeroResidencia());
+            row.createCell((short) intColumn++).setCellValue(usuario.getBairro());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCidade());
+            row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeFederativa());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCep());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneCelular());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneResidencial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneComercial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
+            row.createCell((short) intColumn++).setCellValue(usuario.getRg());
+        }        
+        
+		for (int i = 0; i < intColumn; i++) {
+			sheet.autoSizeColumn(i,true);
+		}
+
+	}
+	
+	public static void gerarExcelAluno(Sheet sheet, Font font, XSSFCellStyle style ){
+
+		ArrayList<Usuario> listUsuarios = UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.ALUNO);
+		
+		Row row = sheet.createRow((short) 0);		
+		
+		int intColumn=0;
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Unidade");
+		row.createCell((short) intColumn++).setCellValue("Matrícula");
+		row.createCell((short) intColumn++).setCellValue("Data Matric");
+		row.createCell((short) intColumn++).setCellValue("Registro Aluno");
+        row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
+        row.createCell((short) intColumn++).setCellValue("Sobre Nome");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Email");        
+        row.createCell((short) intColumn++).setCellValue("Data Nascimento");
+        row.createCell((short) intColumn++).setCellValue("Sexo");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Num Res");
+        row.createCell((short) intColumn++).setCellValue("Bairro");
+        row.createCell((short) intColumn++).setCellValue("Cidade");
+        row.createCell((short) intColumn++).setCellValue("UF");
+        row.createCell((short) intColumn++).setCellValue("Cep");
+        row.createCell((short) intColumn++).setCellValue("Tel Celular");
+        row.createCell((short) intColumn++).setCellValue("Tel Res");
+        row.createCell((short) intColumn++).setCellValue("Tel Com");
+        row.createCell((short) intColumn++).setCellValue("CPF");
+        row.createCell((short) intColumn++).setCellValue("RG");
+        row.createCell((short) intColumn++).setCellValue("Situação do Pais");
+        row.createCell((short) intColumn++).setCellValue("Situação do Pais : Outros");
+
+        
+		for (int i = 0; i < intColumn; i++) {
+			row.getCell((short) i).setCellStyle(style);
+		}
+		
+        for(int i=0;i<listUsuarios.size();i++){
+        	Usuario usuario = listUsuarios.get(i);
+        	row = sheet.createRow((short) i+1);
+        	
+        	intColumn=0;
+       	
+    		row.createCell((short) intColumn++).setCellValue(usuario.getTipoUsuario().getNomeTipoUsuario());
+    		row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeEscola().getNomeUnidadeEscola());
+    		row.createCell((short) intColumn++).setCellValue(usuario.getRegistroMatricula());
+    		row.createCell((short) intColumn++).setCellValue((usuario.getDataMatricula()==null)?"":MpUtilServer.convertDateToString(usuario.getDataMatricula()));
+    		row.createCell((short) intColumn++).setCellValue(usuario.getRegistroAluno());
+            row.createCell((short) intColumn++).setCellValue(usuario.getPrimeiroNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getSobreNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getLogin());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEmail());        
+            row.createCell((short) intColumn++).setCellValue((usuario.getDataNascimento()==null)?"":MpUtilServer.convertDateToString(usuario.getDataNascimento()));
+            row.createCell((short) intColumn++).setCellValue(usuario.getSexo());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEndereco());
+            row.createCell((short) intColumn++).setCellValue(usuario.getNumeroResidencia());
+            row.createCell((short) intColumn++).setCellValue(usuario.getBairro());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCidade());
+            row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeFederativa());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCep());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneCelular());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneResidencial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneComercial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
+            row.createCell((short) intColumn++).setCellValue(usuario.getRg());
+            row.createCell((short) intColumn++).setCellValue(usuario.getSituacaoResponsaveis());
+            row.createCell((short) intColumn++).setCellValue(usuario.getSituacaoResponsaveisOutros());        	
+        	
+        }        
+        
+		for (int i = 0; i < intColumn; i++) {
+			sheet.autoSizeColumn(i,true);
+		}
+
+	}
+	
+	public static void gerarExcelCoordenador(Sheet sheet, Font font, XSSFCellStyle style ){
+		
+		ArrayList<Usuario> listUsuarios = UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.COORDENADOR);
+		
+		Row row = sheet.createRow((short) 0);		
+		
+		int intColumn=0;
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Unidade");
+        row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
+        row.createCell((short) intColumn++).setCellValue("Sobre Nome");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Email");        
+        row.createCell((short) intColumn++).setCellValue("Data Nascimento");
+        row.createCell((short) intColumn++).setCellValue("Sexo");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Num Res");
+        row.createCell((short) intColumn++).setCellValue("Bairro");
+        row.createCell((short) intColumn++).setCellValue("Cidade");
+        row.createCell((short) intColumn++).setCellValue("UF");
+        row.createCell((short) intColumn++).setCellValue("Cep");
+        row.createCell((short) intColumn++).setCellValue("Tel Celular");
+        row.createCell((short) intColumn++).setCellValue("Tel Res");
+        row.createCell((short) intColumn++).setCellValue("Tel Com");
+        row.createCell((short) intColumn++).setCellValue("CPF");
+        row.createCell((short) intColumn++).setCellValue("RG");
+
+        
+		for (int i = 0; i < intColumn; i++) {
+			row.getCell((short) i).setCellStyle(style);
+		}
+        
+        for(int i=0;i<listUsuarios.size();i++){
+        	Usuario usuario = listUsuarios.get(i);
+        	row = sheet.createRow((short) i+1);
+        	
+        	intColumn=0;
+       	
+    		row.createCell((short) intColumn++).setCellValue(usuario.getTipoUsuario().getNomeTipoUsuario());
+    		row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeEscola().getNomeUnidadeEscola());
+            row.createCell((short) intColumn++).setCellValue(usuario.getPrimeiroNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getSobreNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getLogin());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEmail());        
+            row.createCell((short) intColumn++).setCellValue((usuario.getDataNascimento()==null)?"":MpUtilServer.convertDateToString(usuario.getDataNascimento()));
+            row.createCell((short) intColumn++).setCellValue(usuario.getSexo());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEndereco());
+            row.createCell((short) intColumn++).setCellValue(usuario.getNumeroResidencia());
+            row.createCell((short) intColumn++).setCellValue(usuario.getBairro());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCidade());
+            row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeFederativa());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCep());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneCelular());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneResidencial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneComercial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
+            row.createCell((short) intColumn++).setCellValue(usuario.getRg());
+        }        
+        
+		for (int i = 0; i < intColumn; i++) {
+			sheet.autoSizeColumn(i,true);
+		}
+
+	}
+
+	public static void gerarExcelProfessor(Sheet sheet, Font font, XSSFCellStyle style ){
+		
+		ArrayList<Usuario> listUsuarios = UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.PROFESSOR);
+		
+		Row row = sheet.createRow((short) 0);		
+		
+		int intColumn=0;
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Unidade");
+        row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
+        row.createCell((short) intColumn++).setCellValue("Sobre Nome");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Email");        
+        row.createCell((short) intColumn++).setCellValue("Data Nascimento");
+        row.createCell((short) intColumn++).setCellValue("Sexo");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Num Res");
+        row.createCell((short) intColumn++).setCellValue("Bairro");
+        row.createCell((short) intColumn++).setCellValue("Cidade");
+        row.createCell((short) intColumn++).setCellValue("UF");
+        row.createCell((short) intColumn++).setCellValue("Cep");
+        row.createCell((short) intColumn++).setCellValue("Tel Celular");
+        row.createCell((short) intColumn++).setCellValue("Tel Res");
+        row.createCell((short) intColumn++).setCellValue("Tel Com");
+        row.createCell((short) intColumn++).setCellValue("CPF");
+        row.createCell((short) intColumn++).setCellValue("RG");
+
+        
+		for (int i = 0; i < intColumn; i++) {
+			row.getCell((short) i).setCellStyle(style);
+		}
+        
+        for(int i=0;i<listUsuarios.size();i++){
+        	Usuario usuario = listUsuarios.get(i);
+        	row = sheet.createRow((short) i+1);
+        	
+        	intColumn=0;
+       	
+    		row.createCell((short) intColumn++).setCellValue(usuario.getTipoUsuario().getNomeTipoUsuario());
+    		row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeEscola().getNomeUnidadeEscola());
+            row.createCell((short) intColumn++).setCellValue(usuario.getPrimeiroNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getSobreNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getLogin());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEmail());        
+            row.createCell((short) intColumn++).setCellValue((usuario.getDataNascimento()==null)?"":MpUtilServer.convertDateToString(usuario.getDataNascimento()));
+            row.createCell((short) intColumn++).setCellValue(usuario.getSexo());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEndereco());
+            row.createCell((short) intColumn++).setCellValue(usuario.getNumeroResidencia());
+            row.createCell((short) intColumn++).setCellValue(usuario.getBairro());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCidade());
+            row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeFederativa());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCep());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneCelular());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneResidencial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneComercial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
+            row.createCell((short) intColumn++).setCellValue(usuario.getRg());
+        }        
+        
+		for (int i = 0; i < intColumn; i++) {
+			sheet.autoSizeColumn(i,true);
+		}
+
+	}
+	
+	public static void gerarExcelPais(Sheet sheet, Font font, XSSFCellStyle style ){
+		
+		ArrayList<Usuario> listUsuarios = UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.PAIS);
+		
+		Row row = sheet.createRow((short) 0);		
+		
+		int intColumn=0;
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Unidade");
+        row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
+        row.createCell((short) intColumn++).setCellValue("Sobre Nome");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Email");        
+        row.createCell((short) intColumn++).setCellValue("Data Nascimento");        
+        row.createCell((short) intColumn++).setCellValue("Sexo");
+        row.createCell((short) intColumn++).setCellValue("Tipo Pai");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Num Res");
+        row.createCell((short) intColumn++).setCellValue("Bairro");
+        row.createCell((short) intColumn++).setCellValue("Cidade");
+        row.createCell((short) intColumn++).setCellValue("UF");
+        row.createCell((short) intColumn++).setCellValue("Cep");
+        row.createCell((short) intColumn++).setCellValue("Tel Celular");
+        row.createCell((short) intColumn++).setCellValue("Tel Res");
+        row.createCell((short) intColumn++).setCellValue("Tel Com");
+        row.createCell((short) intColumn++).setCellValue("CPF");
+        row.createCell((short) intColumn++).setCellValue("RG");
+        row.createCell((short) intColumn++).setCellValue("Empresa");
+        row.createCell((short) intColumn++).setCellValue("Cargo");
+        row.createCell((short) intColumn++).setCellValue("Resp Acadêmico");
+        row.createCell((short) intColumn++).setCellValue("Resp Financeiro");
+        
+		for (int i = 0; i < intColumn; i++) {
+			row.getCell((short) i).setCellStyle(style);
+		}
+        
+        for(int i=0;i<listUsuarios.size();i++){
+        	Usuario usuario = listUsuarios.get(i);
+        	row = sheet.createRow((short) i+1);
+        	
+        	intColumn=0;
+       	
+    		row.createCell((short) intColumn++).setCellValue(usuario.getTipoUsuario().getNomeTipoUsuario());
+    		row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeEscola().getNomeUnidadeEscola());
+            row.createCell((short) intColumn++).setCellValue(usuario.getPrimeiroNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getSobreNome());
+            row.createCell((short) intColumn++).setCellValue(usuario.getLogin());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEmail());        
+            row.createCell((short) intColumn++).setCellValue((usuario.getDataNascimento()==null)?"":MpUtilServer.convertDateToString(usuario.getDataNascimento()));            
+            row.createCell((short) intColumn++).setCellValue(usuario.getSexo());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTipoPais());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEndereco());
+            row.createCell((short) intColumn++).setCellValue(usuario.getNumeroResidencia());
+            row.createCell((short) intColumn++).setCellValue(usuario.getBairro());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCidade());
+            row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeFederativa());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCep());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneCelular());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneResidencial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneComercial());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
+            row.createCell((short) intColumn++).setCellValue(usuario.getRg());
+            row.createCell((short) intColumn++).setCellValue(usuario.getEmpresaOndeTrabalha());
+            row.createCell((short) intColumn++).setCellValue(usuario.getCargo());
+            row.createCell((short) intColumn++).setCellValue((usuario.isRespAcademico()==true)?"Sim":"Não");
+            row.createCell((short) intColumn++).setCellValue((usuario.isRespFinanceiro()==true)?"Sim":"Não");        
+        }        
+        
+		for (int i = 0; i < intColumn; i++) {
+			sheet.autoSizeColumn(i,true);
+		}
+
+	}
+
+	public static void gerarExcelPaisAlunos(Sheet sheet, Font font, XSSFCellStyle style ){
+		
+		ArrayList<Usuario> listAlunos = UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.ALUNO);
+
+		
+		Row row = sheet.createRow((short) 0);		
+		
+		int intColumn=0;
+		row.createCell((short) intColumn++).setCellValue("Aluno");
+		row.createCell((short) intColumn++).setCellValue("Pais");
+        
+		for (int i = 0; i < intColumn; i++) {
+			row.getCell((short) i).setCellStyle(style);
+		}
+        
+		int countRow=1;
+        for(int i=0;i<listAlunos.size();i++){
+        	Usuario aluno = listAlunos.get(i);        	        	       	
+        	
+        	ArrayList<Usuario> arrayPais = UsuarioServer.getTodosOsPaisDoAluno(aluno.getIdUsuario());
+        	for(int cv=0;cv<arrayPais.size();cv++){
+        		Usuario pai = arrayPais.get(cv);
+        		intColumn=0;
+        		row = sheet.createRow((short) countRow++);        		
+        		row.createCell((short) intColumn++).setCellValue(aluno.getPrimeiroNome() + " "+ aluno.getSobreNome());
+        		row.createCell((short) intColumn++).setCellValue(pai.getPrimeiroNome() + " "+ pai.getSobreNome());
+        		
+        	}
+       	
+        }        
+        
+		for (int i = 0; i < intColumn; i++) {
+			sheet.autoSizeColumn(i,true);
+		}
+
+	}
+
+	
+   public static ArrayList<UsuarioErroImportar> importarUsuariosUsandoExcel(String strFileName){
+		Workbook wb;
 
 //	    String strMessage;
 	    
@@ -407,7 +856,7 @@ public class UsuarioServer{
 	    
 		try {
 
-			wb = new XSSFWorkbook("excel/download/"+strFileName);
+			wb = new XSSFWorkbook(strFileName);
 			
 			arrayUsuarioError.addAll(importarAlunos(wb.getSheetAt(SHEET_ALUNO)));
 			arrayUsuarioError.addAll(importarCoordenador(wb.getSheetAt(SHEET_COORDENADOR)));
@@ -417,6 +866,7 @@ public class UsuarioServer{
 			
 		} catch (Exception ex) {
 			System.out.println("Error Read Excel:"+ex.getMessage());
+			arrayUsuarioError=null;
 //			strMessage="erro";
 		}
 		
@@ -440,7 +890,7 @@ public class UsuarioServer{
 	
 	public static ArrayList<UsuarioErroImportar> importarAlunos(Sheet sheet){
 		
-		 ArrayList<UsuarioErroImportar> arrayAlunoError = new ArrayList<UsuarioErroImportar>();
+		 ArrayList<UsuarioErroImportar> arrayUsuarioError = new ArrayList<UsuarioErroImportar>();
 		 
 	    Row row;
 	    
@@ -454,6 +904,7 @@ public class UsuarioServer{
 			String strCamposCorretos = "";
 			
 			row = sheet.getRow(i);
+			
 			
 
 			
@@ -525,9 +976,9 @@ public class UsuarioServer{
 			if(Sobre_Nome.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
 			}
-			if(Email.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Email é obrigatório || ";
-			}
+//			if(Email.getStringCellValue().isEmpty()){
+//				strCamposCorretos+="Campo Email é obrigatório || ";
+//			}
 			if(Usuario.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Usuario é obrigatório || ";
 			}			
@@ -592,14 +1043,21 @@ public class UsuarioServer{
 				usuarioErroImportar.setEmail(usuario.getEmail());
 				usuarioErroImportar.setLogin(usuario.getLogin());
 				usuarioErroImportar.setErroImportar(strStatusAddUsuario);
-				
-				arrayAlunoError.add(usuarioErroImportar);
+				if( usuario.getPrimeiroNome().isEmpty()
+					&&usuario.getSobreNome().isEmpty()
+					&&usuario.getEmail().isEmpty() 
+					&&usuario.getLogin().isEmpty())
+				{
+					//there is no information to populate
+				}else{
+					arrayUsuarioError.add(usuarioErroImportar);								
+				}
 
 			}
 
 		}
 		
-		return arrayAlunoError;
+		return arrayUsuarioError;
 
 	}
 	
@@ -687,9 +1145,9 @@ public class UsuarioServer{
 			if(Sobre_Nome.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
 			}
-			if(Email.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Email é obrigatório || ";
-			}
+//			if(Email.getStringCellValue().isEmpty()){
+//				strCamposCorretos+="Campo Email é obrigatório || ";
+//			}
 			if(Usuario.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Usuario é obrigatório || ";
 			}			
@@ -757,8 +1215,15 @@ public class UsuarioServer{
 				usuarioErroImportar.setLogin(usuario.getLogin());
 				usuarioErroImportar.setErroImportar(strStatusAddUsuario);
 				
-				arrayUsuarioError.add(usuarioErroImportar);
-
+				if(usuario.getPrimeiroNome().isEmpty()&& 
+				   usuario.getSobreNome().isEmpty() && 
+				   usuario.getEmail().isEmpty() &&
+				   usuario.getLogin().isEmpty())
+				{
+				 //there is no information to populate								
+				}else{
+					arrayUsuarioError.add(usuarioErroImportar);								
+				}
 			}
 
 		}
@@ -862,9 +1327,9 @@ public class UsuarioServer{
 			if(Sobre_Nome.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
 			}
-			if(Email.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Email é obrigatório || ";
-			}
+//			if(Email.getStringCellValue().isEmpty()){
+//				strCamposCorretos+="Campo Email é obrigatório || ";
+//			}
 			if(Usuario.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Usuario é obrigatório || ";
 			}
@@ -946,7 +1411,16 @@ public class UsuarioServer{
 				usuarioErroImportar.setLogin(usuario.getLogin());
 				usuarioErroImportar.setErroImportar(strStatusAddUsuario);
 				
-				arrayUsuarioError.add(usuarioErroImportar);
+				if( usuario.getPrimeiroNome().isEmpty()
+						&&usuario.getSobreNome().isEmpty()
+						&&usuario.getEmail().isEmpty() 
+						&&usuario.getLogin().isEmpty())
+					{
+						//there is no information to populate
+					}else{
+						arrayUsuarioError.add(usuarioErroImportar);								
+					}
+				
 
 			}
 
@@ -1040,9 +1514,9 @@ public class UsuarioServer{
 			if(Sobre_Nome.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
 			}
-			if(Email.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Email é obrigatório || ";
-			}
+//			if(Email.getStringCellValue().isEmpty()){
+//				strCamposCorretos+="Campo Email é obrigatório || ";
+//			}
 			if(Usuario.getStringCellValue().isEmpty()){
 				strCamposCorretos+="Campo Usuario é obrigatório || ";
 			}			
@@ -1108,7 +1582,15 @@ public class UsuarioServer{
 				usuarioErroImportar.setLogin(usuario.getLogin());
 				usuarioErroImportar.setErroImportar(strStatusAddUsuario);
 				
-				arrayUsuarioError.add(usuarioErroImportar);
+				if( usuario.getPrimeiroNome().isEmpty()
+						&&usuario.getSobreNome().isEmpty()
+						&&usuario.getEmail().isEmpty() 
+						&&usuario.getLogin().isEmpty())
+					{
+						//there is no information to populate
+					}else{
+						arrayUsuarioError.add(usuarioErroImportar);								
+					}
 
 			}
 
@@ -1137,6 +1619,7 @@ public class UsuarioServer{
 			data = getUserParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -1150,7 +1633,7 @@ public class UsuarioServer{
 
 	public static ArrayList<Usuario> getUsuarios(String strFilter) {
 
-		ArrayList<Usuario> userList = new ArrayList<Usuario>();
+		ArrayList<Usuario> data = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection connection = ConnectionManager.getConnection();
 
@@ -1164,22 +1647,23 @@ public class UsuarioServer{
 			int count=0;
 			ps.setString(++count, strFilter);
 			
-			userList = getUserParameters(ps.executeQuery());
+			data = getUserParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
 
-		return userList;
+		return data;
 
 	}	
 	
 	public static ArrayList<Usuario> getUsuarios(String strDBField, String strFilter) {
 
-		ArrayList<Usuario> userList = new ArrayList<Usuario>();
+		ArrayList<Usuario> data = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection connection = ConnectionManager.getConnection();
 
@@ -1197,49 +1681,27 @@ public class UsuarioServer{
 //			ps.setString(++count, strDBField);
 			ps.setString(++count, strFilter);
 			
-			userList = getUserParameters(ps.executeQuery());
+			data = getUserParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
 
-		return userList;
+		return data;
 
 	}		
 	
-//	public static Usuario getUsuarioPeloLogin(String strLogin) {
-//
-//		ArrayList<Usuario> userList = new ArrayList<Usuario>();
-//		JornadaDataBase dataBase = new JornadaDataBase();
-//
-//		try 
-//		{
-//
-//			dataBase.createConnection();			
-//			Connection connection = dataBase.getConnection();
-//			PreparedStatement ps = connection.prepareStatement(UsuarioServer.DB_SELECT_USUARIO_LOGIN);
-//			
-//			int count=0;
-//			ps.setString(++count, strLogin);
-//			
-//			userList = getUserParameters(ps.executeQuery());
-//
-//		} catch (SQLException sqlex) {
-//			System.err.println(sqlex.getMessage());
-//		} finally {
-////			dataBase.close();
-//		}
-//
-//		return userList.get(0);
-//
-//	}		
+	
+	
 	
 	public static Usuario getUsuarioPeloLogin(String strLogin) {
 
-		ArrayList<Usuario> userList = new ArrayList<Usuario>();
+		ArrayList<Usuario> data = new ArrayList<Usuario>();
+		
 //		JornadaDataBase dataBase = new JornadaDataBase();
 
 		Connection connection = ConnectionManager.getConnection();
@@ -1252,22 +1714,23 @@ public class UsuarioServer{
 			int count=0;
 			ps.setString(++count, strLogin);
 			
-			userList = getUserParameters(ps.executeQuery());
+			data = getUserParameters(ps.executeQuery());
 
-		} catch (SQLException sqlex) {
-			System.err.println(sqlex.getMessage());
+		} catch (Exception sqlex) {
+			//data=null;
+			return null;
 		} finally {
 			ConnectionManager.closeConnection(connection);
 //			dataBase.close();
 		}
 
-		return userList.get(0);
+		return data.get(0);
 
 	}		
 	
 	public static Usuario getUsuarioPeloId(int idUsuario) {
 
-		ArrayList<Usuario> userList = new ArrayList<Usuario>();
+		ArrayList<Usuario> data = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection connection = ConnectionManager.getConnection();
 		try 
@@ -1280,17 +1743,18 @@ public class UsuarioServer{
 			int count=0;
 			ps.setInt(++count, idUsuario);
 			
-			userList = getUserParameters(ps.executeQuery());
+			data = getUserParameters(ps.executeQuery());
 
-		} catch (SQLException sqlex) {
+		} catch (SQLException sqlex) {			
 			System.err.println(sqlex.getMessage());
+			return null;
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
 		
-		if(userList.size()>0){
-			return userList.get(0);
+		if(data.size()>0){
+			return data.get(0);
 		}
 		else
 		{
@@ -1302,7 +1766,7 @@ public class UsuarioServer{
 	
 	public static ArrayList<Usuario> getAlunosPorCurso(int idCurso, String strFiltroUsuario) {
 		
-		ArrayList<Usuario> userList = new ArrayList<Usuario>();
+		ArrayList<Usuario> data = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection connection = ConnectionManager.getConnection();
 		try 
@@ -1317,22 +1781,23 @@ public class UsuarioServer{
 			ps.setString(++count, strFiltroUsuario);
 			ps.setString(++count, strFiltroUsuario);
 			
-			userList = getUserParameters(ps.executeQuery());
+			data = getUserParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
 			System.err.println(sqlex.getMessage());
+			
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
 
-		return userList;
+		return data;
 
 	}		
 		
 	public static ArrayList<Usuario> getAlunosPorCurso(int idCurso) {
 		
-		ArrayList<Usuario> userList = new ArrayList<Usuario>();
+		ArrayList<Usuario> data = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection connection = ConnectionManager.getConnection();
 		try 
@@ -1345,22 +1810,23 @@ public class UsuarioServer{
 			int count=0;
 			ps.setInt(++count, idCurso);
 			
-			userList = getUserParameters(ps.executeQuery());
+			data = getUserParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
 
-		return userList;
+		return data;
 
 	}		
 	
 	public static ArrayList<Usuario> getUsuariosPorCursoAmbientePai(Usuario usuarioPai, int idCurso) {
 		
-		ArrayList<Usuario> userList = new ArrayList<Usuario>();
+		ArrayList<Usuario> data = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection connection = ConnectionManager.getConnection();
 		try 
@@ -1374,22 +1840,23 @@ public class UsuarioServer{
 			ps.setInt(++count, idCurso);
 			ps.setInt(++count, usuarioPai.getIdUsuario());
 			
-			userList = getUserParameters(ps.executeQuery());
+			data = getUserParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
 
-		return userList;
+		return data;
 
 	}		
 	
 	public static ArrayList<Usuario> getUsuariosPorOcorrencia(int idOcorrencia) {
 		
-		ArrayList<Usuario> userList = new ArrayList<Usuario>();
+		ArrayList<Usuario> data = new ArrayList<Usuario>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection connection = ConnectionManager.getConnection();
 		try 
@@ -1402,16 +1869,17 @@ public class UsuarioServer{
 			int count=0;
 			ps.setInt(++count, idOcorrencia);
 			
-			userList = getUserParameters(ps.executeQuery());
+			data = getUserParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
 
-		return userList;
+		return data;
 
 	}				
 	
@@ -1435,6 +1903,7 @@ public class UsuarioServer{
 			data = getUserParameters(ps.executeQuery());
 			
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -1464,6 +1933,7 @@ public class UsuarioServer{
 			data = getUserParameters(ps.executeQuery());
 			
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -1495,6 +1965,7 @@ public class UsuarioServer{
 			data = getUserParameters(ps.executeQuery());
 			
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -1530,6 +2001,7 @@ public class UsuarioServer{
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -1563,6 +2035,7 @@ public class UsuarioServer{
 			}
 
 		} catch (SQLException sqlex) {
+			current=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(connection);
@@ -1595,6 +2068,7 @@ public class UsuarioServer{
 			}
 
 		} catch (SQLException sqlex) {
+			current=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(connection);
@@ -1614,6 +2088,7 @@ public class UsuarioServer{
 		{
 			Usuario usuario = new Usuario();			
 			usuario.setIdUsuario(rs.getInt("id_usuario"));
+			usuario.setIdUnidadeEscola(rs.getInt("id_unidade_escola"));
 			usuario.setPrimeiroNome(rs.getString("primeiro_nome"));
 			usuario.setSobreNome(rs.getString("sobre_nome"));
 			usuario.setCpf(rs.getString("cpf"));
@@ -1643,19 +2118,31 @@ public class UsuarioServer{
 			usuario.setTipoPais(rs.getString("tipo_pais"));   
 			usuario.setSituacaoResponsaveis(rs.getString("situacao_responsaveis"));   
 			usuario.setSituacaoResponsaveisOutros(rs.getString("situacao_responsaveis_outros"));   
+			usuario.setRegistroAluno(rs.getString("registro_aluno"));
+			usuario.setPrimeiroLogin(rs.getBoolean("primeiro_login"));
 
 			
 			
-			usuario.setIdIdioma((rs.getInt("id_idioma")==0)? 1 : rs.getInt("id_idioma"));
-			usuario.getTipoUsuario().setIdTipoUsuario(usuario.getIdTipoUsuario());
+			usuario.setIdIdioma((rs.getInt("id_idioma")==0)? 1 : rs.getInt("id_idioma"));			
 			try {
+				usuario.getTipoUsuario().setIdTipoUsuario(usuario.getIdTipoUsuario());
 				usuario.getTipoUsuario().setNomeTipoUsuario((rs.getString("nome_tipo_usuario") == null) ? null: rs.getString("nome_tipo_usuario"));
-			}catch (Exception ex) {
-				usuario.getTipoUsuario().setNomeTipoUsuario(null);
+			}catch (Exception ex1) {				
+				try{
+					usuario.setTipoUsuario(getTipoUsuarioPorId(usuario.getIdTipoUsuario()));
+				}catch(Exception ex2){
+					usuario.getTipoUsuario().setNomeTipoUsuario(null);	
+				}
 			}
 			
 			try{
 				usuario.setIdioma(IdiomaServer.getIdioma(usuario.getIdIdioma()));
+			}catch (Exception ex) {
+				usuario.setIdioma(null);
+			}
+			
+			try{
+				usuario.setUnidadeEscola(UnidadeEscolaServer.getUnidadeEscola(usuario.getIdUnidadeEscola()));
 			}catch (Exception ex) {
 				usuario.setIdioma(null);
 			}
@@ -1767,6 +2254,7 @@ public class UsuarioServer{
 			data = getUserParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -1775,7 +2263,31 @@ public class UsuarioServer{
 
 		return data;
 
-	}		
+	}
+	
+//	public static String getPagePrint(String strHtmlPage){
+//		String strLong="";
+//		try {
+//			Date data = new Date();
+//			strLong += ConfigJornada.getProperty("config.download")+ ConfigJornada.getProperty("config.download.print")+"page_" + Long.toString(data.getTime())+ ".html";
+////			strLong = strLong.replace("//", "\\");
+//			System.out.println(strLong);
+//			File file = new File(strLong);
+//
+//
+//			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+//			BufferedWriter bw = new BufferedWriter(fw);
+//			bw.write(strHtmlPage);
+//			bw.close();
+//		} catch (Exception ex) {
+//			System.out.print("Error Excel:" + ex.getMessage());
+//		}
+//		
+//		System.out.println("Done");
+//        
+//        return ConfigJornada.getProperty("config.download.print")+strLong;
+//		
+//	}
 
 	
 

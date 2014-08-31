@@ -31,6 +31,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	public String updateUsuarioRow(Usuario usuario);	
 	public boolean atualizarSenha(int idUsuario, String senha);	
 	public boolean deleteUsuarioRow(int id_usuario);	
+	public String gerarExcelUsuario();
 	public ArrayList<UsuarioErroImportar> importarUsuariosUsandoExcel(String strFileName);
 	public ArrayList<Usuario> getUsuarios();	
 	public Usuario getUsuarioPeloId(int idUsuario);
@@ -45,6 +46,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	public ArrayList<TipoUsuario> getTipoUsuarios();	
 	public boolean associarPaisAoAluno(int id_aluno, ArrayList<String> list_id_pais);
 	public ArrayList<Usuario> getTodosOsPaisDoAluno(int id_aluno);	
+//	public String getPagePrint(String strHtmlPage);
 	
 	/**
 	 * Utility class for simplifying access to the instance of async service.

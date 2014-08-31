@@ -25,21 +25,29 @@ public class MpSelectionPeriodoAmbienteProfessor extends MpSelection {
 		/*********************** Begin Callbacks **********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Periodo>>() {
 			public void onSuccess(ArrayList<Periodo> lista) {
+				try {
+					finishLoadingListBox();
 
-				finishLoadingListBox();
+					for (Periodo object : lista) {
+						addItem(object.getNomePeriodo(),Integer.toString(object.getIdPeriodo()));
+					}
 
-				for (Periodo object : lista) {
-					addItem(object.getNomePeriodo(),
-							Integer.toString(object.getIdPeriodo()));
+					setVisibleItemCount(1);
+
+					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionPeriodoAmbienteProfessor.this);
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionPeriodoAmbienteProfessor.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+					}
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
 				}
-
-				setVisibleItemCount(1);
-
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionPeriodoAmbienteProfessor.this);
-
+				
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 

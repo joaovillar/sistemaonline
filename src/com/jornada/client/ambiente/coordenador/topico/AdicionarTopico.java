@@ -202,7 +202,7 @@ public class AdicionarTopico extends VerticalPanel {
 //					cadastroConteudoProgramatico.populateGrid();
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.topicoErroSalvar());
+					mpDialogBoxWarning.setBodyText(txtConstants.topicoErroSalvar()+" "+txtConstants.geralRecarregarAmbiente());
 					mpDialogBoxWarning.showDialog();
 				}
 			}

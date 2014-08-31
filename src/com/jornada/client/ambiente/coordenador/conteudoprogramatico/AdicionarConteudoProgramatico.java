@@ -191,7 +191,7 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 					telaInicialConteudoProgramatico.getEditarConteudoProgramatico().updateClientData();
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.conteudoProgramaticoErroSalvar());
+					mpDialogBoxWarning.setBodyText(txtConstants.conteudoProgramaticoErroSalvar() + " "+txtConstants.geralRegarregarPagina());
 					mpDialogBoxWarning.showDialog();
 				}
 			}

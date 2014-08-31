@@ -45,6 +45,7 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceTopico;
 import com.jornada.shared.classes.Topico;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class EditarTopicoProfessor extends VerticalPanel {
 
@@ -125,7 +126,8 @@ public class EditarTopicoProfessor extends VerticalPanel {
 //		Label lblEmpty2 = new Label("Por favor, selecione um Conteúdo Programático.");
 
 		cellTable = new CellTable<Topico>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialTopicoProfessor.intWidthTable)+ "px");		
+//		cellTable.setWidth(Integer.toString(TelaInicialTopicoProfessor.intWidthTable)+ "px");		
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setEmptyTableWidget(lblEmpty);
@@ -142,12 +144,15 @@ public class EditarTopicoProfessor extends VerticalPanel {
 		mpPager.setPageSize(15);
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialTopicoProfessor.intWidthTable+30)+"px",Integer.toString(TelaInicialTopicoProfessor.intHeightTable-180)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialTopicoProfessor.intWidthTable+30)+"px",Integer.toString(TelaInicialTopicoProfessor.intHeightTable-180)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialTopicoProfessor.intHeightTable-180)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);	
 		
 		
-		VerticalPanel vPanelEditGrid = new VerticalPanel();		
+		VerticalPanel vPanelEditGrid = new VerticalPanel();
+		vPanelEditGrid.setWidth("100%");
 		vPanelEditGrid.add(gridComboBox);
 		vPanelEditGrid.add(mpPager);
 		vPanelEditGrid.add(scrollPanel);
@@ -191,6 +196,7 @@ public class EditarTopicoProfessor extends VerticalPanel {
 		};
 		/*********************** End Callbacks **********************/
 
+		this.setWidth("100%");
 		super.add(vPanelEditGrid);
 		
 	}
@@ -320,7 +326,7 @@ public class EditarTopicoProfessor extends VerticalPanel {
 
 						@Override
 						public void onSuccess(ArrayList<Topico> list) {
-
+							MpUtilClient.isRefreshRequired(list);
 							mpPanelLoading.setVisible(false);
 							dataProvider.getList().clear();
 							cellTable.setRowCount(0);

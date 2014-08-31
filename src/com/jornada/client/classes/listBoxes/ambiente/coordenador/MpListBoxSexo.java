@@ -1,4 +1,6 @@
-package com.jornada.client.classes.listBoxes;
+package com.jornada.client.classes.listBoxes.ambiente.coordenador;
+
+import com.jornada.client.classes.listBoxes.MpSelection;
 
 
 public class MpListBoxSexo extends MpSelection {

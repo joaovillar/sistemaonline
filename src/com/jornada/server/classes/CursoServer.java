@@ -273,7 +273,7 @@ public class CursoServer{
 			data = getCursoParameters(psCurso.executeQuery());
 
 		} catch (SQLException sqlex) {			
-			System.out.println("Error:<getCursos>");
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -332,6 +332,7 @@ public class CursoServer{
 			data = getCursoParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -358,6 +359,7 @@ public class CursoServer{
 			data = getCursoParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -385,6 +387,7 @@ public class CursoServer{
 			data = getCursoParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -430,6 +433,7 @@ public class CursoServer{
 //			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -455,6 +459,7 @@ public class CursoServer{
 
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);

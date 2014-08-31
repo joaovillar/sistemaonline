@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.jornada.server.database.ConnectionManager;
-import com.jornada.server.database.JornadaDataBase;
 import com.jornada.shared.classes.Topico;
 
 public class TopicoServer {
@@ -30,11 +29,13 @@ public class TopicoServer {
 		
 		int idTopico=0;
 		
-		JornadaDataBase dataBase = new JornadaDataBase();
+//		JornadaDataBase dataBase = new JornadaDataBase();
+		
+		Connection conn = ConnectionManager.getConnection();
 
 		try {
-			dataBase.createConnection();
-			Connection conn = dataBase.getConnection();
+//			dataBase.createConnection();
+//			Connection conn = dataBase.getConnection();
 			
 				int param = 0;
 				PreparedStatement ps = conn.prepareStatement(DB_INSERT_TOPICO);
@@ -63,6 +64,7 @@ public class TopicoServer {
 		}
 		finally
 		{
+			ConnectionManager.closeConnection(conn);
 		}
 		
 		return idTopico;
@@ -104,20 +106,13 @@ public class TopicoServer {
 				data.add(current);
 			}
 			
-//			for(Disciplina disciplina : data){
-//				Periodo periodo = PeriodoServer.getPeriodo(connection, disciplina.getIdPeriodo());
-//				disciplina.setPeriodo(periodo);
-//			}			
-
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
-		
-		
-
 
 		return data;
 
@@ -158,6 +153,7 @@ public class TopicoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -200,6 +196,7 @@ public class TopicoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();

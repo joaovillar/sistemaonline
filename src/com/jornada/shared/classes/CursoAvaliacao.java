@@ -11,18 +11,15 @@ public class CursoAvaliacao implements Serializable{
 	private String nomePeriodo;
 	private String nomeDisciplina;
 	private String nomeConteudoProgramatico;
-	private String nomeAvaliacao;
-//	private Date dataAvaliacao;
-//	private Time horaAvaliacao;
+	private int idAvaliacao;
+	private String assuntoAvaliacao;
+	private String descricaoAvaliacao;
 	private Date dataAvaliacao;
 	private String horaAvaliacao;	
 	private int idTipoAvaliacao;
+	private String descricaoTipoAvaliacao;
 	
-	public static final int INT_TRABALHO_INDIVIDUAL=1;
-	public static final int INT_TRABALHO_GRUPO=2;
-	public static final int INT_PROVA_INDIVIDUAL=3;
-	public static final int INT_PROVA_GRUPO=4;
-	public static final int INT_EXERCICIO_FIXACAO=5;
+
 	
 	public CursoAvaliacao(){
 		
@@ -53,11 +50,11 @@ public class CursoAvaliacao implements Serializable{
 	public void setNomeConteudoProgramatico(String nomeConteudoProgramatico) {
 		this.nomeConteudoProgramatico = nomeConteudoProgramatico;
 	}
-	public String getNomeAvaliacao() {
-		return nomeAvaliacao;
+	public String getAssuntoAvaliacao() {
+		return assuntoAvaliacao;
 	}
-	public void setNomeAvaliacao(String nomeAvaliacao) {
-		this.nomeAvaliacao = nomeAvaliacao;
+	public void setAssuntoAvaliacao(String nomeAvaliacao) {
+		this.assuntoAvaliacao = nomeAvaliacao;
 	}	
 	public int getIdTipoAvaliacao() {
 		return idTipoAvaliacao;
@@ -85,8 +82,36 @@ public class CursoAvaliacao implements Serializable{
 	public void setHoraAvaliacao(String horaAvaliacao) {
 		this.horaAvaliacao = horaAvaliacao;
 	}
-	
-	
-	
+
+
+	public int getIdAvaliacao() {
+		return idAvaliacao;
+	}
+
+
+	public void setIdAvaliacao(int idAvaliacao) {
+		this.idAvaliacao = idAvaliacao;
+	}
+
+
+	public String getDescricaoAvaliacao() {
+		return descricaoAvaliacao;
+	}
+
+
+	public void setDescricaoAvaliacao(String descricao) {
+		this.descricaoAvaliacao = descricao;
+	}
+
+
+	public String getDescricaoTipoAvaliacao() {
+		return descricaoTipoAvaliacao;
+	}
+
+
+	public void setDescricaoTipoAvaliacao(String descricaoTipoAvaliacao) {
+		this.descricaoTipoAvaliacao = descricaoTipoAvaliacao;
+	}
+
 
 }

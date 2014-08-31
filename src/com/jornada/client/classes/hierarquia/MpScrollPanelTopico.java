@@ -63,10 +63,13 @@ public class MpScrollPanelTopico extends ScrollPanel{
 		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(MpHierarquiaCurso.intWidthTable-200)+"px",Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+//		scrollPanel.setSize(Integer.toString(MpHierarquiaCurso.intWidthTable-200)+"px",Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+		scrollPanel.setHeight(Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);				
 		scrollPanel.add(flexTableConteudo);	
 		
+		this.setWidth("100%");
 		this.add(scrollPanel);
 
 		

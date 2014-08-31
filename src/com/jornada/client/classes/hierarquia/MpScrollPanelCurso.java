@@ -140,8 +140,9 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		
 		cellTable = new CellTable<Usuario>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
 
-		cellTable.setWidth(Integer.toString(MpHierarquiaCurso.intWidthTable-250)+ "px");
-        cellTable.setPageSize(10);
+//		cellTable.setWidth(Integer.toString(MpHierarquiaCurso.intWidthTable-250)+ "px");
+		cellTable.setWidth("100%");
+//        cellTable.setPageSize(10);
         
 		dataProvider.addDataDisplay(cellTable);
 		
@@ -158,7 +159,7 @@ public class MpScrollPanelCurso extends ScrollPanel{
 	    
 	    MpSimplePager mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
-		mpPager.setPageSize(10);
+//		mpPager.setPageSize(10);
 		
 		
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
@@ -300,47 +301,33 @@ public class MpScrollPanelCurso extends ScrollPanel{
 			cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
 			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("hand-over-default");
 		}
+	
 		
-		
-		
-		
-		
-		
-				
-		
-		
-		
-//		dataProvider.addDataDisplay(cellTable);
-//		
-//		dataProvider.getList().clear();
-//		
-//		for(int i=0;i<object.getListAlunos().size();i++){
-//			dataProvider.getList().add(object.getListAlunos().get(i));
-//			arrayListBackup.add(object.getListAlunos().get(i));
-//			
-//		}
-		
-		
-		
-		Grid gridAlunos = new Grid(2,1);
-		gridAlunos.setCellPadding(0);
-		gridAlunos.setCellSpacing(0);
+//		Grid gridAlunos = new Grid(2,1);
+//		gridAlunos.setBorderWidth(0);
+//		gridAlunos.setCellPadding(0);
+//		gridAlunos.setCellSpacing(0);
 		
 //		gridAlunos.setWidget(0, 0, mpPager);
-		gridAlunos.setWidget(0, 0, flexTableFiltrar);
-		gridAlunos.setWidget(1, 0, cellTable);
+//		gridAlunos.setWidget(0, 0, flexTableFiltrar);
+//		gridAlunos.setWidget(1, 0, cellTable);
 		
-		
-		flexTableConteudo.setWidget(row, 0, gridAlunos);
+		flexTableConteudo.setWidget(row++, 0, flexTableFiltrar);
+		flexTableConteudo.setWidget(row, 0, cellTable);
+//		flexTableConteudo.setWidget(row, 0, gridAlunos);
 		flexTableConteudo.getFlexCellFormatter().setColSpan(row++, 0, 4);
+
 		
 //		panelDetalhes.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);	
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(MpHierarquiaCurso.intWidthTable-200)+"px",Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+//		scrollPanel.setSize(Integer.toString(MpHierarquiaCurso.intWidthTable-200)+"px",Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+		scrollPanel.setHeight(Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);				
 		scrollPanel.add(flexTableConteudo);	
 		
+		this.setWidth("100%");
 		this.add(scrollPanel);
 		
 	}

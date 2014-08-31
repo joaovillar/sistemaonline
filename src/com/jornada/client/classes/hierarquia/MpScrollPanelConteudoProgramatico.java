@@ -70,6 +70,7 @@ public class MpScrollPanelConteudoProgramatico extends ScrollPanel{
 		gridNumeracao.setWidget(0, column++, lblNumeracaoDB);		
 		
 		FlexTable flexTableConteudo = new FlexTable();
+		flexTableConteudo.setWidth("100%");
 		flexTableConteudo.setCellPadding(2);
 		flexTableConteudo.setCellSpacing(2);
 //		flexTableConteudo.getFlexCellFormatter().setColSpan(0, 0, 2);
@@ -94,10 +95,11 @@ public class MpScrollPanelConteudoProgramatico extends ScrollPanel{
 
 		Label lblEmpty = new Label(txtConstants.avaliacaoNenhumaCurso());
 
-		cellTable = new CellTable<Avaliacao>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
+		cellTable = new CellTable<Avaliacao>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
 		cellTable.setEmptyTableWidget(lblEmpty);
-		cellTable.setWidth(Integer.toString(MpHierarquiaCurso.intWidthTable - 250) + "px");
-		cellTable.setPageSize(10);
+//		cellTable.setWidth(Integer.toString(MpHierarquiaCurso.intWidthTable - 250) + "px");
+		cellTable.setWidth("100%");
+//		cellTable.setPageSize(10);
 		
 		dataProvider.addDataDisplay(cellTable);
 		
@@ -114,7 +116,7 @@ public class MpScrollPanelConteudoProgramatico extends ScrollPanel{
 
 		MpSimplePager mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
-		mpPager.setPageSize(10);
+//		mpPager.setPageSize(10);
 		
 		
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
@@ -128,7 +130,6 @@ public class MpScrollPanelConteudoProgramatico extends ScrollPanel{
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 		
 		FlexTable flexTableFiltrar = new FlexTable();	
-		flexTableFiltrar.setBorderWidth(2);
 		flexTableFiltrar.setCellSpacing(3);
 		flexTableFiltrar.setCellPadding(3);
 		flexTableFiltrar.setBorderWidth(0);		
@@ -225,23 +226,28 @@ public class MpScrollPanelConteudoProgramatico extends ScrollPanel{
 
 
 
-		Grid gridAvaliacoes = new Grid(2, 1);
-		gridAvaliacoes.setCellPadding(0);
-		gridAvaliacoes.setCellSpacing(0);
-		gridAvaliacoes.setWidget(0, 0, flexTableFiltrar);
-		gridAvaliacoes.setWidget(1, 0, cellTable);
+//		Grid gridAvaliacoes = new Grid(2, 1);
+//		gridAvaliacoes.setCellPadding(0);
+//		gridAvaliacoes.setCellSpacing(0);
+//		gridAvaliacoes.setWidget(0, 0, flexTableFiltrar);
+//		gridAvaliacoes.setWidget(1, 0, cellTable);
 //		gridAvaliacoes.setWidget(1, 0, mpPager);
 		
 
-		flexTableConteudo.setWidget(row, 0, gridAvaliacoes);
+		flexTableConteudo.setWidget(row++, 0, flexTableFiltrar);
+		flexTableConteudo.setWidget(row, 0, cellTable);
+//		flexTableConteudo.setWidget(row, 0, gridAvaliacoes);
 		flexTableConteudo.getFlexCellFormatter().setColSpan(row++, 0, 2);
 		
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(MpHierarquiaCurso.intWidthTable-200)+"px",Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+//		scrollPanel.setSize(Integer.toString(MpHierarquiaCurso.intWidthTable-200)+"px",Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+		scrollPanel.setHeight(Integer.toString(MpHierarquiaCurso.intHeightTable-30)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);				
 		scrollPanel.add(flexTableConteudo);	
 		
+		this.setWidth("100%");
 		this.add(scrollPanel);
 
 	}

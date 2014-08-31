@@ -45,7 +45,8 @@ public class TelaInicialPaisVisualizarNotas extends Composite{
 		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
 //		tabLayoutPanel.setPixelSize(intWidthTable+50, intHeightTable);
-		tabLayoutPanel.setPixelSize(intWidthTable, intHeightTable);
+//		tabLayoutPanel.setPixelSize(intWidthTable, intHeightTable);
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable)+"px");
 		tabLayoutPanel.setAnimationDuration(500);
 		tabLayoutPanel.setAnimationVertical(true);
 

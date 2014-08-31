@@ -38,6 +38,7 @@ import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class ImportarUsuario extends VerticalPanel {
 	
@@ -106,45 +107,42 @@ public class ImportarUsuario extends VerticalPanel {
 			}
 
 			@Override
-			public void onSuccess(ArrayList<UsuarioErroImportar> arrayUsuario) {
-				// lblLoading.setVisible(false);
+			public void onSuccess(ArrayList<UsuarioErroImportar> list) {
+				 MpUtilClient.isRefreshRequired(list);
 				mpLoadingSave.setVisible(false);
 
-				if (arrayUsuario==null || arrayUsuario.size()==0) {
-
-					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
-					mpDialogBoxConfirm.setBodyText(txtConstants.usuarioPlanilhaImportadoComSucesso());
-					mpDialogBoxConfirm.showDialog();
-					telaInicialUsuario.getEditarUsuario().updateClientData();
-					telaInicialUsuario.getAssociarPaisAlunos().updateClientData();
-					
-				} else {
-					
+				if (list==null){
+					vPassoTres.clear();
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroImportarUsuariosNull());
+					mpDialogBoxWarning.showDialog();
+				}
+				else if(list.size()>0) {				
 					
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroImportarUsuarios());
 					mpDialogBoxWarning.showDialog();
-
 					
 					vPassoTres.clear();
 					vPassoTres.add(drawPassoTres());
 					
-					dataProvider.getList().clear();
+					dataProvider.getList().clear();					
+					cleanCellTable();					
 					
-					cleanCellTable();
-					
-					
-					for(int i=0;i<arrayUsuario.size();i++){
-						dataProvider.getList().add(arrayUsuario.get(i));
-					}
-			
-					
-					
+					for(int i=0;i<list.size();i++){
+						dataProvider.getList().add(list.get(i));
+					}					
 					addCellTableData(dataProvider);
 					
 					telaInicialUsuario.getEditarUsuario().updateClientData();
 					telaInicialUsuario.getAssociarPaisAlunos().updateClientData();
 					
+				} else {
+					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
+					mpDialogBoxConfirm.setBodyText(txtConstants.usuarioPlanilhaImportadoComSucesso());
+					mpDialogBoxConfirm.showDialog();
+					telaInicialUsuario.getEditarUsuario().updateClientData();
+					telaInicialUsuario.getAssociarPaisAlunos().updateClientData();
 				}
 			}
 		};
@@ -160,7 +158,9 @@ public class ImportarUsuario extends VerticalPanel {
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
 //		vBodyPanel.add(drawPassoTres());
 		vBodyPanel.add(vPassoTres);
+		vBodyPanel.setWidth("100%");
 
+		setWidth("100%");
 		super.add(vBodyPanel);
 
 
@@ -169,7 +169,8 @@ public class ImportarUsuario extends VerticalPanel {
 	
 	public MpPanelPageMainView drawPassoUm(){
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.usuarioSelecionarTemplate(), "images/microsoft_office_2007_excel.16.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 		Grid grid = new Grid(1,5);		
 		grid.setCellSpacing(3);
@@ -193,7 +194,8 @@ public class ImportarUsuario extends VerticalPanel {
 	public MpPanelPageMainView drawPassoDois(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.usuarioSelecionarArquivoExcel(), "images/arrow_down.16.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");		
+//		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 		VerticalPanel vFormPanel = new VerticalPanel();
 		
@@ -287,7 +289,7 @@ public class ImportarUsuario extends VerticalPanel {
 
 	  // Load the image in the document and in the case of success attach it to the viewer
 	  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
-	    @SuppressWarnings("deprecation")
+
 		public void onFinish(IUploader uploader) {
 	      if (uploader.getStatus() == Status.SUCCESS) {
 
@@ -302,9 +304,10 @@ public class ImportarUsuario extends VerticalPanel {
 	        System.out.println("File size " + info.size);
 
 	        // You can send any customized message and parse it 
-	        System.out.println("Server message " + info.message);
+	        System.out.println("Server message :" + uploader.getServerMessage().getMessage());
 	        
-	        strNomeFisicoUploaded = info.message;
+//	        strNomeFisicoUploaded = info.message;
+	        strNomeFisicoUploaded =  uploader.getServerMessage().getMessage();
 
 	        lblNomeArquivoUploaded.setText(info.name);
 	      }

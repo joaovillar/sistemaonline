@@ -101,7 +101,9 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		
 		scrollPanel.setAlwaysShowScrollBars(false);
 
-		scrollPanel.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+"px",Integer.toString(TelaInicialDiarioProfessor.intHeightTable-150)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+"px",Integer.toString(TelaInicialDiarioProfessor.intHeightTable-210)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialDiarioProfessor.intHeightTable-210)+"px");
+		scrollPanel.setWidth("90%");
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
@@ -162,6 +164,8 @@ public class EditarDiarioProfessor extends VerticalPanel {
 //		flexTableWithListBoxes.setWidget(row, 0, listBoxCurso);flexTableWithListBoxes.setWidget(row, 1, listBoxPeriodo);flexTableWithListBoxes.setWidget(row, 2, listBoxDisciplina);flexTableWithListBoxes.setWidget(row++, 3, lblErroDisciplina);
 		
 		vFormPanel.add(flexTableWithListBoxes);
+		vFormPanel.setWidth("100%");
+		vFormPanel.setBorderWidth(0);
 
 /***************************************Begin Callbacks***************************************/
 
@@ -171,6 +175,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		populateComboBoxTipoPresenca();
 //		populateDinamicColumns();
 		
+		this.setWidth("100%");
 		super.add(vFormPanel);
 
 	}
@@ -257,14 +262,16 @@ public class EditarDiarioProfessor extends VerticalPanel {
 
 			@Override
 			public void onSuccess(ArrayList<TipoPresenca> list) {
-				listaTipoPresenca.clear();
+				MpUtilClient.isRefreshRequired(list);
+				listaTipoPresenca.clear();				
 				for (TipoPresenca currentTipoPresenca : list) {
 					String strIdTipoAvaliacao = Integer.toString(currentTipoPresenca.getIdTipoPresenca());
 					String strNomeTipoAvaliacao = currentTipoPresenca.getTipoPresenca();
 					listaTipoPresenca.put(strIdTipoAvaliacao,strNomeTipoAvaliacao);
-				}			
+				}
 				populateDinamicColumns();
 			}
+
 		});
 	}	
 	
@@ -286,20 +293,20 @@ public class EditarDiarioProfessor extends VerticalPanel {
 				}
 
 				@Override
-				public void onSuccess(ArrayList<Aula> resultArrayAula) {
-		
-					arrayColumns.clear();
-					arrayAula.clear();
-					for(int i=0;i<resultArrayAula.size();i++){
-						arrayAula.add(resultArrayAula.get(i));
-						String strDate  = MpUtilClient.convertDateToString(resultArrayAula.get(i).getData());
-						arrayColumns.add(strDate);
-					}
-					
-					cleanCellTable();
-					populateGridListaPresenca();
-				
-				}
+						public void onSuccess(ArrayList<Aula> list) {
+							MpUtilClient.isRefreshRequired(list);
+							arrayColumns.clear();
+							arrayAula.clear();
+							for (int i = 0; i < list.size(); i++) {
+								arrayAula.add(list.get(i));
+								String strDate = MpUtilClient.convertDateToString(list.get(i).getData());
+								arrayColumns.add(strDate);
+							}
+
+							cleanCellTable();
+							populateGridListaPresenca();
+						}
+
 			});
 		}
 	}	
@@ -312,33 +319,33 @@ public class EditarDiarioProfessor extends VerticalPanel {
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			int idDisciplina = Integer.parseInt(listBoxDisciplina.getValue(listBoxDisciplina.getSelectedIndex()));
 			
-			GWTServicePresenca.Util.getInstance().getListaPresencaAlunosArrayList(idCurso, idDisciplina, 
-			new AsyncCallback<ArrayList<ArrayList<String>>>() 
-			{
+			GWTServicePresenca.Util.getInstance().getListaPresencaAlunosArrayList(idCurso, idDisciplina, new AsyncCallback<ArrayList<ArrayList<String>>>() {
 
-				public void onFailure(Throwable caught) {
-					mpPanelLoadingAluno.setVisible(false);
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.topicoErroSalvar());
-					mpDialogBoxWarning.showDialog();
-				}
+								public void onFailure(Throwable caught) {
+									mpPanelLoadingAluno.setVisible(false);
+									mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+									mpDialogBoxWarning.setBodyText(txtConstants.topicoErroSalvar());
+									mpDialogBoxWarning.showDialog();
+								}
 
-				@Override
-				public void onSuccess(ArrayList<ArrayList<String>> list) {
-	
-					dataProvider = new ListDataProvider<ArrayList<String>>();
-					arrayListBackup.clear();
-					dataProvider.getList().clear();
-					
-					for(int i=0;i<list.size();i++){
-						dataProvider.getList().add(list.get(i));
-						arrayListBackup.add(list.get(i));
-					}			
+								@Override
+								public void onSuccess(ArrayList<ArrayList<String>> list) {
 
-					initializeCellTable();
+									MpUtilClient.isRefreshRequired(list);
+									dataProvider = new ListDataProvider<ArrayList<String>>();
+									arrayListBackup.clear();
+									dataProvider.getList().clear();
 
-				}
-			});
+									for (int i = 0; i < list.size(); i++) {
+										dataProvider.getList().add(list.get(i));
+										arrayListBackup.add(list.get(i));
+									}
+
+									initializeCellTable();
+
+								}
+
+							});
 		}
 	}
 	
@@ -356,7 +363,8 @@ public class EditarDiarioProfessor extends VerticalPanel {
 	public void initializeCellTable(){
 		cellTable = new CellTable<ArrayList<String>>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
 
-		cellTable.setWidth(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+ "px");		
+//		cellTable.setWidth(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+ "px");		
+		cellTable.setWidth("90%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		
@@ -547,7 +555,6 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		
 		
 		FlexTable flexTableFiltrarAluno = new FlexTable();	
-		flexTableFiltrarAluno.setBorderWidth(2);
 		flexTableFiltrarAluno.setCellSpacing(3);
 		flexTableFiltrarAluno.setCellPadding(3);
 		flexTableFiltrarAluno.setBorderWidth(0);		
@@ -558,22 +565,26 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		flexTableFiltrarAluno.setWidget(0, 4, btnFiltrar);
 //		flexTableFiltrarAluno.setWidget(0, 5, mpPanelLoadingAluno);	
 		
-		VerticalPanel vPanel = new VerticalPanel();
-		vPanel.setHeight("100%");
-		vPanel.setCellVerticalAlignment(cellTable, ALIGN_TOP);
-		vPanel.add(cellTable);
+//		VerticalPanel vPanel = new VerticalPanel();
+//		vPanel.setBorderWidth(1);
+//		vPanel.setWidth("100%");
+//		vPanel.setCellVerticalAlignment(cellTable, ALIGN_TOP);
+//		vPanel.add(cellTable);
 		
-		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
+//		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
 		
 		VerticalPanel vPanelInScroll = new VerticalPanel();
+		vPanelInScroll.setBorderWidth(0);
 		vPanelInScroll.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanelInScroll.add(flexTableFiltrarAluno);
-		vPanelInScroll.add(vPanel);
-		vPanelInScroll.add(mpSpaceVerticalPanel);
+		vPanelInScroll.add(cellTable);
+
 		scrollPanel.clear();
 		scrollPanel.add(vPanelInScroll);
 		
 		vFormPanel.add(scrollPanel);
+
+
 		
 		mpPanelLoadingAluno.setVisible(false);
 		

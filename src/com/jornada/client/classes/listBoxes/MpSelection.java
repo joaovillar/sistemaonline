@@ -8,7 +8,7 @@ import com.jornada.client.content.i18n.TextConstants;
 public class MpSelection extends ListBox{
 	
 	
-	static TextConstants txtConstants = GWT.create(TextConstants.class);
+	protected static TextConstants txtConstants = GWT.create(TextConstants.class);
 	
 	protected static String CARREGANDO = txtConstants.geralCarregando();
 	protected static String ERRO_POPULAR = txtConstants.erroPopularCombobox();

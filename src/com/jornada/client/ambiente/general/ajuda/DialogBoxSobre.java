@@ -70,6 +70,7 @@ public class DialogBoxSobre extends DialogBox {
 		lbl1.setStyleName("label_comum");
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
+
 //		verticalPanel.setWidth("700px");
 		verticalPanel.add(lbl1);
 

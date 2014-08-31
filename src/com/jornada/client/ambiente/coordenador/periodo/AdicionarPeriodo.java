@@ -199,7 +199,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 					telaInicialPeriodo.populateGrid();
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.periodoErroSalvar());
+					mpDialogBoxWarning.setBodyText(txtConstants.periodoErroSalvar()+" "+txtConstants.geralRecarregarAmbiente());
 					mpDialogBoxWarning.showDialog();
 				}
 			}

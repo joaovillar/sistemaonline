@@ -29,23 +29,26 @@ public class MpSelectionCursoItemTodos extends MpSelection {
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Curso>>() {
 			public void onSuccess(ArrayList<Curso> lista) {
 				
-				finishLoadingListBox();		
-				
-				addItem("Todos Alunos","0");
-
-				for (Curso object : lista) {
-					addItem(object.getNome(),Integer.toString(object.getIdCurso()));
-					listBoxAux.addItem(object.getNome() ,Integer.toString(object.getIdCurso()));
-					listCurso.add(object);
-				}		
-
-				setVisibleItemCount(1);
-
 				try {
-					DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionCursoItemTodos.this);
+					finishLoadingListBox();
+
+					addItem(txtConstants.cursoTodosAlunos(), "0");
+
+					for (Curso object : lista) {
+						addItem(object.getNome(),Integer.toString(object.getIdCurso()));
+						listBoxAux.addItem(object.getNome(),Integer.toString(object.getIdCurso()));
+						listCurso.add(object);
+					}
+
+					setVisibleItemCount(1);
+
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionCursoItemTodos.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+					}
 				} catch (Exception ex) {
 					logoutAndRefreshPage();
-					System.out.println("Error:" + ex.getMessage());
 				}
 				
 			}

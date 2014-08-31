@@ -3,7 +3,6 @@ package com.jornada.client.ambiente.coordenador.comunicado;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
@@ -12,9 +11,9 @@ import com.jornada.shared.classes.Comunicado;
 
 public class TelaInicialComunicado extends Composite{	
 	
-	private VerticalPanel verticalPanelPage;
+//	private VerticalPanel verticalPanelPage;
 	VerticalPanel vPanelBody;
-	private TabLayoutPanel stackPanel;
+	private TabLayoutPanel tabLayoutPanel;
 
 	public  static final int intWidthTable=1400;
 	public static final int intHeightTable=500;
@@ -42,15 +41,16 @@ public class TelaInicialComunicado extends Composite{
 		formularioComunicado = FormularioComunicado.getInstance(this);
 		tabelaComunicados = TabelaComunicados.getInstance(this);
 		
-		stackPanel = new TabLayoutPanel(2.5, Unit.EM);	
+		tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
+		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
 
-
-		stackPanel.setPixelSize(intWidthTable+50, intHeightTable+250);
-		stackPanel.setAnimationDuration(500);
-		stackPanel.setAnimationVertical(true);
+//		tabLayoutPanel.setPixelSize(intWidthTable+50, intHeightTable+250);
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable+250)+"px");
+		tabLayoutPanel.setAnimationDuration(500);
+		tabLayoutPanel.setAnimationVertical(true);
 		
 		vPanelBody = new VerticalPanel();
-		
+		vPanelBody.setWidth("100%");
 		vPanelBody.add(tabelaComunicados);
 		vPanelBody.add(formularioComunicado);
 		
@@ -63,13 +63,14 @@ public class TelaInicialComunicado extends Composite{
 //		scrollPanelTabelaComunicado.add(tabelaComunicados);		
 		
 //		stackPanel.add(formularioComunicado, createHeaderWidget("Comunicado Escolar", "images/plus-circle.png"));
-		stackPanel.add(vPanelBody, new MpHeaderWidget(txtConstants.comunicado(), "images/notes_16.png"));		
+		tabLayoutPanel.add(vPanelBody, new MpHeaderWidget(txtConstants.comunicado(), "images/notes_16.png"));		
 		
-		verticalPanelPage = new VerticalPanel();		
-		verticalPanelPage.add(stackPanel);
-		verticalPanelPage.add(new InlineHTML("&nbsp;"));
-				
-     	initWidget(verticalPanelPage);
+//		verticalPanelPage = new VerticalPanel();		
+//		verticalPanelPage.add(tabLayoutPanel);
+//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
+//				
+//		setWidth("100%");
+     	initWidget(tabLayoutPanel);
 		
 	}
 	
@@ -94,7 +95,9 @@ public class TelaInicialComunicado extends Composite{
 //	
 	
 	public void openFormularioComunicadoParaAdicionar(){
-		stackPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
+//		tabLayoutPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
+//		tabLayoutPanel.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable+180)+"px");
+//		tabLayoutPanel.setWidth("100%");
 		tabelaComunicados.setVisible(false);
 		
 //		formularioComunicado.clearFiels();
@@ -103,7 +106,9 @@ public class TelaInicialComunicado extends Composite{
 	}
 	
 	public void openFormularioComunicadoParaAtualizar(Comunicado comunicado){
-		stackPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
+//		tabLayoutPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
+//		tabLayoutPanel.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable+180)+"px");
+//		tabLayoutPanel.setWidth("100%");
 		tabelaComunicados.setVisible(false);
 //		formularioComunicado.setComunicado(comunicado);
 		formularioComunicado.openFormularioParaAtualizar(comunicado);
@@ -111,7 +116,7 @@ public class TelaInicialComunicado extends Composite{
 	}
 	
 	public void openTabelaComunicado(){		
-		stackPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
+//		tabLayoutPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
 		formularioComunicado.setVisible(false);
 		tabelaComunicados.setVisible(true);
 	}	

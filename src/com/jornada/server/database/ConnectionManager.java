@@ -12,6 +12,7 @@ import com.jornada.ConfigJornada;
 public class ConnectionManager {
 	
 	
+//	private static boolean boneCPConnection = Boolean.parseBoolean(ConfigJornada.getProperty("use.boneCP.connection"));
 	private static final String driver = ConfigJornada.getProperty("config.driver");
 	private static final String url = ConfigJornada.getProperty("config.url");//jdbc:postgresql://
 	private static final String host = ConfigJornada.getProperty("config.host");
@@ -32,18 +33,20 @@ public class ConnectionManager {
 //	private static final String bonecp_ConnectionTestStatement = ConfigJornada.getProperty("bonecp.ConnectionTestStatement");
 	private static final String bonecp_LazyInit = ConfigJornada.getProperty("bonecp.LazyInit");				
 	
-	
 
 	private static BoneCP connectionPool = null;
 
-	public ConnectionManager uniqueInstance;
+//	public ConnectionManager uniqueInstance;
+
+//	public static boolean isBoneCPConnection() {
+//		return boneCPConnection;
+//	}
 
 	public static void configureConnPool() {
 
 //		if(connectionPool==null){
 			try {
-				Class.forName(driver); // also you need the MySQL
-														// driver
+				Class.forName(driver); // also you need the Postgre driver
 				BoneCPConfig config = new BoneCPConfig();
 //				config.setPoolName("paisonline");
 				config.setJdbcUrl(connectionUrl);
@@ -66,7 +69,7 @@ public class ConnectionManager {
 				
 				
 //				config.setIdleConnectionTestPeriod(1);
-//				config.setMinConnectionsPerPartition(1); // if you say 5 here, there will be 10 connection available
+//				config.setMinConnectionsPerPartition(5); // if you say 5 here, there will be 10 connection available
 //				config.setMaxConnectionsPerPartition(2);
 //				config.setPartitionCount(2); // 2*5 = 10 connection will be available
 //				 config.setLazyInit(true); //depends on the application usage you should chose lazy or not setting Lazy true means BoneCP won't open any connections before you request a one from it.
@@ -105,18 +108,21 @@ public class ConnectionManager {
 
 	public static Connection getConnection() {
 
-		Connection conn = null;
-		try {
-			conn = getConnectionPool().getConnection();
-			// will get a thread-safe connection from the BoneCP connection
-			// pool.
-			// synchronization of the method will be done inside BoneCP source
+			Connection conn = null;
+			try {
+				conn = getConnectionPool().getConnection();
+				// will get a thread-safe connection from the BoneCP connection
+				// pool.
+				// synchronization of the method will be done inside BoneCP
+				// source
 
-		} catch (Exception e) {
-			System.out.println("Erro <getConnection>");
-			e.printStackTrace();
-		}
-		return conn;
+			} catch (Exception e) {
+				System.out.println("Erro <getConnection>");
+				e.printStackTrace();
+			}
+			return conn;
+
+		
 
 	}
 
@@ -145,15 +151,18 @@ public class ConnectionManager {
 	}
 
 	public static void closeConnection(Connection conn) {
-		try {
-			if (conn != null) {
-				conn.close(); // release the connection - the name is tricky but
-								// connection is not closed it is released
-			} // and it will stay in pool
-		} catch (SQLException e) {
-			System.out.println("Erro <closeConnection>");
-			e.printStackTrace();
-		}
+		
+			try {
+				if (conn != null) {
+					conn.close(); // release the connection - the name is tricky
+									// but
+									// connection is not closed it is released
+				} // and it will stay in pool
+			} catch (SQLException e) {
+				System.out.println("Erro <closeConnection>");
+				e.printStackTrace();
+			}
+
 
 	}
 

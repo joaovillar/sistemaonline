@@ -18,20 +18,30 @@ public class MpSelectionAvaliacao extends MpSelection {
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Avaliacao>>() {
 			public void onSuccess(ArrayList<Avaliacao> lista) {
-				
-				finishLoadingListBox();		
+				try {
+					finishLoadingListBox();
 
-				for (Avaliacao object : lista) {
-					addItem(object.getAssunto(),Integer.toString(object.getIdAvaliacao()));
-				}		
+					for (Avaliacao object : lista) {
+						addItem(object.getAssunto(),Integer.toString(object.getIdAvaliacao()));
+					}
 
-				setVisibleItemCount(1);
+					setVisibleItemCount(1);
 
-				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionAvaliacao.this);
+					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
+					// MpSelectionAvaliacao.this);
+					try {
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionAvaliacao.this);
+					} catch (Exception ex) {
+						logoutAndRefreshPage();
+					}
+				} catch (Exception ex) {
+					logoutAndRefreshPage();
+				}				
 				
 			}
 
 			public void onFailure(Throwable cautch) {
+				logoutAndRefreshPage();
 				clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 

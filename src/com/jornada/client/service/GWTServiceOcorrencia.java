@@ -20,7 +20,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.Ocorrencia;
-import com.jornada.shared.classes.OcorrenciaAluno;
+import com.jornada.shared.classes.RelUsuarioOcorrencia;
+import com.jornada.shared.classes.ocorrencia.OcorrenciaAluno;
+import com.jornada.shared.classes.ocorrencia.OcorrenciaParaAprovar;
 
 @RemoteServiceRelativePath("GWTServiceOcorrencia")
 public interface GWTServiceOcorrencia extends RemoteService {
@@ -28,11 +30,14 @@ public interface GWTServiceOcorrencia extends RemoteService {
 	public boolean AdicionarOcorrencia(Ocorrencia object);
 	public boolean AtualizarOcorrencia(Ocorrencia object);
 	public boolean AtualizarPaiCiente(OcorrenciaAluno object);
+	public boolean AtualizarLiberarPaiLeitura(RelUsuarioOcorrencia object);	
 	public boolean deleteOcorrenciaRow(int id_ocorrencia);
+	public boolean deletarRelacionamentoUsuarioOcorrencia(int idOcorrencia, int idUsuario);
 	public ArrayList<Ocorrencia> getOcorrencias();
 	public ArrayList<Ocorrencia> getOcorrencias(String strFilter);	
 	public ArrayList<Ocorrencia> getOcorrenciasPeloConteudoProgramatico(int idConteudoProgramatico);
 	public ArrayList<OcorrenciaAluno> getOcorrenciasPeloAluno(int idAluno);
+	public ArrayList<OcorrenciaParaAprovar> getOcorrenciasParaAprovar(Boolean ehParaAprovar);
 	public ArrayList<OcorrenciaAluno> getTodasAsOcorrenciasDosAlunos(int idConteudoProgramatico);
 	
 	

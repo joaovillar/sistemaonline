@@ -39,8 +39,8 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.MpListBoxMediaNota;
-import com.jornada.client.classes.listBoxes.MpListBoxPorcentagemPresenca;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxMediaNota;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPorcentagemPresenca;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpDatePickerCell;
@@ -55,6 +55,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.Curso;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 
 public class EditarCurso extends VerticalPanel {
@@ -140,7 +141,8 @@ public class EditarCurso extends VerticalPanel {
 		vPanelEditGrid = new VerticalPanel();			
 		
 		cellTable = new CellTable<Curso>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+ "px");		
+//		cellTable.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+ "px");		
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		
@@ -164,7 +166,8 @@ public class EditarCurso extends VerticalPanel {
 		flexTableFiltrar.setWidget(0, 5, mpPanelLoading);	
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+20)+"px",Integer.toString(TelaInicialCurso.intHeightTable-90)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+20)+"px",Integer.toString(TelaInicialCurso.intHeightTable-90)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialCurso.intHeightTable-90)+"px");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);
 		
@@ -172,16 +175,25 @@ public class EditarCurso extends VerticalPanel {
 		vPanelEditGrid.add(flexTableFiltrar);
 		vPanelEditGrid.add(scrollPanel);
 //		vPanelEditGrid.add(cellTable);
+		vPanelEditGrid.setWidth("100%");
 		
 		/************************* Begin Callback's *************************/
 		
 		callbackUpdateRow = new AsyncCallback<Boolean>() {
 			public void onSuccess(Boolean success) {
-				EditarCurso.this.telaInicialCurso.updateAssociarCurso();
-				EditarCurso.this.telaInicialCurso.updateAdicionarCurso();
+				mpPanelLoading.setVisible(false);
+				if(success){
+					EditarCurso.this.telaInicialCurso.updateAssociarCurso();
+					EditarCurso.this.telaInicialCurso.updateAdicionarCurso();
+				}else{
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
+					mpDialogBoxWarning.showDialog();					
+				}
 				
 			}
 			public void onFailure(Throwable caught) {
+				mpPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar());
 				mpDialogBoxWarning.showDialog();
@@ -220,6 +232,7 @@ public class EditarCurso extends VerticalPanel {
 		/******** End Populate ********/
 
 
+		setWidth("100%");
 		super.add(vPanelEditGrid);
 
 	}
@@ -288,6 +301,7 @@ public class EditarCurso extends VerticalPanel {
 
 					@Override
 					public void onSuccess(ArrayList<Curso> list) {
+						MpUtilClient.isRefreshRequired(list);
 						mpPanelLoading.setVisible(false);	
 						dataProvider.getList().clear();
 						cellTable.setRowCount(0);

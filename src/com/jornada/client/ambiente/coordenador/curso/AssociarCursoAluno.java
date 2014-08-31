@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
@@ -29,6 +30,7 @@ import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class AssociarCursoAluno extends VerticalPanel{
 	
@@ -78,24 +80,34 @@ public class AssociarCursoAluno extends VerticalPanel{
 		mpPanelCursoLoading.show();
 		mpPanelCursoLoading.setVisible(false);
 		
-		mpPanelAlunoLoading.setTxtLoading(txtConstants.geralCarregando());
+		mpPanelAlunoLoading.setTxtLoading("");
 		mpPanelAlunoLoading.show();
 		mpPanelAlunoLoading.setVisible(false);
 
-		mpPanelAssociandoLoading.setTxtLoading(txtConstants.geralCarregando());
+		mpPanelAssociandoLoading.setTxtLoading("");
 		mpPanelAssociandoLoading.show();
 		mpPanelAssociandoLoading.setVisible(false);
 		
 		
 		VerticalPanel vBodyPanel = new VerticalPanel();
+//		vBodyPanel.setBorderWidth(2);
+		
+		vBodyPanel.setWidth("100%");
 		
 		vBodyPanel.add(drawPassoUmSelecioneCurso());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
 		vBodyPanel.add(drawPassoDoisSelecioneAluno());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
-		vBodyPanel.add(drawPassoTresSubmeterAssociacao());		
+//		vBodyPanel.add(drawPassoTresSubmeterAssociacao());		
 		
+		ScrollPanel scrollPanel = new ScrollPanel();
+		scrollPanel.setHeight(Integer.toString(TelaInicialCurso.intHeightTable-90)+"px");
+		scrollPanel.setAlwaysShowScrollBars(false);		
+		scrollPanel.add(vBodyPanel);
+		
+		this.setWidth("100%");
 		super.add(vBodyPanel);		
+//		super.add(scrollPanel);
 		
 		
 	}
@@ -106,7 +118,8 @@ public class AssociarCursoAluno extends VerticalPanel{
 
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.cursoSelecionarCurso(), "images/folder_library_16_16.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 		FlexTable flexTableFiltrar = new FlexTable();		
 		flexTableFiltrar.setCellSpacing(3);
@@ -172,7 +185,8 @@ public class AssociarCursoAluno extends VerticalPanel{
 	public MpPanelPageMainView drawPassoDoisSelecioneAluno(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.cursoSelecionarAluno(), "images/people.png");
-		mpPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
+//		mpPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
+		mpPanel.setWidth("100%");
 		
 		listBoxCursoParaAluno = new MpSelectionCursoItemTodos();
 		listBoxCursoParaAluno.addChangeHandler(new ChangeHandlerCleanAlunos());			
@@ -208,8 +222,10 @@ public class AssociarCursoAluno extends VerticalPanel{
 		
 		
 		int row=0;
-		flexFiltrar.setWidget(row, 0, lblFiltrarCurso);flexFiltrar.setWidget(row, 1, listBoxCursoParaAluno);flexFiltrar.setWidget(row, 2, txtFiltroCursoParaAluno);flexFiltrar.setWidget(row++, 3, new InlineHTML("&nbsp;"));
-		flexFiltrar.setWidget(row, 0, lblFiltrarAluno);flexFiltrar.setWidget(row, 1, txtFiltroAluno);flexFiltrar.setWidget(row, 2, btnFiltrar);flexFiltrar.setWidget(row, 3, mpPanelAlunoLoading);
+		flexFiltrar.setWidget(row, 0, lblFiltrarCurso);flexFiltrar.setWidget(row, 1, listBoxCursoParaAluno);flexFiltrar.setWidget(row++, 2, txtFiltroCursoParaAluno);
+		//flexFiltrar.setWidget(row++, 3, new InlineHTML("&nbsp;"));
+		flexFiltrar.setWidget(row, 0, lblFiltrarAluno);flexFiltrar.setWidget(row, 1, txtFiltroAluno);flexFiltrar.setWidget(row++, 2, btnFiltrar);
+		//flexFiltrar.setWidget(row, 3, mpPanelAlunoLoading);
 		
 		
 		FlexTable flexTableBotoes = new FlexTable();
@@ -227,6 +243,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 		flexTableBotoes.setWidget(1, 0, mpButtonParaEsquerda);		
 		
 		FlexTable flexTableSelecionar = new FlexTable();
+//		flexTableSelecionar.setWidth("100%");
 		flexTableSelecionar.setCellSpacing(3);
 		flexTableSelecionar.setCellPadding(3);
 		flexTableSelecionar.setBorderWidth(0);		
@@ -235,13 +252,15 @@ public class AssociarCursoAluno extends VerticalPanel{
 		lblAluno.setStyleName("design_label");
 		
 		multiBoxAlunoFiltrado = new ListBox(true);
-	    multiBoxAlunoFiltrado.setWidth("600px");
+	    multiBoxAlunoFiltrado.setWidth("500px");
+//		multiBoxAlunoFiltrado.setWidth("30%");
 	    multiBoxAlunoFiltrado.setHeight("130px");
 	    multiBoxAlunoFiltrado.setVisibleItemCount(10);	
 	    multiBoxAlunoFiltrado.setStyleName("design_text_boxes");
 	    
 		multiBoxAlunoAssociado = new ListBox(true);
-	    multiBoxAlunoAssociado.setWidth("600px");
+	    multiBoxAlunoAssociado.setWidth("500px");
+//	    multiBoxAlunoAssociado.setWidth("30%");
 	    multiBoxAlunoAssociado.setHeight("130px");
 	    multiBoxAlunoAssociado.setVisibleItemCount(10);	
 	    multiBoxAlunoAssociado.setStyleName("design_text_boxes");
@@ -249,11 +268,16 @@ public class AssociarCursoAluno extends VerticalPanel{
 
 	    
 	    flexTableSelecionar.setWidget(0, 0, flexFiltrar);
-	    flexTableSelecionar.setWidget(0, 1, new InlineHTML("&nbsp;"));
+	    flexTableSelecionar.setWidget(0, 1, mpPanelAlunoLoading);
 	    flexTableSelecionar.setWidget(0, 2, lblAluno);
 	    flexTableSelecionar.setWidget(1, 0, multiBoxAlunoFiltrado);
 	    flexTableSelecionar.setWidget(1, 1, flexTableBotoes);
 	    flexTableSelecionar.setWidget(1, 2, multiBoxAlunoAssociado);
+	    
+	    flexTableSelecionar.setWidget(2,0,new InlineHTML("&nbsp;"));
+	    
+	    flexTableSelecionar.setWidget(3,0,drawPassoTresSubmeterAssociacao());
+	    flexTableSelecionar.getFlexCellFormatter().setColSpan(3, 0, 3);
 	    
 		
 	    mpPanel.add(flexTableSelecionar);
@@ -261,6 +285,8 @@ public class AssociarCursoAluno extends VerticalPanel{
 		callbackGetAlunosFiltro = new AsyncCallback<ArrayList<Usuario>>() {
 
 			public void onSuccess(ArrayList<Usuario> list) {
+				
+				MpUtilClient.isRefreshRequired(list);
 				
 				mpPanelAlunoLoading.setVisible(false);				
 				
@@ -290,6 +316,8 @@ public class AssociarCursoAluno extends VerticalPanel{
 		callbackGetAlunosAssociados = new AsyncCallback<ArrayList<Usuario>>() {
 
 			public void onSuccess(ArrayList<Usuario> list) {
+				
+				MpUtilClient.isRefreshRequired(list);
 				
 				mpPanelCursoLoading.setVisible(false);				
 				
@@ -327,12 +355,14 @@ public class AssociarCursoAluno extends VerticalPanel{
 		FlexTable flexTable = new FlexTable();	
 		flexTable.setCellSpacing(3);
 		flexTable.setCellPadding(3);
-		flexTable.setBorderWidth(0);		
+		flexTable.setBorderWidth(0);	
+//		flexTable.setWidth("100%");
 
 		
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		vPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
+//		vPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
+		vPanel.setWidth("100%");
 
 		MpImageButton btnSubmeterAssociacao = new MpImageButton(txtConstants.cursoAssociarAlunos(), "images/image002.png");
 		btnSubmeterAssociacao.addClickHandler(new ClickHandlerSubmeterAssociarCursoAoAluno());		

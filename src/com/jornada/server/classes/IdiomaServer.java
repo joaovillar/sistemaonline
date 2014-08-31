@@ -40,6 +40,7 @@ public class IdiomaServer {
 			
 
 		} catch (SQLException sqlex) {
+			idIdioma=0;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -63,6 +64,7 @@ public class IdiomaServer {
 			data = getParameters(psCurso.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -86,6 +88,7 @@ public class IdiomaServer {
 			data = getParameters(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();

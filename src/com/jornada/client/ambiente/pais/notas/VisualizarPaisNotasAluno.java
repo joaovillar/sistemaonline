@@ -34,6 +34,7 @@ import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.TipoUsuario;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 
 public class VisualizarPaisNotasAluno extends VerticalPanel{
@@ -94,9 +95,10 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		
 		vBodyPanel.add(drawPassoUmSelecioneAluno());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
-//		vBodyPanel.add(drawPassoDoisEditarNotasAluno());
+		vBodyPanel.setWidth("100%");
 
 		
+		this.setWidth("100%");
 		super.add(vBodyPanel);		
 		
 		
@@ -107,8 +109,9 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 
 		
 		MpPanelPageMainView mpPanelPasso1 = new MpPanelPageMainView(txtConstants.notaSelecionarAluno(), "images/user_male_black_red_16.png");
-		mpPanelPasso1.setWidth(Integer.toString(TelaInicialPaisVisualizarNotas.intWidthTable)+"px");
-		mpPanelPasso1.setWidth(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable-20)+"px");
+//		mpPanelPasso1.setWidth(Integer.toString(TelaInicialPaisVisualizarNotas.intWidthTable)+"px");
+//		mpPanelPasso1.setWidth(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable-20)+"px");
+		mpPanelPasso1.setWidth("100%");
 		mpPanelPasso1.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.intHeightTable-50)+"px");
 
 		
@@ -149,11 +152,12 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		gridBoletimChart.setBorderWidth(0);
 		gridBoletimChart.setCellPadding(2);
 		gridBoletimChart.setCellSpacing(2);
-		gridBoletimChart.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-180)+"px");
+		gridBoletimChart.setWidth("100%");
+//		gridBoletimChart.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-180)+"px");
 		
 		FlexTable gridBoletim = new FlexTable();		
 		gridBoletim.setBorderWidth(0);	
-		gridBoletim.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable),Integer.toString(TelaInicialPeriodo.intHeightTable));
+//		gridBoletim.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable),Integer.toString(TelaInicialPeriodo.intHeightTable));
 		row=0;
 		
 		gridBoletim.setWidget(row, 0, vPanelBoletim);
@@ -196,6 +200,7 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 
 			@Override
 			public void onSuccess(String[][] list) {
+				MpUtilClient.isRefreshRequired(list);
 				vPanelBoletim.clear();
 				mpPanelAlunosLoading.setVisible(false);	
 				setList(list);

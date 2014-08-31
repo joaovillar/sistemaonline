@@ -23,12 +23,14 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
+import com.jornada.client.ambiente.coordenador.periodo.TelaInicialPeriodo;
 import com.jornada.client.classes.listBoxes.ambiente.aluno.MpSelectionCursoAmbienteAluno;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
@@ -110,10 +112,10 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 		}
 
 		Label lblEmpty = new Label(txtConstants.avaliacaoNenhumaCurso());
-//		Label lblEmpty2 = new Label("Por favor, selecione o curso.");
 
 		cellTable = new CellTable<CursoAvaliacao>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialAlunoAgenda.intWidthTable)+ "px");	
+//		cellTable.setWidth(Integer.toString(TelaInicialAlunoAgenda.intWidthTable)+ "px");	
+		cellTable.setWidth("100%");
 		cellTable.setEmptyTableWidget(lblEmpty);
 
 		cellTable.setAutoHeaderRefreshDisabled(true);
@@ -127,7 +129,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 		
 		MpSimplePager mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
-		mpPager.setPageSize(15);				
+//		mpPager.setPageSize(15);				
 
 
 		
@@ -151,17 +153,23 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 		flexTableFiltrar.setWidget(0, 2, txtSearch);
 		flexTableFiltrar.setWidget(0, 3, btnFiltrar);	
 		
+		ScrollPanel scrollPanel = new ScrollPanel();
+//		scrollPanel.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable+20)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-110)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialPeriodo.intHeightTable-110)+"px");
+		scrollPanel.setWidth("100%");
+		scrollPanel.setAlwaysShowScrollBars(false);		
+		scrollPanel.add(cellTable);
 		
 		
 		VerticalPanel vPanelEditGrid = new VerticalPanel();		
 		vPanelEditGrid.add(gridComboBox);
 //		vPanelEditGrid.add(mpPager);
 		vPanelEditGrid.add(flexTableFiltrar);
-		vPanelEditGrid.add(cellTable);
+		vPanelEditGrid.add(scrollPanel);
+		vPanelEditGrid.setWidth("100%");
 
-
-
-
+		
+		this.setWidth("100%");
 		super.add(vPanelEditGrid);
 
 	}
@@ -190,6 +198,9 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 
 					@Override
 					public void onSuccess(ArrayList<CursoAvaliacao> list) {
+						
+						MpUtilClient.isRefreshRequired(list);
+						
 						mpPanelLoading.setVisible(false);	
 						dataProvider.getList().clear();
 						arrayListBackup.clear();
@@ -253,7 +264,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 		nomeAvaliacaoColumn = new Column<CursoAvaliacao, String>(new TextCell()) {
 			@Override
 			public String getValue(CursoAvaliacao object) {
-				return object.getNomeAvaliacao();
+				return object.getAssuntoAvaliacao();
 			}
 		};		
 
@@ -297,7 +308,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 	    sortHandler.setComparator(nomeAvaliacaoColumn, new Comparator<CursoAvaliacao>() {
 	      @Override
 	      public int compare(CursoAvaliacao o1, CursoAvaliacao o2) {
-	        return o1.getNomeAvaliacao().compareTo(o2.getNomeAvaliacao());
+	        return o1.getAssuntoAvaliacao().compareTo(o2.getAssuntoAvaliacao());
 	      }
 	    });	
 	    
@@ -376,7 +387,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 				int i = 0;
 				while (i < dataProvider.getList().size()) {
 
-					String strAvaliacao = dataProvider.getList().get(i).getNomeAvaliacao();
+					String strAvaliacao = dataProvider.getList().get(i).getAssuntoAvaliacao();
 					String strData = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getDataAvaliacao(), "EEEE, MMMM dd, yyyy");
 					String strHora = dataProvider.getList().get(i).getHoraAvaliacao();
 					String strPeriodo = dataProvider.getList().get(i).getNomePeriodo();

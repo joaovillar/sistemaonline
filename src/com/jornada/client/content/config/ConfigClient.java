@@ -14,6 +14,8 @@ public interface ConfigClient extends Messages
 	String hierarquiaShowCursoDataNascimento();
 	String hierarquiaShowCursoTelCelular();
 	String hierarquiaShowCursoTelResidencial();
+	
+	String usuarioShowUnidadeEscola();
     
     /** Creates a new instance of BTCConfig */
 //    public ConfigClient()

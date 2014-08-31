@@ -86,7 +86,7 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 		Label lblCursoNome = new Label(txtConstants.cursoNovoCurso());
 		Label lblDataInicial = new Label(txtConstants.cursoDataInicial());
 		Label lblDataFinal = new Label(txtConstants.cursoDataFinal());
-		Label lblCursoImportarAlunos = new Label("Importar alunos do Curso");
+		Label lblCursoImportarAlunos = new Label(txtConstants.cursoImportarAlunosDoCurso());
 		lblErroNomeCurso = new MpLabelTextBoxError();
 		
 		listBoxCursoEstrutura = new MpSelectionCurso();				

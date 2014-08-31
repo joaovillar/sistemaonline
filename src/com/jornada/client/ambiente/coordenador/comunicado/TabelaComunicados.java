@@ -39,18 +39,17 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.ambiente.coordenador.usuario.TelaInicialUsuario;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
-import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class TabelaComunicados extends VerticalPanel{
 	
@@ -123,7 +122,8 @@ public class TabelaComunicados extends VerticalPanel{
 		
 		
 		cellTable = new CellTable<Comunicado>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		
@@ -145,7 +145,9 @@ public class TabelaComunicados extends VerticalPanel{
 		flexTableFiltrar.setWidget(0, 5, mpPanelLoading);
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialComunicado.intWidthTable+30)+"px",Integer.toString(TelaInicialComunicado.intHeightTable+60)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialComunicado.intWidthTable+30)+"px",Integer.toString(TelaInicialComunicado.intHeightTable+60)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable+60)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);
 
@@ -154,19 +156,17 @@ public class TabelaComunicados extends VerticalPanel{
 		vPanelBody.add(btnAdicionarComunicado);	
 		vPanelBody.add(flexTableFiltrar);	
 		vPanelBody.add(scrollPanel);	
-		
+		vPanelBody.setWidth("100%");
+		vPanelBody.setBorderWidth(0);
 		
 		
 		callbackGetComunicadosFiltro = new AsyncCallback<ArrayList<Comunicado>>() {
 
 			public void onSuccess(ArrayList<Comunicado> list) {
 				
-				mpPanelLoading.setVisible(false);	
+				MpUtilClient.isRefreshRequired(list);
 				
-				if(list==null){
-					MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
-					mpDialogBox.showDialog();	
-				}
+				mpPanelLoading.setVisible(false);	
 				
 				dataProvider.getList().clear();
 				cellTable.setRowCount(0);
@@ -214,7 +214,7 @@ public class TabelaComunicados extends VerticalPanel{
 			}
 		};		
 		
-		
+		setWidth("100%");
 		super.add(vPanelBody);
 		populateGrid();
 	}
@@ -253,35 +253,7 @@ public class TabelaComunicados extends VerticalPanel{
 	
 	protected void populateGrid() {
 		
-		GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%",callbackGetComunicadosFiltro
-		
-//				new AsyncCallback<ArrayList<Comunicado>>() {
-//
-//					@Override
-//					public void onFailure(Throwable caught) {
-//						mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//						mpDialogBoxWarning.setBodyText(txtConstants.geralErroCarregarDados());
-//					}
-//
-//					@Override
-//					public void onSuccess(ArrayList<Comunicado> list) {
-//					
-//						if(list==null){
-//							MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
-//							mpDialogBox.showDialog();	
-//						}
-//						dataProvider.getList().clear();
-//						cellTable.setRowCount(0);
-//						for(int i=0;i<list.size();i++){
-//							dataProvider.getList().add(list.get(i));
-//						}
-//						addCellTableData(dataProvider);						
-//						cellTable.redraw();								
-//
-//
-//					}
-//				}
-		);
+		GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%",callbackGetComunicadosFiltro);
 	}	
 	
 	

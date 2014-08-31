@@ -33,7 +33,8 @@ public class DetalhesComunicado extends VerticalPanel{
 		
 		VerticalPanel vPanelComunicado = new VerticalPanel();
 		vPanelComunicado.setStyleName("designComunicado");
-		vPanelComunicado.setWidth(Integer.toString(TelaInicialAlunoComunicado.intWidthTable)+ "px");		
+//		vPanelComunicado.setWidth(Integer.toString(TelaInicialAlunoComunicado.intWidthTable)+ "px");		
+		vPanelComunicado.setWidth("100%");
 		vPanelComunicado.add(lblComunicado);
 		
 		
@@ -57,7 +58,8 @@ public class DetalhesComunicado extends VerticalPanel{
 		
 		VerticalPanel vPanelAssunto = new VerticalPanel();
 //		vPanelAssunto.setStyleName("designLogin");
-		vPanelAssunto.setWidth(Integer.toString(TelaInicialAlunoComunicado.intWidthTable-550)+ "px");		
+//		vPanelAssunto.setWidth(Integer.toString(TelaInicialAlunoComunicado.intWidthTable-550)+ "px");		
+		vPanelAssunto.setWidth("100%");
 		vPanelAssunto.add(lblAssunto);
 		
 		int countGrid = 0;
@@ -75,12 +77,14 @@ public class DetalhesComunicado extends VerticalPanel{
 		
 		
 		flexTable.setWidget(0, 0, vPanelComunicado);
+		flexTable.setWidth("100%");
 		flexTable.setWidget(1, 0, img);
 		flexTable.setWidget(1, 1, grid);
 		
 		flexTable.getFlexCellFormatter().setWidth(1,0,"15%"); 
 		flexTable.getFlexCellFormatter().setVerticalAlignment(1, 1, ALIGN_TOP);
 		
+		this.setWidth("100%");
 		this.add(flexTable);
 	}
 	

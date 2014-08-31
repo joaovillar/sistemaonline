@@ -3,9 +3,7 @@ package com.jornada.client.ambiente.aluno.comunicado;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
 
@@ -13,9 +11,9 @@ public class TelaInicialAlunoComunicado extends Composite{
 	
 	static TextConstants txtConstants = GWT.create(TextConstants.class);
 	
-	private VerticalPanel verticalPanelPage;
-	VerticalPanel vPanelBody;
-	private TabLayoutPanel stackPanel;
+//	private VerticalPanel verticalPanelPage;
+//	VerticalPanel vPanelBody;
+	private TabLayoutPanel tabLayoutPanel;
 
 	public  static final int intWidthTable=1500;
 	public static final int intHeightTable=500;
@@ -41,21 +39,22 @@ public class TelaInicialAlunoComunicado extends Composite{
 		this.tabelaAlunoComunicado = TabelaAlunoComunicado.getInstance(this);
 	
 		
-		stackPanel = new TabLayoutPanel(2.5, Unit.EM);	
+		tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
 
-		stackPanel.setPixelSize(intWidthTable+50, intHeightTable+160);
-		stackPanel.setAnimationDuration(500);
-		stackPanel.setAnimationVertical(true);
+//		tabLayoutPanel.setPixelSize(intWidthTable+50, intHeightTable+160);
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable+160)+"px");
+		tabLayoutPanel.setAnimationDuration(500);
+		tabLayoutPanel.setAnimationVertical(true);
 		
-		vPanelBody = new VerticalPanel();
+//		vPanelBody = new VerticalPanel();
 		
-		stackPanel.add(tabelaAlunoComunicado, new MpHeaderWidget(txtConstants.alunoAmbienteComunicado(), "images/notes_16.png"));
+		tabLayoutPanel.add(tabelaAlunoComunicado, new MpHeaderWidget(txtConstants.alunoAmbienteComunicado(), "images/notes_16.png"));
 		
-		verticalPanelPage = new VerticalPanel();		
-		verticalPanelPage.add(stackPanel);
-		verticalPanelPage.add(new InlineHTML("&nbsp;"));
+//		verticalPanelPage = new VerticalPanel();		
+//		verticalPanelPage.add(tabLayoutPanel);
+//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
 				
-     	initWidget(verticalPanelPage);
+     	initWidget(tabLayoutPanel);
 		
 	}
 	

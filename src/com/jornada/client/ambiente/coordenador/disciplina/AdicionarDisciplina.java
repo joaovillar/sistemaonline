@@ -209,7 +209,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 					telaInicialDisciplina.getEditarDisciplina().updateClientData();
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroSalvar());
+					mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroSalvar()+" "+txtConstants.geralRegarregarPagina());
 					mpDialogBoxWarning.showDialog();
 				}
 			}

@@ -134,7 +134,8 @@ public class EditarPeriodo extends VerticalPanel {
 		Label lblEmpty = new Label(txtConstants.periodoNenhum());
 
 		cellTable = new CellTable<Periodo>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialPeriodo.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialPeriodo.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setEmptyTableWidget(lblEmpty);
@@ -162,7 +163,6 @@ public class EditarPeriodo extends VerticalPanel {
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 		
 		FlexTable flexTableFiltrar = new FlexTable();	
-		flexTableFiltrar.setBorderWidth(2);
 		flexTableFiltrar.setCellSpacing(3);
 		flexTableFiltrar.setCellPadding(3);
 		flexTableFiltrar.setBorderWidth(0);		
@@ -173,7 +173,9 @@ public class EditarPeriodo extends VerticalPanel {
 		
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable+20)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-110)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable+20)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-110)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialPeriodo.intHeightTable-110)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);
 		
@@ -183,6 +185,8 @@ public class EditarPeriodo extends VerticalPanel {
 //		vPanelEditGrid.add(mpPager);
 		vPanelEditGrid.add(flexTableFiltrar);
 		vPanelEditGrid.add(scrollPanel);
+		vPanelEditGrid.setWidth("100%");
+
 
 
 		/************************* Begin Callback's *************************/
@@ -194,6 +198,11 @@ public class EditarPeriodo extends VerticalPanel {
 
 			public void onSuccess(Boolean success) {
 				mpPanelLoading.setVisible(false);	
+				if(success==false){
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.geralErroAtualizar(txtConstants.periodo())+" "+txtConstants.geralRegarregarPagina());
+					mpDialogBoxWarning.showDialog();					
+				}
 			}
 
 			public void onFailure(Throwable caught) {
@@ -233,8 +242,8 @@ public class EditarPeriodo extends VerticalPanel {
 		/******** Begin Populate ********/
 //		populateCursoComboBox();
 		/******** End Populate ********/
-
-
+		
+		setWidth("100%");
 		super.add(vPanelEditGrid);
 
 	}
@@ -305,6 +314,7 @@ public class EditarPeriodo extends VerticalPanel {
 
 					@Override
 					public void onSuccess(ArrayList<Periodo> list) {
+						MpUtilClient.isRefreshRequired(list);
 						mpPanelLoading.setVisible(false);	
 						dataProvider.getList().clear();
 						arrayListBackup.clear();

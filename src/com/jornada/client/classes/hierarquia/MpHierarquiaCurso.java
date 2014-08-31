@@ -21,7 +21,6 @@ import com.jornada.client.MainView;
 import com.jornada.client.classes.resources.CellTreeStyle;
 import com.jornada.client.classes.resources.CustomTreeModel;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
-import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
 import com.jornada.client.content.i18n.TextConstants;
@@ -30,6 +29,7 @@ import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Topico;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public abstract class MpHierarquiaCurso extends Composite{
 	
@@ -69,12 +69,9 @@ public abstract class MpHierarquiaCurso extends Composite{
 		
 		callBackListaCursos = new AsyncCallback<ArrayList<Curso>>() {
 		
-		public void onSuccess(ArrayList<Curso> listaCurso) {
+		public void onSuccess(ArrayList<Curso> list) {
 			
-			if(listaCurso==null || listaCurso.size()==0){
-				MpDialogBoxRefreshPage mpRefresh = new MpDialogBoxRefreshPage();
-				mpRefresh.showDialog();
-			}
+			MpUtilClient.isRefreshRequired(list);
 			
 			labelMessage = new Label("");
 			
@@ -82,7 +79,7 @@ public abstract class MpHierarquiaCurso extends Composite{
 			final SingleSelectionModel<Object> selectionModel = new SingleSelectionModel<Object>(CustomTreeModel.KEY_PROVIDER_OBJECT);
 			
 
-			TreeViewModel treeViewModel = new CustomTreeModel(listaCurso, selectionModel);
+			TreeViewModel treeViewModel = new CustomTreeModel(list, selectionModel);
 			
 			CellTree.Resources resource = GWT.create(CellTreeStyle.class);
 			
@@ -157,7 +154,9 @@ public abstract class MpHierarquiaCurso extends Composite{
 	
 		panelDetalhes = new VerticalPanel();
 		panelDetalhes.setBorderWidth(0);
-		panelDetalhes.setSize(Integer.toString(intWidthTable-200)+"px",Integer.toString(intHeightTable)+"px");
+//		panelDetalhes.setSize(Integer.toString(intWidthTable-200)+"px",Integer.toString(intHeightTable)+"px");
+		panelDetalhes.setHeight(Integer.toString(intHeightTable)+"px");
+		panelDetalhes.setWidth("100%");
 		panelDetalhes.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 	
 		panelTree = new VerticalPanel();
@@ -179,16 +178,20 @@ public abstract class MpHierarquiaCurso extends Composite{
 		
 		
 		Grid grid = new Grid(1,2);
+		grid.setWidth("100%");
 		grid.setCellPadding(0);
 		grid.setCellSpacing(0);
 		grid.setBorderWidth(0);
 		
 		grid.setWidget(0, 0, mpPanelTree);
 		grid.setWidget(0, 1, panelDetalhes);
+		grid.getCellFormatter().setWidth(0, 0, Integer.toString(intWidthNavigationPanel)+"px");
 		grid.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+		
 		
 		initWidget(grid);
 
+		this.setWidth("100%");
 	}	
 	
 	
@@ -201,10 +204,12 @@ public abstract class MpHierarquiaCurso extends Composite{
 		panelDetalhes.clear();
 		
 		VerticalPanel vPanelTitle = vPanelTitulo(txtConstants.curso(), object.getNome(), "images/folder_library-24.png");
+		vPanelTitle.setWidth("100%");
 		
 		panelDetalhes.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 		
     	FlexTable flexTable = new FlexTable();
+    	flexTable.setWidth("100%");
     	flexTable.setCellPadding(2);
     	flexTable.setCellSpacing(2);
     	flexTable.setWidget(0, 0, vPanelTitle);		
@@ -218,11 +223,13 @@ public abstract class MpHierarquiaCurso extends Composite{
 	public void showPeriodo(Periodo object){
 		panelDetalhes.clear();
 
-		VerticalPanel vPanelTitle = vPanelTitulo(txtConstants.periodo(), object.getNomePeriodo(), "images/my_projects_folder-24.png");		
+		VerticalPanel vPanelTitle = vPanelTitulo(txtConstants.periodo(), object.getNomePeriodo(), "images/my_projects_folder-24.png");
+		vPanelTitle.setWidth("100%");
 	
 		panelDetalhes.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 		
     	FlexTable flexTable = new FlexTable();
+    	flexTable.setWidth("100%");
     	flexTable.setCellPadding(2);
     	flexTable.setCellSpacing(2);
     	flexTable.setWidget(0, 0, vPanelTitle);		
@@ -236,10 +243,12 @@ public abstract class MpHierarquiaCurso extends Composite{
 		panelDetalhes.clear();
 
 		VerticalPanel vPanelTitle = vPanelTitulo(txtConstants.disciplina(), object.getNome(), "images/books-24.png");
+		vPanelTitle.setWidth("100%");
 		
 		panelDetalhes.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 		
 		FlexTable flexTable = new FlexTable();
+		flexTable.setWidth("100%");
     	flexTable.setCellPadding(2);
     	flexTable.setCellSpacing(2);
     	flexTable.setWidget(0, 0, vPanelTitle);		
@@ -253,10 +262,12 @@ public abstract class MpHierarquiaCurso extends Composite{
 		panelDetalhes.clear();
 		
 		VerticalPanel vPanelTitle = vPanelTitulo(txtConstants.conteudoProgramatico(), object.getNome(), "images/textdocument-24.png");
+		vPanelTitle.setWidth("100%");
 		
 		panelDetalhes.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 		
     	FlexTable flexTable = new FlexTable();
+    	flexTable.setWidth("100%");
     	flexTable.setCellPadding(2);
     	flexTable.setCellSpacing(2);
     	flexTable.setWidget(0, 0, vPanelTitle);		
@@ -271,10 +282,12 @@ public abstract class MpHierarquiaCurso extends Composite{
 		panelDetalhes.clear();
 		
 		VerticalPanel vPanelTitle = vPanelTitulo(txtConstants.topico(),object.getNome(), "images/type_list-24.png");
+		vPanelTitle.setWidth("100%");
 		
 		panelDetalhes.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 		
     	FlexTable flexTable = new FlexTable();
+    	flexTable.setWidth("100%");
     	flexTable.setCellPadding(2);
     	flexTable.setCellSpacing(2);
     	flexTable.setWidget(0, 0, vPanelTitle);		

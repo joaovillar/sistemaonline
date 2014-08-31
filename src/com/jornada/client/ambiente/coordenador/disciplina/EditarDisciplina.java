@@ -54,6 +54,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceDisciplina;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.Disciplina;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class EditarDisciplina extends VerticalPanel {
 
@@ -122,7 +123,8 @@ public class EditarDisciplina extends VerticalPanel {
 //		Label lblEmpty2 = new Label("Por favor, selecione a disciplina.");
 
 		cellTable = new CellTable<Disciplina>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-		cellTable.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+ "px");
+//		cellTable.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+ "px");
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		cellTable.setEmptyTableWidget(lblEmpty);
@@ -140,7 +142,9 @@ public class EditarDisciplina extends VerticalPanel {
 		initTableColumns(selectionModel);
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialDisciplina.intWidthTable+30)+"px",Integer.toString(TelaInicialDisciplina.intHeightTable-130)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialDisciplina.intWidthTable+30)+"px",Integer.toString(TelaInicialDisciplina.intHeightTable-130)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialDisciplina.intHeightTable-130)+"px");
+		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);
 		
@@ -172,6 +176,7 @@ public class EditarDisciplina extends VerticalPanel {
 //		vPanelEditGrid.add(mpPager);
 		vPanelEditGrid.add(flexTableFiltrar);
 		vPanelEditGrid.add(scrollPanel);
+		vPanelEditGrid.setWidth("100%");
 
 
 		/************************* Begin Callback's *************************/
@@ -182,7 +187,14 @@ public class EditarDisciplina extends VerticalPanel {
 			public void onSuccess(Boolean success) {
 
 				mpPanelLoading.setVisible(false);
-				getTelaInicialDisciplina().getAssociarProfessorDisciplina().updateClientData();
+				
+				if(success){
+					getTelaInicialDisciplina().getAssociarProfessorDisciplina().updateClientData();
+				}else{
+					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+					mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
+					mpDialogBoxWarning.showDialog();
+				}
 				
 			}
 
@@ -223,6 +235,7 @@ public class EditarDisciplina extends VerticalPanel {
 
 		/*********************** End Callbacks **********************/
 		
+		setWidth("100%");
 		super.add(vPanelEditGrid);
 		
 	}
@@ -318,7 +331,7 @@ public class EditarDisciplina extends VerticalPanel {
 
 						@Override
 						public void onSuccess(ArrayList<Disciplina> list) {
-
+							MpUtilClient.isRefreshRequired(list);
 							mpPanelLoading.setVisible(false);
 							dataProvider.getList().clear();
 							arrayListBackup.clear();

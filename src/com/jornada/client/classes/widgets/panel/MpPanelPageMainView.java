@@ -42,6 +42,7 @@ public class MpPanelPageMainView extends VerticalPanel{
         //h2.setBorderWidth(3);
         h2.add(new InlineHTML("&nbsp"));
 
+
         this.add(h2); 
         //this.setBorderWidth(3);
         this.setVerticalAlignment(ALIGN_TOP);

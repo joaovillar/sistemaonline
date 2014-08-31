@@ -44,6 +44,7 @@ import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.presenca.TabelaPresencaAluno;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class VisualizarDiarioAluno extends VerticalPanel {
 
@@ -82,7 +83,9 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 		
 		scrollPanel.setAlwaysShowScrollBars(false);
 
-		scrollPanel.setSize(Integer.toString(TelaInicialDiarioAluno.intWidthTable+30)+"px",Integer.toString(TelaInicialDiarioAluno.intHeightTable-120)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialDiarioAluno.intWidthTable+30)+"px",Integer.toString(TelaInicialDiarioAluno.intHeightTable-120)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialDiarioAluno.intHeightTable-120)+"px");
+		scrollPanel.setWidth("100%");
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
@@ -143,6 +146,7 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 		
 		
 		vFormPanel.add(flexTableWithListBoxes);
+		vFormPanel.setWidth("100%");
 
 /***************************************Begin Callbacks***************************************/
 
@@ -152,6 +156,7 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 		
 		initializeCellTable();
 		
+		this.setWidth("100%");
 		super.add(vFormPanel);
 
 	}
@@ -241,9 +246,11 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 				}
 
 				@Override
-				public void onSuccess(ArrayList<Periodo> arrayPeriodo) {
+				public void onSuccess(ArrayList<Periodo> list) {
 					
-					ArrayList<TabelaPresencaAluno> listTabelaPresencaAluno = convertePeriodoParaTabela(arrayPeriodo);
+					MpUtilClient.isRefreshRequired(list);
+					
+					ArrayList<TabelaPresencaAluno> listTabelaPresencaAluno = convertePeriodoParaTabela(list);
 					
 					mpPanelLoadingAluno.setVisible(false);
 					dataProvider.getList().clear();
@@ -342,7 +349,8 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 	public void initializeCellTable(){
 		cellTable = new CellTable<TabelaPresencaAluno>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
 
-		cellTable.setWidth(Integer.toString(TelaInicialDiarioAluno.intWidthTable)+ "px");		
+//		cellTable.setWidth(Integer.toString(TelaInicialDiarioAluno.intWidthTable)+ "px");		
+		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 		
@@ -395,13 +403,15 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 //		scrollPanel.add(cellTable);	
 		
 		VerticalPanel vPanel = new VerticalPanel();
-		vPanel.setHeight("100%");
+		vPanel.setWidth("100%");
 		vPanel.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanel.add(cellTable);
 		
 		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
 		
 		VerticalPanel vPanelInScroll = new VerticalPanel();
+		vPanelInScroll.setWidth("100%");
+		vPanelInScroll.setBorderWidth(0);
 		vPanelInScroll.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanelInScroll.add(flexTableFiltrarAluno);
 		vPanelInScroll.add(vPanel);

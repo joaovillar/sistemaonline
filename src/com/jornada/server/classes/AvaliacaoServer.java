@@ -23,18 +23,19 @@ public class AvaliacaoServer {
 	public static String DB_SELECT_TIPO_AVALIACAO_ALL = "SELECT * FROM tipo_avaliacao order by nome_tipo_avaliacao asc;";
 	public static String DB_SELECT_TIPO_AVALIACAO = "SELECT * FROM tipo_avaliacao where id_tipo_avaliacao=? order by nome_tipo_avaliacao asc;";
 	public static String DB_SELECT_AVALIACAO_PELO_CURSO=
-			"select  c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.nome_conteudo_programatico, a.assunto, a.data, a.hora, a.id_tipo_avaliacao  "+
-//			"from usuario u "+
-//			"inner join rel_curso_usuario rcu on u.id_usuario=rcu.id_usuario "+
-//			"inner join curso c on c.id_curso = rcu.id_curso "+
+			"select  c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.nome_conteudo_programatico, " +
+			"a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, ta.nome_tipo_avaliacao  "+
 			"from curso c "+
 			"inner join periodo p on c.id_curso = p.id_curso "+
 			"inner join disciplina d on p.id_periodo = d.id_periodo "+
 			"inner join conteudo_programatico cp on d.id_disciplina = cp.id_disciplina "+
 			"inner join avaliacao a on cp.id_conteudo_programatico = a.id_conteudo_programatico "+
+			"inner join tipo_avaliacao ta on a.id_tipo_avaliacao = ta.id_tipo_avaliacao "+
 			"where  "+
 			"c.id_curso=? "+ 
-			"group by c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.nome_conteudo_programatico, a.assunto, a.data, a.hora, a.id_tipo_avaliacao  "+
+			"group by " +
+			"c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.nome_conteudo_programatico, " +
+			"a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, ta.nome_tipo_avaliacao  "+
 			"order by a.data, a.hora asc ";		
 		
 	
@@ -200,6 +201,7 @@ public class AvaliacaoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -234,16 +236,20 @@ public class AvaliacaoServer {
 				current.setNomePeriodo(rs.getString("nome_periodo"));
 				current.setNomeDisciplina(rs.getString("nome_disciplina"));
 				current.setNomeConteudoProgramatico(rs.getString("nome_conteudo_programatico"));
-				current.setNomeAvaliacao(rs.getString("assunto"));
+				current.setIdAvaliacao(rs.getInt("id_avaliacao"));
+				current.setAssuntoAvaliacao(rs.getString("assunto"));
+				current.setDescricaoAvaliacao(rs.getString("descricao"));
 //				current.setDataAvaliacao(MpUtilServer.convertDateToString(rs.getDate("data"), locale));
 				current.setDataAvaliacao(rs.getDate("data"));
 				current.setHoraAvaliacao(MpUtilServer.convertTimeToString(rs.getTime("hora")));
 				current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
+				current.setDescricaoTipoAvaliacao(rs.getString("nome_tipo_avaliacao"));
 
 				data.add(current);
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -280,6 +286,7 @@ public class AvaliacaoServer {
 			}
 
 		} catch (SQLException sqlex) {
+			data=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
@@ -317,6 +324,7 @@ public class AvaliacaoServer {
 //			}
 
 		} catch (SQLException sqlex) {
+			currentObject=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 //			dataBase.close();
