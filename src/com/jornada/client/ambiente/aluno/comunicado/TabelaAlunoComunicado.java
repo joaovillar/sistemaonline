@@ -2,9 +2,11 @@ package com.jornada.client.ambiente.aluno.comunicado;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.cell.client.DatePickerCell;
 import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.cell.client.TextCell;
@@ -65,7 +67,7 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 	private CellTable<Comunicado> cellTable;
 	private Column<Comunicado, String> assuntoColumn;
 	private Column<Comunicado, SafeHtml> descricaoColumn;
-	private Column<Comunicado, String> dataColumn;
+	private Column<Comunicado, Date> dataColumn;
 	private Column<Comunicado, String> horaColumn;
 	private ListDataProvider<Comunicado> dataProvider = new ListDataProvider<Comunicado>();
 
@@ -464,9 +466,9 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 			}
 
 		};
-		dataColumn = new Column<Comunicado, String>(new MpTextCell()) {
+		dataColumn = new Column<Comunicado, Date>(new DatePickerCell()) {
 			@Override
-			public String getValue(Comunicado object) {
+			public Date getValue(Comunicado object) {
 				// String strDate =
 				// ((object.getData()!=null)?DateTimeFormat.getFormat(FORMAT_DATE).format(object.getData()):null);
 				return object.getData();

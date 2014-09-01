@@ -86,8 +86,7 @@ public class OcorrenciaServer {
 //			dataBase.createConnection();
 //			Connection connection = dataBase.getConnection();
 
-			Date date = new Date();
-			
+			Date date = new Date();			
 			if (object.getData() == null) {
 				object.setData(date);
 			}

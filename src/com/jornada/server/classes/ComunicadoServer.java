@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 
 import com.jornada.server.classes.utility.MpUtilServer;
@@ -47,8 +48,7 @@ public class ComunicadoServer {
 			+ "FROM comunicado c, rel_comunicado_usuario rcu "
 			+ "WHERE c.id_comunicado = rcu.id_comunicado and rcu.id_usuario = ?;";
 
-	public static boolean AdicionarComunicado(Comunicado object,
-			ArrayList<Integer> userIdList) {
+    public static boolean AdicionarComunicado(Comunicado object, ArrayList<Integer> userIdList) {
 
 		boolean isOperationDone = false;
 
@@ -57,17 +57,14 @@ public class ComunicadoServer {
 		try {
 			// dataBase.createConnection();
 
-			// Date date = new Date();
-			//
-			// if (object.getData() == null) {
-			// object.setData(null);
-			// }
+            Date date = new Date();
+            if (object.getData() == null) {
+                object.setData(date);
+            }
 			
 
 			int count = 0;
-			PreparedStatement ps = conn.prepareStatement(
-					ComunicadoServer.DB_INSERT_COMUNICADO,
-					Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_INSERT_COMUNICADO, Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(++count, object.getAssunto());
 			ps.setString(++count, object.getDescricao());
@@ -75,10 +72,9 @@ public class ComunicadoServer {
 			// ps.setDate(++count, new
 			// java.sql.Date(object.getData().getTime()));
 			// ps.setTime(++count, object.getHora());
-			ps.setDate(++count,
-					MpUtilServer.convertStringToSqlDate(object.getData()));
-			ps.setTime(++count,
-					MpUtilServer.convertStringToSqlTime(object.getHora()));
+//			ps.setDate(++count,MpUtilServer.convertStringToSqlDate(object.getData()));
+			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
+			ps.setTime(++count,MpUtilServer.convertStringToSqlTime(object.getHora()));
 
 			ps.setInt(++count, object.getIdTipoComunicado());
 			ps.setString(++count, object.getNomeImagem());
@@ -143,28 +139,25 @@ public class ComunicadoServer {
 		try {
 			// dataBase.createConnection();
 
-			// Date date = new Date();
-			//
-			// if (object.getData() == null) {
-			// object.setData(date);
-			// }
+             Date date = new Date();            
+             if (object.getData() == null) {
+                 object.setData(date);
+             }
 
 //			String nomeImagem= object.getNomeImagem().replace(strRemoveImageAddress, "");
 			
 			// "UPDATE comunicado set assunto=?, descricao=?, data=?, hora=?, id_tipo_comunicado=? where id_comunicado=?;";
 			int count = 0;
-			PreparedStatement ps = conn
-					.prepareStatement(ComunicadoServer.DB_UPDATE_COMUNICADO);
+            PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_UPDATE_COMUNICADO);
 			ps.setString(++count, object.getAssunto());
 			ps.setString(++count, object.getDescricao());
 
 			// ps.setDate(++count, new
 			// java.sql.Date(object.getData().getTime()));
 			// ps.setTime(++count, object.getHora());
-			ps.setDate(++count,
-					MpUtilServer.convertStringToSqlDate(object.getData()));
-			ps.setTime(++count,
-					MpUtilServer.convertStringToSqlTime(object.getHora()));
+//            ps.setDate(++count, MpUtilServer.convertStringToSqlDate(object.getData()));
+			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
+            ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
 
 			ps.setInt(++count, object.getIdTipoComunicado());
 			ps.setString(++count, object.getNomeImagem());
@@ -283,17 +276,15 @@ public class ComunicadoServer {
 
 				Comunicado currentObject = new Comunicado();
 
-				currentObject.setIdComunicado(rs.getInt("id_comunicado"));
-				currentObject.setIdTipoComunicado(rs
-						.getInt("id_tipo_comunicado"));
-				currentObject.setIdEscola(rs.getInt("id_escola"));
-				currentObject.setAssunto(rs.getString("assunto"));
-				currentObject.setDescricao(rs.getString("descricao"));
-				currentObject.setData(MpUtilServer.convertDateToString(rs
-						.getDate("data")));
-				currentObject.setHora(MpUtilServer.convertTimeToString(rs
-						.getTime("hora")));
-				currentObject.setNomeImagem(rs.getString("nome_imagem"));
+                currentObject.setIdComunicado(rs.getInt("id_comunicado"));
+                currentObject.setIdTipoComunicado(rs.getInt("id_tipo_comunicado"));
+                currentObject.setIdEscola(rs.getInt("id_escola"));
+                currentObject.setAssunto(rs.getString("assunto"));
+                currentObject.setDescricao(rs.getString("descricao"));
+//                currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+                currentObject.setData(rs.getDate("data"));
+                currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                currentObject.setNomeImagem(rs.getString("nome_imagem"));
 
 				data.add(currentObject);
 			}
@@ -319,9 +310,8 @@ public class ComunicadoServer {
 
 			// dataBase.createConnection();
 
-			PreparedStatement ps = conn
-					.prepareStatement(ComunicadoServer.DB_SELECT_TIPO_COMUNICADO_ILIKE);
-			int count = 0;
+            PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_SELECT_TIPO_COMUNICADO_ILIKE);
+            int count = 0;
 			ps.setString(++count, strFilter);
 			ps.setString(++count, strFilter);
 
@@ -331,16 +321,14 @@ public class ComunicadoServer {
 				Comunicado currentObject = new Comunicado();
 
 				currentObject.setIdComunicado(rs.getInt("id_comunicado"));
-				currentObject.setIdTipoComunicado(rs
-						.getInt("id_tipo_comunicado"));
-				currentObject.setIdEscola(rs.getInt("id_escola"));
-				currentObject.setAssunto(rs.getString("assunto"));
-				currentObject.setDescricao(rs.getString("descricao"));
-				currentObject.setData(MpUtilServer.convertDateToString(rs
-						.getDate("data")));
-				currentObject.setHora(MpUtilServer.convertTimeToString(rs
-						.getTime("hora")));
-				currentObject.setNomeImagem(rs.getString("nome_imagem"));
+                currentObject.setIdTipoComunicado(rs.getInt("id_tipo_comunicado"));
+                currentObject.setIdEscola(rs.getInt("id_escola"));
+                currentObject.setAssunto(rs.getString("assunto"));
+                currentObject.setDescricao(rs.getString("descricao"));
+//                currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+                currentObject.setData(rs.getDate("data"));
+                currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                currentObject.setNomeImagem(rs.getString("nome_imagem"));
 
 				data.add(currentObject);
 			}
@@ -378,17 +366,15 @@ public class ComunicadoServer {
 
 				Comunicado currentObject = new Comunicado();
 
-				currentObject.setIdComunicado(rs.getInt("id_comunicado"));
-				currentObject.setIdTipoComunicado(rs
-						.getInt("id_tipo_comunicado"));
-				currentObject.setIdEscola(rs.getInt("id_escola"));
-				currentObject.setAssunto(rs.getString("assunto"));
-				currentObject.setDescricao(rs.getString("descricao"));
-				currentObject.setData(MpUtilServer.convertDateToString(rs
-						.getDate("data")));
-				currentObject.setHora(MpUtilServer.convertTimeToString(rs
-						.getTime("hora")));
-				currentObject.setNomeImagem(rs.getString("nome_imagem"));
+                currentObject.setIdComunicado(rs.getInt("id_comunicado"));
+                currentObject.setIdTipoComunicado(rs.getInt("id_tipo_comunicado"));
+                currentObject.setIdEscola(rs.getInt("id_escola"));
+                currentObject.setAssunto(rs.getString("assunto"));
+                currentObject.setDescricao(rs.getString("descricao"));
+//                currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+                currentObject.setData(rs.getDate("data"));
+                currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                currentObject.setNomeImagem(rs.getString("nome_imagem"));
 
 				data.add(currentObject);
 			}
@@ -402,17 +388,15 @@ public class ComunicadoServer {
 			while (rs2.next()) {
 				Comunicado currentObject = new Comunicado();
 
-				currentObject.setIdComunicado(rs2.getInt("id_comunicado"));
-				currentObject.setIdTipoComunicado(rs2
-						.getInt("id_tipo_comunicado"));
-				currentObject.setIdEscola(rs2.getInt("id_escola"));
-				currentObject.setAssunto(rs2.getString("assunto"));
-				currentObject.setDescricao(rs2.getString("descricao"));
-				currentObject.setData(MpUtilServer.convertDateToString(rs2
-						.getDate("data")));
-				currentObject.setHora(MpUtilServer.convertTimeToString(rs2
-						.getTime("hora")));
-				currentObject.setNomeImagem(rs2.getString("nome_imagem"));
+                currentObject.setIdComunicado(rs2.getInt("id_comunicado"));
+                currentObject.setIdTipoComunicado(rs2.getInt("id_tipo_comunicado"));
+                currentObject.setIdEscola(rs2.getInt("id_escola"));
+                currentObject.setAssunto(rs2.getString("assunto"));
+                currentObject.setDescricao(rs2.getString("descricao"));
+//                currentObject.setData(MpUtilServer.convertDateToString(rs2.getDate("data")));
+                currentObject.setData(rs.getDate("data"));
+                currentObject.setHora(MpUtilServer.convertTimeToString(rs2.getTime("hora")));
+                currentObject.setNomeImagem(rs2.getString("nome_imagem"));
 
 				data.add(currentObject);
 			}
@@ -450,17 +434,15 @@ public class ComunicadoServer {
 
 				Comunicado currentObject = new Comunicado();
 
-				currentObject.setIdComunicado(rs.getInt("id_comunicado"));
-				currentObject.setIdTipoComunicado(rs
-						.getInt("id_tipo_comunicado"));
-				currentObject.setIdEscola(rs.getInt("id_escola"));
-				currentObject.setAssunto(rs.getString("assunto"));
-				currentObject.setDescricao(rs.getString("descricao"));
-				currentObject.setData(MpUtilServer.convertDateToString(rs
-						.getDate("data")));
-				currentObject.setHora(MpUtilServer.convertTimeToString(rs
-						.getTime("hora")));
-				currentObject.setNomeImagem(rs.getString("nome_imagem"));
+                currentObject.setIdComunicado(rs.getInt("id_comunicado"));
+                currentObject.setIdTipoComunicado(rs.getInt("id_tipo_comunicado"));
+                currentObject.setIdEscola(rs.getInt("id_escola"));
+                currentObject.setAssunto(rs.getString("assunto"));
+                currentObject.setDescricao(rs.getString("descricao"));
+//                currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+                currentObject.setData(rs.getDate("data"));
+                currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                currentObject.setNomeImagem(rs.getString("nome_imagem"));
 
 				data.add(currentObject);
 			}
@@ -474,17 +456,15 @@ public class ComunicadoServer {
 			while (rs2.next()) {
 				Comunicado currentObject = new Comunicado();
 
-				currentObject.setIdComunicado(rs2.getInt("id_comunicado"));
-				currentObject.setIdTipoComunicado(rs2
-						.getInt("id_tipo_comunicado"));
-				currentObject.setIdEscola(rs2.getInt("id_escola"));
-				currentObject.setAssunto(rs2.getString("assunto"));
-				currentObject.setDescricao(rs2.getString("descricao"));
-				currentObject.setData(MpUtilServer.convertDateToString(rs2
-						.getDate("data")));
-				currentObject.setHora(MpUtilServer.convertTimeToString(rs2
-						.getTime("hora")));
-				currentObject.setNomeImagem(rs2.getString("nome_imagem"));
+                currentObject.setIdComunicado(rs2.getInt("id_comunicado"));
+                currentObject.setIdTipoComunicado(rs2.getInt("id_tipo_comunicado"));
+                currentObject.setIdEscola(rs2.getInt("id_escola"));
+                currentObject.setAssunto(rs2.getString("assunto"));
+                currentObject.setDescricao(rs2.getString("descricao"));
+//                currentObject.setData(MpUtilServer.convertDateToString(rs2.getDate("data")));
+                currentObject.setData(rs.getDate("data"));
+                currentObject.setHora(MpUtilServer.convertTimeToString(rs2.getTime("hora")));
+                currentObject.setNomeImagem(rs2.getString("nome_imagem"));
 
 				data.add(currentObject);
 			}

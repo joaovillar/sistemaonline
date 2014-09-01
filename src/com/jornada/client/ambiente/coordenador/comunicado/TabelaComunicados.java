@@ -2,9 +2,11 @@ package com.jornada.client.ambiente.coordenador.comunicado;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.cell.client.DatePickerCell;
 import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.cell.client.TextCell;
@@ -46,9 +48,11 @@ import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.content.config.ConfigClient;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
+import com.jornada.shared.classes.TipoComunicado;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class TabelaComunicados extends VerticalPanel{
@@ -64,7 +68,7 @@ public class TabelaComunicados extends VerticalPanel{
 	
 	private CellTable<Comunicado> cellTable;
 	private Column<Comunicado, String> assuntoColumn;
-	private Column<Comunicado, String> dataColumn;
+	private Column<Comunicado, Date> dataColumn;
 	private Column<Comunicado, String> horaColumn;
 	private Column<Comunicado, SafeHtml> descricaoColumn;
 	private ListDataProvider<Comunicado> dataProvider = new ListDataProvider<Comunicado>();	
@@ -76,6 +80,7 @@ public class TabelaComunicados extends VerticalPanel{
     private static TabelaComunicados uniqueInstance;
     
     TextConstants txtConstants;
+    ConfigClient configClient = GWT.create(ConfigClient.class);
 	
 	public static TabelaComunicados getInstance(TelaInicialComunicado telaInicialComunicado){
 		if(uniqueInstance==null){
@@ -146,7 +151,7 @@ public class TabelaComunicados extends VerticalPanel{
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
 //		scrollPanel.setSize(Integer.toString(TelaInicialComunicado.intWidthTable+30)+"px",Integer.toString(TelaInicialComunicado.intHeightTable+60)+"px");
-		scrollPanel.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable+60)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable)+"px");
 		scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(cellTable);
@@ -338,7 +343,14 @@ public class TabelaComunicados extends VerticalPanel{
 		    public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
 		        super.render(context, value, sb);
 		        final Comunicado object = (Comunicado) context.getKey();
-		        String imagePath = "images/download/compressed-"+object.getNomeImagem();
+		        
+		        String imagePath = "images/frame.64.png";
+		        if(object.getIdTipoComunicado()==TipoComunicado.EMAIL){
+		            imagePath = "images/email.send.64.png";
+		        }else{
+		            imagePath = "images/download/compressed-"+object.getNomeImagem();   
+		        }
+		         
 		        sb.appendHtmlConstant("<img src = '"+imagePath+"' height = '64px' width = '64px' />");
 
 		    }
@@ -374,9 +386,9 @@ public class TabelaComunicados extends VerticalPanel{
 			}
 
 		};	
-		dataColumn = new Column<Comunicado, String>(new TextCell()) {
+		dataColumn = new Column<Comunicado, Date>(new DatePickerCell()) {
 			@Override
-			public String getValue(Comunicado object) {			    
+			public Date getValue(Comunicado object) {			    
 //				String strDate = ((object.getData()!=null)?DateTimeFormat.getFormat(FORMAT_DATE).format(object.getData()):null);
 				return object.getData();
 			}

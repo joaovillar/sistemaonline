@@ -1,6 +1,7 @@
 package com.jornada.shared.classes;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Comunicado implements Serializable{
 
@@ -11,7 +12,7 @@ public class Comunicado implements Serializable{
 	private int idEscola;		
 	private String assunto;
 	private String descricao;
-	private String data;
+	private Date data;
 	private String hora;	  
 	private String nomeImagem;
 	
@@ -59,15 +60,16 @@ public class Comunicado implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public String getData() {
-		return data;
-	}
 
-	public void setData(String data) {
-		this.data = data;
-	}
+	public Date getData() {
+        return data;
+    }
 
-	public String getHora() {
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public String getHora() {
 		return hora;
 	}
 

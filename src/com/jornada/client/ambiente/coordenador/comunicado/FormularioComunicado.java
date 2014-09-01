@@ -475,7 +475,7 @@ public class FormularioComunicado extends VerticalPanel {
 
                 object.setAssunto(txtAssunto.getText());
                 object.setDescricao(mpRichTextDescricao.getTextArea().getHTML());
-                object.setData(MpUtilClient.convertDateToString(mpDateBoxData.getDate().getValue()));
+                object.setData(mpDateBoxData.getDate().getValue());
                 object.setHora(strHora);
                 object.setIdTipoComunicado(intIdTipoComunicado);
                 object.setNomeImagem(strNomeImagem);
@@ -557,7 +557,7 @@ public class FormularioComunicado extends VerticalPanel {
         txtAssunto.setText(this.comunicado.getAssunto());
         mpRichTextDescricao.getTextArea().setHTML(this.comunicado.getDescricao());
 
-        mpDateBoxData.getDate().setValue(MpUtilClient.convertStringToDate(this.comunicado.getData()));
+        mpDateBoxData.getDate().setValue(this.comunicado.getData());
 
         strNomeImagem = this.comunicado.getNomeImagem();
         new PreloadedImage("images/download/" + strNomeImagem, showImage);
