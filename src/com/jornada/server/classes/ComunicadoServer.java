@@ -89,7 +89,7 @@ public class ComunicadoServer {
 				isOperationDone = true;
 			}
 
-			if (object.getIdTipoComunicado() == 8) {
+			if (object.getIdTipoComunicado() == TipoComunicado.EMAIL) {
 				HashSet<Integer> hs = new HashSet<Integer>();
 				hs.addAll(userIdList);
 				userIdList.clear();
@@ -177,7 +177,7 @@ public class ComunicadoServer {
 				isOperationDone = true;
 			}
 
-			if (object.getIdTipoComunicado() == 8) {
+			if (object.getIdTipoComunicado() == TipoComunicado.EMAIL) {
 
 				HashSet<Integer> hs = new HashSet<Integer>();
 				hs.addAll(userIdList);

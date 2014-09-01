@@ -45,7 +45,7 @@ public class TelaInicialComunicado extends Composite{
 		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
 
 //		tabLayoutPanel.setPixelSize(intWidthTable+50, intHeightTable+250);
-		tabLayoutPanel.setHeight(Integer.toString(intHeightTable+250)+"px");
+		tabLayoutPanel.setHeight(Integer.toString(intHeightTable+150)+"px");
 		tabLayoutPanel.setAnimationDuration(500);
 		tabLayoutPanel.setAnimationVertical(true);
 		

@@ -37,7 +37,7 @@ public class MpUtilClient {
 			dateHora = DateTimeFormat.getFormat(FORMAT_DATE_2).parse(strValue);
 			}catch(Exception ex2){
 				dateHora=null;
-				System.out.println(ex2.getMessage());
+				System.out.println("convertStringToDate:"+ex2.getMessage());
 			}
 		}
 		return dateHora;

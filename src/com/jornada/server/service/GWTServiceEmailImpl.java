@@ -31,7 +31,7 @@ public class GWTServiceEmailImpl extends RemoteServiceServlet implements
 
 	@Override
 	public ArrayList<String> getComucidadoEmailList(Comunicado comunicado) {
-		return EmailServer.getComucidadoEmailList(comunicado);
+		return EmailServer.getComunicadoEmailList(comunicado);
 	}
 
 }

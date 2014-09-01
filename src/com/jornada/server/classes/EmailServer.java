@@ -14,161 +14,154 @@ import com.jornada.shared.classes.Usuario;
 
 public class EmailServer {
 
-	private static String DB_GET_USER_EMAIL = "SELECT email FROM usuario where usuario.id_usuario in (";
-	private static String DB_GET_USERS_EMAIL = "SELECT primeiro_nome, sobre_nome, id_usuario FROM usuario";
-	private static String DB_GET_USERS_EMAIL_BY_ID = "SELECT email FROM usuario where id_usuario in (";
-	private static String DB_GET_USERS_BY_COMUNICATION = "SELECT primeiro_nome, sobre_nome "
-			+ "FROM usuario u, rel_comunicado_usuario rcu "
-			+ "WHERE rcu.id_usuario = u.id_usuario and rcu.id_comunicado = ?";
+    private static String DB_GET_USER_EMAIL = "SELECT email FROM usuario where usuario.id_usuario in (";
+    private static String DB_GET_USERS_EMAIL = "SELECT primeiro_nome, sobre_nome, id_usuario FROM usuario";
+    private static String DB_GET_USERS_EMAIL_BY_ID = "SELECT email FROM usuario where id_usuario in (";
+    private static String DB_GET_USERS_BY_COMUNICATION = "SELECT primeiro_nome, sobre_nome " + "FROM usuario u, rel_comunicado_usuario rcu " + "WHERE rcu.id_usuario = u.id_usuario and rcu.id_comunicado = ?";
 
-	public static String getUserEmail(ArrayList<Usuario> users) {
+    public static String getUserEmail(ArrayList<Usuario> users) {
 
-		String emailList = "";
+        String emailList = "";
 
-		Boolean firstUser = true;
-		for (Usuario user : users) {
-			if (firstUser) {
-				DB_GET_USER_EMAIL = DB_GET_USER_EMAIL + user.getIdUsuario();
-				firstUser = false;
-			} else {
-				DB_GET_USER_EMAIL = DB_GET_USER_EMAIL + ","
-						+ user.getIdUsuario();
-			}
-		}
-		firstUser = true;
-		DB_GET_USER_EMAIL = DB_GET_USER_EMAIL + ");";
+        Boolean firstUser = true;
+        for (Usuario user : users) {
+            if (firstUser) {
+                DB_GET_USER_EMAIL = DB_GET_USER_EMAIL + user.getIdUsuario();
+                firstUser = false;
+            } else {
+                DB_GET_USER_EMAIL = DB_GET_USER_EMAIL + "," + user.getIdUsuario();
+            }
+        }
+        firstUser = true;
+        DB_GET_USER_EMAIL = DB_GET_USER_EMAIL + ");";
 
-		Connection conn = ConnectionManager.getConnection();
+        Connection conn = ConnectionManager.getConnection();
 
-		try {
+        try {
 
-			PreparedStatement ps = conn.prepareStatement(DB_GET_USER_EMAIL);
+            PreparedStatement ps = conn.prepareStatement(DB_GET_USER_EMAIL);
 
-			ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-			while (rs.next()) {
-				if (firstUser) {
-					emailList = emailList + rs.getString("email");
-					firstUser = false;
-				} else {
-					emailList = emailList + ", " + rs.getString("email");
-				}
-			}
+            while (rs.next()) {
+                if (firstUser) {
+                    emailList = emailList + rs.getString("email");
+                    firstUser = false;
+                } else {
+                    emailList = emailList + ", " + rs.getString("email");
+                }
+            }
 
-		} catch (SQLException sqlex) {
-			System.err.println(sqlex.getMessage());
-		} finally {
-			ConnectionManager.closeConnection(conn);
-		}
+        } catch (SQLException sqlex) {
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
 
-		return emailList;
+        return emailList;
 
-	}
+    }
 
-	public static HashMap<String, Integer> getUsersIdlList() {
+    public static HashMap<String, Integer> getUsersIdlList() {
 
-		HashMap<String, Integer> emailList = new HashMap<String, Integer>();
-		String name;
+        HashMap<String, Integer> emailList = new HashMap<String, Integer>();
+        String name;
 
-		Connection conn = ConnectionManager.getConnection();
+        Connection conn = ConnectionManager.getConnection();
 
-		try {
+        try {
 
-			PreparedStatement ps = conn.prepareStatement(DB_GET_USERS_EMAIL);
+            PreparedStatement ps = conn.prepareStatement(DB_GET_USERS_EMAIL);
 
-			ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-			while (rs.next()) {
-				name = rs.getString("primeiro_nome");
-				name = name + " " + rs.getString("sobre_nome");
-				if (!rs.getString("id_usuario").isEmpty()) {
-					emailList.put(name, rs.getInt("id_usuario"));
-				}
-			}
+            while (rs.next()) {
+                name = rs.getString("primeiro_nome");
+                name = name + " " + rs.getString("sobre_nome");
+                if (!rs.getString("id_usuario").isEmpty()) {
+                    emailList.put(name, rs.getInt("id_usuario"));
+                }
+            }
 
-		} catch (SQLException sqlex) {
-			System.err.println(sqlex.getMessage());
-		} finally {
-			ConnectionManager.closeConnection(conn);
-		}
+        } catch (SQLException sqlex) {
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
 
-		return emailList;
+        return emailList;
 
-	}
+    }
 
-	public static Boolean sendMailByUserId(ArrayList<Integer> userList,
-			String subject, String content) {
-		EmailFrameWork emailFramework = new EmailFrameWork();
+    public static Boolean sendMailByUserId(ArrayList<Integer> userList, String subject, String content) {
 
-		emailFramework.sendMailByUserId(userList, subject, content);
+        EmailFrameWork emailFramework = new EmailFrameWork();
 
-		return true;
-	}
+        emailFramework.sendMailByUserId(userList, subject, content);
 
-	public static ArrayList<String> getEmailListByUserId(
-			ArrayList<Integer> userIdList) {
-		ArrayList<String> emailList = new ArrayList<String>();
+        return true;
+    }
 
-		Boolean firstUser = true;
+    public static ArrayList<String> getEmailListByUserId(ArrayList<Integer> userIdList) {
+        ArrayList<String> emailList = new ArrayList<String>();
 
-		for (Integer id : userIdList) {
-			if (firstUser) {
-				DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + id;
-				firstUser = false;
-			} else {
-				DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + "," + id;
-			}
-		}
+        Boolean firstUser = true;
 
-		firstUser = true;
-		DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + ");";
+        for (Integer id : userIdList) {
+            if (firstUser) {
+                DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + id;
+                firstUser = false;
+            } else {
+                DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + "," + id;
+            }
+        }
 
-		Connection conn = ConnectionManager.getConnection();
+        firstUser = true;
+        DB_GET_USERS_EMAIL_BY_ID = DB_GET_USERS_EMAIL_BY_ID + ");";
 
-		try {
+        Connection conn = ConnectionManager.getConnection();
 
-			PreparedStatement ps = conn
-					.prepareStatement(DB_GET_USERS_EMAIL_BY_ID);
+        try {
 
-			ResultSet rs = ps.executeQuery();
+            PreparedStatement ps = conn.prepareStatement(DB_GET_USERS_EMAIL_BY_ID);
 
-			while (rs.next()) {
-				emailList.add(rs.getString("email"));
-			}
+            ResultSet rs = ps.executeQuery();
 
-		} catch (SQLException sqlex) {
-			System.err.println(sqlex.getMessage());
-		} finally {
-			ConnectionManager.closeConnection(conn);
-		}
+            while (rs.next()) {
+                emailList.add(rs.getString("email"));
+            }
 
-		return emailList;
-	}
+        } catch (SQLException sqlex) {
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
 
-	public static ArrayList<String> getComucidadoEmailList(Comunicado comunicado) {
+        return emailList;
+    }
 
-		ArrayList<String> userList = new ArrayList<String>();
-		Connection conn = ConnectionManager.getConnection();
-		try {
+    public static ArrayList<String> getComunicadoEmailList(Comunicado comunicado) {
 
-			PreparedStatement ps = conn
-					.prepareStatement(DB_GET_USERS_BY_COMUNICATION);
-			ps.setInt(1, comunicado.getIdComunicado());
+        ArrayList<String> userList = new ArrayList<String>();
+        Connection conn = ConnectionManager.getConnection();
+        try {
 
-			ResultSet rs = ps.executeQuery();
+            PreparedStatement ps = conn.prepareStatement(DB_GET_USERS_BY_COMUNICATION);
+            ps.setInt(1, comunicado.getIdComunicado());
 
-			while (rs.next()) {
-				String userName = rs.getString("primeiro_nome") + " "
-						+ rs.getString("sobre_nome");
-				userList.add(userName);
-			}
+            ResultSet rs = ps.executeQuery();
 
-		} catch (SQLException sqlex) {
-			System.err.println(sqlex.getMessage());
-		} finally {
-			ConnectionManager.closeConnection(conn);
-		}
-		return userList;
-	}
+            while (rs.next()) {
+                String userName = rs.getString("primeiro_nome") + " " + rs.getString("sobre_nome");
+                userList.add(userName);
+            }
+
+        } catch (SQLException sqlex) {
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        return userList;
+    }
 
 }

@@ -94,8 +94,8 @@ public class MultiBox extends Composite {
 
 		panel.add(list);
 
-		panel.getElement().setAttribute("onclick",
-				"document.getElementById('suggestion_box').focus()");
+        panel.getElement().setAttribute("onclick", "document.getElementById('suggestion_box').focus()");
+        
 		box.setFocus(true);
 
 	}
