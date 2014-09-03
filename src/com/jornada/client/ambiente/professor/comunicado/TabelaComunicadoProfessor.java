@@ -48,6 +48,7 @@ import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
+import com.jornada.shared.classes.TipoComunicado;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class TabelaComunicadoProfessor extends VerticalPanel {
@@ -61,8 +62,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 
 	private MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	private MpDialogBox mpDialogBoxWarning = new MpDialogBox();
-	private MpPanelLoading mpPanelLoading = new MpPanelLoading(
-			"images/radar.gif");
+    private MpPanelLoading mpPanelLoading = new MpPanelLoading("images/radar.gif");
 
 	private CellTable<Comunicado> cellTable;
 	private Column<Comunicado, String> assuntoColumn;
@@ -111,12 +111,10 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 		Label lblComunicado = new Label(
 				txtConstants.comunicadoFiltrarComunicado());
 		lblComunicado.setStyleName("design_label");
-		lblComunicado
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        lblComunicado.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
 		txtSearch = new TextBox();
-		MpImageButton btnFiltrar = new MpImageButton(
-				txtConstants.geralFiltrar(), "images/magnifier.png");
+        MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
 
 		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
@@ -127,17 +125,14 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 		// MpImageButton("Adicionar Novo Comunicado", "images/plus-circle.png");
 		// btnAdicionarComunicado.addClickHandler(new ClickHandlerAdicionar());
 
-		cellTable = new CellTable<Comunicado>(10,
-				GWT.<CellTableStyle> create(CellTableStyle.class));
+        cellTable = new CellTable<Comunicado>(10, GWT.<CellTableStyle> create(CellTableStyle.class));
 //		cellTable.setWidth(Integer.toString(TelaInicialComunicadoProfessor.intWidthTable)+ "px");
 		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
 
 		final SelectionModel<Comunicado> selectionModel = new MultiSelectionModel<Comunicado>();
-		cellTable.setSelectionModel(selectionModel,
-				DefaultSelectionEventManager
-						.<Comunicado> createCheckboxManager());
+        cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Comunicado> createCheckboxManager());
 
 		initTableColumns(selectionModel);
 
@@ -159,7 +154,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 		callbackGetComunicadosFiltro = new AsyncCallback<ArrayList<Comunicado>>() {
 
 			public void onSuccess(ArrayList<Comunicado> list) {
-
+			    mpPanelLoading.setVisible(false);
 				MpUtilClient.isRefreshRequired(list);
 
 				if (list == null) {
@@ -167,21 +162,22 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 				    mpDialogBox.showDialog();
 				}
 
-				dataProvider.getList().clear();
-				cellTable.setRowCount(0);
-				for (int i = 0; i < list.size(); i++) {
+                cellTable.setPageStart(0);
+                cellTable.redraw();
+                dataProvider.refresh();
+                dataProvider.getList().clear();
+                for (int i = 0; i < list.size(); i++) {
 					dataProvider.getList().add(list.get(i));
 				}
 				addCellTableData(dataProvider);
-				cellTable.redraw();
+//				cellTable.redraw();
 
 			}
 
 			public void onFailure(Throwable caught) {
 				mpPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants
-						.comunicadoErroCarregar());
+                mpDialogBoxWarning.setBodyText(txtConstants.comunicadoErroCarregar());
 				mpDialogBoxWarning.showDialog();
 
 			}
@@ -195,11 +191,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 	private class ClickHandlerFiltrar implements ClickHandler {
 		public void onClick(ClickEvent event) {
 			mpPanelLoading.setVisible(true);
-			GWTServiceComunicado.Util.getInstance().getComunicadosInterno(
-					"%" + txtSearch.getText() + "%",
-					telaInicialComunicadoProfessor.getMainView()
-							.getUsuarioLogado().getIdUsuario(),
-					callbackGetComunicadosFiltro);
+            GWTServiceComunicado.Util.getInstance().getComunicadosInterno("%" + txtSearch.getText() + "%", telaInicialComunicadoProfessor.getMainView().getUsuarioLogado().getIdUsuario(), callbackGetComunicadosFiltro);
 			// GWTServiceUsuario.Util.getInstance().getUsuarios("%" +
 			// txtSearch.getText() + "%", callbackGetUsuariosFiltro);
 		}
@@ -210,21 +202,14 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 		public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelLoading.setVisible(true);
-				GWTServiceComunicado.Util.getInstance().getComunicadosInterno(
-						"%" + txtSearch.getText() + "%",
-						telaInicialComunicadoProfessor.getMainView()
-								.getUsuarioLogado().getIdUsuario(),
-						callbackGetComunicadosFiltro);
+                GWTServiceComunicado.Util.getInstance().getComunicadosInterno("%" + txtSearch.getText() + "%", telaInicialComunicadoProfessor.getMainView().getUsuarioLogado().getIdUsuario(), callbackGetComunicadosFiltro);
 			}
 		}
 	}
 
 	protected void populateGrid() {
 
-		GWTServiceComunicado.Util.getInstance().getComunicadosInterno(
-				"%" + txtSearch.getText() + "%",
-				telaInicialComunicadoProfessor.getMainView().getUsuarioLogado()
-						.getIdUsuario(), callbackGetComunicadosFiltro);
+        GWTServiceComunicado.Util.getInstance().getComunicadosInterno("%" + txtSearch.getText() + "%", telaInicialComunicadoProfessor.getMainView().getUsuarioLogado().getIdUsuario(), callbackGetComunicadosFiltro);
 
 		// new AsyncCallback<ArrayList<Comunicado>>() {
 		//
@@ -282,8 +267,8 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 	private class MpSafeHtmlCell extends SafeHtmlCell {
 
 		@Override
-		public Set<String> getConsumedEvents() {
-			Set<String> consumedEvents = new HashSet<String>();
+        public Set<String> getConsumedEvents() {
+            Set<String> consumedEvents = new HashSet<String>();
 			consumedEvents.add("click");
 			return consumedEvents;
 		}
@@ -359,21 +344,23 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 		}
 
 		@Override
-		public void render(com.google.gwt.cell.client.Cell.Context context,
-				String value, SafeHtmlBuilder sb) {
+        public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
 			super.render(context, value, sb);
 			final Comunicado object = (Comunicado) context.getKey();
-			String imagePath = "images/download/compressed-"
-					+ object.getNomeImagem();
-			sb.appendHtmlConstant("<img src = '" + imagePath
-					+ "' height = '64px' width = '64px' />");
+			
+            String imagePath = "images/frame.64.png";
+            if(object.getIdTipoComunicado()==TipoComunicado.EMAIL){
+                imagePath = "images/email.send.64.png";
+            }else{
+                imagePath = "images/download/compressed-"+object.getNomeImagem();   
+            }
+//            String imagePath = "images/download/compressed-" + object.getNomeImagem();
+            sb.appendHtmlConstant("<img src = '" + imagePath + "' height = '64px' width = '64px' />");
 
 		}
 
 		@Override
-		public void onBrowserEvent(Context context, Element parent,
-				String value, NativeEvent event,
-				ValueUpdater<String> valueUpdater) {
+        public void onBrowserEvent(Context context, Element parent, String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
 
 			switch (DOM.eventGetType((Event) event)) {
 			case Event.ONCLICK:

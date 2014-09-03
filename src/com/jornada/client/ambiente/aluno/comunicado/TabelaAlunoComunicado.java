@@ -48,6 +48,7 @@ import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceComunicado;
 import com.jornada.shared.classes.Comunicado;
+import com.jornada.shared.classes.TipoComunicado;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class TabelaAlunoComunicado extends VerticalPanel {
@@ -169,15 +170,17 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 					mpDialogBox.showDialog();
 				}
 
-				dataProvider.getList().clear();
-				cellTable.setRowCount(0);
+                cellTable.setPageStart(0);
+                cellTable.redraw();
+                dataProvider.refresh();
+                dataProvider.getList().clear();
 
 				for (int i = 0; i < list.size(); i++) {
 					dataProvider.getList().add(list.get(i));
 				}
 
 				addCellTableData(dataProvider);
-				cellTable.redraw();
+//				cellTable.redraw();
 
 			}
 
@@ -366,10 +369,14 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 				String value, SafeHtmlBuilder sb) {
 			super.render(context, value, sb);
 			final Comunicado object = (Comunicado) context.getKey();
-			String imagePath = "images/download/compressed-"
-					+ object.getNomeImagem();
-			sb.appendHtmlConstant("<img src = '" + imagePath
-					+ "' height = '64px' width = '64px' />");
+//            String imagePath = "images/download/compressed-" + object.getNomeImagem();
+            String imagePath = "images/frame.64.png";
+            if(object.getIdTipoComunicado()==TipoComunicado.EMAIL){
+                imagePath = "images/email.send.64.png";
+            }else{
+                imagePath = "images/download/compressed-"+object.getNomeImagem();   
+            }
+            sb.appendHtmlConstant("<img src = '" + imagePath + "' height = '64px' width = '64px' />");
 
 		}
 

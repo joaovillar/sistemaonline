@@ -177,8 +177,7 @@ public class ComunicadoServer {
 				userIdList.clear();
 				userIdList.addAll(hs);
 
-				PreparedStatement ps2 = conn
-						.prepareStatement(ComunicadoServer.DB_GET_USER_ID_BY_REL_COMUNICADO_USUARIO);
+                PreparedStatement ps2 = conn.prepareStatement(ComunicadoServer.DB_GET_USER_ID_BY_REL_COMUNICADO_USUARIO);
 				ps2.setInt(1, object.getIdComunicado());
 				ResultSet rs = ps2.executeQuery();
 
@@ -211,8 +210,7 @@ public class ComunicadoServer {
 									+ userId + ")";
 						}
 					}
-					PreparedStatement ps3 = conn
-							.prepareStatement(ComunicadoServer.DB_INSERT_REL_COMUNICADO_USUARIO);
+                    PreparedStatement ps3 = conn.prepareStatement(ComunicadoServer.DB_INSERT_REL_COMUNICADO_USUARIO);
 					ps3.executeUpdate();
 				}
 			}
@@ -239,8 +237,7 @@ public class ComunicadoServer {
 			// dataBase.createConnection();
 
 			int count = 0;
-			PreparedStatement ps = conn
-					.prepareStatement(ComunicadoServer.DB_DELETE_COMUNICADO);
+            PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_DELETE_COMUNICADO);
 			ps.setInt(++count, id_comunicado);
 
 			int numberUpdate = ps.executeUpdate();
@@ -394,7 +391,7 @@ public class ComunicadoServer {
                 currentObject.setAssunto(rs2.getString("assunto"));
                 currentObject.setDescricao(rs2.getString("descricao"));
 //                currentObject.setData(MpUtilServer.convertDateToString(rs2.getDate("data")));
-                currentObject.setData(rs.getDate("data"));
+                currentObject.setData(rs2.getDate("data"));
                 currentObject.setHora(MpUtilServer.convertTimeToString(rs2.getTime("hora")));
                 currentObject.setNomeImagem(rs2.getString("nome_imagem"));
 
@@ -423,8 +420,7 @@ public class ComunicadoServer {
 
 			// dataBase.createConnection();
 
-			PreparedStatement ps = conn
-					.prepareStatement(ComunicadoServer.DB_SELECT_TIPO_COMUNICADO_INTERNO_ILIKE);
+            PreparedStatement ps = conn.prepareStatement(ComunicadoServer.DB_SELECT_TIPO_COMUNICADO_INTERNO_ILIKE);
 			int count = 0;
 			ps.setString(++count, strFilter);
 			ps.setString(++count, strFilter);
@@ -447,8 +443,7 @@ public class ComunicadoServer {
 				data.add(currentObject);
 			}
 
-			PreparedStatement ps2 = conn
-					.prepareStatement(DB_GET_COMUNICADO_PESSOAL);
+            PreparedStatement ps2 = conn.prepareStatement(DB_GET_COMUNICADO_PESSOAL);
 			ps2.setInt(1, idUsuario);
 
 			ResultSet rs2 = ps2.executeQuery();
@@ -462,7 +457,7 @@ public class ComunicadoServer {
                 currentObject.setAssunto(rs2.getString("assunto"));
                 currentObject.setDescricao(rs2.getString("descricao"));
 //                currentObject.setData(MpUtilServer.convertDateToString(rs2.getDate("data")));
-                currentObject.setData(rs.getDate("data"));
+                currentObject.setData(rs2.getDate("data"));
                 currentObject.setHora(MpUtilServer.convertTimeToString(rs2.getTime("hora")));
                 currentObject.setNomeImagem(rs2.getString("nome_imagem"));
 

@@ -173,13 +173,18 @@ public class TabelaComunicados extends VerticalPanel{
 				
 				mpPanelLoading.setVisible(false);	
 				
-				dataProvider.getList().clear();
-				cellTable.setRowCount(0);
+				
+//				cellTable.setRowCount(0);		        
+				cellTable.setPageStart(0);
+		        cellTable.redraw();
+		        dataProvider.refresh();
+		        dataProvider.getList().clear();
+		        
 				for(int i=0;i<list.size();i++){
 					dataProvider.getList().add(list.get(i));
 				}
 				addCellTableData(dataProvider);						
-				cellTable.redraw();								
+//				cellTable.redraw();								
 				
 		
 
