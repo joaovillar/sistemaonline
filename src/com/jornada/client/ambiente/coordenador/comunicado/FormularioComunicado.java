@@ -16,7 +16,11 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -26,11 +30,14 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoComunicado;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxDocumentos;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -89,8 +96,16 @@ public class FormularioComunicado extends VerticalPanel {
 
     private FlowPanel panelImages = new FlowPanel();
     
-    FlexTable flex;
-
+    private FlexTable flexTableCampoEmail;
+    
+    private MpPanelPageMainView drawPassoDoisSelecionarImagem;
+    private MpPanelPageMainView drawPassoDoisEscolherDocumento;
+    
+    private MpListBoxDocumentos mpListBoxDocumentos;
+    private RadioButton radioButtonYes;
+    private RadioButton radioButtonNo;
+//    private Grid gridAnexarDocumento;
+    
     // private PreloadedImage preloadedImage;
 
     public static FormularioComunicado getInstance(TelaInicialComunicado telaInicialComunicado) {
@@ -109,17 +124,23 @@ public class FormularioComunicado extends VerticalPanel {
         mpPanelLoading.setTxtLoading(txtConstants.geralCarregando());
         mpPanelLoading.show();
         mpPanelLoading.setVisible(false);
+        
+        mpListBoxDocumentos = new MpListBoxDocumentos();
 
         vBodyPanel = new VerticalPanel();
 
         MpImageButton btnRetornarTelaAnterior = new MpImageButton(txtConstants.comunicadoRetornarTela(), "images/previousFolder.png");
         btnRetornarTelaAnterior.addClickHandler(new ClickHandlerCancelar());
-
+        
+        drawPassoDoisSelecionarImagem = drawPassoDoisSelecionarImagem();
+        drawPassoDoisEscolherDocumento = drawPassoDoisEscolherDocumento();
+        
         vBodyPanel.add(btnRetornarTelaAnterior);
         vBodyPanel.add(new MpSpaceVerticalPanel());
         vBodyPanel.add(drawPassoUmCamposTitulo());
         vBodyPanel.add(new MpSpaceVerticalPanel());
-        vBodyPanel.add(drawPassoDoisSelecionarImagem());
+        vBodyPanel.add(drawPassoDoisSelecionarImagem);
+        vBodyPanel.add(drawPassoDoisEscolherDocumento);
         vBodyPanel.add(new MpSpaceVerticalPanel());
         vBodyPanel.add(drawPassoTresDescricao());
         vBodyPanel.add(new MpSpaceVerticalPanel());
@@ -141,9 +162,6 @@ public class FormularioComunicado extends VerticalPanel {
         txtAssunto = new TextBox();
 
         multiBox = new MultiBox(oracle);
-//        multiBox.setVisible(false);
-        // multiBox.setWidth("200px");
-        // multiBox.setHeight("80px");
 
         mpDateBoxData = new MpDateBoxWithImage();
         mpDateBoxData.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
@@ -165,33 +183,16 @@ public class FormularioComunicado extends VerticalPanel {
         scrollPanel.setAlwaysShowScrollBars(false);
         scrollPanel.add(multiBox);
         
-        flex = new FlexTable();
-        flex.setVisible(false);
-        flex.setBorderWidth(0);
-        flex.setWidget(0, 0, lblFromEmail);
-        flex.setWidget(0, 1, scrollPanel);
-        flex.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+        flexTableCampoEmail = new FlexTable();
+        flexTableCampoEmail.setVisible(false);
+        flexTableCampoEmail.setBorderWidth(0);
+        flexTableCampoEmail.setWidget(0, 0, lblFromEmail);
+        flexTableCampoEmail.setWidget(0, 1, scrollPanel);
+        flexTableCampoEmail.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
 
         listBoxTipoComunicados = new MpSelectionTipoComunicado();
         listBoxTipoComunicados.setStyleName("design_text_boxes");
-        listBoxTipoComunicados.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                int intIdTipoComunicado = Integer.parseInt(listBoxTipoComunicados.getValue(listBoxTipoComunicados.getSelectedIndex()));
-//                if (listBoxTipoComunicados.getItemText((listBoxTipoComunicados.getSelectedIndex())).equals("Comunicado Usuarios")) {
-                if(intIdTipoComunicado==TipoComunicado.EMAIL){
-                    flex.setVisible(true);
-//                    lblFromEmail.setVisible(true);
-//                    multiBox.setVisible(true);
-                } else {
-                    flex.setVisible(false);
-//                    lblFromEmail.setVisible(false);
-//                    multiBox.setVisible(false);
-                }
-
-            }
-
-        });
+        listBoxTipoComunicados.addChangeHandler(new CliclHandlerTipoComunicado());
 
         lblAssunto.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         lblTipoComunicado.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -205,22 +206,15 @@ public class FormularioComunicado extends VerticalPanel {
         lblHora.setStyleName("design_label");
 
         txtAssunto.setWidth("350px");
-        mpDateBoxData.getDate().setWidth("170px");
+        mpDateBoxData.getDate().setWidth("200px");
 
         mpTimePicker = new MpTimePicker(7, 22);
-
-        // VerticalPanel vPanelCommunicateType = new VerticalPanel();
-        // vPanelCommunicateType.setBorderWidth(1);
-
 
 
         FlexTable gridCommunicateType = new FlexTable();
         gridCommunicateType.setCellSpacing(3);
         gridCommunicateType.setCellPadding(3);
         gridCommunicateType.setBorderWidth(0);
-        // gridCommunicateType.setSize(
-        // Integer.toString((TelaInicialComunicado.intWidthTable) / 2),
-        // Integer.toString(TelaInicialComunicado.intHeightTable));
 
         int row = 0;
 
@@ -240,7 +234,7 @@ public class FormularioComunicado extends VerticalPanel {
         // lblFromEmail);gridCommunicateType.setWidget(row++, 1, scrollPanel);
 
         row = 0;
-        gridCommunicateType.setWidget(row, 3, flex);
+        gridCommunicateType.setWidget(row, 3, flexTableCampoEmail);
         gridCommunicateType.getFlexCellFormatter().setRowSpan(row, 3, 4);
         gridCommunicateType.getFlexCellFormatter().setVerticalAlignment(row, 3, HasVerticalAlignment.ALIGN_TOP);
 
@@ -324,6 +318,58 @@ public class FormularioComunicado extends VerticalPanel {
 
     }
 
+    public MpPanelPageMainView drawPassoDoisEscolherDocumento() {
+
+        
+        MpPanelPageMainView mpPanel = new MpPanelPageMainView("Por favor, selecione o documento caso precisar", "images/doc_google_docs.16.png");
+        // mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");
+        mpPanel.setWidth("100%");
+        mpPanel.setHeight("100px");
+
+        Grid vPanelImagem = new Grid(1, 1);
+
+        radioButtonYes = new RadioButton("useTemplate",txtConstants.geralSim());
+        radioButtonYes.addValueChangeHandler(new ValueChangeHandlerYes());
+        radioButtonNo = new RadioButton("useTemplate", txtConstants.geralNao());
+        radioButtonNo.addValueChangeHandler(new ValueChangeHandlerNo());
+        radioButtonNo.setValue(true);
+        mpListBoxDocumentos.setVisible(false);
+        Label lblAnexarDocumento = new Label("Enviar Documento?");
+        lblAnexarDocumento.setStyleName("design_label");
+        
+         
+        
+        
+        Grid gridDesejaAnexar = new Grid(1,5);   
+        gridDesejaAnexar.setCellPadding(2);
+        gridDesejaAnexar.setCellSpacing(2);        
+        
+        int row=0;
+        gridDesejaAnexar.setWidget(row, 0, lblAnexarDocumento);
+        gridDesejaAnexar.setWidget(row, 1, radioButtonYes);
+        gridDesejaAnexar.setWidget(row, 2, radioButtonNo);
+        gridDesejaAnexar.setWidget(row, 3, new InlineHTML("&nbsp;"));
+        gridDesejaAnexar.setWidget(row, 4, mpListBoxDocumentos);
+        
+        
+        
+        
+
+        
+        
+
+
+
+        vPanelImagem.setWidget(0, 0, gridDesejaAnexar);
+//        vPanelImagem.setWidget(1, 0, gridAnexarDocumento);
+//        vPanelImagem.setWidget(0, 1, panelImages);
+
+        mpPanel.add(vPanelImagem);
+
+        return mpPanel;
+
+    }    
+    
     public MpPanelPageMainView drawPassoTresDescricao() {
 
         MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.comunicadoInsiraDescricao(), "images/note_2add.png");
@@ -454,31 +500,32 @@ public class FormularioComunicado extends VerticalPanel {
 
         public void onClick(ClickEvent event) {
 
-            // if (txtAssunto == null || txtAssunto.getText().isEmpty()) {
-            //
-            // mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-            // mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.comunicadoAssunto()));
-            // mpDialogBoxWarning.showDialog();
-            //
-            // } else {
+
             if (checkFieldsValidator()) {
 
                 mpPanelLoading.setVisible(true);
 
                 String strHora = mpTimePicker.getValue(mpTimePicker.getSelectedIndex());
-                // Date hora =
-                // DateTimeFormat.getFormat("hh:mm a").parse(strHora);
 
                 int intIdTipoComunicado = Integer.parseInt(listBoxTipoComunicados.getValue(listBoxTipoComunicados.getSelectedIndex()));
 
                 Comunicado object = new Comunicado();
-
+                
                 object.setAssunto(txtAssunto.getText());
-                object.setDescricao(mpRichTextDescricao.getTextArea().getHTML());
                 object.setData(mpDateBoxData.getDate().getValue());
                 object.setHora(strHora);
                 object.setIdTipoComunicado(intIdTipoComunicado);
-                object.setNomeImagem(strNomeImagem);
+                object.setNomeImagem(strNomeImagem);                                
+                if (object.getIdTipoComunicado() == TipoComunicado.EMAIL && radioButtonYes.getValue()) {
+                    String strDoc =  GWT.getHostPageBaseURL()+mpListBoxDocumentos.getValue(mpListBoxDocumentos.getSelectedIndex());
+//                    String strEmail = 
+                    SafeHtml s_safe = SafeHtmlUtils.fromSafeConstant(mpRichTextDescricao.getTextArea().getHTML() + "<br><a href='"+strDoc+"?user=parameter' target='_blank'>Click aqui para baixar o documento.</a>");
+                    RichTextArea rich = new RichTextArea();
+                    rich.setHTML(s_safe);
+                    mpRichTextDescricao.setTextArea(rich);
+                }
+                object.setDescricao(mpRichTextDescricao.getTextArea().getHTML());
+
 
                 ArrayList<Integer> userEmailList = new ArrayList<Integer>();
 
@@ -596,9 +643,13 @@ public class FormularioComunicado extends VerticalPanel {
         }
         
         if(comunicado.getIdTipoComunicado()==TipoComunicado.EMAIL){
-            flex.setVisible(true);
+            flexTableCampoEmail.setVisible(true);
+            drawPassoDoisEscolherDocumento.setVisible(true);
+            drawPassoDoisSelecionarImagem.setVisible(false);
         }else{
-            flex.setVisible(false);   
+            flexTableCampoEmail.setVisible(false);
+            drawPassoDoisEscolherDocumento.setVisible(false);
+            drawPassoDoisSelecionarImagem.setVisible(true);            
         }
 
         setVisible(true);
@@ -692,4 +743,51 @@ public class FormularioComunicado extends VerticalPanel {
             }
         });
     }
+    
+    
+    private class ValueChangeHandlerYes implements ValueChangeHandler<Boolean>{
+        @Override
+        public void onValueChange(ValueChangeEvent<Boolean> event) {
+            if(event.getValue() == true){
+                  // gridAnexarDocumento.getRowFormatter().setVisible(0, true);
+                mpListBoxDocumentos.setVisible(true);
+            }           
+        }
+    }
+    
+    private class ValueChangeHandlerNo implements ValueChangeHandler<Boolean>{
+        @Override
+        public void onValueChange(ValueChangeEvent<Boolean> event) {
+            if(event.getValue() == true){
+ 
+                mpListBoxDocumentos.setVisible(false);
+            }           
+        }
+    }    
+    
+    
+    private class CliclHandlerTipoComunicado implements ChangeHandler{
+        @Override
+        public void onChange(ChangeEvent event) {
+            int intIdTipoComunicado = Integer.parseInt(listBoxTipoComunicados.getValue(listBoxTipoComunicados.getSelectedIndex()));
+//            if (listBoxTipoComunicados.getItemText((listBoxTipoComunicados.getSelectedIndex())).equals("Comunicado Usuarios")) {
+            if(intIdTipoComunicado==TipoComunicado.EMAIL){
+                flexTableCampoEmail.setVisible(true);
+                drawPassoDoisEscolherDocumento.setVisible(true);
+                drawPassoDoisSelecionarImagem.setVisible(false);
+//                lblFromEmail.setVisible(true);
+//                multiBox.setVisible(true);
+            } else {
+                flexTableCampoEmail.setVisible(false);
+                drawPassoDoisEscolherDocumento.setVisible(false);
+                drawPassoDoisSelecionarImagem.setVisible(true);
+
+//                lblFromEmail.setVisible(false);
+//                multiBox.setVisible(false);
+            }
+
+        }
+
+    }
 }
+

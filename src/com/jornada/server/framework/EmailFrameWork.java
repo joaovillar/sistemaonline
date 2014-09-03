@@ -11,29 +11,27 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.jornada.server.classes.EmailServer;
+import com.jornada.server.classes.UsuarioServer;
+import com.jornada.shared.classes.Usuario;
 
 public class EmailFrameWork {
 
     public void sendMailByUserId(ArrayList<Integer> userList, String subject, String content) {
 
-        final String username = "xxx@xxx.xxx";
-        final String password = "xxx";
+        final String username = "paisonline.ci.suporte@gmail.com";
+        final String password = "eddygdnqlocydttl";
 
-        ArrayList<String> emailList = EmailServer.getEmailListByUserId(userList);
-
-        String emails = "";
-        boolean first = true;
-
-        for (String email : emailList) {
-            if (first) {
-                emails = email;
-                first = false;
-            } else {
-                emails = emails + ", " + email;
-            }
+        //ArrayList<String> emailList = EmailServer.getEmailListByUserId(userList);
+        ArrayList<Usuario> listUsuario = new ArrayList<Usuario>(); 
+        for(int i = 0;i<userList.size();i++){
+            Usuario usuario = UsuarioServer.getUsuarioPeloId(userList.get(i));
+            listUsuario.add(usuario);
         }
 
+//        String emails = "";
+//        boolean first = true;
+
+        
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -45,20 +43,34 @@ public class EmailFrameWork {
                 return new PasswordAuthentication(username, password);
             }
         });
+        
+        
+        String aux = content;
+        for (Usuario user : listUsuario) {
+            try {
+                
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(username));
+                
+//                content = content + "<br><a href='suporte/doc/rematricula.jsp?user="+user.getPrimeiroNome() + " "+ user.getSobreNome()+"' target='_blank'>clique aqui para iniciar o download</a>.";
+                content = content.replace("?user=parameter", "?user="+user.getPrimeiroNome() + " "+ user.getSobreNome()+"&cpf="+user.getCpf()+"&rg="+user.getRg());
 
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
+                message.setSubject(subject);
+                message.setContent(content, "text/html; charset=utf-8");
+                Transport.send(message);
+                System.out.println("Deu certo");
 
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emails));
-            message.setSubject(subject);
-            message.setContent(content, "text/html; charset=utf-8");
-            Transport.send(message);
-            System.out.println("Deu certo");
+            } catch (MessagingException e) {
+                System.out.println("deu tudo errado");
+                throw new RuntimeException(e);
+            }
+            
+            content = aux;
 
-        } catch (MessagingException e) {
-            System.out.println("deu tudo errado");
-            throw new RuntimeException(e);
         }
+
+
+        
     }
 }
