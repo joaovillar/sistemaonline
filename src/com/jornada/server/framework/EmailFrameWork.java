@@ -18,8 +18,8 @@ public class EmailFrameWork {
 
     public void sendMailByUserId(ArrayList<Integer> userList, String subject, String content) {
 
-        final String username = "xxxxx@xxx.xx";
-        final String password = "xxxxx";
+        final String username = "jaovillar@gmail.com";
+        final String password = "Celular846213Joao";
 
         //ArrayList<String> emailList = EmailServer.getEmailListByUserId(userList);
         ArrayList<Usuario> listUsuario = new ArrayList<Usuario>(); 
@@ -59,10 +59,8 @@ public class EmailFrameWork {
                 message.setSubject(subject);
                 message.setContent(content, "text/html; charset=utf-8");
                 Transport.send(message);
-                System.out.println("Deu certo");
 
             } catch (MessagingException e) {
-                System.out.println("deu tudo errado");
                 throw new RuntimeException(e);
             }
             

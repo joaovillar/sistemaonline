@@ -309,6 +309,10 @@ public class AprovarOcorrencia extends VerticalPanel {
 	        	ruo.setIdOcorrencia(object.getIdOcorrencia());
 	        	ruo.setIdUsuario(object.getIdUsuario());
 	        	ruo.setLiberarLeituraPai(object.isLiberarLeituraPai());
+	        	ruo.setAssunto(object.getAssunto());
+	        	ruo.setDescricao(object.getDescricao());
+	        	ruo.setUsuarioPrimeiroNome(object.getUsuarioPrimeiroNome());
+	        	ruo.setUsuarioSobreNome(object.getUsuarioSobreNome());
 	        	
 	        	
 	        	GWTServiceOcorrencia.Util.getInstance().AtualizarLiberarPaiLeitura(ruo, new callbackUpdateRow());
