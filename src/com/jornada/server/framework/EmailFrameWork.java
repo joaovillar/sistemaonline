@@ -18,8 +18,8 @@ public class EmailFrameWork {
 
     public void sendMailByUserId(ArrayList<Integer> userList, String subject, String content) {
 
-        final String username = "jaovillar@gmail.com";
-        final String password = "Celular846213Joao";
+        final String username = "xxxxx@xxxx";
+        final String password = "xxxxxx";
 
         //ArrayList<String> emailList = EmailServer.getEmailListByUserId(userList);
         ArrayList<Usuario> listUsuario = new ArrayList<Usuario>(); 
