@@ -44,13 +44,13 @@ public class OcorrenciaServer {
 			+ "inner join rel_usuario_ocorrencia ruo on o.id_ocorrencia=ruo.id_ocorrencia "
 			+ "inner join conteudo_programatico cp on o.id_conteudo_programatico = cp.id_conteudo_programatico "
 //	"inner join conteudo_programatico cp on o.id_disciplina = cp.id_disciplina "+
-	"inner join disciplina d on o.id_disciplina = d.id_disciplina "+
+	        +"inner join disciplina d on o.id_disciplina = d.id_disciplina "
 			+ "inner join curso c on p.id_curso = c.id_curso "
 			+ "inner join rel_curso_usuario rcu on c.id_curso  = rcu.id_curso "
 			+ "where ruo.id_usuario=?	and rcu.id_usuario=ruo.id_usuario and liberar_leitura_pai=true";
 //	"cp.nome_conteudo_programatico as nomeconteudo, "+
 //	"inner join conteudo_programatico cp on o.id_disciplina = cp.id_disciplina "+
-	"inner join disciplina d on o.id_disciplina = d.id_disciplina "+
+//	"inner join disciplina d on o.id_disciplina = d.id_disciplina "+
 
 	public static String DB_SELECT_OCORRENCIA_PAIS_PODEM_LER = "select DISTINCT "
 			+ "c.nome_curso as nomecurso, "
@@ -98,7 +98,7 @@ public class OcorrenciaServer {
 			// java.sql.Date(object.getData().getTime()));
 			// MpUtilServer.convertStringToSqlDate(object.getData()));
 			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
-			ps.setTime(++count,
+			ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
 			ps.setInt(++count, object.getIdDisciplina());
 
 			ResultSet rs = ps.executeQuery();
@@ -190,15 +190,14 @@ public class OcorrenciaServer {
 			// ps.setTime(++count, object.getHora());
 			// ps.setDate(++count,
 			// MpUtilServer.convertStringToSqlDate(object.getData()));
-			ps.setInt(++count, object.getIdDisciplina());
-					MpUtilServer.convertStringToSqlTime(object.getHora()));
+			ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
+			ps.setInt(++count, object.getIdDisciplina());					
 			ps.setInt(++count, object.getIdOcorrencia());
 
 			int numberUpdate = ps.executeUpdate();
 
 			if (numberUpdate == 1) {
 				if(deletarRelacionamentoUsuarioOcorrencia(object)){
-						.getIdOcorrencia())) {
 					if (AdicionarRelacionamentoUsuarioOcorrencia(object)) {
 						isOperationDone = true;
 					}
@@ -338,7 +337,6 @@ public class OcorrenciaServer {
 	}
 
 	public static boolean deletarRelacionamentoUsuarioOcorrencia(Ocorrencia ocorrencia){
-			int id_ocorrencia) {
 
 		boolean success = false;
 
@@ -388,7 +386,6 @@ public class OcorrenciaServer {
 
 			int count = 0;
 			PreparedStatement ps = connection.prepareStatement(DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA_POR_ID_USUARIO);
-					.prepareStatement(DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA_2);
 			ps.setInt(++count, idOcorrencia);
 			ps.setInt(++count, idUsuario);
 
@@ -416,8 +413,7 @@ public class OcorrenciaServer {
 			// dataBase.createConnection();
 			// Connection connection = dataBase.getConnection();
 
-			PreparedStatement ps = connection
-					.prepareStatement(OcorrenciaServer.DB_SELECT_OCORRENCIA_ALL);
+			PreparedStatement ps = connection.prepareStatement(OcorrenciaServer.DB_SELECT_OCORRENCIA_ALL);
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -426,7 +422,6 @@ public class OcorrenciaServer {
 
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdDisciplina(rs.getInt("id_disciplina"));
-						.getInt("id_conteudo_programatico"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
 				currentObject.setData(rs.getDate("data"));
@@ -478,7 +473,6 @@ public class OcorrenciaServer {
 
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdDisciplina(rs.getInt("id_disciplina"));
-						.getInt("id_conteudo_programatico"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
 				currentObject.setData(rs.getDate("data"));
@@ -503,7 +497,6 @@ public class OcorrenciaServer {
 	}
 
 	public static ArrayList<Ocorrencia> getOcorrenciasPeloConteudoProgramatico(int idDisciplina) {
-			int idConteudoProgramatico) {
 
 		ArrayList<Ocorrencia> data = new ArrayList<Ocorrencia>();
 		// JornadaDataBase dataBase = new JornadaDataBase();
@@ -526,7 +519,6 @@ public class OcorrenciaServer {
 
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdDisciplina(rs.getInt("id_disciplina"));
-						.getInt("id_conteudo_programatico"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
 				currentObject.setData(rs.getDate("data"));
@@ -578,7 +570,6 @@ public class OcorrenciaServer {
 				currentObject.setNomePeriodo(rs.getString("nomeperiodo"));
 				currentObject.setNomeDisciplina(rs.getString("nomedisciplina"));
 //				currentObject.setNomeConteudoProgramatico(rs.getString("nomeconteudo"));		
-						.getString("nomeconteudo"));
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdUsuario(rs.getInt("id_usuario"));
 				currentObject.setAssunto(rs.getString("assunto"));
@@ -628,7 +619,6 @@ public class OcorrenciaServer {
 				currentObject.setNomePeriodo(rs.getString("nomeperiodo"));
 				currentObject.setNomeDisciplina(rs.getString("nomedisciplina"));
 //				currentObject.setNomeConteudoProgramatico(rs.getString("nomeconteudo"));		
-						.getString("nomeconteudo"));
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdUsuario(rs.getInt("id_usuario"));
 				currentObject.setUsuarioPrimeiroNome(rs
@@ -700,7 +690,6 @@ public class OcorrenciaServer {
 	}
 
 	public static ArrayList<OcorrenciaAluno> getTodasAsOcorrenciasDosAlunos(int idDisciplina){	
-			int idConteudoProgramatico) {
 
 		ArrayList<OcorrenciaAluno> listaOcorrenciaTodosAlunos = new ArrayList<OcorrenciaAluno>();
 
