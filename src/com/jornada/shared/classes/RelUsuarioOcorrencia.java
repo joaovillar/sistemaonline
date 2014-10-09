@@ -9,12 +9,48 @@ public class RelUsuarioOcorrencia implements Serializable {
     private int idRelUsuarioOcorrencia;
     private int idUsuario;
     private int idOcorrencia;
+	private String usuarioPrimeiroNome;
+	private String usuarioSobreNome;
+	private String assunto;
+	private String descricao;
     private boolean paiCiente;  
     private boolean liberarLeituraPai;
     
     public RelUsuarioOcorrencia(){
         
     }
+
+	public String getUsuarioPrimeiroNome() {
+		return usuarioPrimeiroNome;
+	}
+
+	public void setUsuarioPrimeiroNome(String usuarioPrimeiroNome) {
+		this.usuarioPrimeiroNome = usuarioPrimeiroNome;
+	}
+
+	public String getUsuarioSobreNome() {
+		return usuarioSobreNome;
+	}
+
+	public void setUsuarioSobreNome(String usuarioSobreNome) {
+		this.usuarioSobreNome = usuarioSobreNome;
+	}
+
+	public String getAssunto() {
+		return assunto;
+	}
+
+	public void setAssunto(String assunto) {
+		this.assunto = assunto;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 
     public int getIdRelUsuarioOcorrencia() {
         return idRelUsuarioOcorrencia;
@@ -57,7 +93,5 @@ public class RelUsuarioOcorrencia implements Serializable {
     }
     
     
-
-
 }
 
