@@ -20,7 +20,7 @@ import com.jornada.shared.classes.Usuario;
 
 public class DialogBoxSenha extends DialogBox {
 	
-	private AsyncCallback<Boolean> callbackAtualizarSenha;
+//	private AsyncCallback<Boolean> callbackAtualizarSenha;
 	
 	TextConstants txtConstants = GWT.create(TextConstants.class);
 	
@@ -28,6 +28,8 @@ public class DialogBoxSenha extends DialogBox {
 	
 	private TextBox txtNovaSenha;
 	private TextBox txtConfirmarNovaSenha;
+	
+	private boolean forcarPrimeiroLogin;
 	
 	private Usuario usuario;
 	
@@ -50,18 +52,21 @@ public class DialogBoxSenha extends DialogBox {
 	
 	private static DialogBoxSenha uniqueInstance;
 	
-	public static DialogBoxSenha getInstance(Usuario usuario){
+	public static DialogBoxSenha getInstance(Usuario usuario, boolean forcarPrimeiroLogin){
 		if(uniqueInstance==null){
-			uniqueInstance = new DialogBoxSenha(usuario);
+			uniqueInstance = new DialogBoxSenha(usuario, forcarPrimeiroLogin);
 		}else{
 			uniqueInstance.setUsuario(usuario);
+			uniqueInstance.setForcarPrimeiroLogin(forcarPrimeiroLogin);
 			uniqueInstance.show();
 		}
 		return uniqueInstance;
 	}
 
 	
-	private DialogBoxSenha(Usuario usuario){
+	private DialogBoxSenha(Usuario usuario, boolean forcarPrimeiroLogin){
+	    
+	    this.forcarPrimeiroLogin = forcarPrimeiroLogin;
 		
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -132,41 +137,6 @@ public class DialogBoxSenha extends DialogBox {
 		vBody.add(gridListBox);
 		vBody.add(gridBotoes);
 
-	    /***********************Begin Callbacks**********************/
-
-		// Callback para adicionar Curso.
-	    callbackAtualizarSenha = new AsyncCallback<Boolean>() {
-
-			public void onFailure(Throwable caught) {
-				mpLoading.setVisible(false);
-				DialogBoxSenha.this.hide();
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.idiomaErroSalvar());
-				mpDialogBoxWarning.showDialog();
-			}
-
-			@Override
-			public void onSuccess(Boolean result) {
-				mpLoading.setVisible(false);
-				DialogBoxSenha.this.hide();
-				boolean isSuccess = result;
-				if (isSuccess) {
-					txtNovaSenha.setValue("");
-					txtConfirmarNovaSenha.setValue("");
-					DialogBoxSenha.this.hide();							
-					
-				} else {
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.senhaErroSalvar());
-					mpDialogBoxWarning.showDialog();
-				}
-			}
-		};
-
-
-		/***********************End Callbacks**********************/
-		
-		
 		setWidget(vBody);
 		super.setGlassEnabled(true);
 		super.setAnimationEnabled(true);
@@ -183,7 +153,7 @@ public class DialogBoxSenha extends DialogBox {
 			if (FieldVerifier.isValidPassword(txtNovaSenha.getValue())) {
 				if (txtNovaSenha.getValue().equals(txtConfirmarNovaSenha.getValue())) {
 					mpLoading.setVisible(true);
-					GWTServiceUsuario.Util.getInstance().atualizarSenha(usuario.getIdUsuario(), txtNovaSenha.getValue(), callbackAtualizarSenha);
+					GWTServiceUsuario.Util.getInstance().atualizarSenha(usuario.getIdUsuario(), txtNovaSenha.getValue(), forcarPrimeiroLogin, new callbackAtualizarSenha());
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.senhaNaoConfere());
@@ -201,8 +171,49 @@ public class DialogBoxSenha extends DialogBox {
 		}		
 	}
 	
+	
+	
+	private class callbackAtualizarSenha implements AsyncCallback<Boolean>{
+
+        public void onFailure(Throwable caught) {
+            mpLoading.setVisible(false);
+            DialogBoxSenha.this.hide();
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.idiomaErroSalvar());
+            mpDialogBoxWarning.showDialog();
+        }
+
+        @Override
+        public void onSuccess(Boolean result) {
+            mpLoading.setVisible(false);
+            DialogBoxSenha.this.hide();
+            boolean isSuccess = result;
+            if (isSuccess) {
+                txtNovaSenha.setValue("");
+                txtConfirmarNovaSenha.setValue("");
+                DialogBoxSenha.this.hide();                         
+                
+            } else {
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.senhaErroSalvar());
+                mpDialogBoxWarning.showDialog();
+            }
+        }
+    }
+	
+	
 		
-	private class ClickHandlerCancelar implements ClickHandler{		
+	public boolean isForcarPrimeiroLogin() {
+        return forcarPrimeiroLogin;
+    }
+
+
+    public void setForcarPrimeiroLogin(boolean forcarPrimeiroLogin) {
+        this.forcarPrimeiroLogin = forcarPrimeiroLogin;
+    }
+
+
+    private class ClickHandlerCancelar implements ClickHandler{		
 		public void onClick(ClickEvent event){
 			DialogBoxSenha.this.hide();			
 		}		

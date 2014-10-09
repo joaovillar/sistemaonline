@@ -52,12 +52,12 @@ public class MpSelectionTipoUsuario extends MpSelection {
 		/***********************End Callbacks**********************/
 
 		/******** Begin Populate ********/
-		populateComboBox();
+//		populateComboBox();
 		/******** End Populate ********/
 		
 	}	
 	
-	private void populateComboBox() {
+	public void populateComboBox() {
 		startLoadingListBox();
 		GWTServiceUsuario.Util.getInstance().getTipoUsuarios(callBackPopulateComboBox);
 	}

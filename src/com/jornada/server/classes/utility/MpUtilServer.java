@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -144,4 +145,41 @@ public class MpUtilServer {
 
 		return "true";
 	}
+
+    public static ArrayList<String> getMaxTestCaseQueryRowsAllowed(ArrayList<String> strArray, int maxValuesOnQuery) {
+
+        ArrayList<String> arrayDest = new ArrayList<String>();
+
+        StringBuilder strBuffer = new StringBuilder();
+
+        int counter = 0;
+
+        int i = 0;
+        while (i < strArray.size()) {
+
+            if (strBuffer.length() == 0) {
+                strBuffer.append((String) strArray.get(i));
+            } else {
+                strBuffer.append(",");
+                strBuffer.append((String) strArray.get(i));
+            }
+
+            counter++;
+            if (counter == maxValuesOnQuery) {
+                counter = 0;
+                arrayDest.add(strBuffer.toString());
+                strBuffer.setLength(0);
+            }
+
+            i++;
+            if (i == strArray.size()) {
+                arrayDest.add(strBuffer.toString());
+            }
+
+        }
+
+        return arrayDest;
+
+    }
+
 }

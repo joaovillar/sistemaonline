@@ -107,7 +107,7 @@ public class AdicionarCurso extends VerticalPanel {
 
 		// Add a title to the form
 		// layout.setHTML(0, 0, "");
-		cellFormatter.setColSpan(0, 0, 0);
+		//cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 		txtNomeCurso = new TextBox();
 		txtDescricaoCurso = new TextArea();

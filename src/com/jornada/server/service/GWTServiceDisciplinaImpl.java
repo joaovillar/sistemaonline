@@ -9,6 +9,7 @@ import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.disciplina.ProfessorDisciplina;
 
 public class GWTServiceDisciplinaImpl extends RemoteServiceServlet implements GWTServiceDisciplina {
 
@@ -34,6 +35,10 @@ public class GWTServiceDisciplinaImpl extends RemoteServiceServlet implements GW
 	
 	public ArrayList<Disciplina> getDisciplinasAssociadosAoProfessor(int idPeriodo, int idUsuario) {		
 		return DisciplinaServer.getDisciplinasAssociadosAoProfessor(idPeriodo, idUsuario);
+	}
+	
+	public ArrayList<ProfessorDisciplina> getPeriodoDisciplinaProfessor(int idCurso) {
+        return DisciplinaServer.getPeriodoDisciplinaProfessor(idCurso);	    
 	}
 	
 	public ArrayList<Disciplina> getDisciplinasPeloPeriodoAmbienteProfessor(Usuario usuario, int idPeriodo) {
@@ -66,6 +71,10 @@ public class GWTServiceDisciplinaImpl extends RemoteServiceServlet implements GW
 	public boolean updateDisciplinaComIdProfessor(int id_professor, ArrayList<String> list_id_disciplina) {
 		return DisciplinaServer.updateDisciplinaComIdProfessor(id_professor, list_id_disciplina);
 	}	
+	
+    public boolean updateDisciplinaComIdProfessor(int idProfessor, int idDisciplina) {
+        return DisciplinaServer.updateDisciplinaComIdProfessor(idProfessor, idDisciplina);
+    }	
 	
 	public ArrayList<Periodo> getPeriodos(){		
 		return DisciplinaServer.getPeriodos();		

@@ -61,9 +61,8 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 	// private AsyncCallback<Boolean> callbackDeleteComunicado;
 
 	private MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
-	private MpDialogBox mpDialogBoxWarning = new MpDialogBox();
-	private MpPanelLoading mpPanelLoading = new MpPanelLoading(
-			"images/radar.gif");
+    private MpDialogBox mpDialogBoxWarning = new MpDialogBox();
+    private MpPanelLoading mpPanelLoading = new MpPanelLoading("images/radar.gif");
 
 	private CellTable<Comunicado> cellTable;
 	private Column<Comunicado, String> assuntoColumn;
@@ -136,9 +135,7 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 		cellTable.setAutoFooterRefreshDisabled(true);
 
 		final SelectionModel<Comunicado> selectionModel = new MultiSelectionModel<Comunicado>();
-		cellTable.setSelectionModel(selectionModel,
-				DefaultSelectionEventManager
-						.<Comunicado> createCheckboxManager());
+        cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Comunicado> createCheckboxManager());
 
 		initTableColumns(selectionModel);
 
@@ -187,8 +184,7 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 			public void onFailure(Throwable caught) {
 				mpPanelLoading.setVisible(false);
 				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants
-						.comunicadoErroCarregar());
+                mpDialogBoxWarning.setBodyText(txtConstants.comunicadoErroCarregar());
 				mpDialogBoxWarning.showDialog();
 
 			}
@@ -202,10 +198,7 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 	private class ClickHandlerFiltrar implements ClickHandler {
 		public void onClick(ClickEvent event) {
 			mpPanelLoading.setVisible(true);
-			GWTServiceComunicado.Util.getInstance().getComunicadosExterno(
-					"%" + txtSearch.getText() + "%",
-					telaInicialAlunoComunicado.getMainView().getUsuarioLogado()
-							.getIdUsuario(), callbackGetComunicadosFiltro);
+            GWTServiceComunicado.Util.getInstance().getComunicadosExterno("%" + txtSearch.getText() + "%", telaInicialAlunoComunicado.getMainView().getUsuarioLogado().getIdUsuario(), callbackGetComunicadosFiltro);
 			// GWTServiceUsuario.Util.getInstance().getUsuarios("%" +
 			// txtSearch.getText() + "%", callbackGetUsuariosFiltro);
 		}
@@ -216,21 +209,14 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 		public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				mpPanelLoading.setVisible(true);
-				GWTServiceComunicado.Util.getInstance().getComunicadosExterno(
-						"%" + txtSearch.getText() + "%",
-						telaInicialAlunoComunicado.getMainView()
-								.getUsuarioLogado().getIdUsuario(),
-						callbackGetComunicadosFiltro);
+                GWTServiceComunicado.Util.getInstance().getComunicadosExterno("%" + txtSearch.getText() + "%", telaInicialAlunoComunicado.getMainView().getUsuarioLogado().getIdUsuario(), callbackGetComunicadosFiltro);
 			}
 		}
 	}
 
 	protected void populateGrid() {
 
-		GWTServiceComunicado.Util.getInstance().getComunicadosExterno(
-				"%" + txtSearch.getText() + "%",
-				telaInicialAlunoComunicado.getMainView().getUsuarioLogado()
-						.getIdUsuario(), callbackGetComunicadosFiltro);
+        GWTServiceComunicado.Util.getInstance().getComunicadosExterno("%" + txtSearch.getText() + "%", telaInicialAlunoComunicado.getMainView().getUsuarioLogado().getIdUsuario(), callbackGetComunicadosFiltro);
 
 		// new AsyncCallback<ArrayList<Comunicado>>() {
 		//
@@ -371,9 +357,10 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 			final Comunicado object = (Comunicado) context.getKey();
 //            String imagePath = "images/download/compressed-" + object.getNomeImagem();
             String imagePath = "images/frame.64.png";
-            if(object.getIdTipoComunicado()==TipoComunicado.EMAIL){
+            if(object.getIdTipoComunicado()==TipoComunicado.EMAIL_ALUNO_PAIS_PROFESSORES){
                 imagePath = "images/email.send.64.png";
             }else{
+                if(object.getNomeImagem()!=null)
                 imagePath = "images/download/compressed-"+object.getNomeImagem();   
             }
             sb.appendHtmlConstant("<img src = '" + imagePath + "' height = '64px' width = '64px' />");
@@ -400,8 +387,7 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 	public void openComunicadoDetalhe(Comunicado object) {
 		detalhesComunicado = new DetalhesComunicado(object);
 		vPanelBody.clear();
-		MpImageButton btnRetornarTelaAnterior = new MpImageButton("",
-				"images/previousFolder.png");
+        MpImageButton btnRetornarTelaAnterior = new MpImageButton("", "images/previousFolder.png");
 		btnRetornarTelaAnterior.addClickHandler(new ClickHandlerCancelar());
 		vPanelBody.add(btnRetornarTelaAnterior);
 		vPanelBody.add(detalhesComunicado);
@@ -512,16 +498,11 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 		// txtConstants.comunicadoVerDetalhes());
 		// cellTable.addColumn(removeColumn, "Remover");
 
-		cellTable.getColumn(cellTable.getColumnIndex(imageColumn))
-				.setCellStyleNames("hand-over");
-		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn))
-				.setCellStyleNames("hand-over");
-		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn))
-				.setCellStyleNames("hand-over");
-		cellTable.getColumn(cellTable.getColumnIndex(dataColumn))
-				.setCellStyleNames("hand-over");
-		cellTable.getColumn(cellTable.getColumnIndex(horaColumn))
-				.setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(imageColumn)).setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(dataColumn)).setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(horaColumn)).setCellStyleNames("hand-over");
 		// cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");
 		// cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");
 

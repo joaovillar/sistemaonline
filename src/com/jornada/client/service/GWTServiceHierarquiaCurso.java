@@ -26,6 +26,7 @@ import com.jornada.shared.classes.Usuario;
 public interface GWTServiceHierarquiaCurso extends RemoteService {
 
 	public ArrayList<Curso> getHierarquiaCursos();	
+	public ArrayList<Curso> getHierarquiaCursos(String strFilter);
 	public ArrayList<Curso> getHierarquiaCursosAmbientePais(Usuario usuarioPais);
 	public ArrayList<Curso> getHierarquiaCursosAmbienteAluno(Usuario usuarioAluno);
 	public ArrayList<Curso> getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor);	

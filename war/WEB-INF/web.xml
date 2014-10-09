@@ -171,5 +171,13 @@
     	<servlet-name>GWTServiceUnidadeEscola</servlet-name>
     	<url-pattern>/jornada/GWTServiceUnidadeEscola</url-pattern>
     </servlet-mapping>
+    <servlet>
+    	<servlet-name>GWTServiceDocumento</servlet-name>
+    	<servlet-class>com.jornada.server.service.GWTServiceDocumentoImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    	<servlet-name>GWTServiceDocumento</servlet-name>
+    	<url-pattern>/jornada/GWTServiceDocumento</url-pattern>
+    </servlet-mapping>
 
 </web-app>

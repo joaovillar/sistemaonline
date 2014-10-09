@@ -846,6 +846,11 @@ background-size: 100%;
 	cursor: pointer;
 }
 
+.imageCenterPointer{
+	vertical-align: middle;
+	cursor: pointer;
+}
+
 .textInputPassword:FOCUS {
 	outline: none;
     box-shadow: 0px 0px 2px blue;
@@ -1079,4 +1084,23 @@ li.multiValueSuggestBox-token-selected {
 
 li.multiValueSuggestBox-input-token {
     float: left;
+}
+
+.scrollbar{
+	padding: 1px 0px;
+  margin: 0px;
+  white-space: nowrap;
+  cursor: hand;
+  cursor: pointer;
+}
+
+.documentClass-PopPup {
+  background-color: white;
+}
+
+
+.img_style{
+	cursor: pointer;
+	position: relative;
+	top: 2px;
 }

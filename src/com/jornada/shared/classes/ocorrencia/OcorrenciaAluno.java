@@ -12,7 +12,7 @@ public class OcorrenciaAluno implements Serializable{
 	private String nomeCurso;
 	private String nomePeriodo;
 	private String nomeDisciplina;
-	private String nomeConteudoProgramatico;
+//	private String nomeConteudoProgramatico;
 	private int idOcorrencia;
 	private int idUsuario;
 	private String assunto;
@@ -53,13 +53,13 @@ public class OcorrenciaAluno implements Serializable{
 		this.nomeDisciplina = nomeDisciplina;
 	}
 
-	public String getNomeConteudoProgramatico() {
-		return nomeConteudoProgramatico;
-	}
-
-	public void setNomeConteudoProgramatico(String nomeConteudoProgramatico) {
-		this.nomeConteudoProgramatico = nomeConteudoProgramatico;
-	}
+//	public String getNomeConteudoProgramatico() {
+//		return nomeConteudoProgramatico;
+//	}
+//
+//	public void setNomeConteudoProgramatico(String nomeConteudoProgramatico) {
+//		this.nomeConteudoProgramatico = nomeConteudoProgramatico;
+//	}
 
 	public String getAssunto() {
 		return assunto;

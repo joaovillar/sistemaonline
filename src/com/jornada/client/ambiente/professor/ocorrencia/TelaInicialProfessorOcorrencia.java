@@ -31,9 +31,15 @@ public class TelaInicialProfessorOcorrencia extends Composite{
 		if(uniqueInstance==null){
 			uniqueInstance = new TelaInicialProfessorOcorrencia(mainView);
 		}else{
+		    
+		    int idTipoUsuario= uniqueInstance.mainView.getUsuarioLogado().getIdTipoUsuario();
+		    
 			uniqueInstance.adicionarOcorrencia.updateClientData();
 			uniqueInstance.editarOcorrencia.updateClientData();
 			uniqueInstance.visualizarOcorrencia.updateClientData();
+            if (idTipoUsuario == TipoUsuario.COORDENADOR || idTipoUsuario == TipoUsuario.ADMINISTRADOR) {
+                uniqueInstance.aprovarOcorrencia.updateClientData();
+            }
 		}
 		
 		return uniqueInstance;

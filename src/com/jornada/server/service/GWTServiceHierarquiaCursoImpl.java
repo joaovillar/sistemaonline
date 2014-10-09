@@ -32,6 +32,10 @@ public class GWTServiceHierarquiaCursoImpl extends RemoteServiceServlet implemen
 		return HierarquiaCursoServer.getHierarquiaCursos();		
 	}
 	
+    public ArrayList<Curso> getHierarquiaCursos(String strFilter) {
+        return HierarquiaCursoServer.getHierarquiaCursos(strFilter);
+    }
+	
 	public ArrayList<Curso> getHierarquiaCursosAmbientePais(Usuario usuarioPais){
 		
 		switch(usuarioPais.getIdTipoUsuario()){

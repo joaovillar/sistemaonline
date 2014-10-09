@@ -60,7 +60,7 @@ public class MpSelectionUnidadeEscola extends MpSelection {
 		
 	}	
 	
-	private void populateComboBox() {
+	public void populateComboBox() {
 		startLoadingListBox();
 		GWTServiceUnidadeEscola.Util.getInstance().getUnidadeEscolas(callBackPopulateComboBox);
 	}

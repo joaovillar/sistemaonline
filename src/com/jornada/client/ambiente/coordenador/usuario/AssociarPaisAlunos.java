@@ -105,9 +105,9 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		
 		Label lblFiltrarAluno = new Label(txtConstants.alunoNome());
 		txtFiltroAlunos = new TextBox();		
-		txtFiltroAlunos.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCurso());
-		MpImageButton btnFiltrar = new MpImageButton(txtConstants.usuarioFiltrarListaAlunos(), "images/magnifier.png");
-		btnFiltrar.addClickHandler(new ClickHandlerFiltrarCurso());		
+		txtFiltroAlunos.addKeyUpHandler(new EnterKeyUpHandlerFiltrarAluno());
+		MpImageButton btnFiltrarAluno = new MpImageButton(txtConstants.usuarioFiltrarListaAlunos(), "images/magnifier.png");
+		btnFiltrarAluno.addClickHandler(new ClickHandlerFiltrarAluno());		
 		
 		lblFiltrarAluno.setStyleName("design_label");	
 		lblFiltrarAluno.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
@@ -121,7 +121,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		gridFiltrar.setWidget(0, 0, lblFiltrarAluno);
 		gridFiltrar.setWidget(0, 1, listBoxAlunos);
 		gridFiltrar.setWidget(0, 2, txtFiltroAlunos);
-		gridFiltrar.setWidget(0, 3, btnFiltrar);
+		gridFiltrar.setWidget(0, 3, btnFiltrarAluno);
 		gridFiltrar.setWidget(0, 4, mpPanelAlunoLoading);	
 		
 		mpPanel.add(gridFiltrar);
@@ -177,8 +177,8 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		flexTable.setCellPadding(3);
 		flexTable.setBorderWidth(0);		
 
-		Label lblAluno = new Label(txtConstants.usuarioPaisAssociados());
-		lblAluno.setStyleName("design_label");
+		Label lblPaisAssociados = new Label(txtConstants.usuarioPaisAssociados());
+		lblPaisAssociados.setStyleName("design_label");
 		
 		multiBoxPaisFiltrado = new ListBox(true);
 	    multiBoxPaisFiltrado.setWidth("450px");
@@ -194,7 +194,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	    
 	    flexTable.setWidget(0, 0, flexTableFiltrar);
 	    flexTable.setWidget(0, 1, new InlineHTML("&nbsp;"));
-	    flexTable.setWidget(0, 2, lblAluno);
+	    flexTable.setWidget(0, 2, lblPaisAssociados);
 	    flexTable.setWidget(1, 0, multiBoxPaisFiltrado);
 	    flexTable.setWidget(1, 1, flexTableBotoes);
 	    flexTable.setWidget(1, 2, multiBoxPaisAssociado);	 
@@ -344,22 +344,23 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	}
 	
 	
+	private void eventoFiltrarAluno(){
+        multiBoxPaisFiltrado.clear();
+        txtFiltroPais.setText("");
+        listBoxAlunos.filterComboBox(txtFiltroAlunos.getText());
+        popularPaisAssociados();
+	}	
 	
-	
-	private class ClickHandlerFiltrarCurso implements ClickHandler {
+	private class ClickHandlerFiltrarAluno implements ClickHandler {
 		public void onClick(ClickEvent event) {
-				//mpPanelAlunoLoading.setVisible(true);				
-				//GWTServiceCurso.Util.getInstance().getCursos("%" + txtFiltroAlunos.getText() + "%", callbackGetAlunosFiltro);
-			listBoxAlunos.filterComboBox(txtFiltroAlunos.getText());
+		    eventoFiltrarAluno();
 		}
 	}
 	
-	private class EnterKeyUpHandlerFiltrarCurso implements KeyUpHandler{
+	private class EnterKeyUpHandlerFiltrarAluno implements KeyUpHandler{
 		public void onKeyUp(KeyUpEvent event){
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				//mpPanelAlunoLoading.setVisible(true);				
-				//GWTServiceCurso.Util.getInstance().getCursos("%" + txtFiltroAlunos.getText() + "%", callbackGetAlunosFiltro);
-				listBoxAlunos.filterComboBox(txtFiltroAlunos.getText());
+			    eventoFiltrarAluno();
 			}
 		}
 	}	

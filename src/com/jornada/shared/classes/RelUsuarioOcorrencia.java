@@ -4,59 +4,60 @@ import java.io.Serializable;
 
 public class RelUsuarioOcorrencia implements Serializable {
 
-	private static final long serialVersionUID = 6808097265191158633L;
-	
-	private int idRelUsuarioOcorrencia;
-	private int idUsuario;
-	private int idOcorrencia;
-	private boolean paiCiente;	
-	private boolean liberarLeituraPai;
-	
-	public RelUsuarioOcorrencia(){
-		
-	}
+    private static final long serialVersionUID = 6808097265191158633L;
+    
+    private int idRelUsuarioOcorrencia;
+    private int idUsuario;
+    private int idOcorrencia;
+    private boolean paiCiente;  
+    private boolean liberarLeituraPai;
+    
+    public RelUsuarioOcorrencia(){
+        
+    }
 
-	public int getIdRelUsuarioOcorrencia() {
-		return idRelUsuarioOcorrencia;
-	}
+    public int getIdRelUsuarioOcorrencia() {
+        return idRelUsuarioOcorrencia;
+    }
 
-	public void setIdRelUsuarioOcorrencia(int idRelUsuarioOcorrencia) {
-		this.idRelUsuarioOcorrencia = idRelUsuarioOcorrencia;
-	}
+    public void setIdRelUsuarioOcorrencia(int idRelUsuarioOcorrencia) {
+        this.idRelUsuarioOcorrencia = idRelUsuarioOcorrencia;
+    }
 
-	public int getIdUsuario() {
-		return idUsuario;
-	}
+    public int getIdUsuario() {
+        return idUsuario;
+    }
 
-	public void setIdUsuario(int idUsuario) {
-		this.idUsuario = idUsuario;
-	}
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
-	public int getIdOcorrencia() {
-		return idOcorrencia;
-	}
+    public int getIdOcorrencia() {
+        return idOcorrencia;
+    }
 
-	public void setIdOcorrencia(int idOcorrencia) {
-		this.idOcorrencia = idOcorrencia;
-	}
+    public void setIdOcorrencia(int idOcorrencia) {
+        this.idOcorrencia = idOcorrencia;
+    }
 
-	public boolean isPaiCiente() {
-		return paiCiente;
-	}
+    public boolean isPaiCiente() {
+        return paiCiente;
+    }
 
-	public void setPaiCiente(boolean paiCiente) {
-		this.paiCiente = paiCiente;
-	}
+    public void setPaiCiente(boolean paiCiente) {
+        this.paiCiente = paiCiente;
+    }
 
-	public boolean isLiberarLeituraPai() {
-		return liberarLeituraPai;
-	}
+    public boolean isLiberarLeituraPai() {
+        return liberarLeituraPai;
+    }
 
-	public void setLiberarLeituraPai(boolean liberarLeituraPai) {
-		this.liberarLeituraPai = liberarLeituraPai;
-	}
-	
-	
+    public void setLiberarLeituraPai(boolean liberarLeituraPai) {
+        this.liberarLeituraPai = liberarLeituraPai;
+    }
+    
+    
 
 
 }
+

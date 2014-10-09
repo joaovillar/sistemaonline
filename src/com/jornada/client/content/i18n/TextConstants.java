@@ -466,6 +466,11 @@ public interface TextConstants extends Messages {
 	/*******PROFESSOR End*******/
 	
 	
+	/*******Pais Begin*******/
+	String pais();
+	String paisNome();
+   /*******Pais End*******/
+	
 	/*******AVALIAÇÔES Begin*******/
 	String avaliacao();
 	String avaliacaoAdicionar();
@@ -668,5 +673,28 @@ public interface TextConstants extends Messages {
 	String sexoFeminino();
 	String sexoMasculino(); 
 	/*******Sexo END*******/
+	
+	/*******Documento BEGIN*******/
+	String documentoSelecionarContrato();
+	String documentoContrato();
+	String documentoFiltrarPais();
+	String documentoPorCurso();
+	String documentoPorNome();
+	String documentoCursoParaFilterPais();
+	String documentoFiltro(); 
+	String documentoReponsavel();
+	String documentoEnviarContratoPorEmail();
+	String documentoEmailNovosPais();
+	String documentoErroEmail();
+	String documentoFinanceiro();
+	String documentoAcademico();
+	String documentoTodos();
+	String documentoImprimirContrato();
+	/*******Documento END*******/
+	
+	
+	/*******EMAIL BEGIN*******/
+	String emailEnviado();
+	/*******EMAIL END*******/
 
 }

@@ -18,7 +18,7 @@ public class MpSelectionCurso extends MpSelection {
 	
 	private ArrayList<Curso> listCurso;
 	
-	public MpSelectionCurso(){
+	public MpSelectionCurso(boolean autoPopulate){
 
 		listBoxAux = new ListBox();
 		
@@ -35,8 +35,12 @@ public class MpSelectionCurso extends MpSelection {
 						listBoxAux.addItem(object.getNome(),Integer.toString(object.getIdCurso()));
 						listCurso.add(object);
 					}
+					
+					//update();
 
 					setVisibleItemCount(1);
+					
+					
 
 					try {
 						DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionCurso.this);
@@ -63,7 +67,9 @@ public class MpSelectionCurso extends MpSelection {
 		
 		
 		/******** Begin Populate ********/
-		populateComboBox();
+        if (autoPopulate) {
+            populateComboBox();
+        }
 		/******** End Populate ********/				
 
 		

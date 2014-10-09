@@ -76,7 +76,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 
 		// Add a title to the form
-		cellFormatter.setColSpan(0, 0, 0);
+//		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 		txtNome = new TextBox();
 		txtCargaHoraria = new TextBox();
@@ -136,7 +136,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		flexTable.setWidget(row, 0, lblCurso);
 
 		
-		listBoxCurso = new MpSelectionCurso();
+		listBoxCurso = new MpSelectionCurso(true);
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		
 		listBoxPeriodo = new MpSelectionPeriodo();
@@ -205,7 +205,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
 					mpDialogBoxConfirm.setBodyText(txtConstants.disciplinaSalva());
 					mpDialogBoxConfirm.showDialog();
-					telaInicialDisciplina.getAssociarProfessorDisciplina().updateClientData();
+					telaInicialDisciplina.getAdicionarProfessorDisciplina().updateClientData();
 					telaInicialDisciplina.getEditarDisciplina().updateClientData();
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());

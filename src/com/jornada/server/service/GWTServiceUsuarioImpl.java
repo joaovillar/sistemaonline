@@ -16,12 +16,15 @@ package com.jornada.server.service;
 
 import java.util.ArrayList;
 
+import org.apache.tools.ant.taskdefs.Concat;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.server.classes.UsuarioServer;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
 
 public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTServiceUsuario {
@@ -37,8 +40,8 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.updateUsuarioRow(usuario);
 	}
 	
-	public boolean atualizarSenha(int idUsuario, String password){		
-		return UsuarioServer.atualizarSenha(idUsuario, password);
+	public boolean atualizarSenha(int idUsuario, String password, boolean forcarPrimeiroLogin){		
+		return UsuarioServer.atualizarSenha(idUsuario, password, forcarPrimeiroLogin);
 	}
 	
 	public boolean deleteUsuarioRow(int id_usuario){		
@@ -76,6 +79,25 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.getAlunosPorCurso(idCurso, strFiltroUsuario);
 	}	
 	
+	
+	
+    public ArrayList<UsuarioNomeID> getAlunosTodosOuPorCurso(int idCurso, boolean showAluno, boolean showPais, boolean showProfessor) {
+        ArrayList<Usuario> listUsuario = new ArrayList<Usuario>();
+        if(0==idCurso){
+            if(showAluno)listUsuario.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.ALUNO));
+            if(showPais)listUsuario.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.PAIS));
+            if(showProfessor)listUsuario.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.PROFESSOR));
+        }else{
+            if(showAluno)listUsuario.addAll(UsuarioServer.getAlunosPorCurso(idCurso));    
+            if(showPais)listUsuario.addAll(UsuarioServer.getPaisPorCurso(idCurso));
+            if(showProfessor)listUsuario.addAll(UsuarioServer.getProfessorPorCurso(idCurso));
+        }
+        
+        return UsuarioServer.convertToUsuarioNomeIdParaEmail(listUsuario);
+    }
+    
+    
+
 	public ArrayList<Usuario> getAlunosPorCurso(int idCurso) {				
 		return UsuarioServer.getAlunosPorCurso(idCurso);
 	}	
@@ -100,7 +122,14 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 	
 	public ArrayList<Usuario> getUsuariosPorTipoUsuario(int id_tipo_usuario) {				
 		return UsuarioServer.getUsuariosPorTipoUsuario(id_tipo_usuario);
-	}		
+	}
+
+    public ArrayList<UsuarioNomeID> getCoordenadoresAdministradoresNomeId() {
+        ArrayList<Usuario> listUser =  new ArrayList<Usuario>(); 
+        listUser.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.COORDENADOR));
+        listUser.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.ADMINISTRADOR));        
+        return UsuarioServer.convertToUsuarioNomeId(listUser);
+    }
 	
 	public ArrayList<Usuario> getFilhoDoPaiAmbientePais(Usuario usuarioPai) {				
 		
@@ -130,10 +159,14 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 	}
 	
 	
-//	public String getPagePrint(String strHtmlPage){
-//		
-//		return UsuarioServer.getPagePrint(strHtmlPage);
-//	}
+	public ArrayList<Usuario> getPaisPorCurso(int idCurso, String strFilterResp, String strFilterName){
+		
+		return UsuarioServer.getPaisPorCurso(idCurso, strFilterResp,strFilterName);
+	}
+	
+	public ArrayList<Usuario> getTodosPais(String strFilterResp, String strFilterName){
+	    return UsuarioServer.getTodosPais(strFilterResp, strFilterName);
+	}
 
 
 }

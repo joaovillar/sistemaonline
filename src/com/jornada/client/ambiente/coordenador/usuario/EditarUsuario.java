@@ -345,7 +345,7 @@ public class EditarUsuario extends VerticalPanel {
 				
 				if (value.equals(IMAGE_PASSWORD)) {
 //					System.out.println(object.getPrimeiroNome());
-					DialogBoxSenha.getInstance(object);
+					DialogBoxSenha.getInstance(object, true);
 				}
 				else if (value.equals(IMAGE_EDIT)){
 //					MpDialogBoxAtualizarUsuario mpAtualizarUsuario = new MpDialogBoxAtualizarUsuario(telaInicialUsuario);
@@ -465,13 +465,11 @@ public class EditarUsuario extends VerticalPanel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				Window.alert(caught.getMessage());
 			}
 
 			@Override
 			public void onSuccess(Usuario usuarioResult) {
-				// TODO Auto-generated method stub
 //				ArrayList<Usuario> listUsuario = new ArrayList<Usuario>();
 //				listUsuario.add(usuarioResult);
 //				cellTable.setRowData(listUsuario);	

@@ -130,7 +130,15 @@ public class CursoServer{
 				Disciplina disciplina = periodo.getListDisciplinas().get(intDisciplinas);
 				disciplina.setIdPeriodo(intNewIdPeriodo);	
 				
+				
+				
 				int intNewIdDisciplina = DisciplinaServer.AdicionarDisciplina(disciplina);
+				
+				Usuario professor = disciplina.getProfessor();
+                if(professor!=null){
+                    DisciplinaServer.updateDisciplinaComIdProfessor(professor.getIdUsuario(), intNewIdDisciplina);
+                }				
+				
 				isOperationDone =true;
 				
 				for(int intConteudo=0;intConteudo<disciplina.getListConteudoProgramatico().size();intConteudo++){
@@ -143,6 +151,7 @@ public class CursoServer{
 					 
 					 for(int intAvaliacao=0; intAvaliacao<conteudo.getListAvaliacao().size();intAvaliacao++){
 						 Avaliacao avaliacao = conteudo.getListAvaliacao().get(intAvaliacao);
+						 avaliacao.setIdConteudoProgramatico(intIdNewConteudo);
 						 AvaliacaoServer.Adicionar(avaliacao);
 						 isOperationDone=true;
 					 }

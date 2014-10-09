@@ -76,7 +76,7 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 
 		// Add a title to the form
 		// layout.setHTML(0, 0, "");
-		cellFormatter.setColSpan(0, 0, 0);
+//		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 		txtNome = new TextBox();
 		txtNumeracao = new TextBox();
@@ -122,7 +122,7 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 		txtObjetivo.setSize("350px", "50px");
 
 		
-		listBoxCurso = new MpSelectionCurso();		
+		listBoxCurso = new MpSelectionCurso(true);		
 		listBoxPeriodo = new MpSelectionPeriodo();		
 		listBoxDisciplina = new MpSelectionDisciplina();
 		

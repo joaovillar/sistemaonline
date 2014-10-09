@@ -18,7 +18,8 @@ public class TelaInicialDisciplina extends Composite{
 	
 	private AdicionarDisciplina adicionarDisciplina;
 	private EditarDisciplina editarDisciplina;
-	private AssociarProfessorDisciplina associarProfessorDisciplina;
+//	private AssociarProfessorDisciplina associarProfessorDisciplina;
+	private AdicionarProfessorDisciplina adicionarProfessorDisciplina;
 
 	private static TelaInicialDisciplina uniqueInstance;
 	public static TelaInicialDisciplina getInstance(){		
@@ -28,7 +29,9 @@ public class TelaInicialDisciplina extends Composite{
 		else{
 			uniqueInstance.adicionarDisciplina.updateClientData();
 			uniqueInstance.editarDisciplina.updateClientData();
-			uniqueInstance.associarProfessorDisciplina.updateClientData();
+//			uniqueInstance.associarProfessorDisciplina.updateClientData();
+			uniqueInstance.adicionarProfessorDisciplina.updateClientData();
+			
 		}
 		return uniqueInstance;
 	}	
@@ -39,11 +42,10 @@ public class TelaInicialDisciplina extends Composite{
 		
 		 adicionarDisciplina =  new AdicionarDisciplina(this);
 		 editarDisciplina = new EditarDisciplina(this);
-		 associarProfessorDisciplina = new AssociarProfessorDisciplina();
+//		 associarProfessorDisciplina = new AssociarProfessorDisciplina();
+		 adicionarProfessorDisciplina = AdicionarProfessorDisciplina.getInstance(this);
 		
-		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
-//		stackPanel.setPixelSize(intWidthTable+50, intHeightTable);
 		tabLayoutPanel.setHeight(Integer.toString(intHeightTable)+"px");
 		
 		tabLayoutPanel.setAnimationDuration(500);
@@ -51,50 +53,24 @@ public class TelaInicialDisciplina extends Composite{
 		
 		tabLayoutPanel.add(adicionarDisciplina, new MpHeaderWidget(txtConstants.disciplinaAdicionar(), "images/plus-circle.png"));
 		tabLayoutPanel.add(editarDisciplina, new MpHeaderWidget(txtConstants.disciplinaEditar(), "images/comment_edit.png"));
-		tabLayoutPanel.add(associarProfessorDisciplina, new MpHeaderWidget(txtConstants.disciplinaAdicionarProfessor(), "images/user1_add2_16.png"));
-		
-		
-//		VerticalPanel verticalPanelPage = new VerticalPanel();		
-//		verticalPanelPage.add(tabLayoutPanel);
-//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
-				
+//		tabLayoutPanel.add(associarProfessorDisciplina, new MpHeaderWidget(txtConstants.disciplinaAdicionarProfessor(), "images/user1_add2_16.png"));
+		tabLayoutPanel.add(adicionarProfessorDisciplina, new MpHeaderWidget(txtConstants.disciplinaAdicionarProfessor(), "images/user1_add2_16.png"));
 		
      	initWidget(tabLayoutPanel);
 		
 	}
 
-	
-//	private Widget createHeaderWidget(String text, String image) {
-//		// Add the image and text to a horizontal panel
-//		HorizontalPanel hPanel = new HorizontalPanel();
-//		hPanel.setHeight("100%");
-//		hPanel.setSpacing(0);
-//		hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-//		hPanel.add(new Image(image));
-//		Label headerText = new Label(text);
-//		headerText.setStyleName("gwt-TabLayoutPanel");
-//		hPanel.add(headerText);
-//		return new SimplePanel(hPanel);
+//	public AssociarProfessorDisciplina getAssociarProfessorDisciplina() {
+//		return associarProfessorDisciplina;
 //	}
-
-	public AssociarProfessorDisciplina getAssociarProfessorDisciplina() {
-		return associarProfessorDisciplina;
-	}
+	
+    public AdicionarProfessorDisciplina getAdicionarProfessorDisciplina() {
+        return adicionarProfessorDisciplina;
+    }
 
 	public EditarDisciplina getEditarDisciplina() {
 		return editarDisciplina;
 	}
-	
-	
-	
-//	protected void populateGrid(){
-//		editarDisciplina.populateGridDisciplina();
-//	}
-	
-	
-	
-	
-	
 	
 	
 }

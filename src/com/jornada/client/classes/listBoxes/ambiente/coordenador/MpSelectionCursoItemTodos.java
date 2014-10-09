@@ -19,20 +19,27 @@ public class MpSelectionCursoItemTodos extends MpSelection {
 	
 	private ArrayList<Curso> listCurso;
 	
-	public MpSelectionCursoItemTodos(){
+	private String strText="";
+	
+	public MpSelectionCursoItemTodos(boolean autoPopulate, String strTextPrimeiroItem){
 
 		listBoxAux = new ListBox();
 		
 		listCurso = new ArrayList<Curso>();
+		this.strText = strTextPrimeiroItem;
+		
 		
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Curso>>() {
 			public void onSuccess(ArrayList<Curso> lista) {
-				
+
 				try {
 					finishLoadingListBox();
+					
 
-					addItem(txtConstants.cursoTodosAlunos(), "0");
+
+					addItem(strText, "0");
+					listBoxAux.addItem(strText, "0");
 
 					for (Curso object : lista) {
 						addItem(object.getNome(),Integer.toString(object.getIdCurso()));
@@ -86,6 +93,7 @@ public class MpSelectionCursoItemTodos extends MpSelection {
 	
 	private void finishLoadingListBox(){
 		clear();
+		listBoxAux.clear();
 		listCurso.clear();
 	}
 	

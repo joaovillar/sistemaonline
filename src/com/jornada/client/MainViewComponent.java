@@ -48,7 +48,7 @@ public class MainViewComponent extends Composite {
 		image.setSize("128px", "128px");
 		flexTable.setWidget(1, 0, image);
 		flexTable.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-		flexTable.getFlexCellFormatter().setColSpan(0, 0, 0);
+//		flexTable.getFlexCellFormatter().setColSpan(0, 0, 0);
 		flexTable.getFlexCellFormatter().setColSpan(0, 0, 1);
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_LEFT);
 		flexTable.getFlexCellFormatter().setRowSpan(1, 0, 1);

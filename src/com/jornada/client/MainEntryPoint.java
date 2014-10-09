@@ -72,7 +72,6 @@ public class MainEntryPoint implements EntryPoint {
 		if (sessionID == null) {
 			displayLoginPage();
 		} else {
-
 			checkWithServerIfSessionIdIsStillLegal();
 		}
 		
@@ -243,7 +242,7 @@ public class MainEntryPoint implements EntryPoint {
 		                    	}
 		                    	else if (object.isPrimeiroLogin()){
 		                    		mpPanelLoading.setVisible(false);
-		                    		DialogBoxPrimeiroLogin.getInstance(object);
+		                    		DialogBoxPrimeiroLogin.getInstance(object, false);
 		                    	}
 		                    	else if (object.getLoggedIn())
 		                        {

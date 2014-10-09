@@ -26,14 +26,12 @@ public class GWTServiceComunicadoImpl extends RemoteServiceServlet implements
 
 	private static final long serialVersionUID = 6710411400591010766L;
 
-	public boolean AdicionarComunicado(Comunicado object,
-			ArrayList<Integer> userIdList) {
+    public boolean AdicionarComunicado(Comunicado object, ArrayList<Integer> userIdList) {
 		return ComunicadoServer.AdicionarComunicado(object, userIdList);
 	}
 
-	public boolean AtualizarComunicado(Comunicado object,
-			ArrayList<Integer> userIdList) {
-		return ComunicadoServer.AtualizarComunicado(object, userIdList);
+    public boolean AtualizarComunicado(Comunicado object, ArrayList<Integer> userIdList) {
+        return ComunicadoServer.AtualizarComunicado(object, userIdList);
 	}
 
 	public boolean deleteComunicadoRow(int id_comunicado) {

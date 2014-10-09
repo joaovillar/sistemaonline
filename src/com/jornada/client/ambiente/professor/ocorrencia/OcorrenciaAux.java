@@ -7,7 +7,7 @@ class OcorrenciaAux {
 	private int idCurso;
 	private int idPeriodo;
 	private int idDisciplina;
-	private int idConteudoProgramatico;
+//	private int idConteudoProgramatico;
 	
 	private String nomeCurso;
 	private String nomePeriodo;
@@ -45,13 +45,13 @@ class OcorrenciaAux {
 		this.idDisciplina = idDisciplina;
 	}
 
-	public int getIdConteudoProgramatico() {
-		return idConteudoProgramatico;
-	}
+//	public int getIdConteudoProgramatico() {
+//		return idConteudoProgramatico;
+//	}
 
-	public void setIdConteudoProgramatico(int idConteudoProgramatico) {
-		this.idConteudoProgramatico = idConteudoProgramatico;
-	}
+//	public void setIdConteudoProgramatico(int idConteudoProgramatico) {
+//		this.idConteudoProgramatico = idConteudoProgramatico;
+//	}
 
 	public Ocorrencia getOcorrencia() {
 		return ocorrencia;

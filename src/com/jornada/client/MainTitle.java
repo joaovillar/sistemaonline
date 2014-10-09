@@ -86,7 +86,7 @@ public class MainTitle extends Composite {
 		horizontalPanelTop.setSize("100%", "40px");
 		verticalPanel.add(horizontalPanelTop);
 		
-		Image image = new Image("images/Courses-128.png");
+		Image image = new Image("images/logo/logoescola.png");
 //		Image image = new Image("images/gwt.png");
 		horizontalPanelTop.add(image);
 		horizontalPanelTop.setCellHorizontalAlignment(image, HasHorizontalAlignment.ALIGN_CENTER);
@@ -268,7 +268,7 @@ public class MainTitle extends Composite {
                   DialogBoxIdioma.getInstance(uniqueInstance.getMainView().getUsuarioLogado());
 	    	  }
 	    	  else if(this.id.equals(CONFIGURACAO_SENHA)){
-	    		  DialogBoxSenha.getInstance(uniqueInstance.getMainView().getUsuarioLogado());
+	    		  DialogBoxSenha.getInstance(uniqueInstance.getMainView().getUsuarioLogado(), false);
 	    	  }	    	  
 	    	  else if(this.id.equals(AJUDA_SOBRE)){
 	    		  DialogBoxSobre.getInstance();

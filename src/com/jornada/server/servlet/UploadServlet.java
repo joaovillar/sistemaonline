@@ -72,6 +72,8 @@ public class UploadServlet extends UploadAction {
 						strDestinationFolder += ConfigJornada.getProperty("config.download.excel");
 					}else if(isImageFile(sufix)){
 						strDestinationFolder += ConfigJornada.getProperty("config.download.image");
+					}else{
+					    strDestinationFolder += ConfigJornada.getProperty("config.download.file");
 					}
 					
 					
@@ -105,6 +107,8 @@ public class UploadServlet extends UploadAction {
 						response += strDestinationFolder+file.getName();
 					}else if(isImageFile(sufix)){
 						response += file.getName();
+					}else{
+					    response += strDestinationFolder+file.getName();
 					}
 					
 
@@ -149,8 +153,7 @@ public class UploadServlet extends UploadAction {
 	 * Get the content of an uploaded file.
 	 */
 	@Override
-	public void getUploadedFile(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+    public void getUploadedFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fieldName = request.getParameter(UConsts.PARAM_SHOW);
 		File f = receivedFiles.get(fieldName);
 		if (f != null) {

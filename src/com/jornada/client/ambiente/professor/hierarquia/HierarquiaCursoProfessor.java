@@ -7,6 +7,7 @@ import com.jornada.client.service.GWTServiceHierarquiaCurso;
 public class HierarquiaCursoProfessor extends MpHierarquiaCurso{
 	
 	public HierarquiaCursoProfessor(MainView mainView){		
+	    super(mainView);
 		populateTree(mainView);
 	}		
 	

@@ -223,7 +223,7 @@ gwt-unitCache
 
 *.orig
 *.txt
-war/**
+#war/**
 war/WEB-INF/classes/com/jornada/**
 war/WEB-INF/deploy/**
 war/jornada/jornada.nocache.js

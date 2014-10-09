@@ -25,10 +25,12 @@ import com.jornada.ConfigJornada;
 import com.jornada.server.classes.password.BCrypt;
 import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
+import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
 public class UsuarioServer{
 
@@ -103,31 +105,31 @@ public class UsuarioServer{
 			"registro_aluno=? " +		
 			"where id_usuario=?";
 	
-	public static String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
-	public static String DB_UPDATE_SENHA = "UPDATE usuario set senha=?, primeiro_login=false where id_usuario=?";
-	public static String DB_SELECT_ILIKE = "SELECT * FROM usuario where (primeiro_nome ilike ?) order by primeiro_nome asc";
-	public static String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario, unidade_escola where usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario and unidade_escola.id_unidade_escola=usuario.id_unidade_escola and (<change> ilike ?)  order by primeiro_nome asc";
-	public static String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome asc";
-	public static String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome asc";
-	public static String DB_SELECT_ALL = "SELECT * FROM usuario order by primeiro_nome asc;";
-//	public static String DB_SELECT_USUARIO_ID = "SELECT * FROM usuario where id_usuario=?;";
-	public static String DB_SELECT_USUARIO_ID = "select * from usuario, tipo_usuario where (id_usuario = ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome asc";
-	public static String DB_SELECT_USUARIO_LOGIN = "SELECT * FROM usuario, tipo_usuario where login=? and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario;";
-	public static String DB_DELETE = "delete from usuario where id_usuario=?";
-	public static String DB_SELECT_ALL_TIPO_USUARIOS = "SELECT * FROM tipo_usuario where is_visible=true order by nome_tipo_usuario asc;";
-	public static String DB_SELECT_TIPO_USUARIOS_POR_NOME = "SELECT * FROM tipo_usuario where nome_tipo_usuario=? ;";
-	public static String DB_SELECT_TIPO_USUARIOS_POR_ID = "SELECT * FROM tipo_usuario where id_tipo_usuario=? ;";
-	public static String DB_SELECT_ILIKE_FILTRADO_POR_CURSO = 
+	public static final String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
+	public static final String DB_UPDATE_SENHA = "UPDATE usuario set senha=?, primeiro_login=? where id_usuario=?";
+	public static final String DB_SELECT_ILIKE = "SELECT * FROM usuario where (primeiro_nome ilike ?) order by primeiro_nome asc";
+	public static final String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario, unidade_escola where usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario and unidade_escola.id_unidade_escola=usuario.id_unidade_escola and (<change> ilike ?)  order by primeiro_nome asc";
+	public static final String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome asc";
+	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome asc";
+	public static final String DB_SELECT_ALL = "SELECT * FROM usuario order by primeiro_nome asc;";
+//	public static final String DB_SELECT_USUARIO_ID = "SELECT * FROM usuario where id_usuario=?;";
+	public static final String DB_SELECT_USUARIO_ID = "select * from usuario, tipo_usuario where (id_usuario = ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome asc";
+	public static final String DB_SELECT_USUARIO_LOGIN = "SELECT * FROM usuario, tipo_usuario where login=? and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario;";
+	public static final String DB_DELETE = "delete from usuario where id_usuario=?";
+	public static final String DB_SELECT_ALL_TIPO_USUARIOS = "SELECT * FROM tipo_usuario where is_visible=true order by nome_tipo_usuario asc;";
+	public static final String DB_SELECT_TIPO_USUARIOS_POR_NOME = "SELECT * FROM tipo_usuario where nome_tipo_usuario=? ;";
+	public static final String DB_SELECT_TIPO_USUARIOS_POR_ID = "SELECT * FROM tipo_usuario where id_tipo_usuario=? ;";
+	public static final String DB_SELECT_ILIKE_FILTRADO_POR_CURSO = 
 			"select * from usuario where id_usuario in "+
 			"( select id_usuario from rel_curso_usuario where id_curso=? ) "+
 			"and (primeiro_nome ilike ? or sobre_nome ilike ?) "+
 			"order by primeiro_nome, sobre_nome";		
-	public static String DB_SELECT_FILTRADO_POR_CURSO = 
+	public static final String DB_SELECT_FILTRADO_POR_CURSO = 
 			"select * from usuario where id_usuario in "+
 			"( select id_usuario from rel_curso_usuario where id_curso=? ) "+
 			"order by primeiro_nome, sobre_nome";	
 	
-	public static String DB_SELECT_ALUNO_FILTRADO_POR_CURSO_AMBIENTE_PAI =
+	public static final String DB_SELECT_ALUNO_FILTRADO_POR_CURSO_AMBIENTE_PAI =
 	"select * from usuario where id_usuario in "+ 
 	"( "+
 	"	select id_usuario from rel_curso_usuario where id_curso=? and id_usuario in "+
@@ -136,24 +138,66 @@ public class UsuarioServer{
 	"	) "+
 	") order by primeiro_nome, sobre_nome ";
 	
-	public static String DB_SELECT_USUARIO_PELO_TIPO_USUARIO_AMBIENTE_PAI = 
+	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO_AMBIENTE_PAI = 
 			"SELECT * FROM usuario where id_tipo_usuario = ? and id_usuario in "+
 			"( "+
 			"	select id_usuario_aluno from rel_pai_aluno where id_usuario_pais=? "+
 			") "+
-			"order by primeiro_nome asc ";			
+			"order by primeiro_nome asc ";
 	
+    public static final String DB_SELECT_ALUNO_PELO_PAI_CURSO = 
+            "select * from usuario where id_usuario in( "+
+            "        select id_usuario from rel_curso_usuario where id_usuario in "+
+            "        ( "+
+            "            select id_usuario_aluno from rel_pai_aluno where id_usuario_pais=? "+ 
+            "        ) and id_curso=? "+
+            ");";
 	
-	public static String DB_SELECT_FILTRADO_POR_OCORRENCIA = 
+	public static final String DB_SELECT_FILTRADO_POR_OCORRENCIA = 
 			"select * from usuario where id_usuario in "+
 			"( select id_usuario from rel_usuario_ocorrencia where id_ocorrencia = ? ) "+
 			"order by primeiro_nome, sobre_nome";		
 	
-	public static String DB_DELETE_REL_PAI_ALUNO = "delete from rel_pai_aluno where id_usuario_aluno=?";
-	public static String DB_INSERT_REL_PAI_ALUNO = "INSERT INTO rel_pai_aluno (id_usuario_pais, id_usuario_aluno) VALUES (?,?)";	
+	public static final String DB_DELETE_REL_PAI_ALUNO = "delete from rel_pai_aluno where id_usuario_aluno=?";
+	public static final String DB_INSERT_REL_PAI_ALUNO = "INSERT INTO rel_pai_aluno (id_usuario_pais, id_usuario_aluno) VALUES (?,?)";
+	
+    private static final String DB_SELECT_PAIS_POR_CURSO = 
+            "select * from usuario where id_usuario in( "+
+            "        select id_usuario_pais from rel_pai_aluno where id_usuario_aluno in "+
+            "        ( "+
+            "            select id_usuario from rel_curso_usuario where id_curso=? group by id_usuario order by id_usuario asc "+
+            "        )  group by id_usuario_pais order by id_usuario_pais asc "+
+            "    ) and (primeiro_nome ilike ? or sobre_nome ilike ? )  <change> "+
+            "    order by primeiro_nome, sobre_nome asc ";	
+    
+    private static final String DB_SELECT_PAIS_POR_CURSO_TODOS = 
+            "select * from usuario where id_usuario in( "+
+            "        select id_usuario_pais from rel_pai_aluno where id_usuario_aluno in "+
+            "        ( "+
+            "            select id_usuario from rel_curso_usuario where id_curso=? group by id_usuario order by id_usuario asc "+
+            "        )  group by id_usuario_pais order by id_usuario_pais asc "+
+            "    ) "+
+            "    order by primeiro_nome, sobre_nome asc ";     
+    
+    private static final String DB_SELECT_PROFESSOR_POR_CURSO_TODOS = 
+            "select * from usuario where id_usuario in( "+
+            "        select id_usuario from disciplina where id_periodo in "+
+            "            ( "+
+            "            select id_periodo from periodo where id_curso in "+
+            "            ( "+
+            "                select id_curso from curso where id_curso=? "+
+            "            ) "+
+            "        ) "+
+            "    )";
+    
+    private static final String DB_SELECT_TODOS_PAIS = 
+            "select * from usuario where (primeiro_nome ilike ? or sobre_nome ilike ? ) " +
+            " and id_tipo_usuario=" + TipoUsuario.PAIS +
+            " <change> "+
+            "    order by primeiro_nome, sobre_nome asc ";      
 	
 	
-	public static String DB_SELECT_ALL_PAIS_DO_ALUNO = 
+	public static final String DB_SELECT_ALL_PAIS_DO_ALUNO = 
 			"select * from usuario where id_usuario in "+
 			"(  "+
 			"	select id_usuario_pais from rel_pai_aluno where id_usuario_aluno=? "+ 
@@ -337,7 +381,7 @@ public class UsuarioServer{
 		return success;
 	}	
 		
-	public static boolean atualizarSenha(int idUsuario, String senha){
+	public static boolean atualizarSenha(int idUsuario, String senha, boolean forcarPrimeiroLogin){
 		boolean success=false;
 
 //		JornadaDataBase dataBase = new JornadaDataBase();
@@ -352,6 +396,7 @@ public class UsuarioServer{
 			int count = 0;
 			PreparedStatement update = connection.prepareStatement(DB_UPDATE_SENHA);
 			update.setString(++count, senhaHashed);
+			update.setBoolean(++count, forcarPrimeiroLogin);
 			update.setInt(++count, idUsuario);
 
 			int numberUpdate = update.executeUpdate();
@@ -554,28 +599,41 @@ public class UsuarioServer{
         row.createCell((short) intColumn++).setCellValue("RG");
         row.createCell((short) intColumn++).setCellValue("Situação do Pais");
         row.createCell((short) intColumn++).setCellValue("Situação do Pais : Outros");
+        row.createCell((short) intColumn++).setCellValue("Curso");
 
         
 		for (int i = 0; i < intColumn; i++) {
 			row.getCell((short) i).setCellStyle(style);
 		}
 		
-        for(int i=0;i<listUsuarios.size();i++){
-        	Usuario usuario = listUsuarios.get(i);
-        	row = sheet.createRow((short) i+1);
-        	
-        	intColumn=0;
-       	
-    		row.createCell((short) intColumn++).setCellValue(usuario.getTipoUsuario().getNomeTipoUsuario());
-    		row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeEscola().getNomeUnidadeEscola());
-    		row.createCell((short) intColumn++).setCellValue(usuario.getRegistroMatricula());
-    		row.createCell((short) intColumn++).setCellValue((usuario.getDataMatricula()==null)?"":MpUtilServer.convertDateToString(usuario.getDataMatricula()));
-    		row.createCell((short) intColumn++).setCellValue(usuario.getRegistroAluno());
+        for (int i = 0; i < listUsuarios.size(); i++) {
+
+            Usuario usuario = listUsuarios.get(i);
+
+            ArrayList<Curso> listCurso = CursoServer.getCursosPorAlunoAmbienteAluno(usuario);
+            String strCursos="";
+            for (int j = 0; j < listCurso.size(); j++) {
+                if(j==0){
+                    strCursos=listCurso.get(j).getNome();
+                }else{
+                    strCursos = strCursos+", "+listCurso.get(j).getNome();
+                }
+            }
+
+            row = sheet.createRow((short) i + 1);
+
+            intColumn = 0;
+
+            row.createCell((short) intColumn++).setCellValue(usuario.getTipoUsuario().getNomeTipoUsuario());
+            row.createCell((short) intColumn++).setCellValue(usuario.getUnidadeEscola().getNomeUnidadeEscola());
+            row.createCell((short) intColumn++).setCellValue(usuario.getRegistroMatricula());
+            row.createCell((short) intColumn++).setCellValue((usuario.getDataMatricula() == null) ? "" : MpUtilServer.convertDateToString(usuario.getDataMatricula()));
+            row.createCell((short) intColumn++).setCellValue(usuario.getRegistroAluno());
             row.createCell((short) intColumn++).setCellValue(usuario.getPrimeiroNome());
             row.createCell((short) intColumn++).setCellValue(usuario.getSobreNome());
             row.createCell((short) intColumn++).setCellValue(usuario.getLogin());
-            row.createCell((short) intColumn++).setCellValue(usuario.getEmail());        
-            row.createCell((short) intColumn++).setCellValue((usuario.getDataNascimento()==null)?"":MpUtilServer.convertDateToString(usuario.getDataNascimento()));
+            row.createCell((short) intColumn++).setCellValue(usuario.getEmail());
+            row.createCell((short) intColumn++).setCellValue((usuario.getDataNascimento() == null) ? "" : MpUtilServer.convertDateToString(usuario.getDataNascimento()));
             row.createCell((short) intColumn++).setCellValue(usuario.getSexo());
             row.createCell((short) intColumn++).setCellValue(usuario.getEndereco());
             row.createCell((short) intColumn++).setCellValue(usuario.getNumeroResidencia());
@@ -589,9 +647,10 @@ public class UsuarioServer{
             row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
             row.createCell((short) intColumn++).setCellValue(usuario.getRg());
             row.createCell((short) intColumn++).setCellValue(usuario.getSituacaoResponsaveis());
-            row.createCell((short) intColumn++).setCellValue(usuario.getSituacaoResponsaveisOutros());        	
-        	
-        }        
+            row.createCell((short) intColumn++).setCellValue(usuario.getSituacaoResponsaveisOutros());
+            row.createCell((short) intColumn++).setCellValue(strCursos);
+
+        }     
         
 		for (int i = 0; i < intColumn; i++) {
 			sheet.autoSizeColumn(i,true);
@@ -1942,7 +2001,38 @@ public class UsuarioServer{
 
 		return data;
 
-	}		
+	}	
+	
+    public static ArrayList<Usuario> getFilhoDoPaiAmbientePais(int idUsuarioPai) {
+
+        ArrayList<Usuario> data = new ArrayList<Usuario>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+        try 
+        {
+
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+            PreparedStatement ps = connection.prepareStatement(UsuarioServer.DB_SELECT_USUARIO_PELO_TIPO_USUARIO_AMBIENTE_PAI);
+            
+            int count=0;
+            ps.setInt(++count, TipoUsuario.ALUNO);
+            ps.setInt(++count, idUsuarioPai);
+                
+            
+            data = getUserParameters(ps.executeQuery());
+            
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;
+
+    }   	
 	
 	
 	public static ArrayList<Usuario> getFilhoDoPaiAmbientePais(Usuario usuarioPai) {
@@ -1974,7 +2064,38 @@ public class UsuarioServer{
 
 		return data;
 
-	}			
+	}	
+	
+    public static ArrayList<Usuario> getFilhoDoPaiPorCurso(Usuario usuarioPai, int idCurso) {
+
+        ArrayList<Usuario> data = new ArrayList<Usuario>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+        try 
+        {
+
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+            PreparedStatement ps = connection.prepareStatement(UsuarioServer.DB_SELECT_ALUNO_PELO_PAI_CURSO);
+            
+            int count=0;
+            ps.setInt(++count, usuarioPai.getIdUsuario());
+            ps.setInt(++count, idCurso);
+                
+            
+            data = getUserParameters(ps.executeQuery());
+            
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;
+
+    }   	
 	
 	public static ArrayList<TipoUsuario> getTipoUsuarios() {
 
@@ -2265,29 +2386,163 @@ public class UsuarioServer{
 
 	}
 	
-//	public static String getPagePrint(String strHtmlPage){
-//		String strLong="";
-//		try {
-//			Date data = new Date();
-//			strLong += ConfigJornada.getProperty("config.download")+ ConfigJornada.getProperty("config.download.print")+"page_" + Long.toString(data.getTime())+ ".html";
-////			strLong = strLong.replace("//", "\\");
-//			System.out.println(strLong);
-//			File file = new File(strLong);
-//
-//
-//			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-//			BufferedWriter bw = new BufferedWriter(fw);
-//			bw.write(strHtmlPage);
-//			bw.close();
-//		} catch (Exception ex) {
-//			System.out.print("Error Excel:" + ex.getMessage());
-//		}
-//		
-//		System.out.println("Done");
-//        
-//        return ConfigJornada.getProperty("config.download.print")+strLong;
-//		
-//	}
+
+	public static ArrayList<Usuario> getTodosPais(String strFilterResp, String strFilterName){
+	    ArrayList<Usuario> data = new ArrayList<Usuario>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+        try 
+        {
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+            
+            String strQuery = DB_SELECT_TODOS_PAIS;
+            strQuery = strQuery.replace("<change>", strFilterResp);
+            
+            PreparedStatement ps = connection.prepareStatement(strQuery);
+            
+            int count=0;
+
+            ps.setString(++count, "%"+strFilterName+"%");
+            ps.setString(++count, "%"+strFilterName+"%");
+
+            data = getUserParameters(ps.executeQuery());
+
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;	    
+	    
+	}
+	
+    public static ArrayList<Usuario> getPaisPorCurso(int idCurso, String strFilterResp, String strFilterName){
+        ArrayList<Usuario> data = new ArrayList<Usuario>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+        try 
+        {
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+            
+            String strQuery = DB_SELECT_PAIS_POR_CURSO;
+            strQuery = strQuery.replace("<change>", strFilterResp);
+            
+            PreparedStatement ps = connection.prepareStatement(strQuery);
+            
+            int count=0;
+            ps.setInt(++count, idCurso);
+            ps.setString(++count, "%"+strFilterName+"%");
+            ps.setString(++count, "%"+strFilterName+"%");
+
+            data = getUserParameters(ps.executeQuery());
+
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;        
+        
+    }
+    public static ArrayList<Usuario> getPaisPorCurso(int idCurso){
+        ArrayList<Usuario> data = new ArrayList<Usuario>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+        try 
+        {
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+            
+            String strQuery = DB_SELECT_PAIS_POR_CURSO_TODOS;
+//            strQuery = strQuery.replace("<change>", strFilterResp);
+            
+            PreparedStatement ps = connection.prepareStatement(strQuery);
+            
+            int count=0;
+            ps.setInt(++count, idCurso);
+
+
+            data = getUserParameters(ps.executeQuery());
+
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;        
+        
+    }    
+    
+    public static ArrayList<Usuario> getProfessorPorCurso(int idCurso){
+        ArrayList<Usuario> data = new ArrayList<Usuario>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+        try 
+        {
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+            
+            String strQuery = DB_SELECT_PROFESSOR_POR_CURSO_TODOS;
+//            strQuery = strQuery.replace("<change>", strFilterResp);
+            
+            PreparedStatement ps = connection.prepareStatement(strQuery);
+            
+            int count=0;
+            ps.setInt(++count, idCurso);
+
+
+            data = getUserParameters(ps.executeQuery());
+
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;        
+        
+    }        
+    
+    
+    public static ArrayList<UsuarioNomeID> convertToUsuarioNomeId(ArrayList<Usuario> listUsuario) {
+        ArrayList<UsuarioNomeID> listUsuarioNomeId = new ArrayList<UsuarioNomeID>();
+
+        for (int i = 0; i < listUsuario.size(); i++) {
+            Usuario user = listUsuario.get(i);
+            UsuarioNomeID userNomeId = new UsuarioNomeID();
+            userNomeId.setNomeUsuario(user.getPrimeiroNome() + " " + user.getSobreNome());
+            userNomeId.setIdUsuario(user.getIdUsuario());
+            listUsuarioNomeId.add(userNomeId);
+        }
+        return listUsuarioNomeId;
+    }
+    
+    public static ArrayList<UsuarioNomeID> convertToUsuarioNomeIdParaEmail(ArrayList<Usuario> listUsuario) {
+        ArrayList<UsuarioNomeID> listUsuarioNomeId = new ArrayList<UsuarioNomeID>();
+
+        for (int i = 0; i < listUsuario.size(); i++) {
+            Usuario user = listUsuario.get(i);
+            UsuarioNomeID userNomeId = new UsuarioNomeID();
+            userNomeId.setNomeUsuario("("+(user.getTipoUsuario().getNomeTipoUsuario())+") " + user.getPrimeiroNome() + " " + user.getSobreNome());
+            userNomeId.setIdUsuario(user.getIdUsuario());
+            listUsuarioNomeId.add(userNomeId);
+        }
+        return listUsuarioNomeId;
+    }    
+	
 
 	
 

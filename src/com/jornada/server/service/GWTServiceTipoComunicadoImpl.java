@@ -21,20 +21,23 @@ import com.jornada.shared.classes.TipoComunicado;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class GWTServiceTipoComunicadoImpl extends RemoteServiceServlet implements GWTServiceTipoComunicado {
-	
-	private static final long serialVersionUID = 4518830319373758385L;
 
-	public ArrayList<TipoComunicado> getTipoComunicados(){
-		
-		return TipoComunicadoServer.getTipoComunicados();
-		
-	}
-	
-	/**
-	 * Quick fix to this is in the RPC implementation at server side override method checkPermutationStrongName() with empty implementation.
-	 */
-	@Override
-	protected void checkPermutationStrongName() throws SecurityException {
-	    return;
-	}	
+    private static final long serialVersionUID = 4518830319373758385L;
+
+    public ArrayList<TipoComunicado> getTipoComunicados() {
+        return TipoComunicadoServer.getTipoComunicados();
+    }
+
+    public ArrayList<TipoComunicado> getTipoComunicadoEmails() {
+        return TipoComunicadoServer.getTipoComunicadoEmails();
+    }
+
+    /**
+     * Quick fix to this is in the RPC implementation at server side override
+     * method checkPermutationStrongName() with empty implementation.
+     */
+    @Override
+    protected void checkPermutationStrongName() throws SecurityException {
+        return;
+    }
 }

@@ -27,6 +27,7 @@ public class DetalhesComunicado extends VerticalPanel{
 		FitImage img = new FitImage("images/download/"+object.getNomeImagem());
 		img.setFixedWidth(512);
 
+		
 		Label lblComunicado = new Label(txtConstants.comunicado().toUpperCase());
 		lblComunicado.setHorizontalAlignment(ALIGN_CENTER);
 		
@@ -78,11 +79,14 @@ public class DetalhesComunicado extends VerticalPanel{
 		
 		flexTable.setWidget(0, 0, vPanelComunicado);
 		flexTable.setWidth("100%");
-		flexTable.setWidget(1, 0, img);
-		flexTable.setWidget(1, 1, grid);
+		int column=0;
+        if (object.getNomeImagem() != null) {
+            flexTable.setWidget(1, column, img);
+            flexTable.getFlexCellFormatter().setWidth(1,column++,"15%");
+        }
+		flexTable.setWidget(1, column, grid);
+		flexTable.getFlexCellFormatter().setVerticalAlignment(1, column, ALIGN_TOP);
 		
-		flexTable.getFlexCellFormatter().setWidth(1,0,"15%"); 
-		flexTable.getFlexCellFormatter().setVerticalAlignment(1, 1, ALIGN_TOP);
 		
 		this.setWidth("100%");
 		this.add(flexTable);

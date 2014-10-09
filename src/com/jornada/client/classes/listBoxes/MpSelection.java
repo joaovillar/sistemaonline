@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.content.i18n.TextConstants;
 
-public class MpSelection extends ListBox{
+public class MpSelection extends ListBox{//ListBox{ //ChosenListBox{ 
 	
 	
 	protected static TextConstants txtConstants = GWT.create(TextConstants.class);
@@ -13,8 +13,19 @@ public class MpSelection extends ListBox{
 	protected static String CARREGANDO = txtConstants.geralCarregando();
 	protected static String ERRO_POPULAR = txtConstants.erroPopularCombobox();
 	
-	
-	public MpSelection(){			
+	public MpSelection(){		
+	    
+//	    ChosenOptions options = new ChosenOptions();
+//
+//	    options.setResources((com.watopi.chosen.client.resources.Resources) GWT.create(CustomChosenRecources.class));
+//	    
+//	    super.
+//	        
+////	    ChosenListBox box = new ChosenListBox(options);
+//	    
+////	    this.setElement(box.getElement());
+	    
+	    
 		setStyleName("design_list_boxes");
 		setWidth("350px");	
 	}
@@ -38,7 +49,8 @@ public class MpSelection extends ListBox{
 		}		
 	}
 	
-
+	
+   
 	protected void logoutAndRefreshPage() {
 		MpDialogBoxRefreshPage mpDialogBox = new MpDialogBoxRefreshPage();
 		mpDialogBox.showDialog();

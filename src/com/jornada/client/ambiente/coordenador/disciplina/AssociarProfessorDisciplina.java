@@ -187,7 +187,7 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 		lblPeriodo.setStyleName("design_label");
 		lblDisciplina.setStyleName("design_label");
 		
-		listBoxCurso = new MpSelectionCurso();
+		listBoxCurso = new MpSelectionCurso(true);
 		listBoxCurso.setWidth("250px");
 		listBoxCurso.addChangeHandler(new ChangeHandlerListBoxCurso());
 

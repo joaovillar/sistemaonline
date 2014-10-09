@@ -100,7 +100,7 @@ public class EditarDisciplina extends VerticalPanel {
 		Label lblCursoEdit = new Label(txtConstants.curso());
 		Label lblPeriodoEdit = new Label(txtConstants.periodo());
 
-		listBoxCurso = new MpSelectionCurso();
+		listBoxCurso = new MpSelectionCurso(true);
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		
 		listBoxPeriodo = new MpSelectionPeriodo();	
@@ -189,7 +189,7 @@ public class EditarDisciplina extends VerticalPanel {
 				mpPanelLoading.setVisible(false);
 				
 				if(success){
-					getTelaInicialDisciplina().getAssociarProfessorDisciplina().updateClientData();
+					getTelaInicialDisciplina().getAdicionarProfessorDisciplina().updateClientData();
 				}else{
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroAtualizar()+" "+txtConstants.geralRegarregarPagina());

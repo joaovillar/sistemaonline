@@ -29,7 +29,7 @@ public class DialogBoxPrimeiroLogin extends DialogBox {
 	
 	TextConstants txtConstants = GWT.create(TextConstants.class);
 	
-//	MpSelection listBoxIdiomas;
+	private boolean forcarPrimeiroLogin;
 	
 	private TextBox txtNovaSenha;
 	private TextBox txtConfirmarNovaSenha;
@@ -43,7 +43,19 @@ public class DialogBoxPrimeiroLogin extends DialogBox {
 
 	MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
 	
-	public Usuario getUsuario() {
+	
+	
+	public boolean isForcarPrimeiroLogin() {
+        return forcarPrimeiroLogin;
+    }
+
+
+    public void setForcarPrimeiroLogin(boolean forcarPrimeiroLogin) {
+        this.forcarPrimeiroLogin = forcarPrimeiroLogin;
+    }
+
+
+    public Usuario getUsuario() {
 		return usuario;
 	}
 
@@ -59,18 +71,21 @@ public class DialogBoxPrimeiroLogin extends DialogBox {
 	
 	private static DialogBoxPrimeiroLogin uniqueInstance;
 	
-	public static DialogBoxPrimeiroLogin getInstance(Usuario usuario){
+	public static DialogBoxPrimeiroLogin getInstance(Usuario usuario, boolean forcarPrimeiroLogin){
 		if(uniqueInstance==null){
-			uniqueInstance = new DialogBoxPrimeiroLogin(usuario);
+			uniqueInstance = new DialogBoxPrimeiroLogin(usuario, forcarPrimeiroLogin);
 		}else{
 			uniqueInstance.setUsuario(usuario);
+			uniqueInstance.setForcarPrimeiroLogin(forcarPrimeiroLogin);
 			uniqueInstance.show();
 		}
 		return uniqueInstance;
 	}
 
 	
-	private DialogBoxPrimeiroLogin(Usuario usuario){
+	private DialogBoxPrimeiroLogin(Usuario usuario, boolean forcarPrimeiroLogin){
+	    
+	    this.forcarPrimeiroLogin = forcarPrimeiroLogin;
 		
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -194,7 +209,7 @@ public class DialogBoxPrimeiroLogin extends DialogBox {
 			if (FieldVerifier.isValidPassword(txtNovaSenha.getValue())) {
 				if (txtNovaSenha.getValue().equals(txtConfirmarNovaSenha.getValue())) {
 					mpLoading.setVisible(true);
-					GWTServiceUsuario.Util.getInstance().atualizarSenha(usuario.getIdUsuario(), txtNovaSenha.getValue(), callbackAtualizarSenha);
+					GWTServiceUsuario.Util.getInstance().atualizarSenha(usuario.getIdUsuario(), txtNovaSenha.getValue(), forcarPrimeiroLogin, callbackAtualizarSenha);
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.senhaNaoConfere());

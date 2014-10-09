@@ -8,6 +8,8 @@ import com.jornada.shared.classes.TipoComunicado;
 public interface GWTServiceTipoComunicadoAsync {
 
 	
-	public void getTipoComunicados(AsyncCallback<ArrayList<TipoComunicado>> callback);	
+	public void getTipoComunicados(AsyncCallback<ArrayList<TipoComunicado>> callback);
+
+    public void getTipoComunicadoEmails(AsyncCallback<ArrayList<TipoComunicado>> callback);	
 	
 }

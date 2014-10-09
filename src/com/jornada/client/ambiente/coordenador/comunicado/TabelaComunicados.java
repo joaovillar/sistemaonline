@@ -262,7 +262,7 @@ public class TabelaComunicados extends VerticalPanel{
 	
 	
 	protected void populateGrid() {
-		
+	    mpPanelLoading.setVisible(true);
 		GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%",callbackGetComunicadosFiltro);
 	}	
 	
@@ -353,6 +353,7 @@ public class TabelaComunicados extends VerticalPanel{
 		        if(object.getIdTipoComunicado()==TipoComunicado.EMAIL){
 		            imagePath = "images/email.send.64.png";
 		        }else{
+		            if(object.getNomeImagem()!=null)
 		            imagePath = "images/download/compressed-"+object.getNomeImagem();   
 		        }
 		         

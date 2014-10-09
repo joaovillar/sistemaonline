@@ -6,12 +6,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
 public interface GWTServiceUsuarioAsync {
 
 	public void AdicionarUsuario(Usuario usuario, AsyncCallback<String> callback);	
 	public void updateUsuarioRow(Usuario usuario, AsyncCallback<String> callback);	
-	public void atualizarSenha(int idUsuario, String senha, AsyncCallback<Boolean> callback);
+	public void atualizarSenha(int idUsuario, String senha, boolean forcarPrimeiroLogin, AsyncCallback<Boolean> callback);
 	public void deleteUsuarioRow(int id_usuario, AsyncCallback<Boolean> callback);
 	public void gerarExcelUsuario(AsyncCallback<String> asyncCallback);
 	public void importarUsuariosUsandoExcel(String strFileName, AsyncCallback<ArrayList<UsuarioErroImportar>> callback);
@@ -29,6 +30,10 @@ public interface GWTServiceUsuarioAsync {
 	public void associarPaisAoAluno(int id_aluno, ArrayList<String> list_id_pais, AsyncCallback<Boolean> callback);
 	public void getTodosOsPaisDoAluno(int id_aluno, AsyncCallback<ArrayList<Usuario>> callback);
 //	public void getPagePrint(String strHtmlPage, AsyncCallback<String> callback);
+	public void getPaisPorCurso(int idCurso, String strFilterResp, String strFilterName, AsyncCallback<ArrayList<Usuario>> callback);
+	public void getTodosPais(String strFilterResp, String strFilterName, AsyncCallback<ArrayList<Usuario>> callback);
+    public void getAlunosTodosOuPorCurso(int idCurso, boolean showAluno, boolean showPais, boolean showProfessor, AsyncCallback<ArrayList<UsuarioNomeID>> callback);
+    public void getCoordenadoresAdministradoresNomeId(AsyncCallback<ArrayList<UsuarioNomeID>> callback);
 		
 
 }

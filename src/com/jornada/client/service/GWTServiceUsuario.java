@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
 @RemoteServiceRelativePath("GWTServiceUsuario")
 public interface GWTServiceUsuario extends RemoteService {
@@ -29,7 +30,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	
 	public String AdicionarUsuario(Usuario usuario);	
 	public String updateUsuarioRow(Usuario usuario);	
-	public boolean atualizarSenha(int idUsuario, String senha);	
+	public boolean atualizarSenha(int idUsuario, String senha, boolean forcarPrimeiroLogin);	
 	public boolean deleteUsuarioRow(int id_usuario);	
 	public String gerarExcelUsuario();
 	public ArrayList<UsuarioErroImportar> importarUsuariosUsandoExcel(String strFileName);
@@ -39,6 +40,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	public ArrayList<Usuario> getUsuarios(String strDBField, String strFilter);	
 	public ArrayList<Usuario> getAlunosPorCurso(int idCurso, String strFiltroUsuario);	
 	public ArrayList<Usuario> getAlunosPorCurso(int idCurso);	
+	public ArrayList<UsuarioNomeID> getAlunosTodosOuPorCurso(int idCurso, boolean showAluno, boolean showPais, boolean showProfessor);
 	public ArrayList<Usuario> getUsuariosPorCursoAmbientePai(Usuario usuarioPai, int idCurso);	
 	public ArrayList<Usuario> getUsuariosPorTipoUsuario(int id_tipo_usuario, String strFilter);	
 	public ArrayList<Usuario> getUsuariosPorTipoUsuario(int id_tipo_usuario);
@@ -46,7 +48,9 @@ public interface GWTServiceUsuario extends RemoteService {
 	public ArrayList<TipoUsuario> getTipoUsuarios();	
 	public boolean associarPaisAoAluno(int id_aluno, ArrayList<String> list_id_pais);
 	public ArrayList<Usuario> getTodosOsPaisDoAluno(int id_aluno);	
-//	public String getPagePrint(String strHtmlPage);
+	public ArrayList<Usuario> getPaisPorCurso(int idCurso, String strFilterResp, String strFilterName);
+	public ArrayList<Usuario> getTodosPais(String strFilterResp, String strFilterName);
+	public ArrayList<UsuarioNomeID> getCoordenadoresAdministradoresNomeId();
 	
 	/**
 	 * Utility class for simplifying access to the instance of async service.

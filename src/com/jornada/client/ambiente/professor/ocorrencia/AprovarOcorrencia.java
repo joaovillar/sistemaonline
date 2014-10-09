@@ -44,7 +44,6 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunoAmbientePais;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -55,7 +54,6 @@ import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceOcorrencia;
 import com.jornada.shared.classes.RelUsuarioOcorrencia;
-import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.ocorrencia.OcorrenciaParaAprovar;
 import com.jornada.shared.classes.utility.MpUtilClient;
@@ -80,7 +78,7 @@ public class AprovarOcorrencia extends VerticalPanel {
 	private Column<OcorrenciaParaAprovar, String> nomeCursoColumn;
 	private Column<OcorrenciaParaAprovar, String> nomePeriodoColumn;
 	private Column<OcorrenciaParaAprovar, String> nomeDisciplinaColumn;
-	private Column<OcorrenciaParaAprovar, String> nomeConteudoProgramaticoColumn;
+//	private Column<OcorrenciaParaAprovar, String> nomeConteudoProgramaticoColumn;
 	private Column<OcorrenciaParaAprovar, String> nomeOcorrenciaColumn;
 	private Column<OcorrenciaParaAprovar, String> nomeDescricaoColumn;
 	private Column<OcorrenciaParaAprovar, Date> dataColumn;
@@ -90,7 +88,7 @@ public class AprovarOcorrencia extends VerticalPanel {
 	private TextBox txtSearch;
 	ArrayList<OcorrenciaParaAprovar> arrayListBackup = new ArrayList<OcorrenciaParaAprovar>();
 
-	private MpSelectionAlunoAmbientePais listBoxAluno;
+//	private MpSelectionAlunoAmbientePais listBoxAluno;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();	
@@ -273,11 +271,13 @@ public class AprovarOcorrencia extends VerticalPanel {
 	
 
 	public void updateClientData(){		
-		if(usuarioLogado.getIdTipoUsuario()==TipoUsuario.ALUNO){
-			populateGrid();
-		}else{			
-			listBoxAluno.populateComboBox(usuarioLogado);
-		}
+
+	    populateGrid();
+//		if(usuarioLogado.getIdTipoUsuario()==TipoUsuario.ALUNO){
+//			populateGrid();
+//		}else{			
+//			listBoxAluno.populateComboBox(usuarioLogado);
+//		}
 	}	
 	
 	
@@ -341,12 +341,12 @@ public class AprovarOcorrencia extends VerticalPanel {
 				return object.getNomeDisciplina();
 			}
 		};
-		nomeConteudoProgramaticoColumn = new Column<OcorrenciaParaAprovar, String>(new TextCell()) {
-			@Override
-			public String getValue(OcorrenciaParaAprovar object) {
-				return object.getNomeConteudoProgramatico();
-			}
-		};
+//		nomeConteudoProgramaticoColumn = new Column<OcorrenciaParaAprovar, String>(new TextCell()) {
+//			@Override
+//			public String getValue(OcorrenciaParaAprovar object) {
+//				return object.getNomeConteudoProgramatico();
+//			}
+//		};
 		
 		nomeAlunoColumn = new Column<OcorrenciaParaAprovar, String>(new TextCell()) {
 			@Override
@@ -401,7 +401,7 @@ public class AprovarOcorrencia extends VerticalPanel {
 		cellTable.addColumn(nomeCursoColumn, txtConstants.curso());
 		cellTable.addColumn(nomePeriodoColumn, txtConstants.periodo());
 		cellTable.addColumn(nomeDisciplinaColumn, txtConstants.disciplina());
-		cellTable.addColumn(nomeConteudoProgramaticoColumn, txtConstants.conteudoProgramatico());
+//		cellTable.addColumn(nomeConteudoProgramaticoColumn, txtConstants.conteudoProgramatico());
 		cellTable.addColumn(dataColumn, txtConstants.ocorrenciaData());		
 		cellTable.addColumn(nomeOcorrenciaColumn, txtConstants.ocorrencia());
 		cellTable.addColumn(nomeDescricaoColumn, txtConstants.ocorrenciaDescricao());
@@ -414,7 +414,7 @@ public class AprovarOcorrencia extends VerticalPanel {
 		cellTable.getColumn(cellTable.getColumnIndex(nomeCursoColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(nomePeriodoColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(nomeDisciplinaColumn)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(nomeConteudoProgramaticoColumn)).setCellStyleNames("hand-over-default");
+//		cellTable.getColumn(cellTable.getColumnIndex(nomeConteudoProgramaticoColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(nomeOcorrenciaColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(nomeDescricaoColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(dataColumn)).setCellStyleNames("hand-over-default");
@@ -515,13 +515,13 @@ public class AprovarOcorrencia extends VerticalPanel {
 	      }
 	    });	
 	    
-	    nomeConteudoProgramaticoColumn.setSortable(true);
-	    sortHandler.setComparator(nomeConteudoProgramaticoColumn, new Comparator<OcorrenciaParaAprovar>() {
-	      @Override
-	      public int compare(OcorrenciaParaAprovar o1, OcorrenciaParaAprovar o2) {
-	        return o1.getNomeConteudoProgramatico().compareTo(o2.getNomeConteudoProgramatico());
-	      }
-	    });		    
+//	    nomeConteudoProgramaticoColumn.setSortable(true);
+//	    sortHandler.setComparator(nomeConteudoProgramaticoColumn, new Comparator<OcorrenciaParaAprovar>() {
+//	      @Override
+//	      public int compare(OcorrenciaParaAprovar o1, OcorrenciaParaAprovar o2) {
+//	        return o1.getNomeConteudoProgramatico().compareTo(o2.getNomeConteudoProgramatico());
+//	      }
+//	    });		    
 		
 	}
 	
@@ -566,10 +566,10 @@ public class AprovarOcorrencia extends VerticalPanel {
 					String strCurso = dataProvider.getList().get(i).getNomeCurso();
 					String strPeriodo = dataProvider.getList().get(i).getNomePeriodo();
 					String strDisciplina = dataProvider.getList().get(i).getNomeDisciplina();
-					String strMateria = dataProvider.getList().get(i).getNomeConteudoProgramatico();
+//					String strMateria = dataProvider.getList().get(i).getNomeConteudoProgramatico();
 
 					String strJuntaTexto = strOcorrencia.toUpperCase() + " " + strDescricao.toUpperCase() + " " + strData.toUpperCase() + " " + strHora.toUpperCase();
-					strJuntaTexto +=  " " + strCurso.toUpperCase() + " " + strPeriodo.toUpperCase() + " " + strDisciplina.toUpperCase() + " " + strMateria.toUpperCase();
+					strJuntaTexto +=  " " + strCurso.toUpperCase() + " " + strPeriodo.toUpperCase() + " " + strDisciplina.toUpperCase() ;
 					strJuntaTexto += " " + strNomeAluno.toUpperCase();
 
 					if (!strJuntaTexto.contains(strFiltro)) {

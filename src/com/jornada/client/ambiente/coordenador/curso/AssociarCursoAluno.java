@@ -136,9 +136,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 		lblFiltrarCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
 		txtFiltroNomeCurso.setStyleName("design_text_boxes");		
 		
-		listBoxNomeCurso = new MpSelectionCurso();
-//		listBoxCursos.setStyleName("design_text_boxes");
-//		listBoxCursos.setWidth("350px");
+		listBoxNomeCurso = new MpSelectionCurso(true);
 		listBoxNomeCurso.addChangeHandler(new ChangeHandlerPopularAlunosAssociados());			
 
 		
@@ -188,7 +186,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 //		mpPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
 		mpPanel.setWidth("100%");
 		
-		listBoxCursoParaAluno = new MpSelectionCursoItemTodos();
+		listBoxCursoParaAluno = new MpSelectionCursoItemTodos(true,txtConstants.cursoTodosAlunos());
 		listBoxCursoParaAluno.addChangeHandler(new ChangeHandlerCleanAlunos());			
 		
 		listBoxCursoParaAluno.setWidth("250px");
@@ -419,23 +417,37 @@ public class AssociarCursoAluno extends VerticalPanel{
 	
 	public void popularAlunosAssociados(){
 		mpPanelCursoLoading.setVisible(true);	
-		int id_curso = Integer.parseInt(listBoxNomeCurso.getValue(listBoxNomeCurso.getSelectedIndex()));
-		GWTServiceCurso.Util.getInstance().getTodosOsAlunosDoCurso(id_curso, callbackGetAlunosAssociados);
+		int index = listBoxNomeCurso.getSelectedIndex();
+		if(index==-1){
+		    mpPanelCursoLoading.setVisible(false);
+		}else{
+	        int id_curso = Integer.parseInt(listBoxNomeCurso.getValue(index));
+	        GWTServiceCurso.Util.getInstance().getTodosOsAlunosDoCurso(id_curso, callbackGetAlunosAssociados);		    
+		}
 	}
 	
+	
+	
+	private void eventoFiltrarCurso(){
+        multiBoxAlunoFiltrado.clear();
+        txtFiltroAluno.setText("");
+	    listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
+	    popularAlunosAssociados();
+	}
 	
 	
 	
 	private class ClickHandlerFiltrarCurso implements ClickHandler {
 		public void onClick(ClickEvent event) {
-			listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
+			eventoFiltrarCurso();
 		}
 	}
 	
 	private class EnterKeyUpHandlerFiltrarCurso implements KeyUpHandler{
 		public void onKeyUp(KeyUpEvent event){
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
+				//listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
+			    eventoFiltrarCurso();
 			}
 		}
 	}	

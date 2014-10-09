@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.disciplina.ProfessorDisciplina;
 
 @RemoteServiceRelativePath("GWTServiceDisciplina")
 public interface GWTServiceDisciplina  extends RemoteService {
@@ -19,12 +20,14 @@ public interface GWTServiceDisciplina  extends RemoteService {
 	public ArrayList<Disciplina> getDisciplinas(String strFilter);
 	public ArrayList<Disciplina> getDisciplinasAssociadosAoProfessor(int idPeriodo, int idUsuario);
 	public ArrayList<Disciplina> getDisciplinasPeloPeriodoAmbienteProfessor(Usuario usuario, int idPeriodo);
+	public ArrayList<ProfessorDisciplina> getPeriodoDisciplinaProfessor(int idCurso);
 	
 	public ArrayList<Disciplina> getDisciplinas();
 	public ArrayList<Periodo> getPeriodos();
 	public boolean deleteDisciplinaRow(int id_disciplina); 
 	public boolean updateDisciplinaRow(Disciplina disciplina);
 	public boolean updateDisciplinaComIdProfessor(int id_professor, ArrayList<String> list_id_disciplina);
+	public boolean updateDisciplinaComIdProfessor(int idProfessor, int idDisciplina);
 	
 	
 	/**

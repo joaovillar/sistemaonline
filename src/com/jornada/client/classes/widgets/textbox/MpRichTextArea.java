@@ -11,9 +11,11 @@ public class MpRichTextArea extends VerticalPanel{
 	public MpRichTextArea(){
 		
 		textArea = new RichTextArea();
-        final RichTextToolbar toolBar = new RichTextToolbar(textArea);
+        final MpRichTextToolbar  toolBar = new MpRichTextToolbar(textArea);
+//		RichTextToolbar 
         VerticalPanel vp = new VerticalPanel();
         textArea.setWidth("100%");
+        
         
         vp.add(toolBar);
         vp.add(textArea);

@@ -39,7 +39,7 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RichTextArea.Formatter;
 
-public class RichTextToolbar extends Composite {
+public class MpRichTextToolbar extends Composite {
 	/** Local CONSTANTS **/
 	//ImageMap and CSS related
 	private static final String HTTP_STATIC_ICONS_GIF = "http://blog.elitecoderz.net/wp-includes/js/tinymce/themes/advanced/img/icons.gif";
@@ -155,7 +155,7 @@ public class RichTextToolbar extends Composite {
 	private ListBox colorlist;
 
 	/** Constructor of the Toolbar **/
-	public RichTextToolbar(RichTextArea richtext) {
+	public MpRichTextToolbar(RichTextArea richtext) {
 		//Initialize the main-panel
 		outer = new VerticalPanel();
 
@@ -423,32 +423,33 @@ public class RichTextToolbar extends Composite {
 	/** Initialize the options on the toolbar **/
 	private void buildTools() {
 		//Init the TOP Panel forst
-		buttonsPanel.add(bold = createToggleButton(HTTP_STATIC_ICONS_GIF,0,0,20,20,GUI_HOVERTEXT_BOLD));
-		buttonsPanel.add(italic = createToggleButton(HTTP_STATIC_ICONS_GIF,0,60,20,20,GUI_HOVERTEXT_ITALIC));
-		buttonsPanel.add(underline = createToggleButton(HTTP_STATIC_ICONS_GIF,0,140,20,20,GUI_HOVERTEXT_UNDERLINE));
-		buttonsPanel.add(stroke = createToggleButton(HTTP_STATIC_ICONS_GIF,0,120,20,20,GUI_HOVERTEXT_STROKE));
+		buttonsPanel.add(bold = createToggleButton("images/text_bold.png",0,0,20,20,GUI_HOVERTEXT_BOLD));
+		buttonsPanel.add(italic = createToggleButton("images/text_italic.png",0,60,20,20,GUI_HOVERTEXT_ITALIC));
+		buttonsPanel.add(underline = createToggleButton("images/text_underline.png",0,140,20,20,GUI_HOVERTEXT_UNDERLINE));
+		buttonsPanel.add(stroke = createToggleButton("images/text_strike.png",0,120,20,20,GUI_HOVERTEXT_STROKE));
 		buttonsPanel.add(new HTML("&nbsp;"));
 //		topPanel.add(subscript = createToggleButton(HTTP_STATIC_ICONS_GIF,0,600,20,20,GUI_HOVERTEXT_SUBSCRIPT));
 //		topPanel.add(superscript = createToggleButton(HTTP_STATIC_ICONS_GIF,0,620,20,20,GUI_HOVERTEXT_SUPERSCRIPT));
 //		topPanel.add(new HTML("&nbsp;"));
-		buttonsPanel.add(alignleft = createPushButton(HTTP_STATIC_ICONS_GIF,0,460,20,20,GUI_HOVERTEXT_ALIGNLEFT));
-		buttonsPanel.add(alignmiddle = createPushButton(HTTP_STATIC_ICONS_GIF,0,420,20,20,GUI_HOVERTEXT_ALIGNCENTER));
-		buttonsPanel.add(alignright = createPushButton(HTTP_STATIC_ICONS_GIF,0,480,20,20,GUI_HOVERTEXT_ALIGNRIGHT));
+		buttonsPanel.add(alignleft = createPushButton("images/text_align_left.png",0,460,20,20,GUI_HOVERTEXT_ALIGNLEFT));
+		buttonsPanel.add(alignmiddle = createPushButton("images/text_align_center.png",0,420,20,20,GUI_HOVERTEXT_ALIGNCENTER));
+		buttonsPanel.add(alignright = createPushButton("images/text_align_right.png",0,480,20,20,GUI_HOVERTEXT_ALIGNRIGHT));
 		buttonsPanel.add(new HTML("&nbsp;"));
-		buttonsPanel.add(orderlist = createPushButton(HTTP_STATIC_ICONS_GIF,0,80,20,20,GUI_HOVERTEXT_ORDERLIST));
-		buttonsPanel.add(unorderlist = createPushButton(HTTP_STATIC_ICONS_GIF,0,20,20,20,GUI_HOVERTEXT_UNORDERLIST));
-		buttonsPanel.add(indentright = createPushButton(HTTP_STATIC_ICONS_GIF,0,400,20,20,GUI_HOVERTEXT_IDENTRIGHT));
-		buttonsPanel.add(indentleft = createPushButton(HTTP_STATIC_ICONS_GIF,0,540,20,20,GUI_HOVERTEXT_IDENTLEFT));
+		buttonsPanel.add(orderlist = createPushButton("images/text_list_order.png",0,80,20,20,GUI_HOVERTEXT_ORDERLIST));
+		buttonsPanel.add(unorderlist = createPushButton("images/text_list_unordered.png",0,20,20,20,GUI_HOVERTEXT_UNORDERLIST));
+		buttonsPanel.add(indentright = createPushButton("images/text_indent_right.png",0,400,20,20,GUI_HOVERTEXT_IDENTRIGHT));
+		buttonsPanel.add(indentleft = createPushButton("images/text_indent_left.png",0,540,20,20,GUI_HOVERTEXT_IDENTLEFT));
 		buttonsPanel.add(new HTML("&nbsp;"));
-		buttonsPanel.add(generatelink = createPushButton(HTTP_STATIC_ICONS_GIF,0,500,20,20,GUI_HOVERTEXT_LINK));
-		buttonsPanel.add(breaklink = createPushButton(HTTP_STATIC_ICONS_GIF,0,640,20,20,GUI_HOVERTEXT_BREAKLINK));
+		buttonsPanel.add(generatelink = createPushButton("images/text_link.png",0,500,20,20,GUI_HOVERTEXT_LINK));
+		buttonsPanel.add(breaklink = createPushButton("images/text_link_break.png",0,640,20,20,GUI_HOVERTEXT_BREAKLINK));
 		buttonsPanel.add(new HTML("&nbsp;"));
-		buttonsPanel.add(insertline = createPushButton(HTTP_STATIC_ICONS_GIF,0,360,20,20,GUI_HOVERTEXT_HLINE));
-		buttonsPanel.add(insertimage = createPushButton(HTTP_STATIC_ICONS_GIF,0,380,20,20,GUI_HOVERTEXT_IMAGE));
+		buttonsPanel.add(insertline = createPushButton("images/text_line.png",0,360,20,20,GUI_HOVERTEXT_HLINE));
+		buttonsPanel.add(insertimage = createPushButton("images/text_image.png",0,380,20,20,GUI_HOVERTEXT_IMAGE));
 		buttonsPanel.add(new HTML("&nbsp;"));
-		buttonsPanel.add(removeformatting = createPushButton(HTTP_STATIC_ICONS_GIF,20,460,20,20,GUI_HOVERTEXT_REMOVEFORMAT));
+		buttonsPanel.add(removeformatting = createPushButton("images/text_clear.png",20,460,20,20,GUI_HOVERTEXT_REMOVEFORMAT));
 		buttonsPanel.add(new HTML("&nbsp;"));
 		buttonsPanel.add(texthtml = createToggleButton(HTTP_STATIC_ICONS_GIF,0,260,20,20,GUI_HOVERTEXT_SWITCHVIEW));
+		texthtml.setVisible(false);
 
 
 		//Init the BOTTOM Panel
@@ -459,7 +460,8 @@ public class RichTextToolbar extends Composite {
 
 	/** Method to create a Toggle button for the toolbar **/
 	private ToggleButton createToggleButton(String url, Integer top, Integer left, Integer width, Integer height, String tip) {
-		Image extract = new Image(url, left, top, width, height);
+//		Image extract = new Image(url, left, top, width, height);
+	    Image extract = new Image(url);
 		ToggleButton tb = new ToggleButton(extract);
 		tb.setHeight(height+"px");
 		tb.setWidth(width+"px");
@@ -472,7 +474,8 @@ public class RichTextToolbar extends Composite {
 
 	/** Method to create a Push button for the toolbar **/
 	private PushButton createPushButton(String url, Integer top, Integer left, Integer width, Integer height, String tip) {
-		Image extract = new Image(url, left, top, width, height);
+//		Image extract = new Image(url, left, top, width, height);
+	    Image extract = new Image(url);
 		PushButton tb = new PushButton(extract);
 		tb.setHeight(height+"px");
 		tb.setWidth(width+"px");

@@ -119,6 +119,7 @@ public class MpScrollPanelCurso extends ScrollPanel{
 
 		
     	FlexTable flexTableConteudo = new FlexTable();
+    	flexTableConteudo.setWidth("100%");
 		flexTableConteudo.setCellPadding(2);
 		flexTableConteudo.setCellSpacing(2);	
 		flexTableConteudo.setBorderWidth(0);

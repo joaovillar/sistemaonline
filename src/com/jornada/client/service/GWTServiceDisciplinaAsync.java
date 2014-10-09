@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.disciplina.ProfessorDisciplina;
 
 public interface GWTServiceDisciplinaAsync {
 
@@ -21,5 +22,7 @@ public interface GWTServiceDisciplinaAsync {
 	public void deleteDisciplinaRow(int id_disciplina, AsyncCallback<Boolean> callback);	
 	public void updateDisciplinaRow(Disciplina disciplina, AsyncCallback<Boolean> callback);	
 	public void updateDisciplinaComIdProfessor(int id_professor, ArrayList<String> list_id_disciplina, AsyncCallback<Boolean> callback);
+    public void getPeriodoDisciplinaProfessor(int idCurso, AsyncCallback<ArrayList<ProfessorDisciplina>> callback);
+    public void updateDisciplinaComIdProfessor(int idProfessor, int idDisciplina, AsyncCallback<Boolean> callback);
 
 }

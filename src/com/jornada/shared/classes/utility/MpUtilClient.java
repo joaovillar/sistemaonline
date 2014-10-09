@@ -103,11 +103,35 @@ public class MpUtilClient {
 		}
 	}
 	
+    public static void isRefreshRequired(Object list){
+        if(list==null) {
+            MpDialogBoxRefreshPage mp = new MpDialogBoxRefreshPage();
+            mp.showDialog();
+        }
+    }	
+	
+    public static void isRefreshRequired(String strText){
+        if(strText==null) {
+            MpDialogBoxRefreshPage mp = new MpDialogBoxRefreshPage();
+            mp.showDialog();
+        }
+    }	
+	
 	public static void isRefreshRequired(String[][] list){
 		if(list==null) {
 			MpDialogBoxRefreshPage mp = new MpDialogBoxRefreshPage();
 			mp.showDialog();
 		}
+	}
+	
+	public static String convertArrayIntToSqlParameter(ArrayList<Integer> list){
+        String strNotIn=" and id_usuario not in (";        
+        for (int i = 0; i < list.size(); i++) {
+            strNotIn = strNotIn + "," + list.get(i);
+        }
+        strNotIn = strNotIn.replaceFirst(",", "")+")";
+        
+        return strNotIn;
 	}
 
 }

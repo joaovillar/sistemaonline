@@ -23,6 +23,8 @@
   <inherits name="com.reveregroup.gwt.imagepreloader.ImagePreloader" />
   <inherits name="com.googlecode.gwt.charts.Charts"/> 
   <inherits name="com.google.gwt.visualization.Visualization"/>
+<!--   <inherits name='com.google.gwt.query.Query'/> -->
+<!--   <inherits name='com.watopi.chosen.Chosen'/> -->
   
 
   <!-- Other module inherits                                      -->
@@ -38,12 +40,11 @@
 <!--   <script src="js/ext/ext-all.js"/> -->
   
   
-   <set-property name="user.agent" value="gecko1_8"/>
+<!--    <set-property name="user.agent" value="gecko1_8"/> -->
 <!--    <set-property name="user.agent" value="safari"/> -->
-<!-- 	<set-property name="user.agent" value="ie10"/> -->
 
 <!--    <set-property name="user.agent" value="safari"/> -->
-<!-- <define-property name="user.agent" values="ie6,gecko,gecko1_8"></define-property> -->
+<!--   <define-property name="user.agent" values="safari,gecko1_8"></define-property> -->
 
   <extend-property name="locale" values="en, pt_BR"/>
   <set-configuration-property name="locale.useragent" value="Y"/>

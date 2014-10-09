@@ -89,7 +89,7 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 		Label lblCursoImportarAlunos = new Label(txtConstants.cursoImportarAlunosDoCurso());
 		lblErroNomeCurso = new MpLabelTextBoxError();
 		
-		listBoxCursoEstrutura = new MpSelectionCurso();				
+		listBoxCursoEstrutura = new MpSelectionCurso(true);				
 		txtFiltroCursoEstrutura = new TextBox();
 		btnFiltrarEstrutura = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
 		
@@ -98,7 +98,7 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 		mpDateBoxInicial = new MpDateBoxWithImage();		
 		mpDateBoxFinal = new MpDateBoxWithImage();		
 
-		listBoxCursoImportarAluno = new MpSelectionCurso();
+		listBoxCursoImportarAluno = new MpSelectionCurso(true);
 		txtFiltroCursoImportar = new TextBox();
 		btnFiltrarImportarAluno = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
 		

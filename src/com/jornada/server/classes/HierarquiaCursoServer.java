@@ -31,7 +31,7 @@ public class HierarquiaCursoServer {
 				for(Disciplina disciplina : periodo.getListDisciplinas()){
 					disciplina.setListConteudoProgramatico(ConteudoProgramaticoServer.getConteudoProgramaticos(disciplina.getIdDisciplina()));
 					disciplina.setProfessor(UsuarioServer.getUsuarioPeloId(disciplina.getIdUsuario()));
-					
+
 					//Getting Topico e Avaliacao
 					for(ConteudoProgramatico conteudo : disciplina.getListConteudoProgramatico()){
 						conteudo.setListTopico(TopicoServer.getTopicos(conteudo.getIdConteudoProgramatico()));
@@ -52,6 +52,10 @@ public class HierarquiaCursoServer {
 	public static ArrayList<Curso> getHierarquiaCursos(){		
 		return getHierarquiaCursos(CursoServer.getCursos());		
 	}	
+	
+    public static ArrayList<Curso> getHierarquiaCursos(String strFilter){       
+        return getHierarquiaCursos(CursoServer.getCursos(strFilter));        
+    }   	
 	
 	public static Curso getHierarquiaCurso(int idCurso){	
 		ArrayList<Curso> listCurso = new ArrayList<Curso>();

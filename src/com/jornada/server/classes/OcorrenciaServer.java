@@ -17,17 +17,17 @@ import com.jornada.shared.classes.ocorrencia.OcorrenciaParaAprovar;
 
 public class OcorrenciaServer {
 	
-	public static String DB_INSERT_OCORRENCIA = "INSERT INTO ocorrencia (assunto, descricao, data, hora, id_conteudo_programatico) VALUES (?,?,?,?,?) returning id_ocorrencia";
+	public static String DB_INSERT_OCORRENCIA = "INSERT INTO ocorrencia (assunto, descricao, data, hora, id_disciplina) VALUES (?,?,?,?,?) returning id_ocorrencia";
 	public static String DB_INSERT_REL_USUARIO_OCORRENCIA = "INSERT INTO rel_usuario_ocorrencia (id_usuario, id_ocorrencia, pai_ciente, liberar_leitura_pai) VALUES (?,?, false, false);";
-	public static String DB_UPDATE_OCORRENCIA = "UPDATE ocorrencia set assunto=?, descricao=?, data=?, hora=?, id_conteudo_programatico=? where id_ocorrencia=?;";
+	public static String DB_UPDATE_OCORRENCIA = "UPDATE ocorrencia set assunto=?, descricao=?, data=?, hora=?, id_disciplina=? where id_ocorrencia=?;";
 	public static String DB_UPDATE_OCORRENCIA_PAI_CIENTE = "UPDATE rel_usuario_ocorrencia set pai_ciente=? where id_ocorrencia=? and id_usuario=?;";
 	public static String DB_UPDATE_OCORRENCIA_LIBERAR_LEITURA_PAI = "UPDATE rel_usuario_ocorrencia set liberar_leitura_pai=? where id_ocorrencia=? and id_usuario=?;";
 	public static String DB_DELETE_OCORRENCIA = "delete from ocorrencia where id_ocorrencia=?";	
-	public static String DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA_1 = "delete from rel_usuario_ocorrencia where id_ocorrencia=?";
-	public static String DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA_2 = "delete from rel_usuario_ocorrencia where id_ocorrencia=? and id_usuario=?;";
+	public static String DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA = "delete from rel_usuario_ocorrencia where id_ocorrencia=?";
+	public static String DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA_POR_ID_USUARIO = "delete from rel_usuario_ocorrencia where id_ocorrencia=? and id_usuario=?;";
 	public static String DB_SELECT_OCORRENCIA_ALL = "SELECT * FROM ocorrencia order by data, hora asc;";
 	public static String DB_SELECT_OCORRENCIA_ILIKE = "SELECT * FROM ocorrencia where (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
-	public static String DB_SELECT_OCORRENCIA_POR_CONTEUDO_PROGRAMATICO = "SELECT * FROM ocorrencia where (id_conteudo_programatico = ?) order by data, hora asc;";
+	public static String DB_SELECT_OCORRENCIA_POR_CONTEUDO_PROGRAMATICO = "SELECT * FROM ocorrencia where (id_disciplina = ?) order by data, hora asc;";
 	
 	
 	public static String DB_SELECT_REL_USUARIO_OCORRENCIA = "SELECT * FROM rel_usuario_ocorrencia where id_ocorrencia = ? and id_usuario = ?;";
@@ -38,14 +38,14 @@ public class OcorrenciaServer {
 	"c.nome_curso as nomecurso, "+
 	"p.nome_periodo as nomeperiodo, "+ 
 	"d.nome_disciplina as nomedisciplina, "+
-	"cp.nome_conteudo_programatico as nomeconteudo, "+
+//	"cp.nome_conteudo_programatico as nomeconteudo, "+
 	"o.*," +
 	"ruo.id_usuario, "+
 	"ruo.pai_ciente "+
 	"from ocorrencia o "+
 	"inner join rel_usuario_ocorrencia ruo on o.id_ocorrencia=ruo.id_ocorrencia "+
-	"inner join conteudo_programatico cp on o.id_conteudo_programatico = cp.id_conteudo_programatico "+
-	"inner join disciplina d on cp.id_disciplina = d.id_disciplina "+
+//	"inner join conteudo_programatico cp on o.id_disciplina = cp.id_disciplina "+
+	"inner join disciplina d on o.id_disciplina = d.id_disciplina "+
 	"inner join periodo p on d.id_periodo = p.id_periodo "+
 	"inner join curso c on p.id_curso = c.id_curso "+
 	"inner join rel_curso_usuario rcu on c.id_curso  = rcu.id_curso "+ 
@@ -56,7 +56,7 @@ public class OcorrenciaServer {
 	"c.nome_curso as nomecurso, "+
 	"p.nome_periodo as nomeperiodo, "+ 
 	"d.nome_disciplina as nomedisciplina, "+
-	"cp.nome_conteudo_programatico as nomeconteudo, "+
+//	"cp.nome_conteudo_programatico as nomeconteudo, "+
 	"u.primeiro_nome, "+
 	"u.sobre_nome, "+
 	"o.*,  "+
@@ -65,8 +65,8 @@ public class OcorrenciaServer {
 	"ruo.liberar_leitura_pai "+
 	"from ocorrencia o "+
 	"inner join rel_usuario_ocorrencia ruo on o.id_ocorrencia=ruo.id_ocorrencia "+
-	"inner join conteudo_programatico cp on o.id_conteudo_programatico = cp.id_conteudo_programatico "+
-	"inner join disciplina d on cp.id_disciplina = d.id_disciplina "+
+//	"inner join conteudo_programatico cp on o.id_disciplina = cp.id_disciplina "+
+	"inner join disciplina d on o.id_disciplina = d.id_disciplina "+
 	"inner join periodo p on d.id_periodo = p.id_periodo "+
 	"inner join curso c on p.id_curso = c.id_curso "+
 	"inner join rel_curso_usuario rcu on c.id_curso  = rcu.id_curso "+ 
@@ -91,20 +91,13 @@ public class OcorrenciaServer {
 				object.setData(date);
 			}
 
-//			if (object.getData() == null) {
-//				object.setData(MpUtilServer.convertDateToString(date));
-//			}
-
 			int count = 0;
 			PreparedStatement ps = connection.prepareStatement(DB_INSERT_OCORRENCIA);
 			ps.setString(++count, object.getAssunto());
 			ps.setString(++count, object.getDescricao());
-//			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
-//			ps.setTime(++count, object.getHora());
-//			ps.setDate(++count, MpUtilServer.convertStringToSqlDate(object.getData()));
 			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));
 			ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
-			ps.setInt(++count, object.getIdConteudoProgramatico());
+			ps.setInt(++count, object.getIdDisciplina());
 
 			ResultSet rs = ps.executeQuery();			
 			rs.next();
@@ -185,7 +178,7 @@ public class OcorrenciaServer {
 //			}
 			
 			
-			//"UPDATE ocorrencia set assunto=?, descricao=?, data=?, hora=?, id_conteudo_programatico=? where id_ocorrencia=?;";
+			//"UPDATE ocorrencia set assunto=?, descricao=?, data=?, hora=?, id_disciplina=? where id_ocorrencia=?;";
 			int count = 0;
 			PreparedStatement ps = connection.prepareStatement(OcorrenciaServer.DB_UPDATE_OCORRENCIA);
 			ps.setString(++count, object.getAssunto());
@@ -196,13 +189,13 @@ public class OcorrenciaServer {
 			//			ps.setTime(++count, object.getHora());
 //			ps.setDate(++count, MpUtilServer.convertStringToSqlDate(object.getData()));
 			ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
-			ps.setInt(++count, object.getIdConteudoProgramatico());
+			ps.setInt(++count, object.getIdDisciplina());
 			ps.setInt(++count, object.getIdOcorrencia());
 
 			int numberUpdate = ps.executeUpdate();
 
 			if (numberUpdate == 1) {
-				if(deletarRelacionamentoUsuarioOcorrencia(object.getIdOcorrencia())){
+				if(deletarRelacionamentoUsuarioOcorrencia(object)){
 					if(AdicionarRelacionamentoUsuarioOcorrencia(object)){
 						isOperationDone = true;						
 					}
@@ -323,7 +316,7 @@ public class OcorrenciaServer {
 		return success;
 	}	
 	
-	public static boolean deletarRelacionamentoUsuarioOcorrencia(int id_ocorrencia){
+	public static boolean deletarRelacionamentoUsuarioOcorrencia(Ocorrencia ocorrencia){
 		
 		boolean success=false;
 
@@ -332,10 +325,19 @@ public class OcorrenciaServer {
 		try {
 //			dataBase.createConnection();
 //			Connection connection = dataBase.getConnection();
+		    int idOcorrencia = ocorrencia.getIdOcorrencia();
+		    
+	        String strNotIn=" and id_usuario not in (";        
+	        for (int i = 0; i < ocorrencia.getListUsuariosRelacionadosOcorrencia().size(); i++) {
+	            strNotIn = strNotIn + "," + ocorrencia.getListUsuariosRelacionadosOcorrencia().get(i).getIdUsuario();
+	        }
+	        strNotIn = strNotIn.replaceFirst(",", "")+")";
+	        
+	        String strQueryDelete = DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA + strNotIn;
 
 			int count = 0;
-			PreparedStatement ps = connection.prepareStatement(DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA_1);
-			ps.setInt(++count, id_ocorrencia);
+			PreparedStatement ps = connection.prepareStatement(strQueryDelete);
+			ps.setInt(++count, idOcorrencia);
 
 			ps.executeUpdate();
 			success = true;
@@ -364,7 +366,7 @@ public class OcorrenciaServer {
 //			Connection connection = dataBase.getConnection();
 
 			int count = 0;
-			PreparedStatement ps = connection.prepareStatement(DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA_2);
+			PreparedStatement ps = connection.prepareStatement(DB_DELETE_RELACIONAMENTO_USUARIO_OCORRENCIA_POR_ID_USUARIO);
 			ps.setInt(++count, idOcorrencia);
 			ps.setInt(++count, idUsuario);
 
@@ -404,7 +406,7 @@ public class OcorrenciaServer {
 				Ocorrencia currentObject = new Ocorrencia();
 				
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));				
-				currentObject.setIdConteudoProgramatico(rs.getInt("id_conteudo_programatico"));
+				currentObject.setIdDisciplina(rs.getInt("id_disciplina"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
 				currentObject.setData(rs.getDate("data"));
@@ -452,7 +454,7 @@ public class OcorrenciaServer {
 				Ocorrencia currentObject = new Ocorrencia();
 				
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));				
-				currentObject.setIdConteudoProgramatico(rs.getInt("id_conteudo_programatico"));
+				currentObject.setIdDisciplina(rs.getInt("id_disciplina"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
 				currentObject.setData(rs.getDate("data"));
@@ -475,7 +477,7 @@ public class OcorrenciaServer {
 
 	}			
 	
-	public static ArrayList<Ocorrencia> getOcorrenciasPeloConteudoProgramatico(int idConteudoProgramatico) {
+	public static ArrayList<Ocorrencia> getOcorrenciasPeloConteudoProgramatico(int idDisciplina) {
 
 		ArrayList<Ocorrencia> data = new ArrayList<Ocorrencia>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
@@ -488,7 +490,7 @@ public class OcorrenciaServer {
 
 			PreparedStatement ps = connection.prepareStatement(OcorrenciaServer.DB_SELECT_OCORRENCIA_POR_CONTEUDO_PROGRAMATICO);
 			int count=0;
-			ps.setInt(++count, idConteudoProgramatico);
+			ps.setInt(++count, idDisciplina);
 //			ps.setString(++count, strFilter);
 
 			ResultSet rs = ps.executeQuery();
@@ -498,7 +500,7 @@ public class OcorrenciaServer {
 				Ocorrencia currentObject = new Ocorrencia();
 				
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));				
-				currentObject.setIdConteudoProgramatico(rs.getInt("id_conteudo_programatico"));
+				currentObject.setIdDisciplina(rs.getInt("id_disciplina"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
 				currentObject.setData(rs.getDate("data"));
@@ -546,7 +548,7 @@ public class OcorrenciaServer {
 				currentObject.setNomeCurso(rs.getString("nomecurso"));
 				currentObject.setNomePeriodo(rs.getString("nomeperiodo"));
 				currentObject.setNomeDisciplina(rs.getString("nomedisciplina"));
-				currentObject.setNomeConteudoProgramatico(rs.getString("nomeconteudo"));		
+//				currentObject.setNomeConteudoProgramatico(rs.getString("nomeconteudo"));		
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdUsuario(rs.getInt("id_usuario"));
 				currentObject.setAssunto(rs.getString("assunto"));
@@ -595,7 +597,7 @@ public class OcorrenciaServer {
 				currentObject.setNomeCurso(rs.getString("nomecurso"));
 				currentObject.setNomePeriodo(rs.getString("nomeperiodo"));
 				currentObject.setNomeDisciplina(rs.getString("nomedisciplina"));
-				currentObject.setNomeConteudoProgramatico(rs.getString("nomeconteudo"));		
+//				currentObject.setNomeConteudoProgramatico(rs.getString("nomeconteudo"));		
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdUsuario(rs.getInt("id_usuario"));
 				currentObject.setUsuarioPrimeiroNome(rs.getString("primeiro_nome"));
@@ -660,11 +662,11 @@ public class OcorrenciaServer {
 
 	}
 	
-	public static ArrayList<OcorrenciaAluno> getTodasAsOcorrenciasDosAlunos(int idConteudoProgramatico){	
+	public static ArrayList<OcorrenciaAluno> getTodasAsOcorrenciasDosAlunos(int idDisciplina){	
 		
 		ArrayList<OcorrenciaAluno> listaOcorrenciaTodosAlunos = new ArrayList<OcorrenciaAluno>();		
 		
-		ArrayList<Ocorrencia> listaOcorrencias = getOcorrenciasPeloConteudoProgramatico(idConteudoProgramatico);
+		ArrayList<Ocorrencia> listaOcorrencias = getOcorrenciasPeloConteudoProgramatico(idDisciplina);
 		
 		for(int cvOcorrencia=0;cvOcorrencia<listaOcorrencias.size();cvOcorrencia++){
 			

@@ -3,6 +3,9 @@ package com.jornada.client.ambiente.coordenador.periodo;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -10,7 +13,6 @@ import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -24,6 +26,7 @@ import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServicePeriodo;
 import com.jornada.shared.FieldVerifier;
@@ -33,13 +36,14 @@ public class AdicionarPeriodo extends VerticalPanel {
 
 	private AsyncCallback<Integer> callbackAddPeriodo;
 
+	private MpTextBox txtFiltroNomeCurso; 
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading hPanelLoading = new MpPanelLoading("images/radar.gif");
 
-	private ListBox listBoxCurso;
-	private MpSelectionCurso mpSelectionCurso;
+//	private ListBox listBoxCurso;
+	private MpSelectionCurso listBoxNomeCurso;
 	
 	private TextBox txtNomePeriodo;
 	private TextArea txtDescricaoPeriodo;
@@ -87,7 +91,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 
 		// Add a title to the form
-		cellFormatter.setColSpan(0, 0, 0);
+//		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 		txtNomePeriodo = new TextBox();
 		txtDescricaoPeriodo = new TextArea();
@@ -131,14 +135,17 @@ public class AdicionarPeriodo extends VerticalPanel {
 		mpDateBoxFinal.getDate().setWidth("170px");
 		
 		
-		mpSelectionCurso = new MpSelectionCurso();
-		listBoxCurso = mpSelectionCurso;
+	    txtFiltroNomeCurso = new MpTextBox();
+	    txtFiltroNomeCurso.setWidth("150px");
+	    txtFiltroNomeCurso.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCurso());
 
+		
+		listBoxNomeCurso = new MpSelectionCurso(true);
+		
 		// Add some standard form options
 		int row = 1;
 
-		flexTable.setWidget(row, 0, lblCurso);
-		flexTable.setWidget(row++, 1, mpSelectionCurso);
+		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row++, 1, listBoxNomeCurso);//flexTable.setWidget(row++, 2, new MpImageHelper(listBoxNomeCurso));//flexTable.setWidget(row++, 2, txtFiltroNomeCurso);
 		
 		flexTable.setWidget(row, 0, lblNomePeriodo);flexTable.setWidget(row, 1, txtNomePeriodo);flexTable.setWidget(row++, 2, lblErroNomePeriodo);
 		flexTable.setWidget(row, 0, lblDescricaoPeriodo);flexTable.setWidget(row++, 1, txtDescricaoPeriodo);
@@ -234,7 +241,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 
 				hPanelLoading.setVisible(true);
 
-				int intIdCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
+				int intIdCurso = Integer.parseInt(listBoxNomeCurso.getValue(listBoxNomeCurso.getSelectedIndex()));
 
 				Periodo periodo = new Periodo();
 				periodo.setIdCurso(intIdCurso);
@@ -288,8 +295,16 @@ public class AdicionarPeriodo extends VerticalPanel {
 
 
 	public void updateClientData() {
-		mpSelectionCurso.populateComboBox();
+		listBoxNomeCurso.populateComboBox();
 	}
+	
+    private class EnterKeyUpHandlerFiltrarCurso implements KeyUpHandler {
+        public void onKeyUp(KeyUpEvent event) {
+            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
+            }
+        }
+    }
 	
 	
 	

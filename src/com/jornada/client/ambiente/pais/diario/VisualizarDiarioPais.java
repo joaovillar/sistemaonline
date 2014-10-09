@@ -102,7 +102,7 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		FlexCellFormatter cellFormatter = flexTableWithListBoxes.getFlexCellFormatter();
 
 		// Add a title to the form
-		cellFormatter.setColSpan(0, 0, 0);
+//		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 		
 		

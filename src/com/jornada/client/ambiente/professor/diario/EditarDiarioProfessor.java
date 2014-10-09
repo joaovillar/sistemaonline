@@ -124,7 +124,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		
 
 		// Add a title to the form
-		cellFormatter.setColSpan(0, 0, 0);
+//		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 		
 //		lblErroDisciplina = new MpLabelTextBoxError();
@@ -216,7 +216,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 				cleanCellTable();
 			}
 			else{
-				mpPanelLoadingAluno.setVisible(true);
+				
 				populateDinamicColumns();
 			}
 			
@@ -262,6 +262,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 
 			@Override
 			public void onSuccess(ArrayList<TipoPresenca> list) {
+			    mpPanelLoadingAluno.setVisible(false);
 				MpUtilClient.isRefreshRequired(list);
 				listaTipoPresenca.clear();				
 				for (TipoPresenca currentTipoPresenca : list) {
@@ -279,7 +280,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 
 		int idSelectedDisciplina = listBoxDisciplina.getSelectedIndex();
 		if (idSelectedDisciplina != -1) {
-
+		    mpPanelLoadingAluno.setVisible(true);
 			int idDisciplina = Integer.parseInt(listBoxDisciplina.getValue(idSelectedDisciplina));
 			GWTServiceAula.Util.getInstance().getAulas(idDisciplina, 		
 			new AsyncCallback<ArrayList<Aula>>() 
@@ -292,20 +293,21 @@ public class EditarDiarioProfessor extends VerticalPanel {
 					mpDialogBoxWarning.showDialog();
 				}
 
-				@Override
-						public void onSuccess(ArrayList<Aula> list) {
-							MpUtilClient.isRefreshRequired(list);
-							arrayColumns.clear();
-							arrayAula.clear();
-							for (int i = 0; i < list.size(); i++) {
-								arrayAula.add(list.get(i));
-								String strDate = MpUtilClient.convertDateToString(list.get(i).getData());
-								arrayColumns.add(strDate);
-							}
+                @Override
+                public void onSuccess(ArrayList<Aula> list) {
+                    mpPanelLoadingAluno.setVisible(false);
+                    MpUtilClient.isRefreshRequired(list);
+                    arrayColumns.clear();
+                    arrayAula.clear();
+                    for (int i = 0; i < list.size(); i++) {
+                        arrayAula.add(list.get(i));
+                        String strDate = MpUtilClient.convertDateToString(list.get(i).getData());
+                        arrayColumns.add(strDate);
+                    }
 
-							cleanCellTable();
-							populateGridListaPresenca();
-						}
+                    cleanCellTable();
+                    populateGridListaPresenca();
+                }
 
 			});
 		}
@@ -315,7 +317,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 
 		int idSelectedDisciplina = listBoxDisciplina.getSelectedIndex();
 		if (idSelectedDisciplina != -1) {
-			
+		    mpPanelLoadingAluno.setVisible(true);
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			int idDisciplina = Integer.parseInt(listBoxDisciplina.getValue(listBoxDisciplina.getSelectedIndex()));
 			
@@ -330,7 +332,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 
 								@Override
 								public void onSuccess(ArrayList<ArrayList<String>> list) {
-
+								    mpPanelLoadingAluno.setVisible(false);
 									MpUtilClient.isRefreshRequired(list);
 									dataProvider = new ListDataProvider<ArrayList<String>>();
 									arrayListBackup.clear();
@@ -508,7 +510,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 
 												@Override
 												public void onSuccess(Boolean success) {
-													mpPanelLoadingAluno.setVisible(true);
+													mpPanelLoadingAluno.setVisible(false);
 													populateDinamicColumns();
 												}});
 //											System.out.println("IdAula!!!"+idAula);

@@ -1,13 +1,12 @@
 package com.jornada.client.ambiente.coordenador.usuario;
 
-
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -36,6 +35,7 @@ import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.config.ConfigClient;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.framework.Print;
+import com.jornada.client.service.GWTServiceDocumento;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.TipoUsuario;
@@ -128,10 +128,19 @@ public class AdicionarUsuario extends VerticalPanel {
 	private MpDateBoxWithImage dataMatr;
 	private MpLabelLeft lblRegistroAluno;
 	private MpTextBox txtRegistroAluno;
+	
+	
+	MpImageButton btnContrato;
+	MpImageButton btnPrinter;
+	MpImageButton btnClean;
+	MpImageButton btnSave;
+	
 
 	boolean isAdicionarOperation = false;
-	boolean isFirstLoad=false;
-	 private Usuario usuarioParaAtualizar;
+	boolean isFirstLoadUpdate=false;
+	private Usuario usuarioParaAtualizar;
+	 
+	 Grid gridBotoes;
 
 	@SuppressWarnings("unused")
 	private TelaInicialUsuario telaInicialUsuario;
@@ -146,6 +155,7 @@ public class AdicionarUsuario extends VerticalPanel {
 
 		if (uniqueInstanceAdicionar == null) {
 			uniqueInstanceAdicionar = new AdicionarUsuario(telaInicialUsuario,true);
+			uniqueInstanceAtualizar = new AdicionarUsuario(telaInicialUsuario,false);
 		}
 
 		return uniqueInstanceAdicionar;
@@ -155,17 +165,13 @@ public class AdicionarUsuario extends VerticalPanel {
 	public static AdicionarUsuario getInstanceAtualizar(TelaInicialUsuario telaInicialUsuario, Usuario usuario) {
 
 		
-		if (uniqueInstanceAtualizar == null) {
-			
+		if (uniqueInstanceAtualizar == null) {			
 
 			uniqueInstanceAtualizar = new AdicionarUsuario(telaInicialUsuario,false);
 			uniqueInstanceAtualizar.usuarioParaAtualizar = usuario;
-			uniqueInstanceAtualizar.isFirstLoad=true;
+			uniqueInstanceAtualizar.isFirstLoadUpdate=true;
+			
 //			uniqueInstanceAtualizar.popularUsuario(usuario);
-
-			
-			
-			
 			
 		} else {
 			uniqueInstanceAtualizar.usuarioParaAtualizar = usuario;
@@ -218,7 +224,12 @@ public class AdicionarUsuario extends VerticalPanel {
 		checkBoxRespFinanceiro = new CheckBox(txtConstants.usuarioRespFinanceiro());
 		checkBoxRespAcademico = new CheckBox(txtConstants.usuarioRespAcademico());
 
+
 		selectTipoUsuario = new MpSelectionTipoUsuario();
+//		if(isAdicionarOperation){
+		selectTipoUsuario.populateComboBox();
+//		}
+
 		selectUnidadeEscola = new MpSelectionUnidadeEscola();
 		selectEstados = new MpListBoxEstados();
 		selectSexo = new MpListBoxSexo();
@@ -463,12 +474,14 @@ public class AdicionarUsuario extends VerticalPanel {
 			strTextoBotaoSubmeter = txtConstants.geralAtualizar();
 		}
 
-		MpImageButton btnSave = new MpImageButton(strTextoBotaoSubmeter,"images/save.png");
+		btnSave = new MpImageButton(strTextoBotaoSubmeter,"images/save.png");
 		btnSave.addClickHandler(new ClickHandlerSave());
-		MpImageButton btnClean = new MpImageButton(txtConstants.geralLimpar(),"images/erase.png");
+		btnClean = new MpImageButton(txtConstants.geralLimpar(),"images/erase.png");
 		btnClean.addClickHandler(new ClickHandlerClean());
-		MpImageButton btnPrinter = new MpImageButton(txtConstants.geralImprimir(),"images/Print.16.png");
+		btnPrinter = new MpImageButton(txtConstants.geralImprimir(),"images/Print.16.png");
 		btnPrinter.addClickHandler(new ClickHandlerPrint());
+        btnContrato = new MpImageButton(txtConstants.documentoContrato(),"images/check.png");
+        btnContrato.addClickHandler(new ClickHandlerContrato());		
 
 //		Image imgExcel = new Image("images/excel.24.png");
 
@@ -476,22 +489,23 @@ public class AdicionarUsuario extends VerticalPanel {
 		vFormPanel = new VerticalPanel();
 		vFormPanel.getElement().setId("vFormPanel");
 
-		Grid gridSave = new Grid(1, 4);
-		gridSave.setCellSpacing(2);
-		gridSave.setCellPadding(2);
+		gridBotoes = new Grid(1, 5);
+		gridBotoes.setCellSpacing(2);
+		gridBotoes.setCellPadding(2);
 		{
 			int i = 0;
-			gridSave.setWidget(0, i++, btnSave);
-			gridSave.setWidget(0, i++, btnClean);
-			gridSave.setWidget(0, i++, btnPrinter);
-			gridSave.setWidget(0, i++, mpLoadingSave);
+			gridBotoes.setWidget(0, i++, btnSave);
+			gridBotoes.setWidget(0, i++, btnClean);
+			gridBotoes.setWidget(0, i++, btnPrinter);
+			gridBotoes.setWidget(0, i++, btnContrato);
+			gridBotoes.setWidget(0, i++, mpLoadingSave);
 		}
 
 		MpSpaceHorizontalPanel mpSpaceHorizontalPanel = new MpSpaceHorizontalPanel();
 		mpSpaceHorizontalPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable - 700) + "px");
 
 		vFormPanel.add(flexTable);
-		vFormPanel.add(gridSave);
+		vFormPanel.add(gridBotoes);
 		vFormPanel.add(mpSpaceHorizontalPanel);
 
 		/*********************** Begin Callbacks **********************/
@@ -543,35 +557,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		};
 		
 		
-//		// Callback para adicionar Disciplina.
-//		callbackAtualizarUsuario = new AsyncCallback<String>() {
-//
-//			public void onFailure(Throwable caught) {
-//				mpLoadingSave.setVisible(false);
-//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//				mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroSalvar());
-//				mpDialogBoxWarning.showDialog();
-//			}
-//
-//			@Override
-//			public void onSuccess(String success) {
-//				// lblLoading.setVisible(false);
-//				mpLoadingSave.setVisible(false);
-//				
-//				if (success.equals("true")) {				
-//
-//					telaInicialUsuario.getEditarUsuario().updateClientDataRow(usuarioParaAtualizar.getIdUsuario());
-//					telaInicialUsuario.getAssociarPaisAlunos().updateClientData();
-//
-//				}else if(success.contains("duplicate key")){
-//					String strUsuario = success.substring(success.indexOf("=(")+2);
-//					strUsuario = strUsuario.substring(0,strUsuario.indexOf(")"));
-//					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//					mpDialogBoxWarning.setBodyText(txtConstants.usuarioErroAtualizar() + " "+txtConstants.usuarioErroLoginDuplicado(strUsuario));
-//					mpDialogBoxWarning.showDialog();					
-//				}
-//			}
-//		};		
+
 
 		/*********************** End Callbacks **********************/
 		
@@ -583,17 +569,88 @@ public class AdicionarUsuario extends VerticalPanel {
 			imgSenha.setVisible(true);			
 			btnClean.setVisible(true);
 			btnPrinter.setVisible(false);
+			btnContrato.setVisible(false);
 		} else {
 			lblSenha.setVisible(false);
 			txtSenha.setVisible(false);
 			imgSenha.setVisible(false);
 			btnClean.setVisible(false);
 			btnPrinter.setVisible(true);
+			btnContrato.setVisible(true);
 		}
 
 
 		super.add(vFormPanel);
 
+	}
+	
+	
+	
+	private Usuario getUsuarioDoForm(){
+	    
+        int intIdTipoUsuario = Integer.parseInt(selectTipoUsuario.getValue(selectTipoUsuario.getSelectedIndex()));
+        String unidadeFederativa = selectEstados.getValue(selectEstados.getSelectedIndex());
+        String sexo = selectSexo.getValue(selectSexo.getSelectedIndex());
+        String tipoPais = selectTipoPais.getValue(selectTipoPais.getSelectedIndex());
+        int intIdUnidadeEscola = Integer.parseInt(selectUnidadeEscola.getValue(selectUnidadeEscola.getSelectedIndex()));
+        boolean respAcademico = checkBoxRespAcademico.getValue();
+        boolean respFinanceiro = checkBoxRespFinanceiro.getValue();
+        boolean situacaoResponsaveisCasados = radioButtonCasados.getValue();
+        boolean situacaoResponsaveisSeparados = radioButtonSeparados.getValue();
+        boolean situacaoResponsaveisOutros = radioButtonOutros.getValue();
+        String strSitResp = "";
+        String strSitRespOutros = "";
+        if (situacaoResponsaveisCasados == true){
+            strSitResp = "casados";
+        }else if (situacaoResponsaveisSeparados == true){
+            strSitResp = "divorciados";
+        }else if (situacaoResponsaveisOutros == true) {
+            strSitResp = "outros";
+            strSitRespOutros = txtSituacaoPaisOutros.getText();
+        }
+
+        Usuario usuario = new Usuario();
+        
+        if(isAdicionarOperation==true){        
+        }else{
+            usuario.setIdUsuario(usuarioParaAtualizar.getIdUsuario());    
+        }
+        usuario.setIdUnidadeEscola(intIdUnidadeEscola);
+        usuario.setPrimeiroNome(txtPrimeiroNome.getText());
+        usuario.setSobreNome(txtSobreNome.getText());
+        usuario.setCpf(txtCpf.getText());
+        usuario.setDataNascimento(dataNascimento.getDate().getValue());
+        usuario.setIdTipoUsuario(intIdTipoUsuario);
+        usuario.setEmail(txtEmail.getText());
+        usuario.setTelefoneCelular(txtTelefoneCelular.getText());
+        usuario.setTelefoneResidencial(txtTelefoneResidencial.getText());
+        usuario.setTelefoneComercial(txtTelefoneComercial.getText());
+        usuario.setLogin(txtLogin.getText());
+        usuario.setSenha(txtSenha.getText());
+        usuario.setEndereco(txtEndereco.getText());
+        usuario.setNumeroResidencia(txtNumRes.getText());
+        usuario.setBairro(txtBairro.getText());
+        usuario.setCidade(txtCidade.getText());
+        usuario.setUnidadeFederativa(unidadeFederativa);
+        usuario.setCep(txtCep.getText());
+        usuario.setRg(txtRg.getText());
+        usuario.setSexo(sexo);
+
+        if (intIdTipoUsuario == TipoUsuario.ALUNO) {
+            usuario.setRegistroMatricula(txtMatricula.getText());
+            usuario.setRegistroAluno(txtRegistroAluno.getText());
+            usuario.setDataMatricula(dataMatr.getDate().getValue());
+            usuario.setSituacaoResponsaveis(strSitResp);
+            usuario.setSituacaoResponsaveisOutros(strSitRespOutros);
+        } else if (intIdTipoUsuario == TipoUsuario.PAIS) {
+            usuario.setEmpresaOndeTrabalha(txtEmpresa.getText());
+            usuario.setCargo(txtCargo.getText());
+            usuario.setRespAcademico(respAcademico);
+            usuario.setRespFinanceiro(respFinanceiro);
+            usuario.setTipoPais(tipoPais);
+        }
+        
+        return usuario;
 	}
 
 	/**************** Begin Event Handlers *****************/
@@ -604,69 +661,13 @@ public class AdicionarUsuario extends VerticalPanel {
 
 			if (checkFieldsValidator()) {
 				mpLoadingSave.setVisible(true);
-
-				int intIdTipoUsuario = Integer.parseInt(selectTipoUsuario.getValue(selectTipoUsuario.getSelectedIndex()));
-				String unidadeFederativa = selectEstados.getValue(selectEstados.getSelectedIndex());
-				String sexo = selectSexo.getValue(selectSexo.getSelectedIndex());
-				String tipoPais = selectTipoPais.getValue(selectTipoPais.getSelectedIndex());
-				int intIdUnidadeEscola = Integer.parseInt(selectUnidadeEscola.getValue(selectUnidadeEscola.getSelectedIndex()));
-				boolean respAcademico = checkBoxRespAcademico.getValue();
-				boolean respFinanceiro = checkBoxRespFinanceiro.getValue();
-				boolean situacaoResponsaveisCasados = radioButtonCasados.getValue();
-				boolean situacaoResponsaveisSeparados = radioButtonSeparados.getValue();
-				boolean situacaoResponsaveisOutros = radioButtonOutros.getValue();
-				String strSitResp = "";
-				String strSitRespOutros = "";
-				if (situacaoResponsaveisCasados == true){
-					strSitResp = "casados";
-				}else if (situacaoResponsaveisSeparados == true){
-					strSitResp = "divorciados";
-				}else if (situacaoResponsaveisOutros == true) {
-					strSitResp = "outros";
-					strSitRespOutros = txtSituacaoPaisOutros.getText();
-				}
-
-				Usuario usuario = new Usuario();
-
-				usuario.setIdUnidadeEscola(intIdUnidadeEscola);
-				usuario.setPrimeiroNome(txtPrimeiroNome.getText());
-				usuario.setSobreNome(txtSobreNome.getText());
-				usuario.setCpf(txtCpf.getText());
-				usuario.setDataNascimento(dataNascimento.getDate().getValue());
-				usuario.setIdTipoUsuario(intIdTipoUsuario);
-				usuario.setEmail(txtEmail.getText());
-				usuario.setTelefoneCelular(txtTelefoneCelular.getText());
-				usuario.setTelefoneResidencial(txtTelefoneResidencial.getText());
-				usuario.setTelefoneComercial(txtTelefoneComercial.getText());
-				usuario.setLogin(txtLogin.getText());
-				usuario.setSenha(txtSenha.getText());
-				usuario.setEndereco(txtEndereco.getText());
-				usuario.setNumeroResidencia(txtNumRes.getText());
-				usuario.setBairro(txtBairro.getText());
-				usuario.setCidade(txtCidade.getText());
-				usuario.setUnidadeFederativa(unidadeFederativa);
-				usuario.setCep(txtCep.getText());
-				usuario.setRg(txtRg.getText());
-				usuario.setSexo(sexo);
-
-				if (intIdTipoUsuario == TipoUsuario.ALUNO) {
-					usuario.setRegistroMatricula(txtMatricula.getText());
-					usuario.setRegistroAluno(txtRegistroAluno.getText());
-					usuario.setDataMatricula(dataMatr.getDate().getValue());
-					usuario.setSituacaoResponsaveis(strSitResp);
-					usuario.setSituacaoResponsaveisOutros(strSitRespOutros);
-				} else if (intIdTipoUsuario == TipoUsuario.PAIS) {
-					usuario.setEmpresaOndeTrabalha(txtEmpresa.getText());
-					usuario.setCargo(txtCargo.getText());
-					usuario.setRespAcademico(respAcademico);
-					usuario.setRespFinanceiro(respFinanceiro);
-					usuario.setTipoPais(tipoPais);
-				}
+				
+				Usuario usuario = getUsuarioDoForm();
 
 				if(isAdicionarOperation==true){
 					GWTServiceUsuario.Util.getInstance().AdicionarUsuario(usuario,callbackAdicionarAtualizarUsuario);
 				}else{
-					usuario.setIdUsuario(usuarioParaAtualizar.getIdUsuario());
+					
 					GWTServiceUsuario.Util.getInstance().updateUsuarioRow(usuario, callbackAdicionarAtualizarUsuario);
 				}
 				
@@ -700,6 +701,20 @@ public class AdicionarUsuario extends VerticalPanel {
 
 		}
 	}
+	
+    private class ClickHandlerContrato implements ClickHandler {
+        @Override
+        public void onClick(ClickEvent event) {
+            
+            String strAddress = GWT.getHostPageBaseURL();
+            
+            Usuario usuario = getUsuarioDoForm();
+            GWTServiceDocumento.Util.getInstance().criarDocumentoParaAlunoTelaUsuario(usuario, strAddress, new callBackContratoAluno());
+
+
+
+        }
+    }	
 	/**************** End Event Handlers *****************/
 
 	public boolean checkFieldsValidator() {
@@ -799,24 +814,25 @@ public class AdicionarUsuario extends VerticalPanel {
 	private class MpTipoUsuarioChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
 
-			int intTipoUsuario = Integer.parseInt(selectTipoUsuario.getValue(selectTipoUsuario.getSelectedIndex()));
+		    int intTipoUsuario = Integer.parseInt(selectTipoUsuario.getValue(selectTipoUsuario.getSelectedIndex()));
 			
 			if (isAdicionarOperation == true) {
+			    
 				showCamposDeAcordoTipoUsuario(intTipoUsuario);
-			} else {
-				
-//				if(isFirstLoad){
-//					isFirstLoad=false;
-//					uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);
-					
 
-					
-//				}else{
+			}else if (isAdicionarOperation == false)  {
+
+				if(isFirstLoadUpdate){
+					isFirstLoadUpdate=false;
+				
+//					showCamposDeAcordoTipoUsuario(usuarioParaAtualizar.getIdTipoUsuario());
+					uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);
+					selectTipoUsuario.setSelectItem(usuarioParaAtualizar.getIdTipoUsuario());
+				}else{
+				    
 					showCamposDeAcordoTipoUsuario(intTipoUsuario);
-//				}
-//				usuarioParaAtualizar.setIdTipoUsuario(intTipoUsuario);
-//				uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);
-//				showCamposDeAcordoTipoUsuario(intTipoUsuario);
+				}
+
 			}
 
 		}
@@ -825,12 +841,12 @@ public class AdicionarUsuario extends VerticalPanel {
 	private class MpUnidadeEscolaChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
 
-			if (isAdicionarOperation == false) {
-				if(isFirstLoad){
-					isFirstLoad=false;
-					uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);					
-				}
-			} 
+//			if (isAdicionarOperation == false) {
+//				if(isFirstLoadUpdate){
+//					isFirstLoadUpdate=false;
+//					uniqueInstanceAtualizar.popularUsuario(usuarioParaAtualizar);					
+//				}
+//			} 
 		}
 	}
 	
@@ -903,10 +919,29 @@ public class AdicionarUsuario extends VerticalPanel {
 			selectTipoPais.setVisible(true);
 
 		} else if (idTipoUsuario == TipoUsuario.ALUNO) {
+		    btnContrato.setVisible(true);
 			flexTable.getRowFormatter().setVisible(HIDE_ALUNO_MATRICULA, true);
 			flexTable.getRowFormatter().setVisible(HIDE_ALUNO_SITUACAO_PAIS,true);
 		}
 
+	}
+	
+	
+	private class callBackContratoAluno implements AsyncCallback<String>{
+
+        @Override
+        public void onFailure(Throwable caught) {
+            // TODO Auto-generated method stub
+            Window.alert(caught.getMessage());
+            
+        }
+
+        @Override
+        public void onSuccess(String result) {
+           System.out.println(result);
+           Window.open(result, "blank", "target='_blank'");            
+        }
+	    
 	}
 
 }

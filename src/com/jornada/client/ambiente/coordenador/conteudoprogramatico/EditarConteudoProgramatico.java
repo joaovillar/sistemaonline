@@ -102,7 +102,7 @@ public class EditarConteudoProgramatico extends VerticalPanel {
 		Label lblPeriodo = new Label(txtConstants.periodo());
 		Label lblDisciplina = new Label(txtConstants.disciplina());
 
-		listBoxCurso = new MpSelectionCurso();
+		listBoxCurso = new MpSelectionCurso(true);
 		listBoxPeriodo = new MpSelectionPeriodo();
 		listBoxDisciplina = new MpSelectionDisciplina();
 		

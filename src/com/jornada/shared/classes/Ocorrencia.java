@@ -11,7 +11,7 @@ public class Ocorrencia implements Serializable {
 	private int idOcorrencia;
 	private String assunto;
 	private String descricao;
-	private int idConteudoProgramatico;
+	private int idDisciplina;
 	private Date data;
 	private String hora;
 	
@@ -41,11 +41,11 @@ public class Ocorrencia implements Serializable {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public int getIdConteudoProgramatico() {
-		return idConteudoProgramatico;
+	public int getIdDisciplina() {
+		return idDisciplina;
 	}
-	public void setIdConteudoProgramatico(int idConteudoProgramatico) {
-		this.idConteudoProgramatico = idConteudoProgramatico;
+	public void setIdDisciplina(int idDisciplina) {
+		this.idDisciplina = idDisciplina;
 	}
 	public Date getData() {
 		return data;

@@ -352,6 +352,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
             if(object.getIdTipoComunicado()==TipoComunicado.EMAIL){
                 imagePath = "images/email.send.64.png";
             }else{
+                if(object.getNomeImagem()!=null)
                 imagePath = "images/download/compressed-"+object.getNomeImagem();   
             }
 //            String imagePath = "images/download/compressed-" + object.getNomeImagem();

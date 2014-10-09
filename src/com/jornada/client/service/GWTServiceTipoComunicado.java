@@ -26,6 +26,7 @@ public interface GWTServiceTipoComunicado extends RemoteService {
 
 	
 	public ArrayList<TipoComunicado> getTipoComunicados();
+	public ArrayList<TipoComunicado> getTipoComunicadoEmails();
 	
 	public static class Util {
 		private static GWTServiceTipoComunicadoAsync instance;

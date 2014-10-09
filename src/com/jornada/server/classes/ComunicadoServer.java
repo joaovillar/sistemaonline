@@ -19,8 +19,12 @@ public class ComunicadoServer {
 	public static String DB_INSERT_COMUNICADO = "INSERT INTO comunicado (assunto, descricao, data, hora, id_tipo_comunicado,nome_imagem) VALUES (?,?,?,?,?,?)";
 	public static String DB_UPDATE_COMUNICADO = "UPDATE comunicado set assunto=?, descricao=?, data=?, hora=?, id_tipo_comunicado=?, nome_imagem=? where id_comunicado=?;";
 	public static String DB_DELETE_COMUNICADO = "delete from comunicado where id_comunicado=?";
-	public static String DB_SELECT_TIPO_COMUNICADO_ALL = "SELECT * FROM comunicado order by data, hora asc;";
-	public static String DB_SELECT_TIPO_COMUNICADO_ILIKE = "SELECT * FROM comunicado where (assunto ilike ? or descricao ilike ?) order by data, hora asc;";
+	public static String DB_SELECT_TIPO_COMUNICADO_ALL = "SELECT * FROM comunicado " +
+	        "where id_tipo_comunicado in (select id_tipo_comunicado from tipo_comunicado where tipo_comunicado_tipo='comunicado') " +
+			"order by data, hora asc;";
+	public static String DB_SELECT_TIPO_COMUNICADO_ILIKE = "SELECT * FROM comunicado " +
+	        "where id_tipo_comunicado in (select id_tipo_comunicado from tipo_comunicado where tipo_comunicado_tipo='comunicado') and " +
+			"(assunto ilike ? or descricao ilike ?) order by data, hora asc;";
 	public static String DB_SELECT_TIPO_COMUNICADO_EXTERNO_ILIKE = "SELECT * FROM comunicado where "
 			+ "( id_tipo_comunicado="
 			+ Integer.toString(TipoComunicado.EXTERNO)
@@ -90,26 +94,27 @@ public class ComunicadoServer {
 				hs.addAll(userIdList);
 				userIdList.clear();
 				userIdList.addAll(hs);
+				
 				try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+				    String AUX_DB_INSERT_REL_COMUNICADO_USUARIO = DB_INSERT_REL_COMUNICADO_USUARIO;
 					if (generatedKeys.next()) {
 						Boolean firstInsert = true;
 						if (!userIdList.isEmpty()) {
 							for (Integer userId : userIdList) {
 								if (firstInsert) {
-									DB_INSERT_REL_COMUNICADO_USUARIO = DB_INSERT_REL_COMUNICADO_USUARIO
+								    AUX_DB_INSERT_REL_COMUNICADO_USUARIO = AUX_DB_INSERT_REL_COMUNICADO_USUARIO
 											+ generatedKeys.getLong(1)
 											+ ", "
 											+ userId + ")";
 									firstInsert = false;
 								} else {
-									DB_INSERT_REL_COMUNICADO_USUARIO = DB_INSERT_REL_COMUNICADO_USUARIO
+								    AUX_DB_INSERT_REL_COMUNICADO_USUARIO = AUX_DB_INSERT_REL_COMUNICADO_USUARIO
 											+ ", ("
 											+ generatedKeys.getLong(1)
 											+ ", " + userId + ")";
 								}
 							}
-							PreparedStatement ps2 = conn
-									.prepareStatement(ComunicadoServer.DB_INSERT_REL_COMUNICADO_USUARIO);
+                            PreparedStatement ps2 = conn.prepareStatement(ComunicadoServer.DB_INSERT_REL_COMUNICADO_USUARIO);
 							ps2.executeUpdate();
 						}
 					}
@@ -192,18 +197,20 @@ public class ComunicadoServer {
 
 				}
 
+				//Quick fix to deploy : can not concatenate static string, everybody gets affected
+				String AUX_DB_INSERT_REL_COMUNICADO_USUARIO = DB_INSERT_REL_COMUNICADO_USUARIO;
 				Boolean firstInsert = true;
 				if (!userIdList.isEmpty()) {
 					for (Integer userId : userIdList) {
 						if (firstInsert) {
-							DB_INSERT_REL_COMUNICADO_USUARIO = DB_INSERT_REL_COMUNICADO_USUARIO
+						    AUX_DB_INSERT_REL_COMUNICADO_USUARIO = AUX_DB_INSERT_REL_COMUNICADO_USUARIO
 									+ object.getIdComunicado()
 									+ ", "
 									+ userId
 									+ ")";
 							firstInsert = false;
 						} else {
-							DB_INSERT_REL_COMUNICADO_USUARIO = DB_INSERT_REL_COMUNICADO_USUARIO
+						    AUX_DB_INSERT_REL_COMUNICADO_USUARIO = AUX_DB_INSERT_REL_COMUNICADO_USUARIO
 									+ ", ("
 									+ object.getIdComunicado()
 									+ ", "
@@ -475,5 +482,7 @@ public class ComunicadoServer {
 		return data;
 
 	}
+	
+	
 
 }

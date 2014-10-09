@@ -20,6 +20,7 @@ public class TelaInicialComunicado extends Composite{
 	
 	private FormularioComunicado formularioComunicado;
 	private TabelaComunicados tabelaComunicados;
+	private AdicionarEmail adicionarEmail;
 
 	TextConstants txtConstants;
 	
@@ -40,6 +41,7 @@ public class TelaInicialComunicado extends Composite{
 		
 		formularioComunicado = FormularioComunicado.getInstance(this);
 		tabelaComunicados = TabelaComunicados.getInstance(this);
+		adicionarEmail = AdicionarEmail.getInstance(this);
 		
 		tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
 		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
@@ -56,20 +58,9 @@ public class TelaInicialComunicado extends Composite{
 		
 		openTabelaComunicado();
 		
-//		scrollPanelFormularioComunicado = new ScrollPanel();
-//		scrollPanelTabelaComunicado = new ScrollPanel();
+    	tabLayoutPanel.add(vPanelBody, new MpHeaderWidget(txtConstants.comunicado(), "images/notes_16.png"));		
+    	tabLayoutPanel.add(adicionarEmail, new MpHeaderWidget("Email", "images/letter.png"));
 		
-//		scrollPanelFormularioComunicado.add(formularioComunicado);
-//		scrollPanelTabelaComunicado.add(tabelaComunicados);		
-		
-//		stackPanel.add(formularioComunicado, createHeaderWidget("Comunicado Escolar", "images/plus-circle.png"));
-		tabLayoutPanel.add(vPanelBody, new MpHeaderWidget(txtConstants.comunicado(), "images/notes_16.png"));		
-		
-//		verticalPanelPage = new VerticalPanel();		
-//		verticalPanelPage.add(tabLayoutPanel);
-//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
-//				
-//		setWidth("100%");
      	initWidget(tabLayoutPanel);
 		
 	}
@@ -80,43 +71,19 @@ public class TelaInicialComunicado extends Composite{
 	
 	
 	
-//	private Widget createHeaderWidget(String text, String image) {
-//		// Add the image and text to a horizontal panel
-//		HorizontalPanel hPanel = new HorizontalPanel();
-//		hPanel.setHeight("100%");
-//		hPanel.setSpacing(0);
-//		hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-//		hPanel.add(new Image(image));
-//		Label headerText = new Label(text);
-//		headerText.setStyleName("gwt-TabLayoutPanel");
-//		hPanel.add(headerText);
-//		return new SimplePanel(hPanel);
-//	}	
-//	
 	
 	public void openFormularioComunicadoParaAdicionar(){
-//		tabLayoutPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
-//		tabLayoutPanel.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable+180)+"px");
-//		tabLayoutPanel.setWidth("100%");
 		tabelaComunicados.setVisible(false);
-		
-//		formularioComunicado.clearFiels();
 		formularioComunicado.openFormularioParaAdicionar();
-//		formularioComunicado.setVisible(true);
+
 	}
 	
 	public void openFormularioComunicadoParaAtualizar(Comunicado comunicado){
-//		tabLayoutPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
-//		tabLayoutPanel.setHeight(Integer.toString(TelaInicialComunicado.intHeightTable+180)+"px");
-//		tabLayoutPanel.setWidth("100%");
 		tabelaComunicados.setVisible(false);
-//		formularioComunicado.setComunicado(comunicado);
 		formularioComunicado.openFormularioParaAtualizar(comunicado);
-//		formularioComunicado.setVisible(true);
 	}
 	
 	public void openTabelaComunicado(){		
-//		tabLayoutPanel.setPixelSize(TelaInicialComunicado.intWidthTable+50, TelaInicialComunicado.intHeightTable+180);
 		formularioComunicado.setVisible(false);
 		tabelaComunicados.setVisible(true);
 	}	

@@ -78,11 +78,15 @@ public class DetalhesComunicadoProfessor extends VerticalPanel{
 		
 		flexTable.setWidget(0, 0, vPanelComunicado);
 		flexTable.setWidth("100%");
-		flexTable.setWidget(1, 0, img);
-		flexTable.setWidget(1, 1, grid);
+//		if(object.getNomeImagem()!=null)flexTable.setWidget(1, 0, img);
+		int column=0;
+        if (object.getNomeImagem() != null) {
+            flexTable.setWidget(1, column, img);
+            flexTable.getFlexCellFormatter().setWidth(1,column++,"15%");
+        }	
+		flexTable.setWidget(1, column, grid);
 		
-		flexTable.getFlexCellFormatter().setWidth(1,0,"15%"); 
-		flexTable.getFlexCellFormatter().setVerticalAlignment(1, 1, ALIGN_TOP);
+		flexTable.getFlexCellFormatter().setVerticalAlignment(1, column, ALIGN_TOP);
 		
 		this.setWidth("100%");
 		this.add(flexTable);

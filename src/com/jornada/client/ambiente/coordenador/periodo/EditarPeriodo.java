@@ -110,7 +110,7 @@ public class EditarPeriodo extends VerticalPanel {
 
 		Label lblCursoEdit = new Label(txtConstants.curso());
 
-		listBoxCurso = new MpSelectionCurso();
+		listBoxCurso = new MpSelectionCurso(true);
 		listBoxCurso.setWidth("250px");
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 

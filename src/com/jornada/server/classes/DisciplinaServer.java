@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
+import com.jornada.shared.classes.disciplina.ProfessorDisciplina;
 
 public class DisciplinaServer {
 	
@@ -22,6 +23,19 @@ public class DisciplinaServer {
 	public static String DB_SELECT_DISCIPLINA_PELO_PERIODO_ILIKE = "SELECT * FROM disciplina where (id_periodo=?) and (nome_disciplina ilike ?) order by nome_disciplina asc;";
 	public static String DB_SELECT_DISCIPLINA_ASSOCIADA_AO_PROFESSOR = "SELECT * FROM disciplina where (id_periodo=?) and (id_usuario=?) order by nome_disciplina asc;";	
 	public static String DB_DELETE_DISCIPLINA = "delete from disciplina where id_disciplina=?;";		
+    public static String DB_SELECT_PERIOO_DISCIPLINA_PROFESSOR = 
+            "select "+ 
+            "pd.nome_periodo, pd.nome_disciplina, "+ 
+            "pd.id_disciplina, pd.id_periodo, pd.id_usuario, "+ 
+            "u.primeiro_nome, u.sobre_nome from "+
+            "( "+
+            "select p.nome_periodo, d.nome_disciplina, d.id_disciplina, d.id_periodo, d.id_usuario "+
+            "from periodo p, disciplina d "+
+            "where p.id_curso=? "+
+            "and p.id_periodo = d.id_periodo "+
+            ") as pd "+
+            "LEFT OUTER JOIN usuario as u "+
+            "ON pd.id_usuario=u.id_usuario; ";
 
 	
 	public DisciplinaServer(){
@@ -140,6 +154,50 @@ public class DisciplinaServer {
 		return data;
 
 	}	
+	
+	
+    public static ArrayList<ProfessorDisciplina> getPeriodoDisciplinaProfessor(int idCurso) {
+
+        ArrayList<ProfessorDisciplina> data = new ArrayList<ProfessorDisciplina>();
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            PreparedStatement ps = conn.prepareStatement(DB_SELECT_PERIOO_DISCIPLINA_PROFESSOR);            
+            int count=0;
+            ps.setInt(++count, idCurso);                  
+            
+            ResultSet rs = ps.executeQuery();
+            
+            try{
+                
+                while (rs.next()) 
+                {
+                    ProfessorDisciplina object = new ProfessorDisciplina();
+                    
+                    object.setIdPeriodo(rs.getInt("id_periodo"));
+                    object.setIdDisciplina(rs.getInt("id_disciplina"));              
+                    object.setIdUsuario(rs.getInt("id_usuario"));
+                    object.setNomePeriodo(rs.getString("nome_periodo"));             
+                    object.setNomeDisciplina(rs.getString("nome_disciplina"));
+                    object.setPrimeiroNome(rs.getString("primeiro_nome"));
+                    object.setSobreNome(rs.getString("sobre_nome"));
+
+                    data.add(object);
+                }
+                }catch(Exception ex){
+                    System.err.println(ex.getMessage());
+                }            
+            
+
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        
+        return data;
+
+    }   	
 	
 	
 	public static ArrayList<Disciplina> getDisciplinas(String strFilter) {
@@ -407,6 +465,40 @@ public class DisciplinaServer {
 		return success;
 		
 	}
+	
+    public static boolean updateDisciplinaComIdProfessor(int idProfessor, int idDisciplina){
+        
+        boolean success=false;
+
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            // dataBase.createConnection();
+            // Connection connection = dataBase.getConnection();
+
+            PreparedStatement ps = conn.prepareStatement(DB_UPDATE_PROFESSOR_DISCIPLINA);
+            int count = 0;
+            ps.setInt(++count, idProfessor);
+            ps.setInt(++count, idDisciplina);
+
+            int numberUpdate = ps.executeUpdate();
+
+            if (numberUpdate == 1) {
+                success = true;
+            }
+
+        } catch (SQLException sqlex) {
+            success=false;
+            System.err.println(sqlex.getMessage());         
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(conn);
+        }       
+
+
+        return success;
+        
+    }	
 		
 	
 	public static ArrayList<Disciplina> getDisciplinaParameters(ResultSet rs){

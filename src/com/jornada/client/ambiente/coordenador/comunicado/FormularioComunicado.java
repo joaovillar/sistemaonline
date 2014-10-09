@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoComunicado;
-import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxDocumentos;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionDocumentos;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -101,7 +101,7 @@ public class FormularioComunicado extends VerticalPanel {
     private MpPanelPageMainView drawPassoDoisSelecionarImagem;
     private MpPanelPageMainView drawPassoDoisEscolherDocumento;
     
-    private MpListBoxDocumentos mpListBoxDocumentos;
+    private MpSelectionDocumentos mpSelectionDocumentos;
     private RadioButton radioButtonYes;
     private RadioButton radioButtonNo;
 //    private Grid gridAnexarDocumento;
@@ -125,7 +125,7 @@ public class FormularioComunicado extends VerticalPanel {
         mpPanelLoading.show();
         mpPanelLoading.setVisible(false);
         
-        mpListBoxDocumentos = new MpListBoxDocumentos();
+        mpSelectionDocumentos = new MpSelectionDocumentos();
 
         vBodyPanel = new VerticalPanel();
 
@@ -327,13 +327,13 @@ public class FormularioComunicado extends VerticalPanel {
         mpPanel.setHeight("100px");
 
         Grid vPanelImagem = new Grid(1, 1);
-
+        
         radioButtonYes = new RadioButton("useTemplate",txtConstants.geralSim());
         radioButtonYes.addValueChangeHandler(new ValueChangeHandlerYes());
         radioButtonNo = new RadioButton("useTemplate", txtConstants.geralNao());
         radioButtonNo.addValueChangeHandler(new ValueChangeHandlerNo());
         radioButtonNo.setValue(true);
-        mpListBoxDocumentos.setVisible(false);
+        mpSelectionDocumentos.setVisible(false);
         Label lblAnexarDocumento = new Label("Enviar Documento?");
         lblAnexarDocumento.setStyleName("design_label");
         
@@ -349,7 +349,7 @@ public class FormularioComunicado extends VerticalPanel {
         gridDesejaAnexar.setWidget(row, 1, radioButtonYes);
         gridDesejaAnexar.setWidget(row, 2, radioButtonNo);
         gridDesejaAnexar.setWidget(row, 3, new InlineHTML("&nbsp;"));
-        gridDesejaAnexar.setWidget(row, 4, mpListBoxDocumentos);
+        gridDesejaAnexar.setWidget(row, 4, mpSelectionDocumentos);
         
         
         
@@ -517,7 +517,7 @@ public class FormularioComunicado extends VerticalPanel {
                 object.setIdTipoComunicado(intIdTipoComunicado);
                 object.setNomeImagem(strNomeImagem);                                
                 if (object.getIdTipoComunicado() == TipoComunicado.EMAIL && radioButtonYes.getValue()) {
-                    String strDoc =  GWT.getHostPageBaseURL()+mpListBoxDocumentos.getValue(mpListBoxDocumentos.getSelectedIndex());
+                    String strDoc =  GWT.getHostPageBaseURL()+mpSelectionDocumentos.getValue(mpSelectionDocumentos.getSelectedIndex());
 //                    String strEmail = 
                     SafeHtml s_safe = SafeHtmlUtils.fromSafeConstant(mpRichTextDescricao.getTextArea().getHTML() + "<br><a href='"+strDoc+"?user=parameter' target='_blank'>Click aqui para baixar o documento.</a>");
                     RichTextArea rich = new RichTextArea();
@@ -585,7 +585,7 @@ public class FormularioComunicado extends VerticalPanel {
 
         multiBox.clearList();
 
-        GWTServiceEmail.Util.getInstance().getComucidadoEmailList(comunicado, new AsyncCallback<ArrayList<String>>() {
+        GWTServiceEmail.Util.getInstance().getComunicadoEmailList(comunicado, new AsyncCallback<ArrayList<String>>() {
 
             public void onSuccess(ArrayList<String> userNameList) {
                 for (String userName : userNameList) {
@@ -750,7 +750,7 @@ public class FormularioComunicado extends VerticalPanel {
         public void onValueChange(ValueChangeEvent<Boolean> event) {
             if(event.getValue() == true){
                   // gridAnexarDocumento.getRowFormatter().setVisible(0, true);
-                mpListBoxDocumentos.setVisible(true);
+                mpSelectionDocumentos.setVisible(true);
             }           
         }
     }
@@ -760,7 +760,7 @@ public class FormularioComunicado extends VerticalPanel {
         public void onValueChange(ValueChangeEvent<Boolean> event) {
             if(event.getValue() == true){
  
-                mpListBoxDocumentos.setVisible(false);
+                mpSelectionDocumentos.setVisible(false);
             }           
         }
     }    

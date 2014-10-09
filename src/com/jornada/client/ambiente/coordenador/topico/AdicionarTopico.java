@@ -77,7 +77,7 @@ public class AdicionarTopico extends VerticalPanel {
 		FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 
 		// Add a title to the form
-		cellFormatter.setColSpan(0, 0, 0);
+//		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 		txtNome = new TextBox();
 		txtNumeracao = new TextBox();
@@ -131,7 +131,7 @@ public class AdicionarTopico extends VerticalPanel {
 		int row = 1;
 		layout.setWidget(row, 0, lblCurso);
 
-		listBoxCurso = new MpSelectionCurso();		
+		listBoxCurso = new MpSelectionCurso(true);		
 		listBoxPeriodo = new MpSelectionPeriodo();		
 		listBoxDisciplina = new MpSelectionDisciplina();		
 		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();

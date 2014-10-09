@@ -105,7 +105,7 @@ public class EditarTopico extends VerticalPanel {
 		Label lblDisciplina = new Label(txtConstants.disciplina());
 		Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());
 
-		listBoxCurso = new MpSelectionCurso();
+		listBoxCurso = new MpSelectionCurso(true);
 		listBoxPeriodo = new MpSelectionPeriodo();
 		listBoxDisciplina = new MpSelectionDisciplina();		
 		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();		
