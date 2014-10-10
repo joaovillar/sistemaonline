@@ -20,7 +20,7 @@ public class TelaInicialComunicado extends Composite{
 	
 	private FormularioComunicado formularioComunicado;
 	private TabelaComunicados tabelaComunicados;
-	private AdicionarEmail adicionarEmail;
+	private AdicionaEmailComunicado adicionaEmailComunicado;
 
 	TextConstants txtConstants;
 	
@@ -41,7 +41,7 @@ public class TelaInicialComunicado extends Composite{
 		
 		formularioComunicado = FormularioComunicado.getInstance(this);
 		tabelaComunicados = TabelaComunicados.getInstance(this);
-		adicionarEmail = AdicionarEmail.getInstance(this);
+		adicionaEmailComunicado = AdicionaEmailComunicado.getInstance(this);
 		
 		tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
 		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
@@ -59,7 +59,7 @@ public class TelaInicialComunicado extends Composite{
 		openTabelaComunicado();
 		
     	tabLayoutPanel.add(vPanelBody, new MpHeaderWidget(txtConstants.comunicado(), "images/notes_16.png"));		
-    	tabLayoutPanel.add(adicionarEmail, new MpHeaderWidget("Email", "images/letter.png"));
+    	tabLayoutPanel.add(adicionaEmailComunicado, new MpHeaderWidget("Email", "images/letter.png"));
 		
      	initWidget(tabLayoutPanel);
 		

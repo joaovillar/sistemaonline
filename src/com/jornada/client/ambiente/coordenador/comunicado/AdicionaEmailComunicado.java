@@ -40,7 +40,7 @@ import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.TipoComunicado;
 import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
-public class AdicionarEmail extends VerticalPanel {
+public class AdicionaEmailComunicado extends VerticalPanel {
     
     
     private final static int ROW_FILTRO_CURSO = 2; 
@@ -81,19 +81,19 @@ public class AdicionarEmail extends VerticalPanel {
 	
 	TextConstants txtConstants;
 	
-	private static AdicionarEmail uniqueInstance;
+	private static AdicionaEmailComunicado uniqueInstance;
 	
-	public static AdicionarEmail getInstance(final TelaInicialComunicado telaInicialComunicado){
+	public static AdicionaEmailComunicado getInstance(final TelaInicialComunicado telaInicialComunicado){
 
 		if(uniqueInstance==null){
-			uniqueInstance = new AdicionarEmail(telaInicialComunicado);
+			uniqueInstance = new AdicionaEmailComunicado(telaInicialComunicado);
 		}
 		
 		return uniqueInstance;
 		
 	}
 
-	private AdicionarEmail(final TelaInicialComunicado telaInicialComunicado) {
+	private AdicionaEmailComunicado(final TelaInicialComunicado telaInicialComunicado) {
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
@@ -277,7 +277,7 @@ public class AdicionarEmail extends VerticalPanel {
 //                    listUser.add(idAluno);
 //                }
 	            
-				GWTServiceEmail.Util.getInstance().sendEmailParaAlunosPaisProfessores(idTipoEmail, listUser, subject, descricao, strNomeFisicoUploaded, strFileName ,new clickHandlerEnviarEmail());
+				GWTServiceEmail.Util.getInstance().sendEmailParaAlunosPaisProfessores(idTipoEmail, listUser, subject, descricao, strNomeFisicoUploaded, strFileName ,new CallBackEnviarEmail());
 
 			}
 
@@ -443,7 +443,7 @@ public class AdicionarEmail extends VerticalPanel {
         }
 
     }
-    private class clickHandlerEnviarEmail implements AsyncCallback<String>{
+    private class CallBackEnviarEmail implements AsyncCallback<String>{
 
         @Override
         public void onFailure(Throwable caught) {
