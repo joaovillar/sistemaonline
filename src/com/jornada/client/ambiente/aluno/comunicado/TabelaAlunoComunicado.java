@@ -356,7 +356,7 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 			super.render(context, value, sb);
 			final Comunicado object = (Comunicado) context.getKey();
 //            String imagePath = "images/download/compressed-" + object.getNomeImagem();
-            String imagePath = "images/frame.64.png";
+            String imagePath = "images/email.send.64.png";
             if(object.getIdTipoComunicado()==TipoComunicado.EMAIL_ALUNO_PAIS_PROFESSORES){
                 imagePath = "images/email.send.64.png";
             }else{
@@ -408,9 +408,6 @@ public class TabelaAlunoComunicado extends VerticalPanel {
 //		scrollPanel.setSize(Integer.toString(TelaInicialAlunoComunicado.intWidthTable+30)+"px",Integer.toString(TelaInicialAlunoComunicado.intHeightTable+70)+"px");
 		scrollPanel.setHeight(Integer.toString(TelaInicialAlunoComunicado.intHeightTable+70)+"px");
 		scrollPanel.setWidth("100%");
-//								+ "px",
-//						Integer.toString(TelaInicialAlunoComunicado.intHeightTable + 70)
-//								+ "px");
 		scrollPanel.setAlwaysShowScrollBars(false);
 		scrollPanel.add(cellTable);
 

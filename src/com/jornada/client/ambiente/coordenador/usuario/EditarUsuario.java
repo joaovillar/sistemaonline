@@ -603,16 +603,20 @@ public class EditarUsuario extends VerticalPanel {
 		columnEmail.setFieldUpdater(new FieldUpdater<Usuario, String>() {
 			@Override
 			public void update(int index, Usuario object, String value) {
-				// Called when the user changes the value.				
-//				if (FieldVerifier.isValidEmail(value)) {
-					object.setEmail(value);
-					GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object,callbackUpdateRow);
-//				} else {
-//					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//					mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.usuarioEmail()));
-//					mpDialogBoxWarning.showDialog();
-//				}	
-				
+				// Called when the user changes the value.	
+			    if(value==null || value.isEmpty()){
+                    object.setEmail(value);
+                    GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object, callbackUpdateRow);
+                } else {
+                    if (FieldVerifier.isValidEmail(value)) {
+                        object.setEmail(value);
+                        GWTServiceUsuario.Util.getInstance().updateUsuarioRow(object, callbackUpdateRow);
+                    } else {
+                        mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                        mpDialogBoxWarning.setBodyText(txtConstants.geralEmailInvalido(txtConstants.usuarioEmail()));
+                        mpDialogBoxWarning.showDialog();
+                    }
+                }				
 			}
 		});
 		

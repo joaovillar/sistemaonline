@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Comunicado;
@@ -88,8 +89,14 @@ public class DetalhesComunicadoProfessor extends VerticalPanel{
 		
 		flexTable.getFlexCellFormatter().setVerticalAlignment(1, column, ALIGN_TOP);
 		
+        ScrollPanel scrollPanel = new ScrollPanel();
+        scrollPanel.setHeight(Integer.toString(TelaInicialComunicadoProfessor.intHeightTable + 90) + "px");
+        scrollPanel.setAlwaysShowScrollBars(false);
+        scrollPanel.add(flexTable);
+		
 		this.setWidth("100%");
-		this.add(flexTable);
+		this.add(scrollPanel);
+//		this.add(flexTable);
 	}
 	
 

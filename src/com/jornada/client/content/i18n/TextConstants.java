@@ -590,6 +590,7 @@ public interface TextConstants extends Messages {
 	String geralSalvar();
 	String geralCancelar();
 	String geralCampoObrigatorio(String campo);
+	String geralEmailInvalido(String campo);
 	String geralErroAtualizar(String campo);
 	String geralErroCarregar(String campo);
 	String geralErroCarregarDados();

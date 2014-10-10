@@ -320,7 +320,7 @@ public class AdicionarUsuario extends VerticalPanel {
 
 		txtPrimeiroNome.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuarioPrimeiroNome()));
 		txtSobreNome.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuarioSobreNome()));
-		txtEmail.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuarioEmail()));
+		txtEmail.setTitle(txtConstants.geralEmailInvalido(txtConstants.usuarioEmail()));
 		txtLogin.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.usuario()));
 		txtSenha.setTitle(txtConstants.usuarioSenha());
 
@@ -721,7 +721,7 @@ public class AdicionarUsuario extends VerticalPanel {
 
 		boolean isFieldsOk = false;
 		boolean isFirstNameOk = false;
-		//boolean isEmailOk = false;
+		boolean isEmailOk = false;
 		boolean isLoginOk = false;
 		boolean isSenhaOk = false;
 		boolean isSobreNomeOk = false;
@@ -742,13 +742,19 @@ public class AdicionarUsuario extends VerticalPanel {
 			txtSobreNome.setStyleName("design_text_boxes_erro");
 		}
 
-//		if (FieldVerifier.isValidEmail(txtEmail.getText())) {
-//			isEmailOk = true;
-//			txtEmail.setStyleName("design_text_boxes");
-//		} else {
-//			isEmailOk = false;
-//			txtEmail.setStyleName("design_text_boxes_erro");
-//		}
+		
+
+        if (txtEmail.getText() == null || txtEmail.getText().isEmpty()) {
+            isEmailOk=true;
+        } else {
+            if (FieldVerifier.isValidEmail(txtEmail.getText())) {
+                isEmailOk = true;
+                txtEmail.setStyleName("design_text_boxes");
+            } else {
+                isEmailOk = false;
+                txtEmail.setStyleName("design_text_boxes_erro");
+            }
+        }
 
 		if (FieldVerifier.isValidName(txtLogin.getText())) {
 			isLoginOk = true;
@@ -770,7 +776,7 @@ public class AdicionarUsuario extends VerticalPanel {
 			isSenhaOk=true;
 		}
 
-		isFieldsOk = isFirstNameOk && isSobreNomeOk && isLoginOk && isSenhaOk;
+		isFieldsOk = isFirstNameOk && isSobreNomeOk && isLoginOk && isSenhaOk && isEmailOk;
 
 		return isFieldsOk;
 	}
