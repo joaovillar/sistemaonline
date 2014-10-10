@@ -16,8 +16,6 @@ package com.jornada.server.service;
 
 import java.util.ArrayList;
 
-import org.apache.tools.ant.taskdefs.Concat;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.server.classes.UsuarioServer;
