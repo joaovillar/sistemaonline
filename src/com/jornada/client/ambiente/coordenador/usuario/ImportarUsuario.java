@@ -179,8 +179,8 @@ public class ImportarUsuario extends VerticalPanel {
 		
 		Label lblBaixarArquivo = new Label(txtConstants.usuarioArquivoExcelTemplate());
 		
-		Anchor anchor = new Anchor("excel/ImportarUsuarios.xlsx");
-		anchor.setHref("excel/ImportarUsuarios.xlsx");
+		Anchor anchor = new Anchor("ImportarUsuarios.xlsx");
+		anchor.setHref("suporte/excel/ImportarUsuarios.xlsx");
 		
 		grid.setWidget(0, 0, lblBaixarArquivo);
 		grid.setWidget(0, 1, anchor);

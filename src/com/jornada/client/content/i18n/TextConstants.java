@@ -696,6 +696,17 @@ public interface TextConstants extends Messages {
 	
 	/*******EMAIL BEGIN*******/
 	String emailEnviado();
-	/*******EMAIL END*******/
+    String emailAssunto();
+    String emailEmail();
+    String emailAnexo();
+    String emailFiltroCurso();
+    String emailPara();
+    String emailTipoUsuario(); 
+    String emailPeloMenosUsuarioPrecisaSerSelecionado();  
+    String emailAbrirTelaParaVisualizarEmails();
+    String emailTodosOsCursos();
+    String emailEscolherArquivo();
+    String emailEnviarEmail();
+    /*******EMAIL END*******/
 
 }

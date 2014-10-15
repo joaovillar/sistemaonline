@@ -59,7 +59,7 @@ public class TelaInicialComunicado extends Composite{
 		openTabelaComunicado();
 		
     	tabLayoutPanel.add(vPanelBody, new MpHeaderWidget(txtConstants.comunicado(), "images/notes_16.png"));		
-    	tabLayoutPanel.add(adicionaEmailComunicado, new MpHeaderWidget("Email", "images/letter.png"));
+    	tabLayoutPanel.add(adicionaEmailComunicado, new MpHeaderWidget(txtConstants.emailEmail(), "images/letter.png"));
 		
      	initWidget(tabLayoutPanel);
 		

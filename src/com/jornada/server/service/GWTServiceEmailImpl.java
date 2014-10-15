@@ -21,7 +21,7 @@ public class GWTServiceEmailImpl extends RemoteServiceServlet implements GWTServ
 
 	@Override
     public Boolean sendMailByUserId(ArrayList<Integer> userList, String subject, String content) {
-        return EmailServer.sendMailByUserId(userList, subject, content);
+        return EmailServer.sendOcorrenciaPorEmail(userList, subject, content);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class GWTServiceEmailImpl extends RemoteServiceServlet implements GWTServ
 	        EmailServer.adicionarRelacionamentoEmail(idComunicado, idUser);            
         }
 	    
-	    EmailServer.sendEmailAlunosPaisProfessores(listUser, subject, content, strFileAddress, strFileName);
+	    status = EmailServer.sendEmailAlunosPaisProfessores(listUser, subject, content, strFileAddress, strFileName);
 	    
 	    
 	    return status;

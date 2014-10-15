@@ -149,11 +149,11 @@ public class EmailServer {
 
     }
 
-    public static Boolean sendMailByUserId(ArrayList<Integer> userList, String subject, String content) {
+    public static Boolean sendOcorrenciaPorEmail(ArrayList<Integer> userList, String subject, String content) {
 
         EmailFrameWork emailFramework = new EmailFrameWork();
 
-        emailFramework.sendMailByUserId(userList, subject, content);
+        emailFramework.sendOcorrenciaPorEmail(userList, subject, content);
 
         return true;
     }
@@ -225,7 +225,7 @@ public class EmailServer {
     public static String sendEmailAlunosPaisProfessores(ArrayList<Integer> listUser, String subject, String content, String strFileAddress, String strFileName) {
         String status ="";
         EmailFrameWork emailFramework = new EmailFrameWork();
-        emailFramework.sendEmailAlunosPaisProfessores(listUser, subject, content, strFileAddress, strFileName);
+        status = emailFramework.sendEmailAlunosPaisProfessores(listUser, subject, content, strFileAddress, strFileName);
         return status;
     }
     

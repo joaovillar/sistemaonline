@@ -103,6 +103,11 @@ public class MpUtilClient {
 		}
 	}
 	
+    public static void isRefreshRequired(){
+            MpDialogBoxRefreshPage mp = new MpDialogBoxRefreshPage();
+            mp.showDialog();
+    }	
+	
     public static void isRefreshRequired(Object list){
         if(list==null) {
             MpDialogBoxRefreshPage mp = new MpDialogBoxRefreshPage();

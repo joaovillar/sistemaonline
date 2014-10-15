@@ -56,7 +56,7 @@ public class OcorrenciaServer {
 			+ "c.nome_curso as nomecurso, "
 			+ "p.nome_periodo as nomeperiodo, "
 			+ "d.nome_disciplina as nomedisciplina, "
-			+ "cp.nome_conteudo_programatico as nomeconteudo, "
+//			+ "cp.nome_conteudo_programatico as nomeconteudo, "
 			+ "u.primeiro_nome, "
 			+ "u.sobre_nome, "
 			+ "o.*,  "
@@ -65,8 +65,9 @@ public class OcorrenciaServer {
 			+ "ruo.liberar_leitura_pai "
 			+ "from ocorrencia o "
 			+ "inner join rel_usuario_ocorrencia ruo on o.id_ocorrencia=ruo.id_ocorrencia "
-			+ "inner join conteudo_programatico cp on o.id_conteudo_programatico = cp.id_conteudo_programatico "
-			+ "inner join disciplina d on cp.id_disciplina = d.id_disciplina "
+//			+ "inner join conteudo_programatico cp on o.id_conteudo_programatico = cp.id_conteudo_programatico "
+//			+ "inner join disciplina d on cp.id_disciplina = d.id_disciplina "
+            + "inner join disciplina d on o.id_disciplina = d.id_disciplina "
 			+ "inner join periodo p on d.id_periodo = p.id_periodo "
 			+ "inner join curso c on p.id_curso = c.id_curso "
 			+ "inner join rel_curso_usuario rcu on c.id_curso  = rcu.id_curso "
@@ -260,8 +261,7 @@ public class OcorrenciaServer {
 			// Connection connection = dataBase.getConnection();
 
 			int count = 0;
-			PreparedStatement ps = connection
-					.prepareStatement(OcorrenciaServer.DB_UPDATE_OCORRENCIA_LIBERAR_LEITURA_PAI);
+            PreparedStatement ps = connection.prepareStatement(OcorrenciaServer.DB_UPDATE_OCORRENCIA_LIBERAR_LEITURA_PAI);
 			ps.setBoolean(++count, object.isLiberarLeituraPai());
 			ps.setInt(++count, object.getIdOcorrencia());
 			ps.setInt(++count, object.getIdUsuario());
@@ -274,8 +274,7 @@ public class OcorrenciaServer {
 				if (object.isLiberarLeituraPai()) {
 					ArrayList<Integer> paisId = new ArrayList<Integer>();
 
-					PreparedStatement ps2 = connection
-							.prepareStatement(DB_SELECT_REL_PAI_ALUNO);
+                    PreparedStatement ps2 = connection.prepareStatement(DB_SELECT_REL_PAI_ALUNO);
 					ps2.setInt(1, object.getIdUsuario());
 
 					ResultSet rs = ps2.executeQuery();
@@ -288,8 +287,7 @@ public class OcorrenciaServer {
 							+ object.getUsuarioSobreNome() + "</p>";
 					content = content + "<p>" + object.getDescricao() + "</p>";
 
-					EmailServer.sendMailByUserId(paisId, object.getAssunto(),
-							content);
+                    EmailServer.sendOcorrenciaPorEmail(paisId, object.getAssunto(), content);
 				}
 			}
 
@@ -595,8 +593,7 @@ public class OcorrenciaServer {
 
 	}
 
-	public static ArrayList<OcorrenciaParaAprovar> getOcorrenciasParaAprovar(
-			boolean ehParaAprovar) {
+    public static ArrayList<OcorrenciaParaAprovar> getOcorrenciasParaAprovar(boolean ehParaAprovar) {
 
 		ArrayList<OcorrenciaParaAprovar> data = new ArrayList<OcorrenciaParaAprovar>();
 		// JornadaDataBase dataBase = new JornadaDataBase();
@@ -606,8 +603,7 @@ public class OcorrenciaServer {
 			// dataBase.createConnection();
 			// Connection connection = dataBase.getConnection();
 
-			PreparedStatement ps = connection
-					.prepareStatement(OcorrenciaServer.DB_SELECT_OCORRENCIA_PAIS_PODEM_LER);
+            PreparedStatement ps = connection.prepareStatement(OcorrenciaServer.DB_SELECT_OCORRENCIA_PAIS_PODEM_LER);
 			int count = 0;
 			ps.setBoolean(++count, ehParaAprovar);
 
@@ -621,18 +617,15 @@ public class OcorrenciaServer {
 //				currentObject.setNomeConteudoProgramatico(rs.getString("nomeconteudo"));		
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdUsuario(rs.getInt("id_usuario"));
-				currentObject.setUsuarioPrimeiroNome(rs
-						.getString("primeiro_nome"));
+                currentObject.setUsuarioPrimeiroNome(rs.getString("primeiro_nome"));
 				currentObject.setUsuarioSobreNome(rs.getString("sobre_nome"));
 				currentObject.setAssunto(rs.getString("assunto"));
 				currentObject.setDescricao(rs.getString("descricao"));
 				currentObject.setData(rs.getDate("data"));
-				// currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
-				currentObject.setHora(MpUtilServer.convertTimeToString(rs
-						.getTime("hora")));
-				currentObject.setPaiCiente(rs.getBoolean("pai_ciente"));
-				currentObject.setLiberarLeituraPai(rs
-						.getBoolean("liberar_leitura_pai"));
+                // currentObject.setData(MpUtilServer.convertDateToString(rs.getDate("data")));
+                currentObject.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                currentObject.setPaiCiente(rs.getBoolean("pai_ciente"));
+                currentObject.setLiberarLeituraPai(rs.getBoolean("liberar_leitura_pai"));
 
 				data.add(currentObject);
 			}
@@ -699,31 +692,26 @@ public class OcorrenciaServer {
 
 			Ocorrencia ocorrencia = listaOcorrencias.get(cvOcorrencia);
 
-			for (int cvUsuario = 0; cvUsuario < ocorrencia
-					.getListUsuariosRelacionadosOcorrencia().size(); cvUsuario++) {
+            for (int cvUsuario = 0; cvUsuario < ocorrencia.getListUsuariosRelacionadosOcorrencia().size(); cvUsuario++) {
 
-				Usuario usuario = ocorrencia
-						.getListUsuariosRelacionadosOcorrencia().get(cvUsuario);
+                Usuario usuario = ocorrencia.getListUsuariosRelacionadosOcorrencia().get(cvUsuario);
 
 				int idOcorrencia = ocorrencia.getIdOcorrencia();
 				int idUsuario = usuario.getIdUsuario();
 
-				RelUsuarioOcorrencia relUsuarioOcorrencia = getRelUsuarioOcorrencia(
-						idOcorrencia, idUsuario);
+                RelUsuarioOcorrencia relUsuarioOcorrencia = getRelUsuarioOcorrencia(idOcorrencia, idUsuario);
 
 				OcorrenciaAluno ocorrenciaAluno = new OcorrenciaAluno();
 
-				ocorrenciaAluno.setIdOcorrencia(ocorrencia.getIdOcorrencia());
-				ocorrenciaAluno.setAssunto(ocorrencia.getAssunto());
-				ocorrenciaAluno.setDescricao(ocorrencia.getDescricao());
-				ocorrenciaAluno.setData(ocorrencia.getData());
-				ocorrenciaAluno.setHora(ocorrencia.getHora());
-				ocorrenciaAluno
-						.setPaiCiente(relUsuarioOcorrencia.isPaiCiente());
-				ocorrenciaAluno.setLiberarLeituraPai(relUsuarioOcorrencia
-						.isLiberarLeituraPai());
-				ocorrenciaAluno.setIdUsuario(usuario.getIdUsuario());
-				ocorrenciaAluno.setUsuario(usuario);
+                ocorrenciaAluno.setIdOcorrencia(ocorrencia.getIdOcorrencia());
+                ocorrenciaAluno.setAssunto(ocorrencia.getAssunto());
+                ocorrenciaAluno.setDescricao(ocorrencia.getDescricao());
+                ocorrenciaAluno.setData(ocorrencia.getData());
+                ocorrenciaAluno.setHora(ocorrencia.getHora());
+                ocorrenciaAluno.setPaiCiente(relUsuarioOcorrencia.isPaiCiente());
+                ocorrenciaAluno.setLiberarLeituraPai(relUsuarioOcorrencia.isLiberarLeituraPai());
+                ocorrenciaAluno.setIdUsuario(usuario.getIdUsuario());
+                ocorrenciaAluno.setUsuario(usuario);
 
 				listaOcorrenciaTodosAlunos.add(ocorrenciaAluno);
 

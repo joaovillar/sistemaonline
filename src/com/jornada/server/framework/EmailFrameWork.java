@@ -39,7 +39,7 @@ public class EmailFrameWork {
   public static final int MAX_LIMIT_SEND_WEB = Integer.parseInt(ConfigJornada.getProperty("config.email.max.send.web"));
     
 
-  public void sendMailByUserId(ArrayList<Integer> userList, String subject, String content) {
+  public void sendOcorrenciaPorEmail(ArrayList<Integer> userList, String subject, String content) {
 
         ArrayList<Usuario> listUsuario = new ArrayList<Usuario>(); 
         for(int i = 0;i<userList.size();i++){
@@ -464,8 +464,9 @@ public class EmailFrameWork {
 
             }
         } catch (MessagingException e) {
+            status=null;
             System.out.println("deu tudo errado");
-            throw new RuntimeException(e);
+            throw new RuntimeException(e);            
         }
 
         return status;

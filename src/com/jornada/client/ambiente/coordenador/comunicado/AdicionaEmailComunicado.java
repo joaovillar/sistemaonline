@@ -13,7 +13,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -39,6 +38,7 @@ import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.TipoComunicado;
 import com.jornada.shared.classes.usuario.UsuarioNomeID;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class AdicionaEmailComunicado extends VerticalPanel {
     
@@ -109,30 +109,30 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 		mpRichTextAreaEmail = new MpRichTextArea();
 		txtAssunto.setStyleName("design_text_boxes");
 		
-		txtAssunto.setTitle(txtConstants.geralCampoObrigatorio("Assunto"));
+		txtAssunto.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.emailAssunto()));
 
 
-		MpLabelLeft lblEmail = new MpLabelLeft("Email");
-		MpLabelLeft lblAssunto = new MpLabelLeft("Assunto");		
-		MpLabelLeft lblAnexo = new MpLabelLeft("Anexo");
-		MpLabelLeft lblFiltarCurso = new MpLabelLeft("Filtro Curso");
-		MpLabelLeft lblPara = new MpLabelLeft("Para");
+		MpLabelLeft lblEmail = new MpLabelLeft(txtConstants.emailEmail());
+		MpLabelLeft lblAssunto = new MpLabelLeft(txtConstants.emailAssunto());		
+		MpLabelLeft lblAnexo = new MpLabelLeft(txtConstants.emailAnexo());
+		MpLabelLeft lblFiltarCurso = new MpLabelLeft(txtConstants.emailFiltroCurso());
+		MpLabelLeft lblPara = new MpLabelLeft(txtConstants.emailPara());
 //		MpLabelLeft lblParaIndividual = new MpLabelLeft("Para");
-		MpLabelLeft lblTipoUsuario = new MpLabelLeft("Tipo Usuario");
+		MpLabelLeft lblTipoUsuario = new MpLabelLeft(txtConstants.emailTipoUsuario());
 		
         multiBoxUsuariosFiltrados = new MpSelection();
         multiBoxUsuariosFiltrados.setMultipleSelect(true);
         multiBoxUsuariosFiltrados.setVisibleItemCount(5);
         multiBoxUsuariosFiltrados.setSize("350px", "70px");
         multiBoxUsuariosFiltrados.setStyleName("design_text_boxes");
-        multiBoxUsuariosFiltrados.setTitle(txtConstants.geralCampoObrigatorio("Para")+". Pelo menos 1 usuario precisa ser selecionado.");
+        multiBoxUsuariosFiltrados.setTitle(txtConstants.geralCampoObrigatorio(txtConstants.emailPara())+". "+txtConstants.emailPeloMenosUsuarioPrecisaSerSelecionado());
 
         
 //        txtFiltroNome = new MpTextBox();     
 //        txtFiltroNome.addKeyUpHandler(new EnterKeyUpHandlerFiltrarNome());
 
         Image img = new Image("images/group.png");
-        img.setTitle("Abrir tela para visualizar emails");
+        img.setTitle(txtConstants.emailAbrirTelaParaVisualizarEmails());
         img.setStyleName("imageCenterPointer");
         img.addClickHandler(new clickHandlerAddress());
 
@@ -153,7 +153,7 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 		listBoxTipoEmail.addChangeHandler(new ChangeHandlerListBoxTipoEmail());
 		
 		
-		listBoxCursoItemTodos = new MpSelectionCursoItemTodos(true, "Todos os Cursos");
+		listBoxCursoItemTodos = new MpSelectionCursoItemTodos(true, txtConstants.emailTodosOsCursos());
 //		listBoxCursoItemTodos.setMultipleSelect(true);
 //		listBoxCursoItemTodos.setVisibleItemCount(5);
 //		listBoxCursoItemTodos.setSize("350px", "70px");
@@ -179,7 +179,7 @@ public class AdicionaEmailComunicado extends VerticalPanel {
         gridTipoUsuario.setWidget(0, 2, checkBoxProfessor);
         
         lblNomeArquivoUploaded = new MpLabelLeft("");
-        MpImageButton mpButton = new MpImageButton("Escolher Arquivo", "images/folder_open_add2.png");
+        MpImageButton mpButton = new MpImageButton(txtConstants.emailEscolherArquivo(), "images/folder_open_add2.png");
         SingleUploader singleUploader = new SingleUploader(FileInputType.CUSTOM.with(mpButton));
         singleUploader.setAutoSubmit(true);
         singleUploader.addOnFinishUploadHandler(onFinishUploaderHandler);   
@@ -217,7 +217,7 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 		
 		
 
-		MpImageButton btnEnviarEmail = new MpImageButton("Enviar Email", "images/image002.png");
+		MpImageButton btnEnviarEmail = new MpImageButton(txtConstants.emailEnviarEmail(), "images/image002.png");
 		btnEnviarEmail.addClickHandler(new ClickHandlerEnviarEmail());
 		MpImageButton btnClean = new MpImageButton(txtConstants.geralLimpar(), "images/erase.png");
 		btnClean.addClickHandler(new ClickHandlerClean());
@@ -411,20 +411,21 @@ public class AdicionaEmailComunicado extends VerticalPanel {
         @Override
         public void onFailure(Throwable caught) {
             disablePanelsLoading();
-            Window.alert(caught.getMessage());
+            MpUtilClient.isRefreshRequired();
+//            Window.alert(caught.getMessage());
         }
 
         @Override
         public void onSuccess(ArrayList<UsuarioNomeID> result) {
             disablePanelsLoading();
+            MpUtilClient.isRefreshRequired(result);
             multiBoxUsuariosFiltrados.clear();
 //            for (UsuarioNomeID user : result) {
             for(int i=0;i<result.size();i++){
                 UsuarioNomeID user = result.get(i);
                 multiBoxUsuariosFiltrados.addItem(user.getNomeUsuario(), Integer.toString(user.getIdUsuario()));
                 multiBoxUsuariosFiltrados.setItemSelected(i, true);
-            }
-            
+            }            
             
         }
         
@@ -448,13 +449,13 @@ public class AdicionaEmailComunicado extends VerticalPanel {
         @Override
         public void onFailure(Throwable caught) {
             disablePanelsLoading();
-            Window.alert(caught.getMessage());
-            
+            MpUtilClient.isRefreshRequired();
         }
 
         @Override
         public void onSuccess(String result) {
             disablePanelsLoading();
+            MpUtilClient.isRefreshRequired(result);
             mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
             mpDialogBoxConfirm.setBodyText(txtConstants.emailEnviado());
             mpDialogBoxConfirm.showDialog();            
