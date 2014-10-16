@@ -36,15 +36,16 @@ public class OcorrenciaServer {
 			+ "c.nome_curso as nomecurso, "
 			+ "p.nome_periodo as nomeperiodo, "
 			+ "d.nome_disciplina as nomedisciplina, "
-			+ "cp.nome_conteudo_programatico as nomeconteudo, "
+			+ "o.*,  "
 //	"cp.nome_conteudo_programatico as nomeconteudo, "+
 			+ "ruo.id_usuario, "
 			+ "ruo.pai_ciente "
 			+ "from ocorrencia o "
 			+ "inner join rel_usuario_ocorrencia ruo on o.id_ocorrencia=ruo.id_ocorrencia "
-			+ "inner join conteudo_programatico cp on o.id_conteudo_programatico = cp.id_conteudo_programatico "
+//			+ "inner join conteudo_programatico cp on o.id_conteudo_programatico = cp.id_conteudo_programatico "
 //	"inner join conteudo_programatico cp on o.id_disciplina = cp.id_disciplina "+
-	        +"inner join disciplina d on o.id_disciplina = d.id_disciplina "
+	        + "inner join disciplina d on o.id_disciplina = d.id_disciplina "
+	        + "inner join periodo p on d.id_periodo = p.id_periodo "
 			+ "inner join curso c on p.id_curso = c.id_curso "
 			+ "inner join rel_curso_usuario rcu on c.id_curso  = rcu.id_curso "
 			+ "where ruo.id_usuario=?	and rcu.id_usuario=ruo.id_usuario and liberar_leitura_pai=true";
@@ -555,8 +556,7 @@ public class OcorrenciaServer {
 			// dataBase.createConnection();
 			// Connection connection = dataBase.getConnection();
 
-			PreparedStatement ps = connection
-					.prepareStatement(OcorrenciaServer.DB_SELECT_OCORRENCIA_PELO_ALUNO);
+            PreparedStatement ps = connection.prepareStatement(OcorrenciaServer.DB_SELECT_OCORRENCIA_PELO_ALUNO);
 			int count = 0;
 			ps.setInt(++count, idAluno);
 
@@ -567,7 +567,6 @@ public class OcorrenciaServer {
 				currentObject.setNomeCurso(rs.getString("nomecurso"));
 				currentObject.setNomePeriodo(rs.getString("nomeperiodo"));
 				currentObject.setNomeDisciplina(rs.getString("nomedisciplina"));
-//				currentObject.setNomeConteudoProgramatico(rs.getString("nomeconteudo"));		
 				currentObject.setIdOcorrencia(rs.getInt("id_ocorrencia"));
 				currentObject.setIdUsuario(rs.getInt("id_usuario"));
 				currentObject.setAssunto(rs.getString("assunto"));
