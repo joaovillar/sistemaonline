@@ -201,7 +201,10 @@ public class AdicionarProfessorDisciplina extends VerticalPanel {
                     @Override
                     public void onSuccess(ArrayList<Usuario> list) {
                         MpUtilClient.isRefreshRequired(list);
-
+                        
+                        dataProvider.getList().clear();
+                        cellTable.setRowCount(0);
+                        
                         listaNomeProfessor.put("0", "Sem professor");     
                         for(Usuario usuario : list){
                             String strIdProfessor = Integer.toString(usuario.getIdUsuario());
@@ -240,7 +243,8 @@ public class AdicionarProfessorDisciplina extends VerticalPanel {
 
 	public void updateClientData() {
 //		listBoxCurso.populateComboBox();
-	    populateComboBoxProfessor();
+//	    populateComboBoxProfessor();
+	    populateGrid();
 	}
 
 	

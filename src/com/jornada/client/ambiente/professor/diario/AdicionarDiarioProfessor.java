@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
@@ -45,6 +44,7 @@ import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServicePresenca;
 import com.jornada.shared.FieldVerifier;
@@ -56,9 +56,7 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class AdicionarDiarioProfessor extends VerticalPanel {
 
-	private AsyncCallback<ArrayList<PresencaUsuarioAula>> callBackDiario;
-	private AsyncCallback<String> callBackAddPresenca;
-
+	
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading mpPanelLoadingSaving = new MpPanelLoading("images/radar.gif");
@@ -84,12 +82,15 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	private LinkedHashMap<String, String> listaTipoPresenca = new LinkedHashMap<String, String>();
 	
 	VerticalPanel vFormPanel = new VerticalPanel();
+	VerticalPanel vFormPanelGrid;
 	
 	private MpDateBoxWithImage mpDateBoxInicial;
 
 	TextConstants txtConstants;
 	
-	private TextBox txtSearch;
+	private MpTextBox txtSearch;
+	
+
 	
 	private TelaInicialDiarioProfessor telaInicialDiarioProfessor;
 
@@ -109,14 +110,14 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		mpPanelLoadingAluno.show();
 		mpPanelLoadingAluno.setVisible(false);
 
-		FlexTable flexTable = new FlexTable();
-		flexTable.setCellSpacing(3);
-		flexTable.setCellPadding(3);
-		flexTable.setBorderWidth(0);
+		FlexTable flexTableComboBoxes = new FlexTable();
+		flexTableComboBoxes.setCellSpacing(3);
+		flexTableComboBoxes.setCellPadding(3);
+		flexTableComboBoxes.setBorderWidth(0);
 //		flexTable.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable),Integer.toString(TelaInicialDiarioProfessor.intHeightTable));
 //		flexTable.setHeight(Integer.toString(TelaInicialDiarioProfessor.intHeightTable)+"px");
 //		flexTable.setWidth("100%");
-		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
+		FlexCellFormatter cellFormatter = flexTableComboBoxes.getFlexCellFormatter();
 
 		// Add a title to the form
 //		cellFormatter.setColSpan(0, 0, 0);
@@ -142,7 +143,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 
 		// Add some standard form options
 		int row = 1;
-		flexTable.setWidget(row, 0, lblCurso);
+		flexTableComboBoxes.setWidget(row, 0, lblCurso);
 
 		listBoxCurso = new MpSelectionCursoAmbienteProfessor(telaInicialDiarioProfessor.getMainView().getUsuarioLogado());		
 		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(telaInicialDiarioProfessor.getMainView().getUsuarioLogado());		
@@ -156,87 +157,18 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
 
 		
-		flexTable.setWidget(row, 0, lblCurso);	flexTable.setWidget(row++, 1, listBoxCurso);
-		flexTable.setWidget(row, 0, lblPeriodo);flexTable.setWidget(row++, 1, listBoxPeriodo);
-		flexTable.setWidget(row, 0, lblDisciplina);flexTable.setWidget(row, 1, listBoxDisciplina);flexTable.setWidget(row++, 2, lblErroDisciplina);
-		flexTable.setWidget(row, 0, lblDataInicial);flexTable.setWidget(row, 1, mpDateBoxInicial);flexTable.setWidget(row++, 2, lblErroDateBox);
+		flexTableComboBoxes.setWidget(row, 0, lblCurso);	flexTableComboBoxes.setWidget(row++, 1, listBoxCurso);
+		flexTableComboBoxes.setWidget(row, 0, lblPeriodo);flexTableComboBoxes.setWidget(row++, 1, listBoxPeriodo);
+		flexTableComboBoxes.setWidget(row, 0, lblDisciplina);flexTableComboBoxes.setWidget(row, 1, listBoxDisciplina);flexTableComboBoxes.setWidget(row++, 2, lblErroDisciplina);
+		flexTableComboBoxes.setWidget(row, 0, lblDataInicial);flexTableComboBoxes.setWidget(row, 1, mpDateBoxInicial);flexTableComboBoxes.setWidget(row++, 2, lblErroDateBox);
 		
 		vFormPanel.setBorderWidth(0);
 		vFormPanel.setWidth("100%");
-		vFormPanel.add(flexTable);
+		vFormPanel.add(flexTableComboBoxes);
 
 		/***********************Begin Callbacks**********************/
 
-		callBackDiario = new AsyncCallback<ArrayList<PresencaUsuarioAula>>() {
-
-			public void onFailure(Throwable caught) {
-				mpPanelLoadingSaving.setVisible(false);
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar());
-				mpDialogBoxWarning.showDialog();			
-				
-			}
-
-			@Override
-			public void onSuccess(ArrayList<PresencaUsuarioAula> list) {
-				MpUtilClient.isRefreshRequired(list);
-				mpPanelLoadingSaving.setVisible(false);
-				
-				if (list == null) {
-					MpDialogBoxRefreshPage mpRefresh = new MpDialogBoxRefreshPage();
-					mpRefresh.showDialog();
-
-				} else {
-
-					pendingChanges.clear();
-					arrayListBackup.clear();
-					dataProvider.getList().clear();
-
-					for (int i = 0; i < list.size(); i++) {
-						dataProvider.getList().add(list.get(i));
-						arrayListBackup.add(list.get(i));
-					}
-
-					cleanGrid();
-
-					addCellTableData(dataProvider);				
-				}
-
-			}
-		};
 		
-		callBackAddPresenca = new AsyncCallback<String>() {
-
-			public void onFailure(Throwable caught) {
-				mpPanelLoadingSaving.setVisible(false);
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar());
-				mpDialogBoxWarning.showDialog();		
-
-			}
-
-			@Override
-			public void onSuccess(String strResult) {
-				mpPanelLoadingSaving.setVisible(false);
-				
-				if(strResult.equalsIgnoreCase("ok")){
-//					pendingChanges.clear();
-					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
-					mpDialogBoxConfirm.setBodyText(txtConstants.presencaSalva());
-					mpDialogBoxConfirm.showDialog();	
-					telaInicialDiarioProfessor.updateEditarDiarioProfessor();
-					populateGridUsuarios();
-					
-				}else{
-					mpPanelLoadingSaving.setVisible(false);
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar()+" "+txtConstants.geralRegarregarPagina());
-					mpDialogBoxWarning.showDialog();							
-					
-				}
-
-			}
-		};
 		
 
 		
@@ -251,8 +183,11 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	
 	
 	public void initializeCellTable(){
-		cellTable = new CellTable<PresencaUsuarioAula>(10,GWT.<CellTableStyle> create(CellTableStyle.class),PresencaUsuarioAula.KEY_PROVIDER);
+	    
+	    vFormPanelGrid = new VerticalPanel();
+//		cellTable = new CellTable<PresencaUsuarioAula>(10,GWT.<CellTableStyle> create(CellTableStyle.class),PresencaUsuarioAula.KEY_PROVIDER);
 //		cellTable.setWidth(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+ "px");		
+	    cellTable = new CellTable<PresencaUsuarioAula>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
 		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
@@ -275,7 +210,8 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		
 		Label lblAluno = new Label(txtConstants.aluno());
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
-		txtSearch = new TextBox();
+		txtSearch = new MpTextBox();
+		txtSearch.setWidth("150px");
 		txtSearch.setStyleName("design_text_boxes");	
 		
 		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
@@ -315,12 +251,12 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		vPanel.setCellVerticalAlignment(scrollPanel, ALIGN_TOP);
 		vPanel.add(scrollPanel);
 		
-		vFormPanel.add(flexTableFiltrarAluno);
-		vFormPanel.add(vPanel);
-		vFormPanel.add(gridSave);
-		vFormPanel.add(new MpSpaceVerticalPanel());
-//		vFormPanel.setWidth("100%");
+		vFormPanelGrid.add(flexTableFiltrarAluno);
+		vFormPanelGrid.add(vPanel);
+		vFormPanelGrid.add(gridSave);
+		vFormPanelGrid.add(new MpSpaceVerticalPanel());
 		
+		vFormPanel.add(vFormPanelGrid);
 		
 		vFormPanel.setCellHorizontalAlignment(gridSave, ALIGN_CENTER);
 		
@@ -367,11 +303,12 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 				
 				aula.setArrayPresenca(arrayPresenca);
 				
-				cleanFields();
+				
+//				cleanFields();
 				removeCellTableFilter();
 				mpPanelLoadingSaving.setVisible(true);				
 
-				GWTServicePresenca.Util.getInstance().AdicionarNovaPresenca(aula, callBackAddPresenca);
+				GWTServicePresenca.Util.getInstance().AdicionarNovaPresenca(aula, new AddPresencaCallBack());
 
 			}
 
@@ -469,7 +406,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		int idSelectedCurso = listBoxCurso.getSelectedIndex();
 		if (idSelectedCurso != -1) {
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
-			GWTServicePresenca.Util.getInstance().getAlunos(idCurso, callBackDiario);
+			GWTServicePresenca.Util.getInstance().getAlunos(idCurso, new PopularDiarioCallBack());
 		}
 	}	
 	
@@ -502,7 +439,8 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 //				Presenca presenca = arrayListBackup.get(index).getPresenca().setIdTipoPresenca(Integer.parseInt(value));
 //				presenca.setIdTipoPresenca(Integer.parseInt(value));	
 				Presenca presenca = new Presenca();
-				presenca.setIdUsuario(arrayListBackup.get(index).getUsuario().getIdUsuario());
+				//presenca.setIdUsuario(arrayListBackup.get(index).getUsuario().getIdUsuario());
+				presenca.setIdUsuario(object.getUsuario().getIdUsuario());
 				presenca.setIdTipoPresenca(Integer.parseInt(value));
 								
 				pendingChanges.add(presenca);
@@ -619,7 +557,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	private class EnterKeyUpHandler implements KeyUpHandler {
 		 public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				filtrarCellTable(txtSearch.getText());
+				filtrarCellTable(txtSearch.getValue());
 			}
 		}
 	}
@@ -628,7 +566,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	private class ClickHandlerFiltrar implements ClickHandler {
 		public void onClick(ClickEvent event) {
 
-			filtrarCellTable(txtSearch.getText());
+			filtrarCellTable(txtSearch.getValue());
 
 		}
 	}
@@ -667,11 +605,99 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	public void removeCellTableFilter(){
 		
 		dataProvider.getList().clear();
+//	    cleanGrid();
 
 		for (int i = 0; i < arrayListBackup.size(); i++) {
 			dataProvider.getList().add(arrayListBackup.get(i));
 		}
 		cellTable.setPageStart(0);
 	}
+	
+	
+	
+    private class PopularDiarioCallBack implements AsyncCallback<ArrayList<PresencaUsuarioAula>>{
+        
+        public void onFailure(Throwable caught) {
+            mpPanelLoadingSaving.setVisible(false);
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar());
+            mpDialogBoxWarning.showDialog();            
+            
+        }
+
+        @Override
+        public void onSuccess(ArrayList<PresencaUsuarioAula> list) {
+            MpUtilClient.isRefreshRequired(list);
+            mpPanelLoadingSaving.setVisible(false);
+            
+            if (list == null) {
+                MpDialogBoxRefreshPage mpRefresh = new MpDialogBoxRefreshPage();
+                mpRefresh.showDialog();
+
+            } else {
+
+                cleanFields();
+                pendingChanges.clear();
+                arrayListBackup.clear();
+                dataProvider.getList().clear();
+                cellTable.setRowCount(0);
+
+                
+                for (int i = 0; i < list.size(); i++) {
+                    dataProvider.getList().add(list.get(i));
+                    arrayListBackup.add(list.get(i));
+                }
+                
+              addCellTableData(dataProvider); 
+
+              cellTable.redraw();
+            }
+
+        }        
+        
+    }
+       
+    private class AddPresencaCallBack implements AsyncCallback<String>{
+        
+        public void onFailure(Throwable caught) {
+            mpPanelLoadingSaving.setVisible(false);
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar());
+            mpDialogBoxWarning.showDialog();        
+
+        }
+
+        @Override
+        public void onSuccess(String strResult) {
+            mpPanelLoadingSaving.setVisible(false);
+            
+            if(strResult.equalsIgnoreCase("ok")){
+                vFormPanelGrid.clear();
+//              pendingChanges.clear();
+                mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
+                mpDialogBoxConfirm.setBodyText(txtConstants.presencaSalva());
+                mpDialogBoxConfirm.showDialog();    
+                telaInicialDiarioProfessor.updateEditarDiarioProfessor();
+//              populateGridUsuarios();
+
+//              scrollPanel.clear();
+                populateComboBoxTipoPresenca();
+                
+                
+                
+                
+                
+            }else{
+                mpPanelLoadingSaving.setVisible(false);
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar()+" "+txtConstants.geralRegarregarPagina());
+                mpDialogBoxWarning.showDialog();                            
+                
+            }
+
+        }        
+        
+    }
+		
 
 }

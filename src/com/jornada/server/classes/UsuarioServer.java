@@ -27,6 +27,7 @@ import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.TipoUsuario;
+import com.jornada.shared.classes.UnidadeEscola;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -993,7 +994,8 @@ public class UsuarioServer{
 			Cell CPF = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell RG = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell Situacao_dos_Pais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
-			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);			
+			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);	
+			Cell cellUnidadeEscola = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			
 			
 			Registro_Matricula.setCellType(Cell.CELL_TYPE_STRING);	
@@ -1019,6 +1021,7 @@ public class UsuarioServer{
 			RG.setCellType(Cell.CELL_TYPE_STRING);
 			Situacao_dos_Pais.setCellType(Cell.CELL_TYPE_STRING);
 			Situacao_dos_Pais_Outros.setCellType(Cell.CELL_TYPE_STRING);
+			cellUnidadeEscola.setCellType(Cell.CELL_TYPE_STRING);
 			
 			Usuario usuario = new Usuario();
 			
@@ -1044,20 +1047,31 @@ public class UsuarioServer{
 						
 			Date dataMatricula = MpUtilServer.convertStringToDate(strDataMatricula,"dd/MM/yyyy");
 			String strValidateDataMatricula = MpUtilServer.isThisDateValid(strDataMatricula, "dd/MM/yyyy");
-			if(!strValidateDataMatricula.equals("true")){
-				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
-			}
+            if (strDataMatricula == null || strDataMatricula.isEmpty()) {
+                dataMatricula = null;
+            } else {
+                if (!strValidateDataMatricula.equals("true")) {
+                    strCamposCorretos += "Data Matricula " + strValidateDataMatricula + " || ";
+                }
+            }
 			
 			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
 			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
-			if(!strValidateDataNascimento.equals("true")){
-				strCamposCorretos+="Data Matricula "+strValidateDataNascimento +" || ";
-			}
+            if (strDataNascimento == null || strDataNascimento.isEmpty()) {
+                dataNascimento = null;
+            } else {
+                if (!strValidateDataNascimento.equals("true")) {
+                    strCamposCorretos += "Data Matricula " + strValidateDataNascimento + " || ";
+                }
+            }
 
 			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.ALUNO); 
+			UnidadeEscola unidEscola = UnidadeEscolaServer.getUnidadeEscola(cellUnidadeEscola.getStringCellValue());
 			
 			usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
 			usuario.setTipoUsuario(tipoUsuario);
+			usuario.setIdUnidadeEscola(unidEscola.getIdUnidadeEscola());
+			usuario.setUnidadeEscola(unidEscola);			
 			usuario.setRegistroMatricula( (Registro_Matricula==null) ? "" : Registro_Aluno.getStringCellValue() );	
 			usuario.setDataMatricula(dataMatricula);//(Formato : 25/12/2010)
 			usuario.setRegistroAluno( (Registro_Aluno==null) ? "" : Registro_Aluno.getStringCellValue() );	
@@ -1161,6 +1175,7 @@ public class UsuarioServer{
 			Cell Tel_Comercial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell CPF = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell RG = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell cellUnidadeEscola = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Situacao_dos_Pais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);			
 			
@@ -1186,6 +1201,7 @@ public class UsuarioServer{
 			Tel_Comercial.setCellType(Cell.CELL_TYPE_STRING);
 			CPF.setCellType(Cell.CELL_TYPE_STRING);
 			RG.setCellType(Cell.CELL_TYPE_STRING);
+			cellUnidadeEscola.setCellType(Cell.CELL_TYPE_STRING);
 //			Situacao_dos_Pais.setCellType(Cell.CELL_TYPE_STRING);
 //			Situacao_dos_Pais_Outros.setCellType(Cell.CELL_TYPE_STRING);
 			
@@ -1224,14 +1240,21 @@ public class UsuarioServer{
 			
 			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
 			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
-			if(!strValidateDataNascimento.equals("true")){
-				strCamposCorretos+="Data Matricula "+strValidateDataNascimento +" || ";
-			}
+            if (strDataNascimento == null || strDataNascimento.isEmpty()) {
+                dataNascimento = null;
+            } else {
+                if (!strValidateDataNascimento.equals("true")) {
+                    strCamposCorretos += "Data Matricula " + strValidateDataNascimento + " || ";
+                }
+            }
 			
 			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.COORDENADOR); 
+			UnidadeEscola unidEscola = UnidadeEscolaServer.getUnidadeEscola(cellUnidadeEscola.getStringCellValue());
 			
 			usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
 			usuario.setTipoUsuario(tipoUsuario);
+			usuario.setIdUnidadeEscola(unidEscola.getIdUnidadeEscola());
+			usuario.setUnidadeEscola(unidEscola);
 //			usuario.setRegistroMatricula( (Registro_Matricula==null) ? "" : Registro_Aluno.getStringCellValue() );	
 //			usuario.setDataMatricula(dataMatricula);//(Formato : 25/12/2010)
 //			usuario.setRegistroAluno( (Registro_Aluno==null) ? "" : Registro_Aluno.getStringCellValue() );	
@@ -1337,6 +1360,7 @@ public class UsuarioServer{
 			Cell Cargo = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell RespAcademico = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell RespFinanceiro = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell cellUnidadeEscola = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Situacao_dos_Pais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);			
 			
@@ -1367,6 +1391,7 @@ public class UsuarioServer{
 			Cargo.setCellType(Cell.CELL_TYPE_STRING);
 			RespAcademico.setCellType(Cell.CELL_TYPE_STRING);
 			RespFinanceiro.setCellType(Cell.CELL_TYPE_STRING);
+			cellUnidadeEscola.setCellType(Cell.CELL_TYPE_STRING);
 			
 //			Situacao_dos_Pais.setCellType(Cell.CELL_TYPE_STRING);
 //			Situacao_dos_Pais_Outros.setCellType(Cell.CELL_TYPE_STRING);
@@ -1414,14 +1439,21 @@ public class UsuarioServer{
 			
 			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
 			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
-			if(!strValidateDataNascimento.equals("true")){
-				strCamposCorretos+="Data Matricula "+strValidateDataNascimento +" || ";
-			}
-			
+            if (strDataNascimento == null || strDataNascimento.isEmpty()) {
+                dataNascimento = null;
+            } else {
+                if (!strValidateDataNascimento.equals("true")) {
+                    strCamposCorretos += "Data Matricula " + strValidateDataNascimento + " || ";
+                }
+            }
+            
 			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.PAIS); 
+			UnidadeEscola unidEscola = UnidadeEscolaServer.getUnidadeEscola(cellUnidadeEscola.getStringCellValue());
 			
 			usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
 			usuario.setTipoUsuario(tipoUsuario);
+			usuario.setIdUnidadeEscola(unidEscola.getIdUnidadeEscola());
+			usuario.setUnidadeEscola(unidEscola);
 //			usuario.setRegistroMatricula( (Registro_Matricula==null) ? "" : Registro_Aluno.getStringCellValue() );	
 //			usuario.setDataMatricula(dataMatricula);//(Formato : 25/12/2010)
 //			usuario.setRegistroAluno( (Registro_Aluno==null) ? "" : Registro_Aluno.getStringCellValue() );	
@@ -1530,6 +1562,7 @@ public class UsuarioServer{
 			Cell Tel_Comercial = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell CPF = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 			Cell RG = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
+			Cell cellUnidadeEscola = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Situacao_dos_Pais = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);
 //			Cell Situacao_dos_Pais_Outros = row.getCell(cv++, Row.CREATE_NULL_AS_BLANK);			
 			
@@ -1555,6 +1588,7 @@ public class UsuarioServer{
 			Tel_Comercial.setCellType(Cell.CELL_TYPE_STRING);
 			CPF.setCellType(Cell.CELL_TYPE_STRING);
 			RG.setCellType(Cell.CELL_TYPE_STRING);
+			cellUnidadeEscola.setCellType(Cell.CELL_TYPE_STRING);
 //			Situacao_dos_Pais.setCellType(Cell.CELL_TYPE_STRING);
 //			Situacao_dos_Pais_Outros.setCellType(Cell.CELL_TYPE_STRING);
 			
@@ -1588,17 +1622,24 @@ public class UsuarioServer{
 //			if(!strValidateDataMatricula.equals("true")){
 //				strCamposCorretos+="Data Matricula "+strValidateDataMatricula +" || ";
 //			}
+            
+            Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento, "dd/MM/yyyy");
+            String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
+            if (strDataNascimento == null || strDataNascimento.isEmpty()) {
+                dataNascimento = null;
+            } else {
+                if (!strValidateDataNascimento.equals("true")) {
+                    strCamposCorretos += "Data Matricula " + strValidateDataNascimento + " || ";
+                }
+            }
 			
-			Date dataNascimento = MpUtilServer.convertStringToDate(strDataNascimento,"dd/MM/yyyy");
-			String strValidateDataNascimento = MpUtilServer.isThisDateValid(strDataNascimento, "dd/MM/yyyy");
-			if(!strValidateDataNascimento.equals("true")){
-				strCamposCorretos+="Data Matricula "+strValidateDataNascimento +" || ";
-			}
-			
-			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.COORDENADOR); 
+			TipoUsuario tipoUsuario = UsuarioServer.getTipoUsuarioPorId(TipoUsuario.PROFESSOR);
+			UnidadeEscola unidEscola = UnidadeEscolaServer.getUnidadeEscola(cellUnidadeEscola.getStringCellValue());
 			
 			usuario.setIdTipoUsuario(tipoUsuario.getIdTipoUsuario());
-			usuario.setTipoUsuario(tipoUsuario);
+            usuario.setTipoUsuario(tipoUsuario);
+            usuario.setIdUnidadeEscola(unidEscola.getIdUnidadeEscola());
+            usuario.setUnidadeEscola(unidEscola);
 //			usuario.setRegistroMatricula( (Registro_Matricula==null) ? "" : Registro_Aluno.getStringCellValue() );	
 //			usuario.setDataMatricula(dataMatricula);//(Formato : 25/12/2010)
 //			usuario.setRegistroAluno( (Registro_Aluno==null) ? "" : Registro_Aluno.getStringCellValue() );	
@@ -1620,6 +1661,7 @@ public class UsuarioServer{
 			usuario.setTelefoneComercial( (Tel_Comercial==null) ? "" : Tel_Comercial.getStringCellValue() );
 			usuario.setCpf( (CPF==null) ? "" : CPF.getStringCellValue() );
 			usuario.setRg( (RG==null) ? "" : RG.getStringCellValue() );
+
 //			usuario.setSituacaoResponsaveis( (Situacao_dos_Pais==null) ? "" : Situacao_dos_Pais.getStringCellValue() );
 //			usuario.setSituacaoResponsaveisOutros( (Situacao_dos_Pais_Outros==null) ? "" : Situacao_dos_Pais_Outros.getStringCellValue() );			
 			

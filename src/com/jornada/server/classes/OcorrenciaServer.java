@@ -251,7 +251,7 @@ public class OcorrenciaServer {
 		return isOperationDone;
 	}
 
-	public static boolean AtualizarLiberarLeituraPai(RelUsuarioOcorrencia object) {
+	public static boolean AtualizarLiberarPaiLeitura(RelUsuarioOcorrencia object) {
 
 		boolean isOperationDone = false;
 
@@ -272,24 +272,26 @@ public class OcorrenciaServer {
 			if (numberUpdate == 1) {
 				isOperationDone = true;
 
-				if (object.isLiberarLeituraPai()) {
-					ArrayList<Integer> paisId = new ArrayList<Integer>();
-
-                    PreparedStatement ps2 = connection.prepareStatement(DB_SELECT_REL_PAI_ALUNO);
-					ps2.setInt(1, object.getIdUsuario());
-
-					ResultSet rs = ps2.executeQuery();
-					while (rs.next()) {
-						paisId.add(rs.getInt("id_usuario_pais"));
-					}
-
-					String content = "<p>Aluno: "
-							+ object.getUsuarioPrimeiroNome() + " "
-							+ object.getUsuarioSobreNome() + "</p>";
-					content = content + "<p>" + object.getDescricao() + "</p>";
-
-                    EmailServer.sendOcorrenciaPorEmail(paisId, object.getAssunto(), content);
-				}
+/******************Codigo comentado para liberar ter tempo de testar antes de liberar para produção ******/
+//				if (object.isLiberarLeituraPai()) {
+//					ArrayList<Integer> paisId = new ArrayList<Integer>();
+//
+//                    PreparedStatement ps2 = connection.prepareStatement(DB_SELECT_REL_PAI_ALUNO);
+//					ps2.setInt(1, object.getIdUsuario());
+//
+//					ResultSet rs = ps2.executeQuery();
+//					while (rs.next()) {
+//						paisId.add(rs.getInt("id_usuario_pais"));
+//					}
+//
+//					String content = "<p>Aluno: "
+//							+ object.getUsuarioPrimeiroNome() + " "
+//							+ object.getUsuarioSobreNome() + "</p>";
+//					content = content + "<p>" + object.getDescricao() + "</p>";
+//
+//                    EmailServer.sendOcorrenciaPorEmail(paisId, object.getAssunto(), content);
+//				}
+/******************Codigo comentado para liberar ter tempo de testar antes de liberar para produção ******/
 			}
 
 		} catch (SQLException sqlex) {

@@ -13,6 +13,7 @@ public class UnidadeEscolaServer {
 	
 	public static String DB_SELECT = "SELECT * FROM unidade_escola;";
 	public static String DB_SELECT_POR_ID_UNIDADE_ESCOLA = "SELECT * FROM unidade_escola where id_unidade_escola=?;";
+	public static String DB_SELECT_POR_NOME_UNIDADE_ESCOLA = "SELECT * FROM unidade_escola where nome_unidade_escola=?;";
 	
 	
 	public static ArrayList<UnidadeEscola> getUnidadeEscolas() {
@@ -57,6 +58,29 @@ public class UnidadeEscolaServer {
 		}
 		return unidadeEscola;
 	}	
+	
+    public static UnidadeEscola getUnidadeEscola(String nomeUnidadeEscola) {
+
+        ArrayList<UnidadeEscola> data = new ArrayList<UnidadeEscola>();     
+        UnidadeEscola unidadeEscola = new UnidadeEscola();
+
+        Connection conn = ConnectionManager.getConnection();
+        
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(DB_SELECT_POR_NOME_UNIDADE_ESCOLA);  
+            int count=0;
+            ps.setString(++count, nomeUnidadeEscola);            
+            data = getParameters(ps.executeQuery());
+            unidadeEscola = data.get(0);
+        } catch (SQLException sqlex) {
+            unidadeEscola=null;
+            System.err.println(sqlex.getMessage());
+        } finally {         
+            ConnectionManager.closeConnection(conn);
+        }
+        return unidadeEscola;
+    }	
 	
 	
 	private static ArrayList<UnidadeEscola> getParameters(ResultSet rs){

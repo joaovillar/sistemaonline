@@ -41,7 +41,7 @@ public class GWTServiceOcorrenciaImpl extends RemoteServiceServlet implements GW
 	}	
 	
 	public boolean AtualizarLiberarPaiLeitura(RelUsuarioOcorrencia object) {		
-		return OcorrenciaServer.AtualizarLiberarLeituraPai(object);
+		return OcorrenciaServer.AtualizarLiberarPaiLeitura(object);
 	}		
 	
 	public boolean deleteOcorrenciaRow(int id_ocorrencia){		

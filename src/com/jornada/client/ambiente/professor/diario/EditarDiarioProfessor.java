@@ -103,7 +103,8 @@ public class EditarDiarioProfessor extends VerticalPanel {
 
 //		scrollPanel.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+"px",Integer.toString(TelaInicialDiarioProfessor.intHeightTable-210)+"px");
 		scrollPanel.setHeight(Integer.toString(TelaInicialDiarioProfessor.intHeightTable-210)+"px");
-		scrollPanel.setWidth("90%");
+//		scrollPanel.setWidth("90%");
+		scrollPanel.setWidth(Integer.toString(Window.getClientWidth()-60)+"px");
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
@@ -165,7 +166,6 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		
 		vFormPanel.add(flexTableWithListBoxes);
 		vFormPanel.setWidth("100%");
-		vFormPanel.setBorderWidth(0);
 
 /***************************************Begin Callbacks***************************************/
 
@@ -576,7 +576,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 //		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
 		
 		VerticalPanel vPanelInScroll = new VerticalPanel();
-		vPanelInScroll.setBorderWidth(0);
+		vPanelInScroll.setWidth("90%");
 		vPanelInScroll.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanelInScroll.add(flexTableFiltrarAluno);
 		vPanelInScroll.add(cellTable);
@@ -585,8 +585,6 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		scrollPanel.add(vPanelInScroll);
 		
 		vFormPanel.add(scrollPanel);
-
-
 		
 		mpPanelLoadingAluno.setVisible(false);
 		

@@ -18,7 +18,7 @@ public class TelaInicialUsuario extends Composite{
 	private EditarUsuario editarUsuario;
 	private AssociarPaisAlunos associarPaisAlunos;
 	private ImportarUsuario importarUsuario;
-	private ContratoUsuario contratoUsuario;
+//	private ContratoUsuario contratoUsuario;
 
 	
 	private static TelaInicialUsuario uniqueInstance;
@@ -43,7 +43,7 @@ public class TelaInicialUsuario extends Composite{
 		editarUsuario = new EditarUsuario(this);
 		associarPaisAlunos = new AssociarPaisAlunos();
 		importarUsuario = new ImportarUsuario(this);
-		contratoUsuario = ContratoUsuario.getInstance(this);
+//		contratoUsuario = ContratoUsuario.getInstance(this);
 		
 		// StackLayoutPanel stackPanel = new StackLayoutPanel(Unit.EM);
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
@@ -56,7 +56,7 @@ public class TelaInicialUsuario extends Composite{
 		tabLayoutPanel.add(adicionarUsuario, new MpHeaderWidget(txtConstants.usuarioAdicionar(), "images/plus-circle.png"));
 		tabLayoutPanel.add(editarUsuario, new MpHeaderWidget(txtConstants.usuarioEditar(), "images/comment_edit.png"));
 		tabLayoutPanel.add(associarPaisAlunos, new MpHeaderWidget(txtConstants.usuarioAssociarPaisAlunos(), "images/group-add-icon_16.png"));
-		tabLayoutPanel.add(contratoUsuario, new MpHeaderWidget(txtConstants.documentoContrato(), "images/check.png"));
+//		tabLayoutPanel.add(contratoUsuario, new MpHeaderWidget(txtConstants.documentoContrato(), "images/check.png"));
 		tabLayoutPanel.add(importarUsuario, new MpHeaderWidget(txtConstants.usuarioImportar(), "images/001_22.16.png"));
 		
 //		
