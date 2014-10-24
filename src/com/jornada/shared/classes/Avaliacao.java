@@ -9,7 +9,8 @@ public class Avaliacao implements Serializable{
 	private static final long serialVersionUID = 7710560979869058468L;
 	
 	private int idAvaliacao;
-	private int idConteudoProgramatico;
+//	private int idConteudoProgramatico;
+	private int idDisciplina;
 	private int idTipoAvaliacao;
 	private String assunto;
 	private String descricao;
@@ -33,15 +34,15 @@ public class Avaliacao implements Serializable{
 		this.idAvaliacao = idAvaliacao;
 	}
 
-	public int getIdConteudoProgramatico() {
-		return idConteudoProgramatico;
-	}
+	public int getIdDisciplina() {
+        return idDisciplina;
+    }
 
-	public void setIdConteudoProgramatico(int idConteudoProgramatico) {
-		this.idConteudoProgramatico = idConteudoProgramatico;
-	}
+    public void setIdDisciplina(int idDisciplina) {
+        this.idDisciplina = idDisciplina;
+    }
 
-	public int getIdTipoAvaliacao() {
+    public int getIdTipoAvaliacao() {
 		return idTipoAvaliacao;
 	}
 

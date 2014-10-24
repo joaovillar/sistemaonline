@@ -130,14 +130,21 @@ public class CursoServer{
 				Disciplina disciplina = periodo.getListDisciplinas().get(intDisciplinas);
 				disciplina.setIdPeriodo(intNewIdPeriodo);	
 				
-				
-				
 				int intNewIdDisciplina = DisciplinaServer.AdicionarDisciplina(disciplina);
 				
 				Usuario professor = disciplina.getProfessor();
                 if(professor!=null){
                     DisciplinaServer.updateDisciplinaComIdProfessor(professor.getIdUsuario(), intNewIdDisciplina);
                 }				
+                
+                
+                for(int intAvaliacao=0; intAvaliacao<disciplina.getListAvaliacao().size();intAvaliacao++){
+                    Avaliacao avaliacao = disciplina.getListAvaliacao().get(intAvaliacao);
+                    avaliacao.setIdDisciplina(intNewIdDisciplina);
+                    AvaliacaoServer.Adicionar(avaliacao);
+                    isOperationDone=true;
+                }
+
 				
 				isOperationDone =true;
 				
@@ -149,12 +156,12 @@ public class CursoServer{
 					 isOperationDone = true;
 					 
 					 
-					 for(int intAvaliacao=0; intAvaliacao<conteudo.getListAvaliacao().size();intAvaliacao++){
-						 Avaliacao avaliacao = conteudo.getListAvaliacao().get(intAvaliacao);
-						 avaliacao.setIdConteudoProgramatico(intIdNewConteudo);
-						 AvaliacaoServer.Adicionar(avaliacao);
-						 isOperationDone=true;
-					 }
+//					 for(int intAvaliacao=0; intAvaliacao<conteudo.getListAvaliacao().size();intAvaliacao++){
+//						 Avaliacao avaliacao = conteudo.getListAvaliacao().get(intAvaliacao);
+//						 avaliacao.setIdDisciplina(intIdNewConteudo);
+//						 AvaliacaoServer.Adicionar(avaliacao);
+//						 isOperationDone=true;
+//					 }
 					 
 					for(int intTopico=0; intTopico<conteudo.getListTopico().size();intTopico++){
 						Topico topico = conteudo.getListTopico().get(intTopico);

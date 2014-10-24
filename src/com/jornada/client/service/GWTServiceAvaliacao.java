@@ -30,7 +30,7 @@ public interface GWTServiceAvaliacao extends RemoteService {
 	public boolean AdicionarAvaliacao(Avaliacao object);	
 	public boolean updateRow(Avaliacao object);
 	public boolean deleteRow(int id_avaliacao); 	
-	public ArrayList<Avaliacao> getAvaliacaoPeloConteudoProgramatico(int idConteudoProgramatico);	
+	public ArrayList<Avaliacao> getAvaliacaoPelaDisciplina(int idDisciplina);	
 	public ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int idCurso, String locale);
 	public ArrayList<TipoAvaliacao> getTipoAvaliacao();
 	

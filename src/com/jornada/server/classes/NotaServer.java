@@ -16,7 +16,7 @@ public class NotaServer {
 	public static final String DB_UPDATE = "UPDATE nota set nota=? where id_avaliacao=? and id_usuario=?;";
 	public static final String DB_SELECT_NOTA_PELA_AVALIACAO = "SELECT * FROM nota where id_avaliacao=?;";	
 	public static final String DB_SELECT_BOLETIM_NOTA_ALUNO_POR_CURSO =
-	"		select d.*, cp.*, a.*, n,* from "+ 
+	"		select d.*, a.*, n,* from "+ 
 	"		( "+
 	"			select "+ 
 	"				c.id_curso, c.nome_curso, "+ 
@@ -30,8 +30,8 @@ public class NotaServer {
 	"			where  "+
 	"			u.id_tipo_usuario=? and  rcu.id_usuario=? and c.id_curso=? "+ 
 	"		) d "+
-	"		left join ( select * from conteudo_programatico ) cp on d.id_disciplina=cp.id_disciplina "+
-	"		left join ( select * from avaliacao ) a on cp.id_conteudo_programatico=a.id_conteudo_programatico "+
+//	"		left join ( select * from conteudo_programatico ) cp on d.id_disciplina=cp.id_disciplina "+
+	"		left join ( select * from avaliacao ) a on d.id_disciplina=a.id_disciplina  "+
 	"		left join ( select * from nota where id_usuario=? ) n on a.id_avaliacao=n.id_avaliacao ";
 	
 	public static Boolean Adicionar(Nota object) {
@@ -183,7 +183,7 @@ public class NotaServer {
 				current.setNomeCurso(rs.getString("nome_curso"));
 				current.setNomePeriodo(rs.getString("nome_periodo"));
 				current.setNomeDisciplina(rs.getString("nome_disciplina"));
-				current.setNomeConteudoProgramatico(rs.getString("descricao"));
+//				current.setNomeConteudoProgramatico(rs.getString("descricao"));
 				current.setNomeAvaliacao(rs.getString("assunto"));
 				current.setNota(rs.getString("nota"));				
 

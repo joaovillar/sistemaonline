@@ -11,8 +11,8 @@ import com.jornada.client.content.i18n.TextConstants;
 public class TelaInicialPaisVisualizarNotas extends Composite{
 	
 
-	public  static final int intWidthTable=1500;
-	public static final int intHeightTable=550;
+	public  static final int INT_WIDTH_TABLE=1500;
+	public static final int INT_HEIGHT_TABLE=550;
 	
 	private VisualizarPaisNotasAluno visualizarPaisNotasAluno;
 
@@ -46,7 +46,7 @@ public class TelaInicialPaisVisualizarNotas extends Composite{
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
 //		tabLayoutPanel.setPixelSize(intWidthTable+50, intHeightTable);
 //		tabLayoutPanel.setPixelSize(intWidthTable, intHeightTable);
-		tabLayoutPanel.setHeight(Integer.toString(intHeightTable)+"px");
+		tabLayoutPanel.setHeight(Integer.toString(INT_HEIGHT_TABLE)+"px");
 		tabLayoutPanel.setAnimationDuration(500);
 		tabLayoutPanel.setAnimationVertical(true);
 

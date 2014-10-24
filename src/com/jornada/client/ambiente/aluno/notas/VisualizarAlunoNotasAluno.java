@@ -1,7 +1,5 @@
 package com.jornada.client.ambiente.aluno.notas;
 
-
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -39,12 +37,12 @@ import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.utility.MpUtilClient;
-
 
 
 public class VisualizarAlunoNotasAluno extends VerticalPanel{
@@ -56,32 +54,18 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	
 	static TextConstants txtConstants = GWT.create(TextConstants.class);
 	
-//	private AsyncCallback<ArrayList<Usuario>> callbackGetAlunosFiltro;	
-	private AsyncCallback<String[][]> callbackBoletim;
-	
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading mpPanelAlunosLoading = new MpPanelLoading("images/radar.gif");
 	
 	String [][] arrayBoletim;
 
+	private MpTextBox txtFiltroAluno;		
 	
-//	private CellTable<Avaliacao> cellTable;
-//	private ListDataProvider<Avaliacao> dataProvider = new ListDataProvider<Avaliacao>();	
-	
-	
-	private TextBox txtFiltroAluno;		
-	
-//	private ListBox listBoxAluno;
 	private MpSelectionCursoAmbienteAluno listBoxCurso;
 	private MpSelectionAlunosPorCurso listBoxAlunosPorCurso;
-//	private MpSelection listBoxAlunoLogado;
-	
-	private VerticalPanel vPanelBoletim;
 
-	
-//	private ArrayList<Periodo> listPeriodo;
-//	private ArrayList<Disciplina> listDisciplina;
+	private VerticalPanel vPanelBoletim;
 	
 	private TelaInicialAlunoVisualizarNotas telaInicialAlunoVisualizarNotas;
 	
@@ -96,8 +80,6 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 
 	
 	private VisualizarAlunoNotasAluno(TelaInicialAlunoVisualizarNotas telaInicialAlunoVisualizarNotas){
-		
-//		this.cadastroNota=cadastroNota;
 		
 		this.telaInicialAlunoVisualizarNotas = telaInicialAlunoVisualizarNotas;
 		
@@ -114,9 +96,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		
 		vBodyPanel.add(drawPassoUmSelecioneAluno());
 		vBodyPanel.add(new InlineHTML("&nbsp;"));
-//		vBodyPanel.add(drawPassoDoisEditarNotasAluno());
 		vBodyPanel.setWidth("100%");
-
 		
 		this.setWidth("100%");
 		super.add(vBodyPanel);		
@@ -126,23 +106,15 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	
 	
 	public MpPanelPageMainView drawPassoUmSelecioneAluno(){
-//	public VerticalPanel drawPassoUmSelecioneAluno(){
-
 		
 		MpPanelPageMainView mpPanelPasso1 = new MpPanelPageMainView(txtConstants.notaSelecionarAluno(), "images/user_male_black_red_16.png");
-//		VerticalPanel mpPanelPasso1 = new VerticalPanel();
-//		mpPanelPasso1.setWidth(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable)+"px");
-//		mpPanelPasso1.setWidth(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable-20)+"px");
 		mpPanelPasso1.setWidth("100%");
-		mpPanelPasso1.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.intHeightTable-50)+"px");
-//		mpPanelPasso1.setSize(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable-200)+"px", Integer.toString(TelaInicialAlunoVisualizarNotas.intHeightTable-100)+"px");
+		mpPanelPasso1.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.INI_HEIGHT_TABLE-50)+"px");
 		
 		Usuario usuarioLogado  = telaInicialAlunoVisualizarNotas.getMainView().getUsuarioLogado();
-
 		
 		Label lblNomeCurso = new Label(txtConstants.curso());
-		Label lblNomeAluno = new Label(txtConstants.alunoNome());
-		
+		Label lblNomeAluno = new Label(txtConstants.alunoNome());		
 
 		listBoxCurso = new MpSelectionCursoAmbienteAluno(usuarioLogado);
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
@@ -150,11 +122,8 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		listBoxAlunosPorCurso = new MpSelectionAlunosPorCurso();
 		listBoxAlunosPorCurso.addChangeHandler(new MpAlunosPorCursoSelectionChangeHandler());
 		
-//		listBoxAlunoLogado = new MpSelection();
-//		listBoxAlunoLogado.addItem(usuarioLogado.getPrimeiroNome() + " "+usuarioLogado.getSobreNome(), Integer.toString(usuarioLogado.getIdUsuario()));
-		
-		
-		txtFiltroAluno = new TextBox();		
+		txtFiltroAluno = new MpTextBox();
+		txtFiltroAluno.setWidth("100px");
 		MpImageButton btnFiltrar = new MpImageButton(txtConstants.usuarioFiltrarListaAlunos(), "images/magnifier.png");
 		
 		txtFiltroAluno.addKeyUpHandler(new KeyUpHandlerFiltrarAluno());		
@@ -194,28 +163,17 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		gridBoletimChart.setBorderWidth(0);
 		gridBoletimChart.setCellPadding(2);
 		gridBoletimChart.setCellSpacing(2);
-//		gridBoletimChart.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-180)+"px");
-		gridBoletimChart.setHeight(Integer.toString(TelaInicialPeriodo.intHeightTable-180)+"px");
-		
-		
-
+		gridBoletimChart.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.INI_HEIGHT_TABLE-180)+"px");
 		
 		row=0;		
 		Grid gridBoletim = new Grid(2,1);		
 		
-//		gridBoletim.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable)+"px");
 		gridBoletim.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		gridBoletim.setWidget(row, 0, vPanelBoletim);
 		
 		gridBoletimChart.setBorderWidth(0);
 		gridBoletimChart.setWidth("100%");
 		gridBoletimChart.setWidget(0, 0, gridBoletim);
-//		gridBoletimChart.setWidget(0, 1, chart);
-		
-//		chart = new ColumnChart();
-//		getGridBoletimChart().setWidget(0, 1, chart);
-		
-    
         
         gridBoletimChart.getCellFormatter().setWidth(0, 0, "500px");
         gridBoletimChart.getCellFormatter().setWidth(0, 1, "500px");
@@ -223,63 +181,11 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
         gridBoletimChart.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         gridBoletimChart.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
         gridBoletimChart.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);        
-		
-//		draw();
-		
-		
+
 		mpPanelPasso1.add(flexTableFiltrar);
 		mpPanelPasso1.add(gridBoletimChart);
+		mpPanelPasso1.setBorderWidth(0);
 		mpPanelPasso1.add(new InlineHTML("&nbsp;"));
-		
-	
-		callbackBoletim = new AsyncCallback<String[][]>() {
-
-			public void onFailure(Throwable caught) {
-				mpPanelAlunosLoading.setVisible(false);		
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.notaErroCarregar());
-				mpDialogBoxWarning.showDialog();
-			}
-
-			@Override
-			public void onSuccess(String[][] list) {
-				MpUtilClient.isRefreshRequired(list);
-				vPanelBoletim.clear();
-				mpPanelAlunosLoading.setVisible(false);
-				setList(list);
-				vPanelBoletim.add(createBoletimTable(list));
-
-				// Create the API Loader
-				ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
-				chartLoader.loadApi(new Runnable() {
-					@Override
-					public void run() {
-						// Create and attach the chart
-						if (chart == null) {
-							chart = new ColumnChart();
-							getGridBoletimChart().setWidget(0, 1, chart);
-						}
-
-						draw(getList());
-					}
-				});
-
-			}
-		};
-
-//		ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
-//		chartLoader.loadApi(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				// Create and attach the chart
-//				chart = new ColumnChart();
-//				add(chart);
-//				draw();
-//			}
-//		});		
-		
-		
 		
 		return mpPanelPasso1;
 		
@@ -295,6 +201,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	private class ClickHandlerFiltrarAluno implements ClickHandler {
 		public void onClick(ClickEvent event) {			
 			listBoxAlunosPorCurso.filterComboBox(txtFiltroAluno.getText());
+			populateBoletimAluno();
 		}
 	}
 	
@@ -302,6 +209,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				listBoxAlunosPorCurso.filterComboBox(txtFiltroAluno.getText());
+				populateBoletimAluno();
 			}
 		}
 	}
@@ -322,9 +230,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	
 	private class MpAlunosPorCursoSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
-			
 			populateBoletimAluno();
-
 		}  
 	}
 
@@ -334,13 +240,17 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 		int idTipoUsuario = TipoUsuario.ALUNO;
 		int intIdCurso = listBoxAlunosPorCurso.getSelectedIndex();
+
 		if(intIdCurso==-1){
 			mpPanelAlunosLoading.setVisible(false);
 			vPanelBoletim.clear();
+			if(chart!=null){
+			    chart.setVisible(false);
+			}
 		}
 		else{
 			int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getValue(intIdCurso));
-			GWTServiceNota.Util.getInstance().getBoletimNotasPorAlunoPorCurso(idCurso, idTipoUsuario, idUsuario,callbackBoletim);
+			GWTServiceNota.Util.getInstance().getBoletimNotasPorAlunoPorCurso(idCurso, idTipoUsuario, idUsuario,new CallbackBoletim());
 		}
 
 	}
@@ -489,104 +399,88 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		}
 		
 		
-		int numeroColunas = list.length; 
+        int numeroColunas = list.length;
         int numeroLinhas = list[0].length;
-          
 
-//		String[] countries = new String[] { "Austria", "Bulgaria", "Denmark", "Greece" };
-		
-		String[] disciplinas = new String[numeroLinhas-1];		
-		for(int i=0;i<disciplinas.length;i++){
-			disciplinas[i]=list[0][i+1];
-		}
-		
-		
-		//int[] years = new int[] { 2003, 2004, 2005, 2006, 2007, 2008 };
-		String[] periodos = new String[numeroColunas-1];
-		for(int i=0;i<periodos.length;i++){
-			periodos[i]= list[i+1][0];
-		}
-		
+        if (numeroLinhas > 1 && numeroColunas > 1) {
+            
+            chart.setVisible(true);
 
-		
-		double[][] values = new double[numeroLinhas-1][numeroColunas-1];
-		
-		for (int row = 0; row < disciplinas.length; row++) {
-			for (int column = 0; column < periodos.length; column++) {
-				try {
-					String strValue = list[column + 1][row + 1];
-					values[row][column] = Double.parseDouble(strValue);
-				} catch (Exception ex) {
-					values[row][column] = 0;
-				}
-			}
-		}
-		
-		
-//		int[][] values = new int[][] 
-//				{ 
-//					{ 8 },
-//					{ 5 },
-//					{ 9 }
-//				};
-		
-		
-		
+            String[] disciplinas = new String[numeroLinhas - 1];
+            for (int i = 0; i < disciplinas.length; i++) {
+                disciplinas[i] = list[0][i + 1];
+            }
 
-		// Prepare the data
-		DataTable dataTable = DataTable.create();
-		
+            // int[] years = new int[] { 2003, 2004, 2005, 2006, 2007, 2008 };
+            String[] periodos = new String[numeroColunas - 1];
+            for (int i = 0; i < periodos.length; i++) {
+                periodos[i] = list[i + 1][0];
+            }
 
-		
-		dataTable.addColumn(ColumnType.STRING, txtConstants.disciplina());
-		for (int i = 0; i < disciplinas.length; i++) {
-			dataTable.addColumn(ColumnType.NUMBER, disciplinas[i]);
-		}
-		
+            double[][] values = new double[numeroLinhas - 1][numeroColunas - 1];
 
-		
-		dataTable.addRows(periodos.length);
-		for (int i = 0; i < periodos.length; i++) {
-			dataTable.setValue(i, 0, String.valueOf(periodos[i]));
-		}
-		
-		int valueCol = values.length;		
-		for (int col = 0; col < valueCol; col++) {
-			for (int row = 0; row < values[col].length; row++) {
-				dataTable.setValue(row, col + 1, values[col][row]);
-			}
-		}
+            for (int row = 0; row < disciplinas.length; row++) {
+                for (int column = 0; column < periodos.length; column++) {
+                    try {
+                        String strValue = list[column + 1][row + 1];
+                        values[row][column] = Double.parseDouble(strValue);
+                    } catch (Exception ex) {
+                        values[row][column] = 0;
+                    }
+                }
+            }
 
-		// Set options
-		ColumnChartOptions options = ColumnChartOptions.create();
-		options.setFontName("Tahoma");
-		options.setTitle(txtConstants.alunoAmbienteNotas());
-		
-		
-		
-		options.setHAxis(HAxis.create(txtConstants.disciplina()));
-		
-		
-		VAxis vaxis = VAxis.create(txtConstants.nota());
-		vaxis.setMaxValue(10.0);
-		vaxis.setMinValue(0.0);
-		options.setVAxis(vaxis);
-		
-		VAxis.create().setMaxValue(10.0);
-		VAxis.create().setMaxValue(10.0);
-		
-		Animation animation = Animation.create();
-		animation.setDuration(500);
-		animation.setEasing(AnimationEasing.OUT);
-		Legend legend = Legend.create(LegendPosition.BOTTOM);
-			
-		options.setAnimation(animation);
-		options.setLegend(legend);
-		
-	
 
-		// Draw the chart
-		chart.draw(dataTable, options);
+            // Prepare the data
+            DataTable dataTable = DataTable.create();
+
+            dataTable.addColumn(ColumnType.STRING, txtConstants.disciplina());
+            for (int i = 0; i < disciplinas.length; i++) {
+                dataTable.addColumn(ColumnType.NUMBER, disciplinas[i]);
+            }
+
+            dataTable.addRows(periodos.length);
+            for (int i = 0; i < periodos.length; i++) {
+                dataTable.setValue(i, 0, String.valueOf(periodos[i]));
+            }
+
+            int valueCol = values.length;
+            for (int col = 0; col < valueCol; col++) {
+                for (int row = 0; row < values[col].length; row++) {
+                    dataTable.setValue(row, col + 1, values[col][row]);
+                }
+            }
+
+            // Set options
+            ColumnChartOptions options = ColumnChartOptions.create();
+            options.setFontName("Tahoma");
+            options.setTitle(txtConstants.alunoAmbienteNotas());
+
+            options.setHAxis(HAxis.create(txtConstants.disciplina()));
+
+            VAxis vaxis = VAxis.create(txtConstants.nota());
+            vaxis.setMaxValue(10.0);
+            vaxis.setMinValue(0.0);
+            options.setVAxis(vaxis);
+
+            VAxis.create().setMaxValue(10.0);
+            VAxis.create().setMaxValue(10.0);
+
+            Animation animation = Animation.create();
+            animation.setDuration(500);
+            animation.setEasing(AnimationEasing.OUT);
+            Legend legend = Legend.create(LegendPosition.BOTTOM);
+
+            options.setAnimation(animation);
+            options.setLegend(legend);
+
+            // Draw the chart
+
+            chart.draw(dataTable, options);
+        }else{
+            chart.setVisible(false);
+        }
+		
 //		chart.d
 	}
 
@@ -600,7 +494,43 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		this.list = list;
 	}	
 	
-	
+    
+    private class CallbackBoletim implements  AsyncCallback<String[][]>{
+        
+        public void onFailure(Throwable caught) {
+            mpPanelAlunosLoading.setVisible(false);     
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.notaErroCarregar());
+            mpDialogBoxWarning.showDialog();
+        }
+
+        @Override
+        public void onSuccess(String[][] list) {
+            MpUtilClient.isRefreshRequired(list);
+            vPanelBoletim.clear();
+            mpPanelAlunosLoading.setVisible(false);
+            setList(list);
+            vPanelBoletim.add(createBoletimTable(list));
+            
+            // Create the API Loader
+            ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
+            chartLoader.loadApi(new Runnable() {
+                @Override
+                public void run() {
+                    // Create and attach the chart
+//                  gridBoletimChart.clear();
+//                    chart.clearChart();
+                    if (chart == null) {
+                        chart = new ColumnChart();
+                        getGridBoletimChart().setWidget(0, 1, chart);
+                    }
+                    
+                    draw(getList());
+                }
+            });
+
+        }
+    }
 	
 	
 

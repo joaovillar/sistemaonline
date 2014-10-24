@@ -11,12 +11,10 @@ import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.InlineHTML;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
-import com.jornada.client.classes.listBoxes.MpSelectionConteudoProgramatico;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoAvaliacao;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
@@ -24,6 +22,7 @@ import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriod
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
@@ -46,7 +45,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 	private MpSelectionCursoAmbienteProfessor listBoxCurso;
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
 	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;	
-	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;	
+//	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;	
 	private MpSelectionTipoAvaliacao listBoxTipoAvaliacao;
 	
 	private TextBox txtAssunto;
@@ -55,7 +54,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 	private MpTimePicker mpTimePicker;
 	
 	private MpLabelTextBoxError lblErrorAssunto;
-	private MpLabelTextBoxError lblErrorConteudo;	
+	private MpLabelTextBoxError lblErrorDisciplina;	
 	
 	private TelaInicialAvaliacao telaInicialAvaliacao;
 
@@ -86,40 +85,20 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		mpTimePicker = new MpTimePicker(7,22);
 		
 
-		Label lblCurso = new Label(txtConstants.curso());
-		Label lblPeriodo = new Label(txtConstants.periodo());
-		Label lblDisciplina = new Label(txtConstants.disciplina());		
-		Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());		
+		MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
+		MpLabelRight lblPeriodo = new MpLabelRight(txtConstants.periodo());
+		MpLabelRight lblDisciplina = new MpLabelRight(txtConstants.disciplina());		
+//		Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());		
 		
-		Label lblAssunto = new Label(txtConstants.avaliacaoAssunto());		
-		Label lblDescricao = new Label(txtConstants.avaliacaoDescricao());
-		Label lblTipoAvaliacao = new Label(txtConstants.avaliacaoTipo());
-		Label lblData = new Label(txtConstants.avaliacaoData());
-		Label lblHora = new Label(txtConstants.avaliacaoHora());	
+		MpLabelRight lblAssunto = new MpLabelRight(txtConstants.avaliacaoAssunto());		
+		MpLabelRight lblDescricao = new MpLabelRight(txtConstants.avaliacaoDescricao());
+		MpLabelRight lblTipoAvaliacao = new MpLabelRight(txtConstants.avaliacaoTipo());
+		MpLabelRight lblData = new MpLabelRight(txtConstants.avaliacaoData());
+		MpLabelRight lblHora = new MpLabelRight(txtConstants.avaliacaoHora());	
 		
 		lblErrorAssunto = new MpLabelTextBoxError();
-		lblErrorConteudo = new MpLabelTextBoxError();
+		lblErrorDisciplina = new MpLabelTextBoxError();
 		
-		
-		lblCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblPeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblDisciplina.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblConteudoProgramatico.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);				
-		lblAssunto.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		lblDescricao.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblTipoAvaliacao.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblData.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblHora.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		
-		lblCurso.setStyleName("design_label");
-		lblPeriodo.setStyleName("design_label");
-		lblDisciplina.setStyleName("design_label");
-		lblConteudoProgramatico.setStyleName("design_label");
-		lblAssunto.setStyleName("design_label");
-		lblDescricao.setStyleName("design_label");	
-		lblTipoAvaliacao.setStyleName("design_label");	
-		lblData.setStyleName("design_label");
-		lblHora.setStyleName("design_label");		
 				
 		txtAssunto.setWidth("350px");
 		txtDescricao.setSize("350px", "50px");
@@ -132,11 +111,11 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		listBoxCurso = new MpSelectionCursoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
 		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
 		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
-		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();
+//		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();
 		
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());		
-		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
+//		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
 		
 		listBoxTipoAvaliacao = new MpSelectionTipoAvaliacao();
 		
@@ -145,20 +124,20 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		int row = 1;
 		flexTableLayout.setWidget(row, 0, lblCurso);flexTableLayout.setWidget(row++, 1, listBoxCurso);
 		flexTableLayout.setWidget(row, 0, lblPeriodo);flexTableLayout.setWidget(row++, 1, listBoxPeriodo);
-		flexTableLayout.setWidget(row, 0, lblDisciplina);flexTableLayout.setWidget(row++, 1, listBoxDisciplina);	
-		flexTableLayout.setWidget(row, 0, lblConteudoProgramatico);flexTableLayout.setWidget(row, 1, listBoxConteudoProgramatico);flexTableLayout.setWidget(row++, 2, lblErrorConteudo);
+		flexTableLayout.setWidget(row, 0, lblDisciplina);flexTableLayout.setWidget(row, 1, listBoxDisciplina);flexTableLayout.setWidget(row++, 2, lblErrorDisciplina);
+//		flexTableLayout.setWidget(row, 0, lblConteudoProgramatico);flexTableLayout.setWidget(row, 1, listBoxConteudoProgramatico);flexTableLayout.setWidget(row++, 2, lblErrorConteudo);
 		flexTableLayout.setWidget(row, 0, new InlineHTML("&nbsp;"));flexTableLayout.setWidget(row++, 1, new InlineHTML("&nbsp;"));	
 		flexTableLayout.setWidget(row, 0, lblAssunto);flexTableLayout.setWidget(row, 1, txtAssunto);flexTableLayout.setWidget(row++, 2, lblErrorAssunto);
 		flexTableLayout.setWidget(row, 0, lblDescricao);flexTableLayout.setWidget(row++, 1, txtDescricao);
 		flexTableLayout.setWidget(row, 0, lblTipoAvaliacao);flexTableLayout.setWidget(row++, 1, listBoxTipoAvaliacao);		
 		flexTableLayout.setWidget(row, 0, lblData);flexTableLayout.setWidget(row++, 1, dateBoxData);
 		flexTableLayout.setWidget(row, 0, lblHora);flexTableLayout.setWidget(row++, 1, mpTimePicker);
-		
 
 
 		MpImageButton btnSave = new MpImageButton(txtConstants.geralSalvar(), "images/save.png");
-		btnSave.addClickHandler(new ClickHandlerSave());
 		MpImageButton btnClean = new MpImageButton(txtConstants.geralLimpar(), "images/erase.png");
+	    
+		btnSave.addClickHandler(new ClickHandlerSave());
 		btnClean.addClickHandler(new ClickHandlerClean());				
 
 		VerticalPanel vFormPanel = new VerticalPanel();
@@ -212,11 +191,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 			}
 		};
 
-
-		
-
 		/***********************End Callbacks**********************/
-
 		
 		super.add(vFormPanel);
 
@@ -229,29 +204,18 @@ public class AdicionarAvaliacao extends VerticalPanel {
 
 		public void onClick(ClickEvent event) {
 
-//			if (txtAssunto == null || txtAssunto.getText().isEmpty()) {
-//
-//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//				mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.avaliacaoAssunto()));
-//				mpDialogBoxWarning.showDialog();
-//
-//			} else {
-
 			if(checkFieldsValidator()){
 				hPanelLoading.setVisible(true);
 
-				int intIdConteudoProgramatico = Integer.parseInt(listBoxConteudoProgramatico.getValue(listBoxConteudoProgramatico.getSelectedIndex()));
+				int intIdDisciplina = Integer.parseInt(listBoxDisciplina.getValue(listBoxDisciplina.getSelectedIndex()));
 				int intIdTipoAvaliacao = Integer.parseInt(listBoxTipoAvaliacao.getValue(listBoxTipoAvaliacao.getSelectedIndex()));
 				String strHora = mpTimePicker.getValue(mpTimePicker.getSelectedIndex());
 				
 				Avaliacao object = new Avaliacao();
-				object.setIdConteudoProgramatico(intIdConteudoProgramatico);
+				object.setIdDisciplina(intIdDisciplina);
 				object.setAssunto(txtAssunto.getText());
 				object.setDescricao(txtDescricao.getText());
 				object.setIdTipoAvaliacao(intIdTipoAvaliacao);
-//				object.setData(dateBoxData.getDate().getValue());				
-//				object.setHora(MpUtilClient.convertStringToTime(strHora));				
-//				object.setData(MpUtilClient.convertDateToString(dateBoxData.getDate().getValue()));				
 				object.setData(dateBoxData.getDate().getValue());
 				object.setHora(strHora);				
 
@@ -277,7 +241,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 			int index = listBoxPeriodo.getSelectedIndex();
 			if(index==-1){
 				listBoxDisciplina.clear();
-				listBoxConteudoProgramatico.clear();
+//				listBoxConteudoProgramatico.clear();
 			}
 			else{
 				int idPeriodo = Integer.parseInt(listBoxPeriodo.getValue(index));
@@ -286,18 +250,18 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		}  
 	}
 	
-	private class MpDisciplinaSelectionChangeHandler implements ChangeHandler {
-		public void onChange(ChangeEvent event) {
-			int index = listBoxDisciplina.getSelectedIndex();
-			if(index==-1){
-				listBoxConteudoProgramatico.clear();
-			}
-			else{
-				int idDisciplina= Integer.parseInt(listBoxDisciplina.getValue(index));
-				listBoxConteudoProgramatico.populateComboBox(idDisciplina);				
-			}
-		}  
-	}
+//	private class MpDisciplinaSelectionChangeHandler implements ChangeHandler {
+//		public void onChange(ChangeEvent event) {
+//			int index = listBoxDisciplina.getSelectedIndex();
+//			if(index==-1){
+//				listBoxConteudoProgramatico.clear();
+//			}
+//			else{
+//				int idDisciplina= Integer.parseInt(listBoxDisciplina.getValue(index));
+//				listBoxConteudoProgramatico.populateComboBox(idDisciplina);				
+//			}
+//		}  
+//	}
 	
 	private class ClickHandlerClean implements ClickHandler {
 		public void onClick(ClickEvent event) {
@@ -324,11 +288,11 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		
 		boolean isConteudoOk=false;
 		
-		if(FieldVerifier.isValidListBoxSelectedValue(listBoxConteudoProgramatico.getSelectedIndex())){
+		if(FieldVerifier.isValidListBoxSelectedValue(listBoxDisciplina.getSelectedIndex())){
 			isConteudoOk=true;
-			lblErrorConteudo.hideErroMessage();
+			lblErrorDisciplina.hideErroMessage();
 		}else{
-			lblErrorConteudo.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.conteudoProgramatico()));
+			lblErrorDisciplina.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.disciplina()));
 		}
 		
 		isFieldsOk = isAssuntoOk && isConteudoOk;
@@ -340,7 +304,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 	
 	public void cleanFields(){
 		lblErrorAssunto.hideErroMessage();
-		lblErrorConteudo.hideErroMessage();
+		lblErrorDisciplina.hideErroMessage();
 		txtAssunto.setText("");		
 		txtDescricao.setText("");	
 		dateBoxData.getDate().setValue(null);

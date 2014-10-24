@@ -21,14 +21,13 @@ public class ConteudoProgramatico implements Serializable {
 //	private Periodo periodo;
 	
 	private ArrayList<Topico> listTopico;
-	private ArrayList<Avaliacao> listAvaliacao;
+
 	
 	
 	public ConteudoProgramatico(){
 		
 //		periodo = new Periodo();
 		listTopico = new ArrayList<Topico>();
-		listAvaliacao = new ArrayList<Avaliacao>();
 	}
 	
 	public int getIdConteudoProgramatico() {
@@ -93,14 +92,6 @@ public class ConteudoProgramatico implements Serializable {
 
 	public void setListTopico(ArrayList<Topico> listTopico) {
 		this.listTopico = listTopico;
-	}
-
-	public ArrayList<Avaliacao> getListAvaliacao() {
-		return listAvaliacao;
-	}
-
-	public void setListAvaliacao(ArrayList<Avaliacao> listAvaliacao) {
-		this.listAvaliacao = listAvaliacao;
 	}
 
 	public static long getSerialversionuid() {

@@ -31,16 +31,23 @@ public class HierarquiaCursoServer {
 				for(Disciplina disciplina : periodo.getListDisciplinas()){
 					disciplina.setListConteudoProgramatico(ConteudoProgramaticoServer.getConteudoProgramaticos(disciplina.getIdDisciplina()));
 					disciplina.setProfessor(UsuarioServer.getUsuarioPeloId(disciplina.getIdUsuario()));
+					
+                  disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacao(disciplina.getIdDisciplina()));
+                    //Getting Nota e TipoAvaliacao
+                    for(Avaliacao avaliacao : disciplina.getListAvaliacao()){
+                        avaliacao.setListNota(NotaServer.getNotas(avaliacao.getIdAvaliacao()));
+                        avaliacao.setTipoAvaliacao(AvaliacaoServer.getTipoAvaliacao(avaliacao.getIdTipoAvaliacao()));
+                    }					
 
 					//Getting Topico e Avaliacao
 					for(ConteudoProgramatico conteudo : disciplina.getListConteudoProgramatico()){
 						conteudo.setListTopico(TopicoServer.getTopicos(conteudo.getIdConteudoProgramatico()));
-						conteudo.setListAvaliacao(AvaliacaoServer.getAvaliacao(conteudo.getIdConteudoProgramatico()));
+//						conteudo.setListAvaliacao(AvaliacaoServer.getAvaliacao(conteudo.getIdConteudoProgramatico()));
 						//Getting Nota e TipoAvaliacao
-						for(Avaliacao avaliacao : conteudo.getListAvaliacao()){
-							avaliacao.setListNota(NotaServer.getNotas(avaliacao.getIdAvaliacao()));
-							avaliacao.setTipoAvaliacao(AvaliacaoServer.getTipoAvaliacao(avaliacao.getIdTipoAvaliacao()));
-						}
+//						for(Avaliacao avaliacao : conteudo.getListAvaliacao()){
+//							avaliacao.setListNota(NotaServer.getNotas(avaliacao.getIdAvaliacao()));
+//							avaliacao.setTipoAvaliacao(AvaliacaoServer.getTipoAvaliacao(avaliacao.getIdTipoAvaliacao()));
+//						}
 					}
 				}				
 			}

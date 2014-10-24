@@ -35,7 +35,6 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.MpSelectionConteudoProgramatico;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
@@ -78,7 +77,7 @@ public class EditarAvaliacao extends VerticalPanel {
 	private MpSelectionCursoAmbienteProfessor listBoxCurso;
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;	
 	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
-	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;	
+//	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;	
 
 	MpPanelLoading mpPanelLoading = new MpPanelLoading("images/radar.gif");
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
@@ -100,17 +99,17 @@ public class EditarAvaliacao extends VerticalPanel {
 		Label lblCurso = new Label(txtConstants.curso());
 		Label lblPeriodo = new Label(txtConstants.periodo());
 		Label lblDisciplina = new Label(txtConstants.disciplina());
-		Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());
+//		Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());
 		
 		listBoxCurso = new MpSelectionCursoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
 		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
 		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
-		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();		
+//		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();		
 		
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());		
 		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());		
-		listBoxConteudoProgramatico.addChangeHandler(new MpConteudoProgramaticoSelectionChangeHandler());
+//		listBoxConteudoProgramatico.addChangeHandler(new MpConteudoProgramaticoSelectionChangeHandler());
 		
 
 		Grid gridComboBox = new Grid(4, 4);
@@ -126,11 +125,12 @@ public class EditarAvaliacao extends VerticalPanel {
 			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
 			gridComboBox.setWidget(row, 0, lblDisciplina);
 			gridComboBox.setWidget(row, 1, listBoxDisciplina);
-			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(row, 0, lblConteudoProgramatico);
-			gridComboBox.setWidget(row, 1, listBoxConteudoProgramatico);
 			gridComboBox.setWidget(row, 2, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(row++, 3, mpPanelLoading);			
+			gridComboBox.setWidget(row++, 3, mpPanelLoading);
+//			gridComboBox.setWidget(row, 0, lblConteudoProgramatico);
+//			gridComboBox.setWidget(row, 1, listBoxConteudoProgramatico);
+//			gridComboBox.setWidget(row, 2, new InlineHTML("&nbsp;"));
+//			gridComboBox.setWidget(row++, 3, mpPanelLoading);			
 		}
 
 			
@@ -195,7 +195,7 @@ public class EditarAvaliacao extends VerticalPanel {
 
 	private void renderCellTable(){
 		
-		Label lblEmpty = new Label(txtConstants.avaliacaoNenhumaAvaliacaoNoConteudo());
+		Label lblEmpty = new Label(txtConstants.avaliacaoNenhumaDisciplina());
 //		Label lblEmpty2 = new Label("Por favor, selecione um Conteudo Programatico.");
 		
 		cellTable = new CellTable<Avaliacao>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
@@ -297,7 +297,7 @@ public class EditarAvaliacao extends VerticalPanel {
 			int index = listBoxPeriodo.getSelectedIndex();
 			if(index==-1){
 				listBoxDisciplina.clear();
-				listBoxConteudoProgramatico.clear();
+//				listBoxConteudoProgramatico.clear();
 				dataProvider.getList().clear();
 			}
 			else{
@@ -309,25 +309,26 @@ public class EditarAvaliacao extends VerticalPanel {
 	
 	private class MpDisciplinaSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
-			int index = listBoxDisciplina.getSelectedIndex();
-			if(index==-1){
-				listBoxConteudoProgramatico.clear();
-				dataProvider.getList().clear();
-			}
-			else{
-				int idDisciplina= Integer.parseInt(listBoxDisciplina.getValue(index));
-				listBoxConteudoProgramatico.populateComboBox(idDisciplina);				
-			}
+//			int index = listBoxDisciplina.getSelectedIndex();
+//			if(index==-1){
+//				listBoxConteudoProgramatico.clear();
+//				dataProvider.getList().clear();
+//			}
+//			else{
+//				int idDisciplina= Integer.parseInt(listBoxDisciplina.getValue(index));
+//				listBoxConteudoProgramatico.populateComboBox(idDisciplina);				
+//			}
+		    populateGridAvaliacao();
 		}  
 	}
 	
-	private class MpConteudoProgramaticoSelectionChangeHandler implements ChangeHandler{
-		
-		public void onChange(ChangeEvent event){
-			populateGridAvaliacao();
-//			populateComboBoxTipoAvaliacao();
-		}
-	}	
+//	private class MpConteudoProgramaticoSelectionChangeHandler implements ChangeHandler{
+//		
+//		public void onChange(ChangeEvent event){
+//			populateGridAvaliacao();
+////			populateComboBoxTipoAvaliacao();
+//		}
+//	}	
 	
 
 	/**************** End Event Handlers *****************/
@@ -342,15 +343,15 @@ public class EditarAvaliacao extends VerticalPanel {
 		
 		mpPanelLoading.setVisible(true);
 		
-		int indexConteudoProgramatico = listBoxConteudoProgramatico.getSelectedIndex();
+		int indexDisciplina = listBoxDisciplina.getSelectedIndex();
 		
-		if (indexConteudoProgramatico == -1 ) {
+		if (indexDisciplina == -1 ) {
 			mpPanelLoading.setVisible(false);
 			dataProvider.getList().clear();
 		} 
 		else{	
-			int idConteudoProgramatico = Integer.parseInt(listBoxConteudoProgramatico.getValue(indexConteudoProgramatico));
-			GWTServiceAvaliacao.Util.getInstance().getAvaliacaoPeloConteudoProgramatico(idConteudoProgramatico, 
+			int idDisciplina = Integer.parseInt(listBoxDisciplina.getValue(indexDisciplina));
+			GWTServiceAvaliacao.Util.getInstance().getAvaliacaoPelaDisciplina(idDisciplina, 
 					
 					new AsyncCallback<ArrayList<Avaliacao>>() {
 

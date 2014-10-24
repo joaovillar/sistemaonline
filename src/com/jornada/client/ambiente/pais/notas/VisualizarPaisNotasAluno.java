@@ -3,6 +3,11 @@ package com.jornada.client.ambiente.pais.notas;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
@@ -23,14 +28,15 @@ import com.googlecode.gwt.charts.client.options.HAxis;
 import com.googlecode.gwt.charts.client.options.Legend;
 import com.googlecode.gwt.charts.client.options.LegendPosition;
 import com.googlecode.gwt.charts.client.options.VAxis;
-import com.jornada.client.ambiente.aluno.notas.TelaInicialAlunoVisualizarNotas;
 import com.jornada.client.ambiente.coordenador.periodo.TelaInicialPeriodo;
 import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunosPorCursoAmbientePais;
 import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionCursoAmbientePais;
+import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpPanelPageMainView;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.TipoUsuario;
@@ -48,7 +54,7 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 	static TextConstants txtConstants = GWT.create(TextConstants.class);
 	
 //	private AsyncCallback<ArrayList<Usuario>> callbackGetAlunosFiltro;	
-	private AsyncCallback<String[][]> callbackBoletim;
+//	private AsyncCallback<String[][]> callbackBoletim;
 	
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -57,6 +63,8 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 	String [][] arrayBoletim;
 	
 //	private TextBox txtFiltroAluno;		
+	
+	private MpTextBox txtFiltroAluno;    
 	
 //	private ListBox listBoxAluno;
 	private MpSelectionCursoAmbientePais listBoxCurso;
@@ -109,10 +117,8 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 
 		
 		MpPanelPageMainView mpPanelPasso1 = new MpPanelPageMainView(txtConstants.notaSelecionarAluno(), "images/user_male_black_red_16.png");
-//		mpPanelPasso1.setWidth(Integer.toString(TelaInicialPaisVisualizarNotas.intWidthTable)+"px");
-//		mpPanelPasso1.setWidth(Integer.toString(TelaInicialAlunoVisualizarNotas.intWidthTable-20)+"px");
 		mpPanelPasso1.setWidth("100%");
-		mpPanelPasso1.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.intHeightTable-50)+"px");
+		mpPanelPasso1.setHeight(Integer.toString(TelaInicialPaisVisualizarNotas.INT_HEIGHT_TABLE-50)+"px");
 
 		
 		Label lblNomeCurso = new Label(txtConstants.curso());
@@ -124,6 +130,14 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		listBoxAlunosPorCurso = new MpSelectionAlunosPorCursoAmbientePais();
 		listBoxAlunosPorCurso.addChangeHandler(new MpAlunosPorCursoSelectionChangeHandler());
 		
+        txtFiltroAluno = new MpTextBox();  
+        txtFiltroAluno.setWidth("100px");
+        MpImageButton btnFiltrar = new MpImageButton(txtConstants.usuarioFiltrarListaAlunos(), "images/magnifier.png");
+        
+        txtFiltroAluno.addKeyUpHandler(new KeyUpHandlerFiltrarAluno());     
+        btnFiltrar.addClickHandler(new ClickHandlerFiltrarAluno());             
+		
+		
 		lblNomeCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblNomeAluno.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
 		
@@ -131,7 +145,7 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		lblNomeAluno.setStyleName("design_label");	
 		
 
-		Grid gridFiltrar = new Grid(1,7);		
+		Grid gridFiltrar = new Grid(1,9);		
 		gridFiltrar.setCellSpacing(2);
 		gridFiltrar.setCellPadding(2);
 		gridFiltrar.setBorderWidth(0);				
@@ -142,8 +156,10 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		gridFiltrar.setWidget(row, 2, new MpSpaceVerticalPanel());
 		gridFiltrar.setWidget(row, 3, lblNomeAluno);
 		gridFiltrar.setWidget(row, 4, listBoxAlunosPorCurso);
-		gridFiltrar.setWidget(row, 5, new MpSpaceVerticalPanel());
-		gridFiltrar.setWidget(row, 6, mpPanelAlunosLoading);
+		gridFiltrar.setWidget(row, 5, txtFiltroAluno);
+		gridFiltrar.setWidget(row, 6, btnFiltrar);
+		gridFiltrar.setWidget(row, 7, new MpSpaceVerticalPanel());
+		gridFiltrar.setWidget(row, 8, mpPanelAlunosLoading);
 //		gridFiltrar.setWidget(row, 2, txtFiltroAluno);
 //		gridFiltrar.setWidget(row, 3, btnFiltrar);
 		
@@ -153,77 +169,29 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		gridBoletimChart.setCellPadding(2);
 		gridBoletimChart.setCellSpacing(2);
 		gridBoletimChart.setWidth("100%");
-//		gridBoletimChart.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable)+"px",Integer.toString(TelaInicialPeriodo.intHeightTable-180)+"px");
+		gridBoletimChart.setHeight(Integer.toString(TelaInicialPaisVisualizarNotas.INT_HEIGHT_TABLE-180)+"px");
 		
+		
+	    row=0;
 		FlexTable gridBoletim = new FlexTable();		
-		gridBoletim.setBorderWidth(0);	
-//		gridBoletim.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable),Integer.toString(TelaInicialPeriodo.intHeightTable));
-		row=0;
+		gridBoletim.setBorderWidth(0);
+		gridBoletim.setWidget(row, 0, vPanelBoletim);		
 		
-		gridBoletim.setWidget(row, 0, vPanelBoletim);
-		
-		gridBoletimChart.setWidget(0, 0, gridBoletim);
+
 		
 		mpPanelPasso1.add(gridFiltrar);
 		mpPanelPasso1.add(gridBoletimChart);
 		mpPanelPasso1.add(new InlineHTML("&nbsp;"));
+//		mpPanelPasso1.setBorderWidth(1);
+		mpPanelPasso1.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 		
-//        // Create the API Loader
-//        ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
-//        chartLoader.loadApi(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//            		// Create and attach the chart
-//    				chart = new ColumnChart();
-//    				getGridBoletimChart().setWidget(0, 1, chart);
-//    				
-//                }
-//        });		
-        
+        gridBoletimChart.setWidget(0, 0, gridBoletim);       
         gridBoletimChart.getCellFormatter().setWidth(0, 0, "500px");
         gridBoletimChart.getCellFormatter().setWidth(0, 1, "500px");
         gridBoletimChart.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_LEFT);
         gridBoletimChart.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         gridBoletimChart.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
         gridBoletimChart.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);           
-		
-	
-		callbackBoletim = new AsyncCallback<String[][]>() {
-
-			public void onFailure(Throwable caught) {
-				mpPanelAlunosLoading.setVisible(false);		
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.notaErroCarregar());
-				mpDialogBoxWarning.showDialog();
-			}
-
-			@Override
-			public void onSuccess(String[][] list) {
-				MpUtilClient.isRefreshRequired(list);
-				vPanelBoletim.clear();
-				mpPanelAlunosLoading.setVisible(false);	
-				setList(list);
-				vPanelBoletim.add(createBoletimTable(list));	
-				// Create the API Loader
-				ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
-				chartLoader.loadApi(new Runnable() {
-					@Override
-					public void run() {
-						// Create and attach the chart
-						if (chart == null) {
-							chart = new ColumnChart();
-							getGridBoletimChart().setWidget(0, 1, chart);
-						}
-
-						draw(getList());
-					}
-				});
-			
-			}
-		};		
-		
-		
 		
 		return mpPanelPasso1;
 		
@@ -251,14 +219,17 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		mpPanelAlunosLoading.setVisible(true);	
 		int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 		int idTipoUsuario = TipoUsuario.ALUNO;
-		int intIdCurso = listBoxAlunosPorCurso.getSelectedIndex();
-		if(intIdCurso==-1){
+		int intIdAluno = listBoxAlunosPorCurso.getSelectedIndex();
+		if(intIdAluno==-1){
 			mpPanelAlunosLoading.setVisible(false);
 			vPanelBoletim.clear();
+			if(chart!=null){
+                chart.setVisible(false);
+            }
 		}
 		else{
-			int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getValue(intIdCurso));
-			GWTServiceNota.Util.getInstance().getBoletimNotasPorAlunoPorCurso(idCurso, idTipoUsuario, idUsuario,callbackBoletim);
+			int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getValue(intIdAluno));
+			GWTServiceNota.Util.getInstance().getBoletimNotasPorAlunoPorCurso(idCurso, idTipoUsuario, idUsuario, new CallbackBoletim());
 		}
 
 	}
@@ -390,99 +361,79 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		int numeroColunas = list.length; 
         int numeroLinhas = list[0].length;
           
+        if (numeroLinhas > 1 && numeroColunas > 1) {
+            chart.setVisible(true);
+            String[] disciplinas = new String[numeroLinhas - 1];
+            for (int i = 0; i < disciplinas.length; i++) {
+                disciplinas[i] = list[0][i + 1];
+            }
 
-//		String[] countries = new String[] { "Austria", "Bulgaria", "Denmark", "Greece" };
-		
-		String[] disciplinas = new String[numeroLinhas-1];		
-		for(int i=0;i<disciplinas.length;i++){
-			disciplinas[i]=list[0][i+1];
-		}
-		
-		
-		//int[] years = new int[] { 2003, 2004, 2005, 2006, 2007, 2008 };
-		String[] periodos = new String[numeroColunas-1];
-		for(int i=0;i<periodos.length;i++){
-			periodos[i]= list[i+1][0];
-		}
-		
+            String[] periodos = new String[numeroColunas - 1];
+            for (int i = 0; i < periodos.length; i++) {
+                periodos[i] = list[i + 1][0];
+            }
 
-		
-		double[][] values = new double[numeroLinhas-1][numeroColunas-1];
-		
-		for (int row = 0; row < disciplinas.length; row++) {
-			for (int column = 0; column < periodos.length; column++) {
-				try {
-					String strValue = list[column + 1][row + 1];
-					values[row][column] = Double.parseDouble(strValue);
-				} catch (Exception ex) {
-					values[row][column] = 0;
-				}
-			}
-		}
-		
-		
-//		int[][] values = new int[][] 
-//				{ 
-//					{ 8 },
-//					{ 5 },
-//					{ 9 }
-//				};
-		
-		
-		
+            double[][] values = new double[numeroLinhas - 1][numeroColunas - 1];
 
-		// Prepare the data
-		DataTable dataTable = DataTable.create();
-		
+            for (int row = 0; row < disciplinas.length; row++) {
+                for (int column = 0; column < periodos.length; column++) {
+                    try {
+                        String strValue = list[column + 1][row + 1];
+                        values[row][column] = Double.parseDouble(strValue);
+                    } catch (Exception ex) {
+                        values[row][column] = 0;
+                    }
+                }
+            }
 
-		
-		dataTable.addColumn(ColumnType.STRING, txtConstants.disciplina());
-		for (int i = 0; i < disciplinas.length; i++) {
-			dataTable.addColumn(ColumnType.NUMBER, disciplinas[i]);
-		}
-		
+            // Prepare the data
+            DataTable dataTable = DataTable.create();
 
-		
-		dataTable.addRows(periodos.length);
-		for (int i = 0; i < periodos.length; i++) {
-			dataTable.setValue(i, 0, String.valueOf(periodos[i]));
-		}
-		
-		int valueCol = values.length;		
-		for (int col = 0; col < valueCol; col++) {
-			for (int row = 0; row < values[col].length; row++) {
-				dataTable.setValue(row, col + 1, values[col][row]);
-			}
-		}
+            dataTable.addColumn(ColumnType.STRING, txtConstants.disciplina());
+            for (int i = 0; i < disciplinas.length; i++) {
+                dataTable.addColumn(ColumnType.NUMBER, disciplinas[i]);
+            }
 
-		// Set options
-		ColumnChartOptions options = ColumnChartOptions.create();
-		options.setFontName("Tahoma");
-		options.setTitle(txtConstants.alunoAmbienteNotas());
-		
-		
-		
-		options.setHAxis(HAxis.create(txtConstants.disciplina()));
-		
-		
-		VAxis vaxis = VAxis.create(txtConstants.nota());
-		vaxis.setMaxValue(10.0);
-		vaxis.setMinValue(0.0);
-		options.setVAxis(vaxis);
-		
-		VAxis.create().setMaxValue(10.0);
-		VAxis.create().setMaxValue(10.0);
-		
-		Animation animation = Animation.create();
-		animation.setDuration(500);
-		animation.setEasing(AnimationEasing.OUT);
-		Legend legend = Legend.create(LegendPosition.BOTTOM);
-			
-		options.setAnimation(animation);
-		options.setLegend(legend);
+            dataTable.addRows(periodos.length);
+            for (int i = 0; i < periodos.length; i++) {
+                dataTable.setValue(i, 0, String.valueOf(periodos[i]));
+            }
 
-		// Draw the chart
-		chart.draw(dataTable, options);
+            int valueCol = values.length;
+            for (int col = 0; col < valueCol; col++) {
+                for (int row = 0; row < values[col].length; row++) {
+                    dataTable.setValue(row, col + 1, values[col][row]);
+                }
+            }
+
+            // Set options
+            ColumnChartOptions options = ColumnChartOptions.create();
+            options.setFontName("Tahoma");
+            options.setTitle(txtConstants.alunoAmbienteNotas());
+
+            options.setHAxis(HAxis.create(txtConstants.disciplina()));
+
+            VAxis vaxis = VAxis.create(txtConstants.nota());
+            vaxis.setMaxValue(10.0);
+            vaxis.setMinValue(0.0);
+            options.setVAxis(vaxis);
+
+            VAxis.create().setMaxValue(10.0);
+            VAxis.create().setMaxValue(10.0);
+
+            Animation animation = Animation.create();
+            animation.setDuration(500);
+            animation.setEasing(AnimationEasing.OUT);
+            Legend legend = Legend.create(LegendPosition.BOTTOM);
+
+            options.setAnimation(animation);
+            options.setLegend(legend);
+
+            chart.draw(dataTable, options);
+            
+        } else {
+            chart.setVisible(false);
+        }	
 	}
 
 
@@ -498,6 +449,59 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 	public void setList(String[][] list) {
 		this.list = list;
 	}	
+	
+    private class ClickHandlerFiltrarAluno implements ClickHandler {
+        public void onClick(ClickEvent event) {         
+            listBoxAlunosPorCurso.filterComboBox(txtFiltroAluno.getText());
+            populateBoletimAluno();
+        }
+    }
+    
+    private class KeyUpHandlerFiltrarAluno implements KeyUpHandler {
+        public void onKeyUp(KeyUpEvent event) {
+            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                listBoxAlunosPorCurso.filterComboBox(txtFiltroAluno.getText());
+                populateBoletimAluno();
+            }
+        }
+    }
+    
+    
+    
+    
+    private class CallbackBoletim implements AsyncCallback<String[][]>{
+        public void onFailure(Throwable caught) {
+            mpPanelAlunosLoading.setVisible(false);     
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.notaErroCarregar());
+            mpDialogBoxWarning.showDialog();
+        }
+
+        @Override
+        public void onSuccess(String[][] list) {
+            MpUtilClient.isRefreshRequired(list);
+            vPanelBoletim.clear();
+            mpPanelAlunosLoading.setVisible(false); 
+            setList(list);
+            vPanelBoletim.add(createBoletimTable(list));    
+            // Create the API Loader
+            ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
+            chartLoader.loadApi(new Runnable() {
+                @Override
+                public void run() {
+                    // Create and attach the chart
+                    if (chart == null) {
+                        chart = new ColumnChart();
+                        getGridBoletimChart().setWidget(0, 1, chart);
+                    }
+
+                    draw(getList());
+                }
+            });
+        
+        }
+    }
+    
 	
 
 }

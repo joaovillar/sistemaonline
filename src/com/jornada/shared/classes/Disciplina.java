@@ -24,8 +24,10 @@ public class Disciplina implements Serializable {
 	
 	private Usuario professor;
 	
+	
 	private ArrayList<ConteudoProgramatico> listConteudoProgramatico;
 	private ArrayList<Aula> listAula;
+	private ArrayList<Avaliacao> listAvaliacao;
 	
 	
 	public Disciplina(){
@@ -34,6 +36,7 @@ public class Disciplina implements Serializable {
 		professor = new Usuario();
 		listConteudoProgramatico = new ArrayList<ConteudoProgramatico>();
 		listAula = new ArrayList<Aula>();
+		listAvaliacao = new ArrayList<Avaliacao>();
 		
 	}
 	
@@ -131,12 +134,27 @@ public class Disciplina implements Serializable {
 	public void setListAula(ArrayList<Aula> listAula) {
 		this.listAula = listAula;
 	}
+	
+	
 
 
 
-	public static long getSerialversionuid() {
+	public ArrayList<Avaliacao> getListAvaliacao() {
+        return listAvaliacao;
+    }
+
+
+
+    public void setListAvaliacao(ArrayList<Avaliacao> listAvaliacao) {
+        this.listAvaliacao = listAvaliacao;
+    }
+
+
+
+    public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
 
 	public String toString(){
 		return "projeto:com.jornada.shared.classes.Disciplina";

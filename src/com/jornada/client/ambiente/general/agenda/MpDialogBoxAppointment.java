@@ -33,7 +33,7 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 	TextBox txtCurso;
 	TextBox txtPeriodo;
 	TextBox txtDisciplina;
-	TextBox txtMateria;
+//	TextBox txtMateria;
 	TextBox txtAssunto;
 	TextArea txtDescricao;
 //	TextBox txtTipo;
@@ -128,7 +128,7 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		Label lblCurso = new Label(txtConstants.curso());
 		Label lblPeriodo = new Label(txtConstants.periodo());
 		Label lblDisciplina = new Label(txtConstants.disciplina());
-		Label lblMateria = new Label(txtConstants.conteudoProgramatico());
+//		Label lblMateria = new Label(txtConstants.conteudoProgramatico());
 		Label lblAssunto = new Label(txtConstants.avaliacaoAssunto());
 		Label lblDescricao = new Label(txtConstants.avaliacaoDescricao());
 //		Label lblTipoAvaliacao = new Label(txtConstants.avaliacaoTipo());
@@ -139,7 +139,7 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		txtCurso = new TextBox();
 		txtPeriodo = new TextBox();
 		txtDisciplina = new TextBox();
-		txtMateria = new TextBox();
+//		txtMateria = new TextBox();
 		txtAssunto = new TextBox();
 		txtDescricao = new TextArea();
 //		txtTipo = new TextBox();
@@ -149,7 +149,7 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		txtCurso.setReadOnly(true);
 		txtPeriodo.setReadOnly(true);
 		txtDisciplina.setReadOnly(true);
-		txtMateria.setReadOnly(true);
+//		txtMateria.setReadOnly(true);
 		txtAssunto.setReadOnly(true);
 		txtDescricao.setReadOnly(true);
 //		txtTipo.setReadOnly(true);
@@ -161,12 +161,12 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		lblCurso.setStyleName("design_label");
 		lblPeriodo.setStyleName("design_label");
 		lblDisciplina.setStyleName("design_label");
-		lblMateria.setStyleName("design_label");	
+//		lblMateria.setStyleName("design_label");	
 		
 		txtCurso.setStyleName("design_text_boxes");
 		txtPeriodo.setStyleName("design_text_boxes");
 		txtDisciplina.setStyleName("design_text_boxes");
-		txtMateria.setStyleName("design_text_boxes");
+//		txtMateria.setStyleName("design_text_boxes");
 		txtAssunto.setStyleName("design_text_boxes");
 		txtDescricao.setStyleName("design_text_boxes");
 //		txtTipo.setStyleName("design_text_boxes");
@@ -176,7 +176,7 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		txtCurso.setWidth("250px");
 		txtPeriodo.setWidth("250px");
 		txtDisciplina.setWidth("250px");
-		txtMateria.setWidth("250px");
+//		txtMateria.setWidth("250px");
 		txtAssunto.setWidth("250px");
 		txtDescricao.setSize("250px", "50px");
 //		txtTipo.setWidth("250px");
@@ -199,8 +199,8 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row++, 1, txtCurso);
 		flexTable.setWidget(row, 0, lblPeriodo);flexTable.setWidget(row++, 1, txtPeriodo);
 		flexTable.setWidget(row, 0, lblDisciplina);flexTable.setWidget(row++, 1, txtDisciplina);
-		flexTable.setWidget(row, 0, lblMateria);flexTable.setWidget(row++, 1, txtAssunto);
-		flexTable.setWidget(row, 0, lblAssunto);flexTable.setWidget(row++, 1, txtMateria);
+		flexTable.setWidget(row, 0, lblAssunto);flexTable.setWidget(row++, 1, txtAssunto);
+//		flexTable.setWidget(row, 0, lblAssuntoMateria);flexTable.setWidget(row++, 1, txtMateria);
 		flexTable.setWidget(row, 0, lblDescricao);flexTable.setWidget(row++, 1, txtDescricao);
 //		flexTable.setWidget(row, 0, lblTipoAvaliacao);flexTable.setWidget(row++, 1, txtTipo);
 		flexTable.setWidget(row, 0, lblData);flexTable.setWidget(row++, 1, txtData);
@@ -220,7 +220,7 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		txtCurso.setValue(ca.getNomeCurso());
 		txtPeriodo.setValue(ca.getNomePeriodo());
 		txtDisciplina.setValue(ca.getNomeDisciplina());
-		txtMateria.setValue(ca.getNomeConteudoProgramatico());
+//		txtMateria.setValue(ca.getNomeConteudoProgramatico());
 		txtAssunto.setValue(ca.getAssuntoAvaliacao());
 		txtDescricao.setValue(ca.getDescricaoAvaliacao());
 //		txtTipo.setValue(ca.getDescricaoTipoAvaliacao());
@@ -236,7 +236,7 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		txtCurso.setValue("");
 		txtPeriodo.setValue("");
 		txtDisciplina.setValue("");
-		txtMateria.setValue("");
+//		txtMateria.setValue("");
 		txtAssunto.setValue("");
 		txtDescricao.setValue("");
 //		txtTipo.setValue("");

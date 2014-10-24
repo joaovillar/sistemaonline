@@ -10,7 +10,7 @@ public class CursoAvaliacao implements Serializable{
 	private String nomeCurso;
 	private String nomePeriodo;
 	private String nomeDisciplina;
-	private String nomeConteudoProgramatico;
+//	private String nomeConteudoProgramatico;
 	private int idAvaliacao;
 	private String assuntoAvaliacao;
 	private String descricaoAvaliacao;
@@ -44,12 +44,12 @@ public class CursoAvaliacao implements Serializable{
 	public void setNomeDisciplina(String nomeDisciplina) {
 		this.nomeDisciplina = nomeDisciplina;
 	}
-	public String getNomeConteudoProgramatico() {
-		return nomeConteudoProgramatico;
-	}
-	public void setNomeConteudoProgramatico(String nomeConteudoProgramatico) {
-		this.nomeConteudoProgramatico = nomeConteudoProgramatico;
-	}
+//	public String getNomeConteudoProgramatico() {
+//		return nomeConteudoProgramatico;
+//	}
+//	public void setNomeConteudoProgramatico(String nomeConteudoProgramatico) {
+//		this.nomeConteudoProgramatico = nomeConteudoProgramatico;
+//	}
 	public String getAssuntoAvaliacao() {
 		return assuntoAvaliacao;
 	}

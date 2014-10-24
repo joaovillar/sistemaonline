@@ -19,7 +19,7 @@ public class TelaInicialNota extends Composite{
 	public static final int intHeightTable=500;
 	
 
-	private EditarNotaPorConteudoProgramatico editarNotaPorConteudoProgramatico;
+	private EditarNotaPorDisciplina editarNotaPorDisciplina;
 	private MainView mainView;
 
 	
@@ -28,7 +28,7 @@ public class TelaInicialNota extends Composite{
 		if(uniqueInstance==null){
 			uniqueInstance = new TelaInicialNota(mainView);
 		}else{
-			uniqueInstance.editarNotaPorConteudoProgramatico.updateClientData();
+			uniqueInstance.editarNotaPorDisciplina.updateClientData();
 		}
 		return uniqueInstance;
 	}		
@@ -37,7 +37,7 @@ public class TelaInicialNota extends Composite{
 		
 		this.mainView = mainView;
 		
-		editarNotaPorConteudoProgramatico =  new EditarNotaPorConteudoProgramatico(this);
+		editarNotaPorDisciplina =  new EditarNotaPorDisciplina(this);
 //		editarNotaPorAluno = new EditarNotaPorAluno(this);
 		
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);		
@@ -46,7 +46,7 @@ public class TelaInicialNota extends Composite{
 		tabLayoutPanel.setAnimationDuration(500);
 		tabLayoutPanel.setAnimationVertical(true);
 		
-		tabLayoutPanel.add(editarNotaPorConteudoProgramatico, new MpHeaderWidget(txtConstants.notaEditarNotasConteudoProgramatico(), "images/plus-circle.png"));
+		tabLayoutPanel.add(editarNotaPorDisciplina, new MpHeaderWidget(txtConstants.notaEditarNotas(), "images/plus-circle.png"));
 //		stackPanel.add(editarNotaPorAluno, createHeaderWidget("Editar Notas por Aluno", "images/comment_edit.png"));		
 		
 		

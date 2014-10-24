@@ -10,7 +10,7 @@ public class TabelaBoletim implements Serializable{
 	private String NomeCurso;
 	private String NomePeriodo;
 	private String NomeDisciplina;
-	private String NomeConteudoProgramatico;
+//	private String NomeConteudoProgramatico;
 	private String NomeAvaliacao;
 	private String Nota;
 
@@ -42,13 +42,13 @@ public class TabelaBoletim implements Serializable{
 		NomeDisciplina = nomeDisciplina;
 	}
 
-	public String getNomeConteudoProgramatico() {
-		return NomeConteudoProgramatico;
-	}
-
-	public void setNomeConteudoProgramatico(String nomeConteudoProgramatico) {
-		NomeConteudoProgramatico = nomeConteudoProgramatico;
-	}
+//	public String getNomeConteudoProgramatico() {
+//		return NomeConteudoProgramatico;
+//	}
+//
+//	public void setNomeConteudoProgramatico(String nomeConteudoProgramatico) {
+//		NomeConteudoProgramatico = nomeConteudoProgramatico;
+//	}
 
 	public String getNomeAvaliacao() {
 		return NomeAvaliacao;

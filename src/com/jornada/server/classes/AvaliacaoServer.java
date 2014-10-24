@@ -16,25 +16,25 @@ import com.jornada.shared.classes.TipoAvaliacao;
 public class AvaliacaoServer {
 	
 	
-	public static String DB_INSERT_AVALIACAO = "INSERT INTO avaliacao (id_conteudo_programatico, id_tipo_avaliacao, assunto, descricao, data, hora) VALUES (?,?,?,?,?,?);";
+	public static String DB_INSERT_AVALIACAO = "INSERT INTO avaliacao (id_disciplina, id_tipo_avaliacao, assunto, descricao, data, hora) VALUES (?,?,?,?,?,?);";
 	public static String DB_UPDATE = "UPDATE avaliacao set id_tipo_avaliacao=?, assunto=?, descricao=?, data=?, hora=? where id_avaliacao=?;";
 	public static String DB_DELETE = "delete from avaliacao where id_avaliacao=?;";	
-	public static String DB_SELECT_AVALIACAO_PELO_CONTEUDO_PROGRAMATICO = "SELECT * FROM avaliacao where id_conteudo_programatico=? order by assunto asc;";	
+	public static String DB_SELECT_AVALIACAO_PELA_DISCIPLINA = "SELECT * FROM avaliacao where id_disciplina=? order by assunto asc;";	
 	public static String DB_SELECT_TIPO_AVALIACAO_ALL = "SELECT * FROM tipo_avaliacao order by nome_tipo_avaliacao asc;";
 	public static String DB_SELECT_TIPO_AVALIACAO = "SELECT * FROM tipo_avaliacao where id_tipo_avaliacao=? order by nome_tipo_avaliacao asc;";
 	public static String DB_SELECT_AVALIACAO_PELO_CURSO=
-			"select  c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.nome_conteudo_programatico, " +
+			"select  c.nome_curso, p.nome_periodo, d.nome_disciplina, " +
 			"a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, ta.nome_tipo_avaliacao  "+
 			"from curso c "+
 			"inner join periodo p on c.id_curso = p.id_curso "+
 			"inner join disciplina d on p.id_periodo = d.id_periodo "+
-			"inner join conteudo_programatico cp on d.id_disciplina = cp.id_disciplina "+
-			"inner join avaliacao a on cp.id_conteudo_programatico = a.id_conteudo_programatico "+
+//			"inner join conteudo_programatico cp on d.id_disciplina = cp.id_disciplina "+
+			"inner join avaliacao a on d.id_disciplina = a.id_disciplina "+
 			"inner join tipo_avaliacao ta on a.id_tipo_avaliacao = ta.id_tipo_avaliacao "+
 			"where  "+
 			"c.id_curso=? "+ 
 			"group by " +
-			"c.nome_curso, p.nome_periodo, d.nome_disciplina, cp.nome_conteudo_programatico, " +
+			"c.nome_curso, p.nome_periodo, d.nome_disciplina, " +
 			"a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, ta.nome_tipo_avaliacao  "+
 			"order by a.data, a.hora asc ";		
 		
@@ -59,7 +59,7 @@ public class AvaliacaoServer {
 			}
 				int count = 0;
 				PreparedStatement ps = conn.prepareStatement(DB_INSERT_AVALIACAO);
-				ps.setInt(++count, object.getIdConteudoProgramatico());
+				ps.setInt(++count, object.getIdDisciplina());
 				ps.setInt(++count, object.getIdTipoAvaliacao());				
 				ps.setString(++count, object.getAssunto());
 				ps.setString(++count, object.getDescricao());
@@ -166,7 +166,7 @@ public class AvaliacaoServer {
 		return success;
 	}			
 	
-	public static ArrayList<Avaliacao> getAvaliacao(int id_conteudo_programatico) {
+	public static ArrayList<Avaliacao> getAvaliacao(int id_disciplina) {
 
 		ArrayList<Avaliacao> data = new ArrayList<Avaliacao>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
@@ -178,10 +178,10 @@ public class AvaliacaoServer {
 			
 			
 
-			PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_PELO_CONTEUDO_PROGRAMATICO);
+			PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_PELA_DISCIPLINA);
 			
 			int count=0;
-			ps.setInt(++count, id_conteudo_programatico);			
+			ps.setInt(++count, id_disciplina);			
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) 
@@ -190,7 +190,7 @@ public class AvaliacaoServer {
 				Avaliacao current = new Avaliacao();
 				
 				current.setIdAvaliacao(rs.getInt("id_avaliacao"));
-				current.setIdConteudoProgramatico(rs.getInt("id_conteudo_programatico"));
+				current.setIdDisciplina(rs.getInt("id_disciplina"));
 				current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));				
 				current.setAssunto(rs.getString("assunto"));				
 				current.setDescricao(rs.getString("descricao"));
@@ -235,7 +235,7 @@ public class AvaliacaoServer {
 				current.setNomeCurso(rs.getString("nome_curso"));
 				current.setNomePeriodo(rs.getString("nome_periodo"));
 				current.setNomeDisciplina(rs.getString("nome_disciplina"));
-				current.setNomeConteudoProgramatico(rs.getString("nome_conteudo_programatico"));
+//				current.setNomeConteudoProgramatico(rs.getString("nome_conteudo_programatico"));
 				current.setIdAvaliacao(rs.getInt("id_avaliacao"));
 				current.setAssuntoAvaliacao(rs.getString("assunto"));
 				current.setDescricaoAvaliacao(rs.getString("descricao"));

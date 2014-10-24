@@ -41,8 +41,8 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 		return AvaliacaoServer.deleteRow(id_avaliacao);
 	}	
 	
-	public ArrayList<Avaliacao> getAvaliacaoPeloConteudoProgramatico(int idConteudoProgramatico) {		
-		return AvaliacaoServer.getAvaliacao(idConteudoProgramatico);
+	public ArrayList<Avaliacao> getAvaliacaoPelaDisciplina(int idDisciplina) {		
+		return AvaliacaoServer.getAvaliacao(idDisciplina);
 	}	
 	
 	public ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int id_curso, String locale){

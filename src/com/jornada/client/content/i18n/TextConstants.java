@@ -455,8 +455,8 @@ public interface TextConstants extends Messages {
 	String notaSelecionarAlunoDesejaAdicionarAlterarNota();
 	String notaErroBuscarAluno();
 	String notaInserirAlterarNotasAluno();
-	String notaEditarNotasConteudoProgramatico();
-	String notaNehumaNotaComConteudoProgramatico();
+	String notaEditarNotas();
+	String notaNehumaNota();
 	String notaErroAtualizar();
 	/*******NOTA End*******/	
 	
@@ -486,6 +486,7 @@ public interface TextConstants extends Messages {
 	String avaliacaoErroAtualizar();
 	String avaliacaoErroRemover();
 	String avaliacaoNenhumaCurso();
+	String avaliacaoNenhumaDisciplina();
 	String avaliacaoSelecioneCurso();	
 	String avaliacaoSalva();
 	String avaliacaoDesejaRemover(String assuntoAvaliacao);

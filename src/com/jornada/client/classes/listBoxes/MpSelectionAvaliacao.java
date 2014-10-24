@@ -53,9 +53,9 @@ public class MpSelectionAvaliacao extends MpSelection {
 		
 	}	
 	
-	public void populateComboBox(int idConteudoProgramatico) {
+	public void populateComboBox(int idDisciplina) {
 		startLoadingListBox();
-		GWTServiceAvaliacao.Util.getInstance().getAvaliacaoPeloConteudoProgramatico(idConteudoProgramatico ,callBackPopulateComboBox);
+		GWTServiceAvaliacao.Util.getInstance().getAvaliacaoPelaDisciplina(idDisciplina ,callBackPopulateComboBox);
 	}
 	
 	private void startLoadingListBox(){
