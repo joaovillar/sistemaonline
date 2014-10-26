@@ -428,8 +428,14 @@ public class EditarNotaPorDisciplina extends VerticalPanel {
 				// Called when the user changes the value.
 				
 				if (FieldVerifier.isValidDouble(value)) {
-					object.setNota(value);
-					GWTServiceNota.Util.getInstance().updateRow(object,callbackUpdateRow);
+				    if(FieldVerifier.isValidGrade(value)){
+	                    object.setNota(value);
+	                    GWTServiceNota.Util.getInstance().updateRow(object,callbackUpdateRow);				        
+				    }else{
+	                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+	                    mpDialogBoxWarning.setBodyText(txtConstants.geralErroTipo(txtConstants.geralValorEntre0E10()));
+	                    mpDialogBoxWarning.showDialog();				        
+				    }
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.geralErroTipo(txtConstants.geralNumeroDouble()));

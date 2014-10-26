@@ -22,6 +22,7 @@ import com.jornada.server.classes.AvaliacaoServer;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
 import com.jornada.shared.classes.TipoAvaliacao;
+import com.jornada.shared.classes.boletim.AvaliacaoNota;
 
 public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWTServiceAvaliacao {
 	
@@ -45,9 +46,15 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 		return AvaliacaoServer.getAvaliacao(idDisciplina);
 	}	
 	
-	public ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int id_curso, String locale){
-		return AvaliacaoServer.getAvaliacaoPeloCurso(id_curso, locale);
+	public ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int idCurso){
+		return AvaliacaoServer.getAvaliacaoPeloCurso(idCurso);
 	}
+	
+    public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
+       
+        return AvaliacaoServer.getAvaliacaoNota(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina); 
+        
+    }
 	
 	public ArrayList<TipoAvaliacao> getTipoAvaliacao(){		
 		return AvaliacaoServer.getTipoAvaliacao();		

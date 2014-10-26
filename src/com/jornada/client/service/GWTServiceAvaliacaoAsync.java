@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
 import com.jornada.shared.classes.TipoAvaliacao;
+import com.jornada.shared.classes.boletim.AvaliacaoNota;
 
 public interface GWTServiceAvaliacaoAsync {
 
@@ -14,8 +15,9 @@ public interface GWTServiceAvaliacaoAsync {
 	public void updateRow(Avaliacao object, AsyncCallback<Boolean> callback);	
 	public void deleteRow(int id_avaliacao, AsyncCallback<Boolean> callback);	
 	public void getAvaliacaoPelaDisciplina(int idDisciplina, AsyncCallback<ArrayList<Avaliacao>> callback);	
-	public void getAvaliacaoPeloCurso(int idCurso, String locale, AsyncCallback<ArrayList<CursoAvaliacao>> callback);
-	public void getTipoAvaliacao(AsyncCallback<ArrayList<TipoAvaliacao>> callback);	
+	public void getAvaliacaoPeloCurso(int idCurso, AsyncCallback<ArrayList<CursoAvaliacao>> callback);
+	public void getTipoAvaliacao(AsyncCallback<ArrayList<TipoAvaliacao>> callback);
+	public void getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, AsyncCallback<ArrayList<AvaliacaoNota>> callback);	
 
 	
 }

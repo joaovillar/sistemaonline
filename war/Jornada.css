@@ -28,6 +28,13 @@ h1 {
 	border-size:2px;
 }
 
+.dialogVPanelWhite {
+  background :  #FFFFFF;
+	margin: 2px;
+	border: Black;
+	border-size:2px;
+}
+
 .serverResponseLabelError {
   color: red;
 }
@@ -651,8 +658,7 @@ cursor: pointer;
 	color: #003168;
 }
 
-.table-boletim-disciplinas {
-/*   background-color: #e2e2e2; */
+.table-boletim-disciplinas{
 	color: #000000;
 	font-family: Arial,Verdana,sans-serif;
 	font-size: 12px;
@@ -661,8 +667,19 @@ cursor: pointer;
     border-left: #a6a6af 0.5px solid;
     border-right: #e6e6e6 0.5px solid;  
     border-top: #a6a6af 0.5px solid;
+/*     cursor: pointer; */
     
 }
+/* .table-boletim-disciplinas:hover{ */
+/* 	text-decoration:underline; */
+/*     cursor: pointer; */
+/*     background-color: lightblue; */
+/* background-color:#D4D0DB;  */
+/* 	background-color:rgb(196, 218, 249); */
+/* 	font-weight: bold; */
+/*     color: #FFFFFF; */
+/* } */
+
 .table-boletim-cell {
 	color: #000000;
 	font-family: Arial,Verdana,sans-serif;
@@ -677,21 +694,35 @@ cursor: pointer;
 	color: #000000;
 	font-family: Arial,Verdana,sans-serif;
 	font-size: 12px;	
-  	background-color: lime;
+  	background-color: lightGreen;
     border-bottom: #e6e6e6 0.5px solid;
     border-left: #a6a6af 0.5px solid;
     border-right: #e6e6e6 0.5px solid;  
     border-top: #a6a6af 0.5px solid;
 }
+.table-boletim-cell-green:hover {
+	background-color: lime;
+	text-decoration:underline;
+    cursor: pointer;
+    font-weight: bold;	
+}
+
 .table-boletim-cell-red {
 	color: #ffffff;
 	font-family: Arial,Verdana,sans-serif;
 	font-size: 12px;	
-  	background-color: red;
+/*   	background-color: red; */
+  	background-color: rgb(255, 70, 70);
     border-bottom: #e6e6e6 0.5px solid;
     border-left: #a6a6af 0.5px solid;
     border-right: #e6e6e6 0.5px solid;  
     border-top: #a6a6af 0.5px solid;
+}
+.table-boletim-cell-red:hover {
+	background-color: red;
+	text-decoration:underline;
+    cursor: pointer;
+    font-weight: bold;	
 }
 
 .table-boletim-cell-green-media {
@@ -699,7 +730,7 @@ cursor: pointer;
 	color: #000000;
 	font-family: Arial,Verdana,sans-serif;
 	font-size: 12px;	
-  	background-color: lime;
+  	background-color: lightGreen;
     border-bottom: #e6e6e6 0.5px solid;
     border-left: #a6a6af 0.5px solid;
     border-right: #e6e6e6 0.5px solid;  
@@ -712,7 +743,7 @@ cursor: pointer;
 	color: #ffffff;
 	font-family: Arial,Verdana,sans-serif;
 	font-size: 12px;	
-  	background-color: red;
+  	background-color: rgb(255, 70, 70);;
     border-bottom: #e6e6e6 0.5px solid;
     border-left: #a6a6af 0.5px solid;
     border-right: #e6e6e6 0.5px solid;  
@@ -1104,3 +1135,4 @@ li.multiValueSuggestBox-input-token {
 	position: relative;
 	top: 2px;
 }
+

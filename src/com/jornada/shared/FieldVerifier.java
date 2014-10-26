@@ -69,6 +69,22 @@ public class FieldVerifier {
 		}
 	}	
 	
+    public static boolean isValidGrade(String value) {
+        
+        if(isValidDouble(value)){
+            
+            double double1 = Double.parseDouble(value);
+            if(double1>=0 && double1<=10){
+                return true;
+            }else{
+                return false;
+            }
+            
+        }else{
+            return false;
+        }
+    }   	
+	
 	
 	public static boolean isValidDate(String value){
 		if (value == null) {

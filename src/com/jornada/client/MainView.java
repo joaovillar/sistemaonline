@@ -1,5 +1,7 @@
 package com.jornada.client;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.Window;
@@ -209,13 +211,24 @@ public class MainView extends Composite implements HistoryListener{
 
 		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR);
 		
-		this.vPanelBody.clear();
+		
 //		new ElementFader().fade(vPanelBody.getElement(), 0, 1, 500);
+		 GWT.runAsync(new RunAsyncCallback() {
+	          public void onFailure(Throwable caught) {
+	            Window.alert("Code download failed");
+	          }
+
+	          public void onSuccess() {
+	              
+	              vPanelBody.clear();
+	              TelaInicialAdminEscola telaInicialAdminEscola = TelaInicialAdminEscola.getInstance(MainView.this);
+	              
+	              vPanelBody.add(telaInicialAdminEscola);
+	              vPanelMenu.setVisible(true);
+	          }
+	        });
 		
-		TelaInicialAdminEscola telaInicialAdminEscola = TelaInicialAdminEscola.getInstance(this);
-		
-		this.vPanelBody.add(telaInicialAdminEscola);
-		this.vPanelMenu.setVisible(true);
+
 
 		
 	}
@@ -389,12 +402,23 @@ public class MainView extends Composite implements HistoryListener{
 		
 		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR);		
 //		new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1300);	
-		this.vPanelBody.clear();
-		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		
+		
+		 GWT.runAsync(new RunAsyncCallback() {
+	          public void onFailure(Throwable caught) {
+	            Window.alert("Code download failed");
+	          }
 
-		TelaInicialProfessor telaInicialProfessor = TelaInicialProfessor.getInstance(this);
-		this.vPanelBody.add(telaInicialProfessor);
-		this.vPanelMenu.setVisible(true);		
+	          public void onSuccess() {
+	              vPanelBody.clear();
+	              vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+
+	              TelaInicialProfessor telaInicialProfessor = TelaInicialProfessor.getInstance(MainView.this);
+	              vPanelBody.add(telaInicialProfessor);
+	              vPanelMenu.setVisible(true);
+	          }
+	        });
+		
 	}	
 	
 	
@@ -495,12 +519,22 @@ public class MainView extends Composite implements HistoryListener{
 		
 		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO);		
 //		new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1300);	
-		this.vPanelBody.clear();
-		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		
+		 GWT.runAsync(new RunAsyncCallback() {
+	          public void onFailure(Throwable caught) {
+	            Window.alert("Code download failed");
+	          }
 
-		TelaInicialAluno telaInicialAluno = TelaInicialAluno.getInstance(this);
-		this.vPanelBody.add(telaInicialAluno);
-		this.vPanelMenu.setVisible(true);		
+	          public void onSuccess() {
+	              vPanelBody.clear();
+	              vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+
+	              TelaInicialAluno telaInicialAluno = TelaInicialAluno.getInstance(MainView.this);
+	              vPanelBody.add(telaInicialAluno);
+	              vPanelMenu.setVisible(true);       
+
+	          }
+	        });
 	}		
 	
 	public void openFerramentaAlunoNota(){
@@ -573,14 +607,28 @@ public class MainView extends Composite implements HistoryListener{
 		this.vPanelMenu.setVisible(true);		
 	}		
 	
-	public void openFerramentaPais(){		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS);		
-		this.vPanelBody.clear();
-		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+	public void openFerramentaPais(){	
+	    
+		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS);
+		
+		
+        GWT.runAsync(new RunAsyncCallback() {
+            public void onFailure(Throwable caught) {
+              Window.alert("Code download failed");
+            }
 
-		TelaInicialPais telaInicialPais = TelaInicialPais.getInstance(this);
-		this.vPanelBody.add(telaInicialPais);
-		this.vPanelMenu.setVisible(true);		
+            public void onSuccess() {
+                vPanelBody.clear();
+                vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+
+                TelaInicialPais telaInicialPais = TelaInicialPais.getInstance(MainView.this);
+                vPanelBody.add(telaInicialPais);
+                vPanelMenu.setVisible(true);       
+
+            }
+          });
+		
+		
 	}		
 	
 	public void openFerramentaPaisAgenda(){

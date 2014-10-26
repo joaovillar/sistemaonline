@@ -18,7 +18,6 @@ import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Grid;
@@ -203,10 +202,10 @@ public class VisualizarAlunoAgenda extends VerticalPanel {
 	protected void populateGrid() {
 		mpPanelLoading.setVisible(true);
 		
-		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+//		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 
 		int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
-		GWTServiceAvaliacao.Util.getInstance().getAvaliacaoPeloCurso(idCurso, locale,
+		GWTServiceAvaliacao.Util.getInstance().getAvaliacaoPeloCurso(idCurso,
 		
 				new AsyncCallback<ArrayList<CursoAvaliacao>>() {
 

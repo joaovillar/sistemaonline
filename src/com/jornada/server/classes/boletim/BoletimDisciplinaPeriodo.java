@@ -1,5 +1,6 @@
 package com.jornada.server.classes.boletim;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -93,6 +94,7 @@ public class BoletimDisciplinaPeriodo
             
             String strDisciplina = arrayDisciplinas[intDisciplina];
             
+            double somaMedia=0;
             for(int intPeriodo=0;intPeriodo<arrayPeriodo.length;intPeriodo++){
                 
                 String strPeriodo = arrayPeriodo[intPeriodo];
@@ -102,28 +104,38 @@ public class BoletimDisciplinaPeriodo
                     if(boletim.getNomeDisciplina().equals(strDisciplina)){
                         if(boletim.getNomePeriodo().equals(strPeriodo)){
                             
-                            String strNotaBoletim = arrayBoletim[intPeriodo][intDisciplina];
-                            if(strNotaBoletim==null || strNotaBoletim.isEmpty()){
+//                            String strNotaBoletim = arrayBoletim[intPeriodo][intDisciplina];
+//                            if(strNotaBoletim==null || strNotaBoletim.isEmpty()){
+//                                somaMedia = strNotaBoletim;
+//                                arrayBoletim[intPeriodo][intDisciplina] = boletim.getNota();
+                            if(arrayBoletim[intPeriodo][intDisciplina]==null || arrayBoletim[intPeriodo][intDisciplina].isEmpty()){
                                 arrayBoletim[intPeriodo][intDisciplina] = boletim.getNota();
+                                if(boletim.getNota()!=null){
+                                    somaMedia = Double.parseDouble(boletim.getNota());
+                                }
                             }
                             else{
                                 if (boletim.getNota() != null && !boletim.getNota().isEmpty())
                                 {
                                     double notaDoDB = Double.parseDouble(boletim.getNota());
-                                    double notaDoBoletim = Double.parseDouble(strNotaBoletim);
-
-                                    int numeroParaMedia = getNumeroDeNotasParaCalcularMedia(listTabelaBoletim,strPeriodo, strDisciplina);
+//                                    double notaDoBoletim = Double.parseDouble(strNotaBoletim);
                                     
-                                    double media = (notaDoDB + notaDoBoletim) / numeroParaMedia;
+                                    somaMedia = (notaDoDB + somaMedia);
 
-                                    arrayBoletim[intPeriodo][intDisciplina] = Double.toString(media);
+                                    
                                 }
                             }
 
                         }
                     }
                 }
-                
+                int numeroParaMedia = getNumeroDeNotasParaCalcularMedia(listTabelaBoletim,strPeriodo, strDisciplina);
+                if (numeroParaMedia > 0) {
+                    double mediaDisciplinaPeriodo = somaMedia / numeroParaMedia;
+                    DecimalFormat oneDigit = new DecimalFormat("#0.0");
+//                    arrayBoletim[intPeriodo][intDisciplina] = Double.toString(mediaDisciplinaPeriodo);
+                    arrayBoletim[intPeriodo][intDisciplina] = oneDigit.format(mediaDisciplinaPeriodo);
+                }
             }
             
         }
@@ -154,24 +166,24 @@ public class BoletimDisciplinaPeriodo
 
     }
         
-    private static String[] getPeriodosFromArray(ArrayList<TabelaBoletim> listTabelaBoletim){
-        
-        	//Avoiding Duplicity
-		HashSet<String> hashPeriodos = new HashSet<String>();		
-		for(TabelaBoletim object : listTabelaBoletim){
-			hashPeriodos.add(object.getNomePeriodo());
-		}
-		String[] auxArrayPeriodos = new String[hashPeriodos.size()];
+    private static String[] getPeriodosFromArray(ArrayList<TabelaBoletim> listTabelaBoletim) {
 
-		//Mounting Periodos
-		int i=0;
-		for(String strPeriodo : hashPeriodos){
-			auxArrayPeriodos[i++] = strPeriodo;
-		}
-		Arrays.sort(auxArrayPeriodos);
+        // Avoiding Duplicity
+        HashSet<String> hashPeriodos = new HashSet<String>();
+        for (TabelaBoletim object : listTabelaBoletim) {
+            hashPeriodos.add(object.getNomePeriodo());
+        }
+        String[] auxArrayPeriodos = new String[hashPeriodos.size()];
 
-                return auxArrayPeriodos;
-                
+        // Mounting Periodos
+        int i = 0;
+        for (String strPeriodo : hashPeriodos) {
+            auxArrayPeriodos[i++] = strPeriodo;
+        }
+        Arrays.sort(auxArrayPeriodos);
+
+        return auxArrayPeriodos;
+
     }
            
     private static String[] getDisciplinaFromArray(ArrayList<TabelaBoletim> listTabelaBoletim)

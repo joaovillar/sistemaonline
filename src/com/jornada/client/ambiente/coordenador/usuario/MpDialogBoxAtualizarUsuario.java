@@ -48,7 +48,6 @@ public class MpDialogBoxAtualizarUsuario extends DecoratedPopupPanel implements 
 //		setText(txtConstants.geralAviso());
 
 		Button closeButton = new Button(txtConstants.geralFecharJanela(), this);
-		// closeButton.ad
 		closeButton.addKeyUpHandler(new EnterKeyUpHandler());
 		closeButton.setFocus(true);
 		closeButton.setStyleName("cw-Button");

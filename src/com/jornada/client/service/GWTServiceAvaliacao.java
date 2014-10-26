@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
 import com.jornada.shared.classes.TipoAvaliacao;
+import com.jornada.shared.classes.boletim.AvaliacaoNota;
 
 @RemoteServiceRelativePath("GWTServiceAvaliacao")
 public interface GWTServiceAvaliacao extends RemoteService {
@@ -31,8 +32,9 @@ public interface GWTServiceAvaliacao extends RemoteService {
 	public boolean updateRow(Avaliacao object);
 	public boolean deleteRow(int id_avaliacao); 	
 	public ArrayList<Avaliacao> getAvaliacaoPelaDisciplina(int idDisciplina);	
-	public ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int idCurso, String locale);
+	public ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int idCurso);
 	public ArrayList<TipoAvaliacao> getTipoAvaliacao();
+	 public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina);
 	
 	public static class Util {
 		private static GWTServiceAvaliacaoAsync instance;

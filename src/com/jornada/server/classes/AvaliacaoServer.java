@@ -12,23 +12,23 @@ import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
 import com.jornada.shared.classes.TipoAvaliacao;
+import com.jornada.shared.classes.boletim.AvaliacaoNota;
 
 public class AvaliacaoServer {
 	
 	
-	public static String DB_INSERT_AVALIACAO = "INSERT INTO avaliacao (id_disciplina, id_tipo_avaliacao, assunto, descricao, data, hora) VALUES (?,?,?,?,?,?);";
-	public static String DB_UPDATE = "UPDATE avaliacao set id_tipo_avaliacao=?, assunto=?, descricao=?, data=?, hora=? where id_avaliacao=?;";
-	public static String DB_DELETE = "delete from avaliacao where id_avaliacao=?;";	
-	public static String DB_SELECT_AVALIACAO_PELA_DISCIPLINA = "SELECT * FROM avaliacao where id_disciplina=? order by assunto asc;";	
-	public static String DB_SELECT_TIPO_AVALIACAO_ALL = "SELECT * FROM tipo_avaliacao order by nome_tipo_avaliacao asc;";
-	public static String DB_SELECT_TIPO_AVALIACAO = "SELECT * FROM tipo_avaliacao where id_tipo_avaliacao=? order by nome_tipo_avaliacao asc;";
-	public static String DB_SELECT_AVALIACAO_PELO_CURSO=
+	public static final String DB_INSERT_AVALIACAO = "INSERT INTO avaliacao (id_disciplina, id_tipo_avaliacao, assunto, descricao, data, hora) VALUES (?,?,?,?,?,?);";
+	public static final String DB_UPDATE = "UPDATE avaliacao set id_tipo_avaliacao=?, assunto=?, descricao=?, data=?, hora=? where id_avaliacao=?;";
+	public static final String DB_DELETE = "delete from avaliacao where id_avaliacao=?;";	
+	public static final String DB_SELECT_AVALIACAO_PELA_DISCIPLINA = "SELECT * FROM avaliacao where id_disciplina=? order by assunto asc;";	
+	public static final String DB_SELECT_TIPO_AVALIACAO_ALL = "SELECT * FROM tipo_avaliacao order by nome_tipo_avaliacao asc;";
+	public static final String DB_SELECT_TIPO_AVALIACAO = "SELECT * FROM tipo_avaliacao where id_tipo_avaliacao=? order by nome_tipo_avaliacao asc;";
+	public static final String DB_SELECT_AVALIACAO_PELO_CURSO=
 			"select  c.nome_curso, p.nome_periodo, d.nome_disciplina, " +
 			"a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, ta.nome_tipo_avaliacao  "+
 			"from curso c "+
 			"inner join periodo p on c.id_curso = p.id_curso "+
 			"inner join disciplina d on p.id_periodo = d.id_periodo "+
-//			"inner join conteudo_programatico cp on d.id_disciplina = cp.id_disciplina "+
 			"inner join avaliacao a on d.id_disciplina = a.id_disciplina "+
 			"inner join tipo_avaliacao ta on a.id_tipo_avaliacao = ta.id_tipo_avaliacao "+
 			"where  "+
@@ -37,6 +37,26 @@ public class AvaliacaoServer {
 			"c.nome_curso, p.nome_periodo, d.nome_disciplina, " +
 			"a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, ta.nome_tipo_avaliacao  "+
 			"order by a.data, a.hora asc ";		
+	
+    public static final String DB_SELECT_AVALIACAO_NOTA = 
+            "select * from "+ 
+            "( "+
+            "    select c.nome_curso, p.nome_periodo, d.nome_disciplina, a.* "+ 
+            "    from curso c, periodo p, disciplina d, avaliacao a "+
+            "    where "+
+            "    c.id_curso = ? "+
+            "    and c.id_curso = p.id_curso "+
+            "    and p.nome_periodo = ? "+
+            "    and p.id_periodo = d.id_periodo "+
+            "    and d.nome_disciplina = ? "+
+            "    and d.id_disciplina = a.id_disciplina "+
+            ") as ava "+
+            "left join "+
+            "nota n "+
+            "on ava.id_avaliacao = n.id_avaliacao "+
+            "where  "+
+            "n.id_usuario=? ";
+ 	
 		
 	
 	
@@ -211,55 +231,111 @@ public class AvaliacaoServer {
 		return data;
 
 	}		
-		
-	public static ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int id_curso, String locale) {
-
-		ArrayList<CursoAvaliacao> data = new ArrayList<CursoAvaliacao>();
-//		JornadaDataBase dataBase = new JornadaDataBase();
-		Connection conn = ConnectionManager.getConnection();
-		try 
-		{
-//			dataBase.createConnection();
-
-			PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_PELO_CURSO);
-			
-			int count=0;
-			ps.setInt(++count, id_curso);			
-
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) 
-			{
-
-				CursoAvaliacao current = new CursoAvaliacao();
-				
-				current.setNomeCurso(rs.getString("nome_curso"));
-				current.setNomePeriodo(rs.getString("nome_periodo"));
-				current.setNomeDisciplina(rs.getString("nome_disciplina"));
-//				current.setNomeConteudoProgramatico(rs.getString("nome_conteudo_programatico"));
-				current.setIdAvaliacao(rs.getInt("id_avaliacao"));
-				current.setAssuntoAvaliacao(rs.getString("assunto"));
-				current.setDescricaoAvaliacao(rs.getString("descricao"));
-//				current.setDataAvaliacao(MpUtilServer.convertDateToString(rs.getDate("data"), locale));
-				current.setDataAvaliacao(rs.getDate("data"));
-				current.setHoraAvaliacao(MpUtilServer.convertTimeToString(rs.getTime("hora")));
-				current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
-				current.setDescricaoTipoAvaliacao(rs.getString("nome_tipo_avaliacao"));
-
-				data.add(current);
-			}
-
-		} catch (SQLException sqlex) {
-			data=null;
-			System.err.println(sqlex.getMessage());
-		} finally {
-//			dataBase.close();
-			ConnectionManager.closeConnection(conn);
-		}
-
-		return data;
-
-	}			
 	
+	
+	
+		
+    public static ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int id_curso) {
+
+        ArrayList<CursoAvaliacao> data = new ArrayList<CursoAvaliacao>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection conn = ConnectionManager.getConnection();
+        try 
+        {
+//          dataBase.createConnection();
+
+            PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_PELO_CURSO);
+            
+            int count=0;
+            ps.setInt(++count, id_curso);           
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) 
+            {
+
+                CursoAvaliacao current = new CursoAvaliacao();
+                
+                current.setNomeCurso(rs.getString("nome_curso"));
+                current.setNomePeriodo(rs.getString("nome_periodo"));
+                current.setNomeDisciplina(rs.getString("nome_disciplina"));
+//              current.setNomeConteudoProgramatico(rs.getString("nome_conteudo_programatico"));
+                current.setIdAvaliacao(rs.getInt("id_avaliacao"));
+                current.setAssuntoAvaliacao(rs.getString("assunto"));
+                current.setDescricaoAvaliacao(rs.getString("descricao"));
+//              current.setDataAvaliacao(MpUtilServer.convertDateToString(rs.getDate("data"), locale));
+                current.setDataAvaliacao(rs.getDate("data"));
+                current.setHoraAvaliacao(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
+                current.setDescricaoTipoAvaliacao(rs.getString("nome_tipo_avaliacao"));
+
+                data.add(current);
+            }
+
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(conn);
+        }
+
+        return data;
+
+    }           
+
+    
+public static ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
+
+    ArrayList<AvaliacaoNota> data = new ArrayList<AvaliacaoNota>();
+//  JornadaDataBase dataBase = new JornadaDataBase();
+    Connection conn = ConnectionManager.getConnection();
+    try 
+    {
+//      dataBase.createConnection();
+
+        PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_NOTA);
+        
+        int count=0;
+        ps.setInt(++count, idCurso);           
+        ps.setString(++count, strNomePeriodo);
+        ps.setString(++count, strNomeDisciplina);
+        ps.setInt(++count, idUsuario);
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) 
+        {
+
+            AvaliacaoNota current = new AvaliacaoNota();
+            
+            current.setNomeCurso(rs.getString("nome_curso"));
+            current.setNomePeriodo(rs.getString("nome_periodo"));
+            current.setNomeDisciplina(rs.getString("nome_disciplina"));
+            current.setIdAvaliacao(rs.getInt("id_avaliacao"));
+            current.setAssunto(rs.getString("assunto"));
+            current.setDescricao(rs.getString("descricao"));
+            current.setData(rs.getDate("data"));
+            current.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+            current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
+            current.setNota(rs.getDouble("nota"));
+            
+            TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao()); 
+            current.setTipoAvaliacao(tipoAvaliacao);
+
+            data.add(current);
+        }
+
+    } catch (SQLException sqlex) {
+        data=null;
+        System.err.println(sqlex.getMessage());
+    } finally {
+//      dataBase.close();
+        ConnectionManager.closeConnection(conn);
+    }
+
+    return data;
+
+}           
+    
 	
 	public static ArrayList<TipoAvaliacao> getTipoAvaliacao() {
 

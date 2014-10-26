@@ -182,6 +182,7 @@ public class NotaServer {
 				
 				current.setNomeCurso(rs.getString("nome_curso"));
 				current.setNomePeriodo(rs.getString("nome_periodo"));
+				current.setIdDisciplina(rs.getInt("id_disciplina"));
 				current.setNomeDisciplina(rs.getString("nome_disciplina"));
 //				current.setNomeConteudoProgramatico(rs.getString("descricao"));
 				current.setNomeAvaliacao(rs.getString("assunto"));

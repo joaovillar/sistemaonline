@@ -603,6 +603,7 @@ public interface TextConstants extends Messages {
 	String geralOk();
 	String geralNumeroInteiro();
 	String geralNumeroDouble();
+	String geralValorEntre0E10();
 	String geralRecarregarAmbiente();
 	String geralErro();
 	String geralFecharJanela();

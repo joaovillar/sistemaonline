@@ -117,9 +117,6 @@ public class PeriodoServer {
 //			dataBase.close();
 			ConnectionManager.closeConnection(connection);
 		}
-		
-		
-
 
 		return data;
 

@@ -10,6 +10,7 @@ public class TabelaBoletim implements Serializable{
 	private String NomeCurso;
 	private String NomePeriodo;
 	private String NomeDisciplina;
+	private int idDisciplina;
 //	private String NomeConteudoProgramatico;
 	private String NomeAvaliacao;
 	private String Nota;
@@ -65,6 +66,14 @@ public class TabelaBoletim implements Serializable{
 	public void setNota(String nota) {
 		Nota = nota;
 	}
+
+    public int getIdDisciplina() {
+        return idDisciplina;
+    }
+
+    public void setIdDisciplina(int idDisciplina) {
+        this.idDisciplina = idDisciplina;
+    }
 	
 	
 

@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.gwt.charts.client.ChartLoader;
 import com.googlecode.gwt.charts.client.ChartPackage;
@@ -49,6 +48,8 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	private String[][] list;
 	
 	private ColumnChart chart;
+	
+	private FlexTable flexTableBoletim;
 
 	private Grid gridBoletimChart;
 	
@@ -259,91 +260,87 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		
 		
 		Double doubleMediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
-
 		
-		
-		FlexTable flexTable = new FlexTable();
-		flexTable.setCellSpacing(0);
-		flexTable.setCellPadding(0);
-		flexTable.setBorderWidth(0);
-		flexTable.setStyleName("table-boletim");
-		flexTable.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable),Integer.toString(TelaInicialPeriodo.intHeightTable));
+		flexTableBoletim = new FlexTable();
+		flexTableBoletim.setCellSpacing(0);
+		flexTableBoletim.setCellPadding(0);
+		flexTableBoletim.setBorderWidth(0);
+		flexTableBoletim.setStyleName("table-boletim");
+		flexTableBoletim.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable),Integer.toString(TelaInicialPeriodo.intHeightTable));
 
         int lin = listBoletim[0].length;
         int col = listBoletim.length;    
         
-
-//        double mediaNotaEscola = Double.valueOf(Nota.STR_NOTA_ESCOLA);
-        
-        
-		
+		//For para preencher linha a linhas
 		for(int row=0;row<lin;row++){
 			
 			double doubleMedia=0;
 			int intCalcularMedia=0;
 			
+			//For para preencher coluna a coluna 
 			for(int column=0;column<col;column++){
 				String strTextBoletim = listBoletim[column][row];
-				Label lblText = new Label();
+				Label lblText = new Label();				
 				lblText.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 				
-				//Se não tiver nota coloca '-' para preencher a tabela com alguma coisa
+				//Se nao tiver nota coloca '-' para preencher a tabela com alguma coisa
 				if(strTextBoletim==null || strTextBoletim.isEmpty()){
 					strTextBoletim="-";
 					lblText.setText(strTextBoletim);					
 				}
-				//senão adicione a nota
+				//senao adicione a nota
 				else{
 					lblText.setText(strTextBoletim);										
 				}
 				
-				flexTable.setWidget(row, column, lblText);				
+				flexTableBoletim.setWidget(row, column, lblText);				
 
-				//linha zero é o header
+				//Inicio Adicionando o Style
+				//linha zero eh o header
 				if(row==0){
 					lblText.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-					flexTable.getWidget(row, column).setStyleName("table-boletim-header");	
-				}
-				//Coluna 0 (que não seja a linha 0) é o nome das disciplinas
-				else if(column==0&&row!=0){
-					lblText.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-					flexTable.getWidget(row, column).setStyleName("table-boletim-disciplinas");
+					flexTableBoletim.getWidget(row, column).setStyleName("table-boletim-header");
 					
 				}
-				//se não for o header nem as disciplinas então coloque as notas
+				//Coluna 0 (que nao seja a linha 0) eh nome das disciplinas
+				else if(column==0&&row!=0){
+					lblText.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+					flexTableBoletim.getWidget(row, column).setStyleName("table-boletim-disciplinas");
+					lblText.addClickHandler(new ClickHandlerFlexTableDisciplinas());
+				}
+				//se nao for o header nem as disciplinas entao coloque as notas
 				else
 				{
 					String strNota = listBoletim[column][row];
-					//se não tiver nota coloque o fundo branco
+					//se nao tiver nota coloque o fundo branco
 					if(strNota==null || strNota.isEmpty()){
-						flexTable.getWidget(row, column).setStyleName("table-boletim-cell");
+						flexTableBoletim.getWidget(row, column).setStyleName("table-boletim-cell");
 					}
 					else{
 						double doubleNota = Double.parseDouble(strNota);
 						doubleMedia = doubleMedia +doubleNota;
 						intCalcularMedia++;
-						//ToDo colocar 6.0 no banco de dados
 						//se nota maior que 6 coloque o fundo verde
 						if(doubleNota>=doubleMediaNotaCurso){
-							flexTable.getWidget(row, column).setStyleName("table-boletim-cell-green");
+							flexTableBoletim.getWidget(row, column).setStyleName("table-boletim-cell-green");
+							lblText.addClickHandler(new ClickHandlerFlexTableNotas());
 						}
-						//ToDo colocar 6.0 no banco de dados
 						//se nota menor que 6 coloque o fundo vermelho
 						else if(doubleNota<doubleMediaNotaCurso){
-							flexTable.getWidget(row, column).setStyleName("table-boletim-cell-red");
+							flexTableBoletim.getWidget(row, column).setStyleName("table-boletim-cell-red");
+							lblText.addClickHandler(new ClickHandlerFlexTableNotas());
 						}
-					}					
-					
-				}				
-				
+					}
+				}
+				//Fim adicionando o style
 			}
 			
 			
-			//Begin Criando Coluna Média Geral
+			//Begin Criando Coluna Media Geral
 			
 			if (row == 0) {
-				flexTable.setWidget(row, col + 1, new Label(txtConstants.notaMediaFinal()));
-				flexTable.getWidget(row, col + 1).setStyleName("table-boletim-header-media");
+				flexTableBoletim.setWidget(row, col + 1, new Label(txtConstants.notaMediaFinal()));
+				flexTableBoletim.getWidget(row, col + 1).setStyleName("table-boletim-header-media");
 			} else {
 
 				doubleMedia = doubleMedia / intCalcularMedia;
@@ -357,23 +354,23 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 				Label lblMedia = new Label(strMediaGeral);
 				lblMedia.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
-				flexTable.setWidget(row, col + 1, lblMedia);
+				flexTableBoletim.setWidget(row, col + 1, lblMedia);
 				
 				if (doubleMedia >= doubleMediaNotaCurso) {
-					flexTable.getWidget(row, col + 1).setStyleName("table-boletim-cell-green-media");
+					flexTableBoletim.getWidget(row, col + 1).setStyleName("table-boletim-cell-green-media");
 				}
 				else if (doubleMedia < doubleMediaNotaCurso) { // se nota menor que 6 coloque o fundo vermelho 
-					flexTable.getWidget(row, col + 1).setStyleName("table-boletim-cell-red-media");
+					flexTableBoletim.getWidget(row, col + 1).setStyleName("table-boletim-cell-red-media");
 				}
 				else{
-					flexTable.getWidget(row, col + 1).setStyleName("table-boletim-cell");
+					flexTableBoletim.getWidget(row, col + 1).setStyleName("table-boletim-cell");
 				}
 			}
-			//Criando Coluna Média Geral			
+			//Fim Criando Coluna Media Geral			
 			
 		}
 
-		return flexTable;
+		return flexTableBoletim;
 		
 		
 		
@@ -531,6 +528,52 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 
         }
     }
+    
+    
+    private class ClickHandlerFlexTableDisciplinas implements ClickHandler {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            int columnIndex = flexTableBoletim.getCellForEvent(event).getCellIndex();
+            int rowIndex = flexTableBoletim.getCellForEvent(event).getRowIndex();
+            
+            System.out.println("columnIndex:"+columnIndex);
+            System.out.println("rowIndex:"+rowIndex);
+
+        }
+    }
+    
+    
+    private class ClickHandlerFlexTableNotas implements ClickHandler {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            int columnIndex = flexTableBoletim.getCellForEvent(event).getCellIndex();
+            int rowIndex = flexTableBoletim.getCellForEvent(event).getRowIndex();
+            
+            System.out.println("columnIndex:"+columnIndex);
+            System.out.println("rowIndex:"+rowIndex);
+            
+            String strCurso = listBoxCurso.getItemText(listBoxCurso.getSelectedIndex());
+            int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
+            Label lblDisciplina = (Label)flexTableBoletim.getWidget(rowIndex, 0);
+            Label lblPeriodo = (Label)flexTableBoletim.getWidget(0, columnIndex);
+            
+            Double doubleMediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+            
+            Usuario usuario = telaInicialAlunoVisualizarNotas.getMainView().getUsuarioLogado(); 
+            if(usuario.getIdTipoUsuario()==TipoUsuario.ALUNO){
+                DialogBoxNota.getInstance(usuario.getIdUsuario(), idCurso, strCurso, lblDisciplina.getText(), lblPeriodo.getText(), doubleMediaNotaCurso);
+            }else{
+                int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getValue(listBoxAlunosPorCurso.getSelectedIndex()));                
+                DialogBoxNota.getInstance(idUsuario, idCurso, strCurso, lblDisciplina.getText(), lblPeriodo.getText(), doubleMediaNotaCurso);                
+            }
+                
+            
+
+        }
+    }
+
 	
 	
 

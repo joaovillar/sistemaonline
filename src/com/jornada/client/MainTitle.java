@@ -302,46 +302,11 @@ public class MainTitle extends Composite {
 
 				}
 
-				// GWTServiceLogin.Util.getInstance().logout(callBackSair);
 			}
 		});
-//		Window.addCloseHandler(new CloseHandler<Window>() {
-//			@Override
-//			public void onClose(CloseEvent<Window> event) {
-//
-////				if (getCookieLanguage().equals("changing")) {
-////					Cookies.removeCookie("language");
-//				if (strControlClosingEvent.equals("changing")) {
-//					strControlClosingEvent = "";
-//				} else {
-//					System.out.println("logging out");
-//					GWTServiceLogin.Util.getInstance().logout(callBackSair);
-//					String s = "";
-//			        for(int i = 0; i < 100000; i++)
-//			        {
-//			            s += i;
-//			        }
-//				}
-//			}
-//		});
+
 		
 	}
 	
-	
-	
-//	private String getCookieLanguage(){
-//		String strCookieLanguage = "";
-//		try {
-//			strCookieLanguage = Cookies.getCookie("language");
-//		} catch (Exception ex) {
-//			strCookieLanguage = "";
-//		}
-//
-//		if (strCookieLanguage == null) {
-//			strCookieLanguage = "";
-//		}
-//
-//		return strCookieLanguage;		
-//	}
 
 }

@@ -14,7 +14,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
@@ -183,9 +182,9 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 
 	protected void populateGrid() {
 		mpPanelLoading.setVisible(true);	
-		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+//		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
-		GWTServiceAvaliacao.Util.getInstance().getAvaliacaoPeloCurso(idCurso,locale,
+		GWTServiceAvaliacao.Util.getInstance().getAvaliacaoPeloCurso(idCurso,
 		
 				new AsyncCallback<ArrayList<CursoAvaliacao>>() {
 
