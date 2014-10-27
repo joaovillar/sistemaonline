@@ -134,7 +134,7 @@ public class BoletimDisciplinaPeriodo
                     double mediaDisciplinaPeriodo = somaMedia / numeroParaMedia;
                     DecimalFormat oneDigit = new DecimalFormat("0.##");
 //                    arrayBoletim[intPeriodo][intDisciplina] = Double.toString(mediaDisciplinaPeriodo);
-                    arrayBoletim[intPeriodo][intDisciplina] = oneDigit.format(mediaDisciplinaPeriodo);
+                    arrayBoletim[intPeriodo][intDisciplina] = oneDigit.format(mediaDisciplinaPeriodo).replace(",", ".");
                 }
             }
             
