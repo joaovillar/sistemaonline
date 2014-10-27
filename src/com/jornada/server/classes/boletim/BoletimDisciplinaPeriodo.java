@@ -132,7 +132,7 @@ public class BoletimDisciplinaPeriodo
                 int numeroParaMedia = getNumeroDeNotasParaCalcularMedia(listTabelaBoletim,strPeriodo, strDisciplina);
                 if (numeroParaMedia > 0) {
                     double mediaDisciplinaPeriodo = somaMedia / numeroParaMedia;
-                    DecimalFormat oneDigit = new DecimalFormat("#0.0");
+                    DecimalFormat oneDigit = new DecimalFormat("0.##");
 //                    arrayBoletim[intPeriodo][intDisciplina] = Double.toString(mediaDisciplinaPeriodo);
                     arrayBoletim[intPeriodo][intDisciplina] = oneDigit.format(mediaDisciplinaPeriodo);
                 }
