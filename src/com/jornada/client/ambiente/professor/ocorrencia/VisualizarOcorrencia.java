@@ -821,7 +821,8 @@ public class VisualizarOcorrencia extends VerticalPanel {
 			public void onSuccess(Boolean success) {
 //				paiCienteColumn.getValue(object);
 				System.out.println("success");
-
+				telaInicialProfessorOcorrencia.updateEditarOcorrenciaPopulateGrid();
+				telaInicialProfessorOcorrencia.updateAprovarOcorrenciaPopulateGrid();
 			}
 
 			public void onFailure(Throwable caught) {

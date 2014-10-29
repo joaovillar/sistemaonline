@@ -199,7 +199,7 @@ public class AdicionarTopico extends VerticalPanel {
 					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
 					mpDialogBoxConfirm.setBodyText(txtConstants.topicoSalvo());
 					mpDialogBoxConfirm.showDialog();
-//					cadastroConteudoProgramatico.populateGrid();
+					telaInicialTopico.populateGrid();
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.topicoErroSalvar()+" "+txtConstants.geralRecarregarAmbiente());
