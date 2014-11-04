@@ -381,9 +381,13 @@ public class EditarCurso extends VerticalPanel {
 				}
 			}
 		});
+		
+//		cellTable.setWidth("100%", true);
+//		cellTable.setColumnWidth(descricaoColumn, 65.0, Unit.PCT);
 
 
-		descricaoColumn = new Column<Curso, String>(new MpTextAreaEditCell(5,150)) {
+		MpTextAreaEditCell lbl = new MpTextAreaEditCell(5,40);
+		descricaoColumn = new Column<Curso, String>(lbl) {
 			@Override
 			public String getValue(Curso object) {
 				return object.getDescricao();
@@ -399,7 +403,7 @@ public class EditarCurso extends VerticalPanel {
 		});
 
 
-		objetivoColumn = new Column<Curso, String>(new MpTextAreaEditCell(5,150)) {
+		objetivoColumn = new Column<Curso, String>(new MpTextAreaEditCell(5,40)) {
 			@Override
 			public String getValue(Curso object) {
 				return object.getEmenta();

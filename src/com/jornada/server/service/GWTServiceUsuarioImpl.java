@@ -20,6 +20,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.server.classes.UsuarioServer;
 import com.jornada.shared.classes.TipoUsuario;
+import com.jornada.shared.classes.UnidadeEscola;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
 import com.jornada.shared.classes.usuario.UsuarioNomeID;
@@ -79,7 +80,7 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 	
 	
 	
-    public ArrayList<UsuarioNomeID> getAlunosTodosOuPorCurso(int idCurso, boolean showAluno, boolean showPais, boolean showProfessor) {
+    public ArrayList<UsuarioNomeID> getAlunosTodosOuPorCurso(int idCurso, int idUnidade, boolean showAluno, boolean showPais, boolean showProfessor) {
         ArrayList<Usuario> listUsuario = new ArrayList<Usuario>();
         if(0==idCurso){
             if(showAluno)listUsuario.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.ALUNO));
@@ -91,7 +92,15 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
             if(showProfessor)listUsuario.addAll(UsuarioServer.getProfessorPorCurso(idCurso));
         }
         
-        return UsuarioServer.convertToUsuarioNomeIdParaEmail(listUsuario);
+        ArrayList<Usuario> listUsuarioUnidade = new ArrayList<Usuario>();
+        for (int i = 0; i < listUsuario.size(); i++) {
+            Usuario user = listUsuario.get(i);
+            if (user.getIdUnidadeEscola() == idUnidade || user.getIdUnidadeEscola() == UnidadeEscola.INT_AMBAS) {
+                listUsuarioUnidade.add(user);
+            }
+        }
+        
+        return UsuarioServer.convertToUsuarioNomeIdParaEmail(listUsuarioUnidade);
     }
     
     
@@ -122,11 +131,20 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.getUsuariosPorTipoUsuario(id_tipo_usuario);
 	}
 
-    public ArrayList<UsuarioNomeID> getCoordenadoresAdministradoresNomeId() {
+    public ArrayList<UsuarioNomeID> getCoordenadoresAdministradoresNomeId(int idUnidade) {
         ArrayList<Usuario> listUser =  new ArrayList<Usuario>(); 
         listUser.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.COORDENADOR));
-        listUser.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.ADMINISTRADOR));        
-        return UsuarioServer.convertToUsuarioNomeId(listUser);
+        listUser.addAll(UsuarioServer.getUsuariosPorTipoUsuario(TipoUsuario.ADMINISTRADOR));    
+        
+        ArrayList<Usuario> listUsuarioUnidade = new ArrayList<Usuario>();
+        for (int i = 0; i < listUser.size(); i++) {
+            Usuario user = listUser.get(i);
+            if (user.getIdUnidadeEscola() == idUnidade || user.getIdUnidadeEscola() == UnidadeEscola.INT_AMBAS) {
+                listUsuarioUnidade.add(user);
+            }
+        }
+        
+        return UsuarioServer.convertToUsuarioNomeId(listUsuarioUnidade);
     }
 	
 	public ArrayList<Usuario> getFilhoDoPaiAmbientePais(Usuario usuarioPai) {				

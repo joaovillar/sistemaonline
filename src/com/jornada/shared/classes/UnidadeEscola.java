@@ -7,6 +7,7 @@ public class UnidadeEscola implements Serializable {
 	private static final long serialVersionUID = 7663750057940951949L;
 	
 	public static final String DB_NOME_UNIDADE_ESCOLA = "nome_unidade_escola";
+	public static final int INT_AMBAS = 3;
 
 
 	private int idUnidadeEscola;

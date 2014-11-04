@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoEmail;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionCursoItemTodos;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionUnidadeEscola;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelLeft;
@@ -43,9 +44,9 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 public class AdicionaEmailComunicado extends VerticalPanel {
     
     
-    private final static int ROW_FILTRO_CURSO = 2; 
-    private final static int ROW_TIPO_USUARIO = 3;
-    private final static int ROW_TIPO_PARA = 4;
+    private final static int ROW_FILTRO_CURSO = 3; 
+    private final static int ROW_TIPO_USUARIO = 4;
+    private final static int ROW_TIPO_PARA = 5;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -63,6 +64,8 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 	private MpTextBox txtAssunto;
 	private MpRichTextArea mpRichTextAreaEmail;
 	private MpSelectionCursoItemTodos listBoxCursoItemTodos;
+	
+	private MpSelectionUnidadeEscola listBoxUnidadeEscola;
 	
 	private MpSelection multiBoxUsuariosFiltrados;
 	
@@ -113,6 +116,7 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 
 
 		MpLabelLeft lblEmail = new MpLabelLeft(txtConstants.emailEmail());
+		MpLabelLeft lblUnidade = new MpLabelLeft(txtConstants.usuarioUnidadeEscola());
 		MpLabelLeft lblAssunto = new MpLabelLeft(txtConstants.emailAssunto());		
 		MpLabelLeft lblAnexo = new MpLabelLeft(txtConstants.emailAnexo());
 		MpLabelLeft lblFiltarCurso = new MpLabelLeft(txtConstants.emailFiltroCurso());
@@ -159,6 +163,9 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 //		listBoxCursoItemTodos.setSize("350px", "70px");
         listBoxCursoItemTodos.addChangeHandler(new ChangeHandlerListBoxCurso());	
         
+        listBoxUnidadeEscola = new MpSelectionUnidadeEscola();
+        listBoxUnidadeEscola.addChangeHandler(new ChangeHandlerListBoxUnidade());
+        
         
         checkBoxAluno = new CheckBox(txtConstants.aluno());
         checkBoxPais = new CheckBox(txtConstants.pais());
@@ -201,7 +208,8 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 		// Add some standard form options
 		int row = 1;
 
-		flexTable.setWidget(row, 0, lblEmail);flexTable.setWidget(row++, 1, listBoxTipoEmail);//flexTable.setWidget(row++, 2, new MpImageHelper(listBoxNomeCurso));//flexTable.setWidget(row++, 2, txtFiltroNomeCurso);
+		flexTable.setWidget(row, 0, lblEmail);flexTable.setWidget(row++, 1, listBoxTipoEmail);
+		flexTable.setWidget(row, 0, lblUnidade);flexTable.setWidget(row++, 1, listBoxUnidadeEscola);
 		
 		
 		flexTable.setWidget(row, 0, lblFiltarCurso);flexTable.setWidget(row++, 1, listBoxCursoItemTodos);//flexTable.setWidget(row++, 2, new MpImageHelper(listBoxNomeCurso));//flexTable.setWidget(row++, 2, txtFiltroNomeCurso);
@@ -345,16 +353,17 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 	    
 	    mpPanelParaLoading.setVisible(true);
 	    String strValue = listBoxTipoEmail.getValue(listBoxTipoEmail.getSelectedIndex());
-
+	    int idUnidadeEscola = Integer.parseInt(listBoxUnidadeEscola.getValue(listBoxUnidadeEscola.getSelectedIndex()));
 	    multiBoxUsuariosFiltrados.clear();
 	    if(strValue.equals(Integer.toString(TipoComunicado.EMAIL_ALUNO_PAIS_PROFESSORES))){
 	        int idCurso = Integer.parseInt(listBoxCursoItemTodos.getValue(listBoxCursoItemTodos.getSelectedIndex()));
 	        boolean showAluno = checkBoxAluno.getValue();
 	        boolean showPais = checkBoxPais.getValue();
 	        boolean showProfessor = checkBoxProfessor.getValue();
-            GWTServiceUsuario.Util.getInstance().getAlunosTodosOuPorCurso(idCurso, showAluno, showPais, showProfessor, new CallbackPopulateCampoPara());    
+	        
+            GWTServiceUsuario.Util.getInstance().getAlunosTodosOuPorCurso(idCurso, idUnidadeEscola, showAluno, showPais, showProfessor, new CallbackPopulateCampoPara());    
 	    }else if(strValue.equals(Integer.toString(TipoComunicado.EMAIL_COORDENADORES))){
-	        GWTServiceUsuario.Util.getInstance().getCoordenadoresAdministradoresNomeId(new CallbackPopulateCampoPara());
+	        GWTServiceUsuario.Util.getInstance().getCoordenadoresAdministradoresNomeId(idUnidadeEscola, new CallbackPopulateCampoPara());
 	    }
 	    
 	}
@@ -389,6 +398,22 @@ public class AdicionaEmailComunicado extends VerticalPanel {
                 flexTable.getRowFormatter().setVisible(ROW_TIPO_PARA, false);
 
             }
+
+        }
+    }
+    
+    private class ChangeHandlerListBoxUnidade implements ChangeHandler {
+        public void onChange(ChangeEvent event) {
+            
+
+            String strValue = listBoxTipoEmail.getValue(listBoxTipoEmail.getSelectedIndex());
+            if(strValue.equals(Integer.toString(TipoComunicado.EMAIL_ALUNO_PAIS_PROFESSORES))){
+                populateUsuario();
+            }else{
+                multiBoxUsuariosFiltrados.clear();
+                populateUsuario();
+            }
+                
 
         }
     }

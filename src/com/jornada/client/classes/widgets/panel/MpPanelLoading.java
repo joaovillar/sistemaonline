@@ -84,6 +84,15 @@ public class MpPanelLoading  extends HorizontalPanel{
 	public void setWidth(String width){
 		hPanelFather.setWidth(width);
 	}
+
+	public Label getLblLoading() {
+		return lblLoading;
+	}
+
+	public void setLblLoading(Label lblLoading) {
+		this.lblLoading = lblLoading;
+	}
+	
 	
 	
 }

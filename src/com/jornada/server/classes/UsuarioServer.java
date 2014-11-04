@@ -112,6 +112,7 @@ public class UsuarioServer{
 	public static final String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario, unidade_escola where usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario and unidade_escola.id_unidade_escola=usuario.id_unidade_escola and (<change> ilike ?)  order by primeiro_nome asc";
 	public static final String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome asc";
 	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome asc";
+	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO_UNIDADE = "SELECT * FROM usuario where id_tipo_usuario = ? and id_unidade_escola = ? order by primeiro_nome asc";
 	public static final String DB_SELECT_ALL = "SELECT * FROM usuario order by primeiro_nome asc;";
 //	public static final String DB_SELECT_USUARIO_ID = "SELECT * FROM usuario where id_usuario=?;";
 	public static final String DB_SELECT_USUARIO_ID = "select * from usuario, tipo_usuario where (id_usuario = ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome asc";
@@ -479,7 +480,7 @@ public class UsuarioServer{
 		XSSFSheet sheetCoordenador = wb.createSheet("Coordenador");
 		XSSFSheet sheetPais = wb.createSheet("Pais");
 		XSSFSheet sheetProfessor = wb.createSheet("Professor");
-		XSSFSheet sheetPaisAlunos = wb.createSheet("Associação Pais e Alunos");
+		XSSFSheet sheetPaisAlunos = wb.createSheet("Associaï¿½ï¿½o Pais e Alunos");
 		
         gerarExcelAdministrador(sheetAdministrador, font, style);
         gerarExcelAluno(sheetAlunos, font, style);
@@ -510,15 +511,15 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuï¿½rio");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Usuï¿½rio");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");
         row.createCell((short) intColumn++).setCellValue("Sexo");
-        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Endereï¿½o");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -576,18 +577,18 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuï¿½rio");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
-		row.createCell((short) intColumn++).setCellValue("Matrícula");
+		row.createCell((short) intColumn++).setCellValue("Matrï¿½cula");
 		row.createCell((short) intColumn++).setCellValue("Data Matric");
 		row.createCell((short) intColumn++).setCellValue("Registro Aluno");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Usuï¿½rio");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");
         row.createCell((short) intColumn++).setCellValue("Sexo");
-        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Endereï¿½o");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -598,8 +599,8 @@ public class UsuarioServer{
         row.createCell((short) intColumn++).setCellValue("Tel Com");
         row.createCell((short) intColumn++).setCellValue("CPF");
         row.createCell((short) intColumn++).setCellValue("RG");
-        row.createCell((short) intColumn++).setCellValue("Situação do Pais");
-        row.createCell((short) intColumn++).setCellValue("Situação do Pais : Outros");
+        row.createCell((short) intColumn++).setCellValue("Situaï¿½ï¿½o do Pais");
+        row.createCell((short) intColumn++).setCellValue("Situaï¿½ï¿½o do Pais : Outros");
         row.createCell((short) intColumn++).setCellValue("Curso");
 
         
@@ -666,15 +667,15 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuï¿½rio");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Usuï¿½rio");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");
         row.createCell((short) intColumn++).setCellValue("Sexo");
-        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Endereï¿½o");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -731,15 +732,15 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuï¿½rio");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Usuï¿½rio");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");
         row.createCell((short) intColumn++).setCellValue("Sexo");
-        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Endereï¿½o");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -796,16 +797,16 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuï¿½rio");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usuário");
+        row.createCell((short) intColumn++).setCellValue("Usuï¿½rio");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");        
         row.createCell((short) intColumn++).setCellValue("Sexo");
         row.createCell((short) intColumn++).setCellValue("Tipo Pai");
-        row.createCell((short) intColumn++).setCellValue("Endereço");
+        row.createCell((short) intColumn++).setCellValue("Endereï¿½o");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -818,7 +819,7 @@ public class UsuarioServer{
         row.createCell((short) intColumn++).setCellValue("RG");
         row.createCell((short) intColumn++).setCellValue("Empresa");
         row.createCell((short) intColumn++).setCellValue("Cargo");
-        row.createCell((short) intColumn++).setCellValue("Resp Acadêmico");
+        row.createCell((short) intColumn++).setCellValue("Resp Acadï¿½mico");
         row.createCell((short) intColumn++).setCellValue("Resp Financeiro");
         
 		for (int i = 0; i < intColumn; i++) {
@@ -853,8 +854,8 @@ public class UsuarioServer{
             row.createCell((short) intColumn++).setCellValue(usuario.getRg());
             row.createCell((short) intColumn++).setCellValue(usuario.getEmpresaOndeTrabalha());
             row.createCell((short) intColumn++).setCellValue(usuario.getCargo());
-            row.createCell((short) intColumn++).setCellValue((usuario.isRespAcademico()==true)?"Sim":"Não");
-            row.createCell((short) intColumn++).setCellValue((usuario.isRespFinanceiro()==true)?"Sim":"Não");        
+            row.createCell((short) intColumn++).setCellValue((usuario.isRespAcademico()==true)?"Sim":"Nï¿½o");
+            row.createCell((short) intColumn++).setCellValue((usuario.isRespFinanceiro()==true)?"Sim":"Nï¿½o");        
         }        
         
 		for (int i = 0; i < intColumn; i++) {
@@ -1033,16 +1034,16 @@ public class UsuarioServer{
 			
 			
 			if(Primeiro_Nome.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Primeiro Nome é obrigatório || ";
+				strCamposCorretos+="Campo Primeiro Nome ï¿½ obrigatï¿½rio || ";
 			}
 			if(Sobre_Nome.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
+				strCamposCorretos+="Campo Sobre Nome ï¿½ obrigatï¿½rio || ";
 			}
 //			if(Email.getStringCellValue().isEmpty()){
-//				strCamposCorretos+="Campo Email é obrigatório || ";
+//				strCamposCorretos+="Campo Email ï¿½ obrigatï¿½rio || ";
 //			}
 			if(Usuario.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Usuario é obrigatório || ";
+				strCamposCorretos+="Campo Usuario ï¿½ obrigatï¿½rio || ";
 			}			
 						
 			Date dataMatricula = MpUtilServer.convertStringToDate(strDataMatricula,"dd/MM/yyyy");
@@ -1215,16 +1216,16 @@ public class UsuarioServer{
 			
 			
 			if(Primeiro_Nome.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Primeiro Nome é obrigatório || ";
+				strCamposCorretos+="Campo Primeiro Nome ï¿½ obrigatï¿½rio || ";
 			}
 			if(Sobre_Nome.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
+				strCamposCorretos+="Campo Sobre Nome ï¿½ obrigatï¿½rio || ";
 			}
 //			if(Email.getStringCellValue().isEmpty()){
-//				strCamposCorretos+="Campo Email é obrigatório || ";
+//				strCamposCorretos+="Campo Email ï¿½ obrigatï¿½rio || ";
 //			}
 			if(Usuario.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Usuario é obrigatório || ";
+				strCamposCorretos+="Campo Usuario ï¿½ obrigatï¿½rio || ";
 			}			
 			
 
@@ -1406,16 +1407,16 @@ public class UsuarioServer{
 			
 			
 			if(Primeiro_Nome.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Primeiro Nome é obrigatório || ";
+				strCamposCorretos+="Campo Primeiro Nome ï¿½ obrigatï¿½rio || ";
 			}
 			if(Sobre_Nome.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
+				strCamposCorretos+="Campo Sobre Nome ï¿½ obrigatï¿½rio || ";
 			}
 //			if(Email.getStringCellValue().isEmpty()){
-//				strCamposCorretos+="Campo Email é obrigatório || ";
+//				strCamposCorretos+="Campo Email ï¿½ obrigatï¿½rio || ";
 //			}
 			if(Usuario.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Usuario é obrigatório || ";
+				strCamposCorretos+="Campo Usuario ï¿½ obrigatï¿½rio || ";
 			}
 			
 
@@ -1602,16 +1603,16 @@ public class UsuarioServer{
 			
 			
 			if(Primeiro_Nome.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Primeiro Nome é obrigatório || ";
+				strCamposCorretos+="Campo Primeiro Nome ï¿½ obrigatï¿½rio || ";
 			}
 			if(Sobre_Nome.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Sobre Nome é obrigatório || ";
+				strCamposCorretos+="Campo Sobre Nome ï¿½ obrigatï¿½rio || ";
 			}
 //			if(Email.getStringCellValue().isEmpty()){
-//				strCamposCorretos+="Campo Email é obrigatório || ";
+//				strCamposCorretos+="Campo Email ï¿½ obrigatï¿½rio || ";
 //			}
 			if(Usuario.getStringCellValue().isEmpty()){
-				strCamposCorretos+="Campo Usuario é obrigatório || ";
+				strCamposCorretos+="Campo Usuario ï¿½ obrigatï¿½rio || ";
 			}			
 			
 
@@ -2044,6 +2045,37 @@ public class UsuarioServer{
 		return data;
 
 	}	
+	
+    public static ArrayList<Usuario> getUsuariosPorTipoUsuario(int idTipoUsuario, int idUnidadeEscola) {
+
+        ArrayList<Usuario> data = new ArrayList<Usuario>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+        try 
+        {
+
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+            PreparedStatement ps = connection.prepareStatement(UsuarioServer.DB_SELECT_USUARIO_PELO_TIPO_USUARIO_UNIDADE);
+            
+            int count=0;
+            ps.setInt(++count, idTipoUsuario);
+            ps.setInt(++count, idUnidadeEscola);
+                
+            
+            data = getUserParameters(ps.executeQuery());
+            
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;
+
+    }   	
 	
     public static ArrayList<Usuario> getFilhoDoPaiAmbientePais(int idUsuarioPai) {
 

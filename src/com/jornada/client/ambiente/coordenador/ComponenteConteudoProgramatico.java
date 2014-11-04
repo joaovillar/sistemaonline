@@ -35,6 +35,7 @@ public class ComponenteConteudoProgramatico extends Composite {
 		this.mainView=mainView;
 		
 		String strTitle = txtConstants.coordenadorAmbienteConteudoProgramatico();
+
 		String strImageAddress = "images/Text-Document-icon_128.png";
 		String strText = txtConstants.conteudoProgramaticoCompText1();
 		strText+=txtConstants.conteudoProgramaticoCompText2();

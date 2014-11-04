@@ -40,7 +40,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	public ArrayList<Usuario> getUsuarios(String strDBField, String strFilter);	
 	public ArrayList<Usuario> getAlunosPorCurso(int idCurso, String strFiltroUsuario);	
 	public ArrayList<Usuario> getAlunosPorCurso(int idCurso);	
-	public ArrayList<UsuarioNomeID> getAlunosTodosOuPorCurso(int idCurso, boolean showAluno, boolean showPais, boolean showProfessor);
+	public ArrayList<UsuarioNomeID> getAlunosTodosOuPorCurso(int idCurso, int idUnidade, boolean showAluno, boolean showPais, boolean showProfessor);
 	public ArrayList<Usuario> getUsuariosPorCursoAmbientePai(Usuario usuarioPai, int idCurso);	
 	public ArrayList<Usuario> getUsuariosPorTipoUsuario(int id_tipo_usuario, String strFilter);	
 	public ArrayList<Usuario> getUsuariosPorTipoUsuario(int id_tipo_usuario);
@@ -50,7 +50,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	public ArrayList<Usuario> getTodosOsPaisDoAluno(int id_aluno);	
 	public ArrayList<Usuario> getPaisPorCurso(int idCurso, String strFilterResp, String strFilterName);
 	public ArrayList<Usuario> getTodosPais(String strFilterResp, String strFilterName);
-	public ArrayList<UsuarioNomeID> getCoordenadoresAdministradoresNomeId();
+	public ArrayList<UsuarioNomeID> getCoordenadoresAdministradoresNomeId(int idUnidade);
 	
 	/**
 	 * Utility class for simplifying access to the instance of async service.
