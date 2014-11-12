@@ -22,6 +22,7 @@ public class Curso implements Serializable, Comparable<Curso> {
 	private Date dataFinal;
 	private String mediaNota;
 	private String porcentagemPresenca;
+	private boolean status;
 	
 	
 	private ArrayList<Periodo> listPeriodos;
@@ -131,7 +132,20 @@ public class Curso implements Serializable, Comparable<Curso> {
 		return serialVersionUID;
 	}
 	
-	public String toString(){
+	
+	
+	
+	public boolean isStatus() {
+        return status;
+    }
+
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+
+    public String toString(){
 		return "projeto:com.jornada.shared.classes.Curso";
 	}
 

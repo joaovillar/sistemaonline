@@ -21,10 +21,11 @@ public class CursoServer{
 
 //	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa, data_inicial, data_final) VALUES (?,?,?,?,?)";
 //	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=?, data_inicial=?, data_final=? where id_curso=?";
-	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa, media_nota, porcentagem_presenca, data_inicial, data_final) VALUES (?,?,?,?,?,?,?) returning id_curso";
-	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=?, media_nota=?, porcentagem_presenca=?, data_inicial=?, data_final=? where id_curso=?";	
-	public static String DB_SELECT_CURSO_ILIKE = "SELECT * FROM curso where (nome_curso ilike ?) order by nome_curso asc";
+	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa, media_nota, porcentagem_presenca, data_inicial, data_final, status) VALUES (?,?,?,?,?,?,?,?) returning id_curso";
+	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=?, media_nota=?, porcentagem_presenca=?, data_inicial=?, data_final=?, status=? where id_curso=?";	
+	public static String DB_SELECT_CURSO_ILIKE = "SELECT * FROM curso where (nome_curso ilike ?) and status=? order by nome_curso asc";
 	public static String DB_SELECT_CURSO_ALL = "SELECT * FROM curso order by nome_curso asc;";
+	public static String DB_SELECT_CURSO_ALL_STATUS = "SELECT * FROM curso where status = ? order by nome_curso asc;";
 	public static String DB_SELECT_CURSO_ID = "SELECT * FROM curso where id_curso=?;";
 	public static String DB_DELETE_CURSO = "delete from curso where id_curso=?";
 	public static String DB_DELETE_REL_CURSO_ALUNO = "delete from rel_curso_usuario where id_curso=?";
@@ -44,15 +45,15 @@ public class CursoServer{
 			") ";
 	
 	public static String DB_SELECT_CURSO_ID_ALUNO =  
-			"select * from curso where id_curso in " +
-			"( select id_curso from rel_curso_usuario where id_usuario = ? group by id_curso )";
+			"select * from curso where status=true and id_curso in " +
+			"( select id_curso from rel_curso_usuario where id_usuario = ? group by id_curso ) and status=?;";
 	
 	public static String DB_SELECT_CURSO_ID_PROFESSOR = 
 		"select * from curso where id_curso in( "+
 		"	select id_curso from periodo where id_periodo in( "+
 		"		select id_periodo from disciplina where id_usuario=? "+
 		"	) "+
-		") ";
+		") and status=? ; ";
 
 	
 	private static final long serialVersionUID = 8881085880718739029L;
@@ -81,11 +82,12 @@ public class CursoServer{
 			PreparedStatement insertCurso = conn.prepareStatement(CursoServer.DB_INSERT_CURSO);
 			insertCurso.setString(++count, curso.getNome());
 			insertCurso.setString(++count, curso.getDescricao());
-			insertCurso.setString(++count, curso.getEmenta());
+			insertCurso.setString(++count, curso.getEmenta());			
 			insertCurso.setString(++count, curso.getMediaNota());
 			insertCurso.setString(++count, curso.getPorcentagemPresenca());
 			insertCurso.setDate(++count, new java.sql.Date(curso.getDataInicial().getTime()));
 			insertCurso.setDate(++count, new java.sql.Date(curso.getDataFinal().getTime()));
+			insertCurso.setBoolean(++count, curso.isStatus());
 			
 			ResultSet rs = insertCurso.executeQuery();			
 			rs.next();
@@ -215,10 +217,11 @@ public class CursoServer{
 			updateCurso.setString(++count, curso.getNome());
 			updateCurso.setString(++count, curso.getDescricao());
 			updateCurso.setString(++count, curso.getEmenta());
-			updateCurso.setString(++count, curso.getMediaNota());
+			updateCurso.setString(++count, curso.getMediaNota());			
 			updateCurso.setString(++count, curso.getPorcentagemPresenca());
 			updateCurso.setDate(++count, new java.sql.Date(curso.getDataInicial().getTime()));
 			updateCurso.setDate(++count, new java.sql.Date(curso.getDataFinal().getTime()));
+			updateCurso.setBoolean(++count, curso.isStatus());
 			updateCurso.setInt(++count, curso.getIdCurso());
 
 			int numberUpdate = updateCurso.executeUpdate();
@@ -298,6 +301,30 @@ public class CursoServer{
 		return data;
 	}	
 	
+	   public static ArrayList<Curso> getCursos(boolean status){
+	        ArrayList<Curso> data = new ArrayList<Curso>();     
+//	      JornadaDataBase dataBase = new JornadaDataBase();
+	        Connection conn = ConnectionManager.getConnection();
+	        try 
+	        {
+//	          dataBase.createConnection();            
+//	          Connection connection = dataBase.getConnection();
+
+	            PreparedStatement psCurso = conn.prepareStatement(CursoServer.DB_SELECT_CURSO_ALL_STATUS);
+	            int count=0;
+	            psCurso.setBoolean(++count, status);
+	            data = getCursoParameters(psCurso.executeQuery());
+
+	        } catch (SQLException sqlex) {          
+	            data=null;
+	            System.err.println(sqlex.getMessage());
+	        } finally {
+//	          dataBase.close();
+	            ConnectionManager.closeConnection(conn);
+	        }
+	        return data;
+	    }   
+	
 	
 	public static Curso getCurso(int idCurso) {
 		ArrayList<Curso> data = new ArrayList<Curso>();		
@@ -358,7 +385,7 @@ public class CursoServer{
 	}		
 	
 
-	public static ArrayList<Curso> getCursosPorAlunoAmbienteAluno(Usuario usuario) {
+	public static ArrayList<Curso> getCursosPorAlunoAmbienteAluno(Usuario usuario, Boolean status) {
 		ArrayList<Curso> data = new ArrayList<Curso>();		
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection conn = ConnectionManager.getConnection();
@@ -371,6 +398,7 @@ public class CursoServer{
 			
 			int count=0;
 			ps.setInt(++count, usuario.getIdUsuario());
+			ps.setBoolean(++count, status);
 			
 			data = getCursoParameters(ps.executeQuery());
 
@@ -386,7 +414,7 @@ public class CursoServer{
 	}		
 	
 	
-	public static ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario) {
+	public static ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario, Boolean status) {
 		ArrayList<Curso> data = new ArrayList<Curso>();		
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection conn = ConnectionManager.getConnection();
@@ -399,6 +427,7 @@ public class CursoServer{
 			
 			int count=0;
 			ps.setInt(++count, usuario.getIdUsuario());
+			ps.setBoolean(++count, status);
 			
 			data = getCursoParameters(ps.executeQuery());
 
@@ -412,7 +441,7 @@ public class CursoServer{
 		return data;
 	}		
 	
-	public static ArrayList<Curso> getCursos(String strFilter) {
+	public static ArrayList<Curso> getCursos(String strFilter, boolean status) {
 
 		ArrayList<Curso> data = new ArrayList<Curso>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
@@ -427,6 +456,7 @@ public class CursoServer{
 			
 			int count=0;
 			psCurso.setString(++count, strFilter);
+			psCurso.setBoolean(++count, status);
 			
 			
 			data = getCursoParameters(psCurso.executeQuery());
@@ -588,6 +618,7 @@ public class CursoServer{
 			object.setNome(rs.getString("nome_curso"));
 			object.setDescricao(rs.getString("descricao"));
 			object.setEmenta(rs.getString("ementa"));
+			object.setStatus(rs.getBoolean("status"));
 			object.setDataInicial(rs.getDate("data_inicial"));
 			object.setDataFinal(rs.getDate("data_final"));
 			object.setMediaNota(rs.getString("media_nota"));

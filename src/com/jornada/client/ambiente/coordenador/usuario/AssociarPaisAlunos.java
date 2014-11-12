@@ -131,7 +131,8 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	}
 	
 	
-	public MpPanelPageMainView drawPassoDoisSelecionePais(){
+	@SuppressWarnings("deprecation")
+    public MpPanelPageMainView drawPassoDoisSelecionePais(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.usuarioSelecionaPais(), "images/people.png");
 //		mpPanel.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");

@@ -57,12 +57,12 @@ public class GWTServiceHierarquiaCursoImpl extends RemoteServiceServlet implemen
 		}
 	}
 	
-	public ArrayList<Curso> getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor){
+	public ArrayList<Curso> getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor, Boolean status){
 		
 		switch (usuarioProfessor.getIdTipoUsuario()) {
 			case TipoUsuario.ADMINISTRADOR: return HierarquiaCursoServer.getHierarquiaCursos();
 			case TipoUsuario.COORDENADOR: return HierarquiaCursoServer.getHierarquiaCursos();
-			case TipoUsuario.PROFESSOR: return HierarquiaCursoServer.getHierarquiaCursosAmbienteProfessor(usuarioProfessor);
+			case TipoUsuario.PROFESSOR: return HierarquiaCursoServer.getHierarquiaCursosAmbienteProfessor(usuarioProfessor, status);
 			default: return null;
 		}
 	}

@@ -81,32 +81,40 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 	
 	public ArrayList<Curso> getCursosPorAlunoAmbienteAluno(Usuario usuario){			
 		switch(usuario.getIdTipoUsuario()){
-			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos();
-			case TipoUsuario.COORDENADOR : return CursoServer.getCursos();
-			case TipoUsuario.ALUNO : return CursoServer.getCursosPorAlunoAmbienteAluno(usuario);
+			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos(true);
+			case TipoUsuario.COORDENADOR : return CursoServer.getCursos(true);
+			case TipoUsuario.ALUNO : return CursoServer.getCursosPorAlunoAmbienteAluno(usuario, true);
 			default: return null;
 		}
 	}		
 	
 	
-	public ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario){			
+	public ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario, Boolean status){			
 		switch(usuario.getIdTipoUsuario()){
-			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos();
-			case TipoUsuario.COORDENADOR : return CursoServer.getCursos();
-			case TipoUsuario.PROFESSOR : return CursoServer.getCursosAmbienteProfessor(usuario);
+			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos(status);
+			case TipoUsuario.COORDENADOR : return CursoServer.getCursos(status);
+			case TipoUsuario.PROFESSOR : return CursoServer.getCursosAmbienteProfessor(usuario, status);
 			default: return null;
 		}
 	}	
 	
-	public ArrayList<Curso> getCursos(String strFilter) {				
-		return CursoServer.getCursos(strFilter);
+	public ArrayList<Curso> getCursos(String strFilter, Boolean status) {	
+	        return CursoServer.getCursos(strFilter, status);
+		
 	}		
+    public ArrayList<Curso> getCursos(Boolean status) {   
+        return CursoServer.getCursos(status);
+    
+}       	
 	public ArrayList<Usuario> getTodosOsAlunosDoCurso(int id_curso){		
 		return CursoServer.getTodosOsAlunosDoCurso(id_curso);	
 	}	
 	public boolean associarAlunosAoCurso(int id_curso,ArrayList<Integer> list_id_aluno){		
 		return CursoServer.associarAlunosAoCurso(id_curso, list_id_aluno);
-	}	
+	}
+
+
+
 
 
 }

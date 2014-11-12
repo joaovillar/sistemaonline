@@ -13,7 +13,7 @@ public class HierarquiaCursoProfessor extends MpHierarquiaCurso{
 	
 	public void populateTree(MainView mainView){
 		mpPanelLoading.setVisible(true);
-		GWTServiceHierarquiaCurso.Util.getInstance().getHierarquiaCursosAmbienteProfessor(mainView.getUsuarioLogado(), callBackListaCursos);
+		GWTServiceHierarquiaCurso.Util.getInstance().getHierarquiaCursosAmbienteProfessor(mainView.getUsuarioLogado(), true, callBackListaCursos);
 	}
 	
 }

@@ -18,11 +18,13 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
+import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxMediaNota;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPorcentagemPresenca;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
@@ -35,20 +37,18 @@ import com.jornada.shared.classes.Curso;
 
 public class AdicionarCurso extends VerticalPanel {
 
-	private AsyncCallback<Integer> callbackAddCurso;
-	
-	
 	private AdicionarCursoDeUmTemplate adicionarCursoDeUmTemplate;
 
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
-	MpPanelLoading hPanelLoading = new MpPanelLoading("images/radar.gif");
+	MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
 
 
 	private TextBox txtNomeCurso;
 	private TextArea txtDescricaoCurso;
 	private TextArea txtEmentaCurso;
+	private MpSelection mpListBoxStatus;
 	private MpListBoxMediaNota mpListBoxMediaNota;
 	private MpListBoxPorcentagemPresenca mpListBoxPorcentagemPresenca;	
 	private MpDateBoxWithImage mpDateBoxInicial;
@@ -56,7 +56,7 @@ public class AdicionarCurso extends VerticalPanel {
 	
 	MpLabelTextBoxError lblErroNomeCurso;
 	
-	@SuppressWarnings("unused")
+//	@SuppressWarnings("unused")
 	private TelaInicialCurso telaInicialCurso;
 	
 	TextConstants txtConstants;
@@ -64,10 +64,38 @@ public class AdicionarCurso extends VerticalPanel {
 	
 	VerticalPanel vPanelAddCursoDeTemplate;
 	VerticalPanel vPanelAddNovoCurso;
-//	FlexTable flexTableAddCourseFromTemplate;
+	
+//	private Hidden hiddenIdCurso;
+
+	
+	private Curso cursoParaAtualizar;
+	
+	private static AdicionarCurso uniqueInstanceAdicionar;
+	private static AdicionarCurso uniqueInstanceAtualizar;
+	
+	private boolean isAdicionar;
+	
+	public static AdicionarCurso getInstanceAdicionar(TelaInicialCurso telaInicialCurso){
+	    if(uniqueInstanceAdicionar==null){
+	        uniqueInstanceAdicionar = new AdicionarCurso(telaInicialCurso, true);
+	        uniqueInstanceAtualizar = new AdicionarCurso(telaInicialCurso, false);
+	    }
+	    return uniqueInstanceAdicionar;
+	}
+	
+    public static AdicionarCurso getInstanceAtualizar(TelaInicialCurso telaInicialCurso, Curso curso) {
+        if (uniqueInstanceAtualizar == null) {
+            uniqueInstanceAtualizar = new AdicionarCurso(telaInicialCurso, false);
+        }else{
+            uniqueInstanceAtualizar.cursoParaAtualizar = curso;
+            uniqueInstanceAtualizar.popularCurso(curso);
+        }
+        return uniqueInstanceAtualizar;
+    }
 
 	@SuppressWarnings("deprecation")
-	public AdicionarCurso(final TelaInicialCurso telaInicialCurso) {
+	private AdicionarCurso(final TelaInicialCurso telaInicialCurso, boolean isAdicionar) {
+	    this.isAdicionar = isAdicionar;
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
@@ -75,9 +103,9 @@ public class AdicionarCurso extends VerticalPanel {
 
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
-		hPanelLoading.setTxtLoading(txtConstants.geralCarregando());
-		hPanelLoading.show();
-		hPanelLoading.setVisible(false);
+		mpLoading.setTxtLoading(txtConstants.geralCarregando());
+		mpLoading.show();
+		mpLoading.setVisible(false);
 		
 
 		
@@ -92,7 +120,9 @@ public class AdicionarCurso extends VerticalPanel {
 		
 		gridUseTemplate.setWidget(0, 0, lblUseTemplate);gridUseTemplate.setWidget(0, 1, radioButtonYes);gridUseTemplate.setWidget(0, 2, radioButtonNo);
 
-		adicionarCursoDeUmTemplate = AdicionarCursoDeUmTemplate.getInstance(telaInicialCurso);
+        if (isAdicionar == true) {
+            adicionarCursoDeUmTemplate = AdicionarCursoDeUmTemplate.getInstance(telaInicialCurso);
+        }
 		
 		vPanelAddCursoDeTemplate = new VerticalPanel();
 		vPanelAddNovoCurso = new VerticalPanel();
@@ -112,12 +142,17 @@ public class AdicionarCurso extends VerticalPanel {
 		txtNomeCurso = new TextBox();
 		txtDescricaoCurso = new TextArea();
 		txtEmentaCurso = new TextArea();
+		
 		mpListBoxMediaNota = new MpListBoxMediaNota();
 		mpListBoxPorcentagemPresenca = new MpListBoxPorcentagemPresenca();
 		mpDateBoxInicial = new MpDateBoxWithImage();
 		mpDateBoxInicial.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
 		mpDateBoxFinal = new MpDateBoxWithImage();
 		mpDateBoxFinal.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
+		
+		mpListBoxStatus = new MpSelection();
+		mpListBoxStatus.addItem(txtConstants.cursoAtivo(), "true");
+		mpListBoxStatus.addItem(txtConstants.cursoDesativado(), "false");
 		
 		txtNomeCurso.setStyleName("design_text_boxes");
 		txtDescricaoCurso.setStyleName("design_text_boxes");
@@ -126,42 +161,25 @@ public class AdicionarCurso extends VerticalPanel {
 //		mpListBoxPorcentagemPresenca.setStyleName("design_text_boxes");
 
 
-		Label lblNomeCurso = new Label(txtConstants.cursoNome());		
-		Label lblDescricaoCurso = new Label(txtConstants.cursoDescricao());
-		Label lblEmentaCurso = new Label(txtConstants.cursoEmenta());
-		Label lblMediaNotaCurso = new Label(txtConstants.cursoMediaNota());
-		Label lblPorcentagemPresencaCurso = new Label(txtConstants.cursoPorcentagemPresenca());
-		Label lblDataInicial = new Label(txtConstants.cursoDataInicial());
-		Label lblDataFinal = new Label(txtConstants.cursoDataFinal());
+		MpLabelRight lblStatusCurso = new MpLabelRight(txtConstants.cursoStatus());
+		MpLabelRight lblNomeCurso = new MpLabelRight(txtConstants.cursoNome());		
+		MpLabelRight lblDescricaoCurso = new MpLabelRight(txtConstants.cursoDescricao());
+		MpLabelRight lblEmentaCurso = new MpLabelRight(txtConstants.cursoEmenta());
+		MpLabelRight lblMediaNotaCurso = new MpLabelRight(txtConstants.cursoMediaNota());
+		MpLabelRight lblPorcentagemPresencaCurso = new MpLabelRight(txtConstants.cursoPorcentagemPresenca());
+		MpLabelRight lblDataInicial = new MpLabelRight(txtConstants.cursoDataInicial());
+		MpLabelRight lblDataFinal = new MpLabelRight(txtConstants.cursoDataFinal());
 		
 		lblErroNomeCurso = new MpLabelTextBoxError();
-
-		
-		lblNomeCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblDescricaoCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		lblEmentaCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblMediaNotaCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		lblPorcentagemPresencaCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblDataInicial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		lblDataFinal.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		
-		
-		lblNomeCurso.setStyleName("design_label");
-		lblDescricaoCurso.setStyleName("design_label");
-		lblEmentaCurso.setStyleName("design_label");		
-		lblMediaNotaCurso.setStyleName("design_label");
-		lblPorcentagemPresencaCurso.setStyleName("design_label");		
-		lblDataInicial.setStyleName("design_label");
-		lblDataFinal.setStyleName("design_label");
 		txtNomeCurso.setWidth("350px");
 		txtDescricaoCurso.setSize("350px", "50px");
 		txtEmentaCurso.setSize("350px", "50px");
-//		txtMediaNota.setWidth("150px");
+
+		mpListBoxStatus.setWidth("80px");
 		mpListBoxMediaNota.setWidth("80px");
 		mpListBoxPorcentagemPresenca.setWidth("80px");
 		mpDateBoxInicial.getDate().setWidth("170px");
 		mpDateBoxFinal.getDate().setWidth("170px");
-		
 		
 
 		// Add some standard form options
@@ -169,12 +187,22 @@ public class AdicionarCurso extends VerticalPanel {
 		flexTableAddNewCourse.setWidget(row, 0, lblNomeCurso)     ;flexTableAddNewCourse.setWidget(row, 1, txtNomeCurso); flexTableAddNewCourse.setWidget(row++, 2, lblErroNomeCurso);
 		flexTableAddNewCourse.setWidget(row, 0, lblDescricaoCurso);flexTableAddNewCourse.setWidget(row++, 1, txtDescricaoCurso);
 		flexTableAddNewCourse.setWidget(row, 0, lblEmentaCurso)   ;flexTableAddNewCourse.setWidget(row++, 1, txtEmentaCurso);
+		flexTableAddNewCourse.setWidget(row, 0, lblStatusCurso);flexTableAddNewCourse.setWidget(row++, 1, mpListBoxStatus);
 		flexTableAddNewCourse.setWidget(row, 0, lblMediaNotaCurso);flexTableAddNewCourse.setWidget(row++, 1, mpListBoxMediaNota);
 		flexTableAddNewCourse.setWidget(row, 0, lblPorcentagemPresencaCurso)   ;flexTableAddNewCourse.setWidget(row++, 1, mpListBoxPorcentagemPresenca);
 		flexTableAddNewCourse.setWidget(row, 0, lblDataInicial)   ;flexTableAddNewCourse.setWidget(row++, 1, mpDateBoxInicial);
 		flexTableAddNewCourse.setWidget(row, 0, lblDataFinal)     ;flexTableAddNewCourse.setWidget(row++, 1, mpDateBoxFinal);
 
-		MpImageButton btnSave = new MpImageButton(txtConstants.cursoSalvar(), "images/save.png");
+		
+        String strTextoBotaoSubmeter = "";
+
+        if (isAdicionar == true) {
+            strTextoBotaoSubmeter = txtConstants.geralSalvar();
+
+        } else {
+            strTextoBotaoSubmeter = txtConstants.geralAtualizar();
+        }
+		MpImageButton btnSave = new MpImageButton(strTextoBotaoSubmeter, "images/save.png");
 		btnSave.addClickHandler(new ClickHandlerSave());
 		MpImageButton btnClean = new MpImageButton(txtConstants.geralLimpar(), "images/erase.png");
 		btnClean.addClickHandler(new ClickHandlerClean());
@@ -188,21 +216,24 @@ public class AdicionarCurso extends VerticalPanel {
 			int i = 0;
 			gridSave.setWidget(0, i++, btnSave);
 			gridSave.setWidget(0, i++, btnClean);
-			gridSave.setWidget(0, i++, hPanelLoading);
+			gridSave.setWidget(0, i++, mpLoading);
 		}
 
 		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
 		mpSpaceVerticalPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
 		
-		
-		vPanelAddCursoDeTemplate.add(adicionarCursoDeUmTemplate);
+        if (isAdicionar == true) {
+            vPanelAddCursoDeTemplate.add(adicionarCursoDeUmTemplate);
+        }
 		vPanelAddCursoDeTemplate.setVisible(false);
 		
 		vPanelAddNovoCurso.add(flexTableAddNewCourse);
 		vPanelAddNovoCurso.add(gridSave);
 		
 		
-		vFormPanel.add(gridUseTemplate);
+        if (this.isAdicionar == true) {
+            vFormPanel.add(gridUseTemplate);
+        }
 		vFormPanel.add(vPanelAddNovoCurso);	
 		vFormPanel.add(vPanelAddCursoDeTemplate);
 //		vFormPanel.add(gridSave);		
@@ -213,46 +244,18 @@ public class AdicionarCurso extends VerticalPanel {
 		/***********************Begin Callbacks**********************/
 
 		// Callback para adicionar Curso.
-		callbackAddCurso = new AsyncCallback<Integer>() {
 
-			public void onFailure(Throwable caught) {
-				hPanelLoading.setVisible(false);
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar());
-				mpDialogBoxWarning.showDialog();
-			}
-
-			@Override
-			public void onSuccess(Integer result) {
-				// lblLoading.setVisible(false);
-				hPanelLoading.setVisible(false);
-				int isSuccess = result;
-				if (isSuccess!=0) {
-					cleanFields();
-					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
-					mpDialogBoxConfirm.setBodyText(txtConstants.cursoSalvoSucesso());
-					mpDialogBoxConfirm.showDialog();
-//					EditarCurso.dataGrid().redraw();
-					telaInicialCurso.updatePopulateGrid();
-					telaInicialCurso.updateAssociarCurso();
-					getAdicionarCursoDeUmTemplate().updateListBoxCurso();
-					
-				} else {
-					hPanelLoading.setVisible(false);
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar()+" "+txtConstants.geralRegarregarPagina());
-					mpDialogBoxWarning.showDialog();
-				}
-			}
-		};
 
 
 		/***********************End Callbacks**********************/
 
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+30)+"px",Integer.toString(TelaInicialCurso.intHeightTable-40)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+30)+"px",Integer.toString(TelaInicialCurso.intHeightTable-40)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+30)+"px",Integer.toString(TelaInicialCurso.intHeightTable-40)+"px");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(vFormPanel);
+		
+//		super.setBorderWidth(1);
 		
 		super.add(scrollPanel);
 		
@@ -282,19 +285,29 @@ public class AdicionarCurso extends VerticalPanel {
 //
 //			} else {
 			if(checkFieldsValidator()){
-				hPanelLoading.setVisible(true);
+				mpLoading.setVisible(true);
+				
+				String status = mpListBoxStatus.getValue(mpListBoxStatus.getSelectedIndex());
 
 				Curso curso = new Curso();
 				curso.setNome(txtNomeCurso.getText());
 				curso.setDescricao(txtDescricaoCurso.getText());
 				curso.setEmenta(txtEmentaCurso.getText());
+				curso.setStatus(Boolean.parseBoolean(status)); 
 				curso.setDataInicial(mpDateBoxInicial.getDate().getValue());
 				curso.setDataFinal(mpDateBoxFinal.getDate().getValue());
 				curso.setMediaNota(mpListBoxMediaNota.getValue(mpListBoxMediaNota.getSelectedIndex()));
 				curso.setPorcentagemPresenca(mpListBoxPorcentagemPresenca.getValue(mpListBoxPorcentagemPresenca.getSelectedIndex()));
 
-//				getServiceCursoAsync().AdicionarCurso(curso,callbackAddCurso);
-				GWTServiceCurso.Util.getInstance().AdicionarCurso(curso, callbackAddCurso);
+
+                if(isAdicionar==true){
+                    GWTServiceCurso.Util.getInstance().AdicionarCurso(curso, new CallbackAddCurso());
+                }else{
+                    curso.setIdCurso(uniqueInstanceAtualizar.cursoParaAtualizar.getIdCurso());
+                    GWTServiceCurso.Util.getInstance().updateCursoRow(curso, new CallbackAtualizarCurso());
+                }
+				
+				
 
 			}
 
@@ -366,6 +379,106 @@ public class AdicionarCurso extends VerticalPanel {
 	}
 
 	
+	private void popularCurso(Curso curso) {
+	    
+	    txtNomeCurso.setText(curso.getNome());
+	    txtDescricaoCurso.setText(curso.getDescricao());
+	    txtEmentaCurso.setText(curso.getEmenta());
+	    mpDateBoxInicial.getDate().setValue(curso.getDataInicial());
+	    mpDateBoxFinal.getDate().setValue(curso.getDataFinal());
+	    
+        for (int i = 0; i < mpListBoxStatus.getItemCount(); i++) {
+            boolean booStatus = Boolean.parseBoolean(mpListBoxStatus.getValue(i));
+            if (curso.isStatus() == booStatus ) {
+                mpListBoxStatus.setSelectedIndex(i);
+                break;
+            }
+        }
+	    
+        for (int i = 0; i < mpListBoxMediaNota.getItemCount(); i++) {
+            if (curso.getMediaNota().equals(mpListBoxMediaNota.getValue(i))) {
+                mpListBoxMediaNota.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        for (int i = 0; i < mpListBoxPorcentagemPresenca.getItemCount(); i++) {
+            if (curso.getPorcentagemPresenca().equals(mpListBoxPorcentagemPresenca.getValue(i))) {
+                mpListBoxPorcentagemPresenca.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        
+	}
+	
+	
+	
+	private class CallbackAddCurso implements AsyncCallback<Integer>{
+        public void onFailure(Throwable caught) {
+            mpLoading.setVisible(false);
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar());
+            mpDialogBoxWarning.showDialog();
+        }
+
+        @Override
+        public void onSuccess(Integer result) {
+            // lblLoading.setVisible(false);
+            mpLoading.setVisible(false);
+            int isSuccess = result;
+            if (isSuccess!=0) {
+                cleanFields();
+                mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
+                mpDialogBoxConfirm.setBodyText(txtConstants.cursoSalvoSucesso());
+                mpDialogBoxConfirm.showDialog();
+//              EditarCurso.dataGrid().redraw();
+                telaInicialCurso.updatePopulateGrid();
+                telaInicialCurso.updateAssociarCurso();
+                getAdicionarCursoDeUmTemplate().updateListBoxCurso();
+                
+            } else {
+                mpLoading.setVisible(false);
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar()+" "+txtConstants.geralRegarregarPagina());
+                mpDialogBoxWarning.showDialog();
+            }
+        }
+	}
+	
+	
+ 
+	private class CallbackAtualizarCurso implements AsyncCallback<Boolean>{
+        public void onFailure(Throwable caught) {
+            mpLoading.setVisible(false);
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar());
+            mpDialogBoxWarning.showDialog();
+        }
+
+        @Override
+        public void onSuccess(Boolean result) {
+            // lblLoading.setVisible(false);
+            mpLoading.setVisible(false);
+            
+            if (result==true) {
+//                cleanFields();
+//                mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
+//                mpDialogBoxConfirm.setBodyText(txtConstants.cursoSalvoSucesso());
+//                mpDialogBoxConfirm.showDialog();
+//              EditarCurso.dataGrid().redraw();
+                telaInicialCurso.updatePopulateGrid();
+                telaInicialCurso.updateAssociarCurso();
+                getAdicionarCursoDeUmTemplate().updateListBoxCurso();
+                
+            } else {
+                mpLoading.setVisible(false);
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar()+" "+txtConstants.geralRegarregarPagina());
+                mpDialogBoxWarning.showDialog();
+            }
+        }
+    }
 	
 
 }

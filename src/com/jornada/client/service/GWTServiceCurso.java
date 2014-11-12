@@ -31,10 +31,11 @@ public interface GWTServiceCurso extends RemoteService {
 	public boolean updateCursoRow(Curso curso);	
 	public boolean deleteCursoRow(int id_curso);	
 	public ArrayList<Curso> getCursos();
+	public ArrayList<Curso> getCursos(Boolean status);
 	public ArrayList<Curso> getCursosPorPaiAmbientePais(Usuario usuario);	
 	public ArrayList<Curso> getCursosPorAlunoAmbienteAluno(Usuario usuario);
-	public ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario);
-	public ArrayList<Curso> getCursos(String strFilter);	
+	public ArrayList<Curso> getCursosAmbienteProfessor(Usuario usuario, Boolean status);
+	public ArrayList<Curso> getCursos(String strFilter, Boolean status);	
 	public ArrayList<Usuario> getTodosOsAlunosDoCurso(int id_curso);	
 	public boolean associarAlunosAoCurso(int id_curso, ArrayList<Integer> list_id_aluno);
 	

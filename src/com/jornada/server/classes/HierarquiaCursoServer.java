@@ -57,11 +57,11 @@ public class HierarquiaCursoServer {
 	}
 	
 	public static ArrayList<Curso> getHierarquiaCursos(){		
-		return getHierarquiaCursos(CursoServer.getCursos());		
+		return getHierarquiaCursos(CursoServer.getCursos(true));		
 	}	
 	
     public static ArrayList<Curso> getHierarquiaCursos(String strFilter){       
-        return getHierarquiaCursos(CursoServer.getCursos(strFilter));        
+        return getHierarquiaCursos(CursoServer.getCursos(strFilter, true));        
     }   	
 	
 	public static Curso getHierarquiaCurso(int idCurso){	
@@ -76,11 +76,11 @@ public class HierarquiaCursoServer {
 	}	
 	
 	public static ArrayList<Curso> getHierarquiaCursosAmbienteAluno(Usuario usuarioAluno){		
-		return getHierarquiaCursos(CursoServer.getCursosPorAlunoAmbienteAluno(usuarioAluno));		
+		return getHierarquiaCursos(CursoServer.getCursosPorAlunoAmbienteAluno(usuarioAluno, true));		
 	}
 	
-	public static ArrayList<Curso> getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor){		
-		return getHierarquiaCursos(CursoServer.getCursosAmbienteProfessor(usuarioProfessor));		
+	public static ArrayList<Curso> getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor, Boolean status){		
+		return getHierarquiaCursos(CursoServer.getCursosAmbienteProfessor(usuarioProfessor, status));		
 	}		
 	
 }

@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.jornada.client.classes.listBoxes.MpSelection;
+import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServicePeriodo;
 import com.jornada.shared.classes.Curso;
 
@@ -81,7 +82,7 @@ public class MpSelectionCursoItemTodos extends MpSelection {
 	
 	public void populateComboBox() {
 		startLoadingListBox();
-		GWTServicePeriodo.Util.getInstance().getCursos(callBackPopulateComboBox);
+		GWTServiceCurso.Util.getInstance().getCursos(true, callBackPopulateComboBox);
 	}
 	
 	private void startLoadingListBox(){

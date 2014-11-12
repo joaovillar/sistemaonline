@@ -545,7 +545,7 @@ public class DocumentoServer {
                 if (idTipoUsuario == TipoUsuario.PAIS) {
                     cursosUsuario = CursoServer.getCursosPorPaiAmbientePais(user);    
                 }else{
-                    cursosUsuario = CursoServer.getCursosPorAlunoAmbienteAluno(user);
+                    cursosUsuario = CursoServer.getCursosPorAlunoAmbienteAluno(user, true);
                 }
                 
                         
@@ -573,7 +573,7 @@ public class DocumentoServer {
                 if (idTipoUsuario == TipoUsuario.PAIS) {
                     cursosUsuarios = CursoServer.getCursosPorPaiAmbientePais(user);    
                 }else{
-                    cursosUsuarios = CursoServer.getCursosPorAlunoAmbienteAluno(user);
+                    cursosUsuarios = CursoServer.getCursosPorAlunoAmbienteAluno(user, true);
                 }
                 
                 if(cursosUsuarios==null || cursosUsuarios.size()==0){
@@ -675,10 +675,10 @@ public class DocumentoServer {
         String strUser = "nome_pai="+usuario.getPrimeiroNome() + " " + usuario.getSobreNome()+"&";
         String strRg = "rg="+((usuario.getRg()==null)?"":usuario.getRg())+"&";
         String strCpf = "cpf="+((usuario.getCpf()==null)?"":usuario.getCpf())+"&";
-        String strEndereco = ((usuario.getEndereco()==null)?"":" Endereço "+usuario.getEndereco());
+        String strEndereco = ((usuario.getEndereco()==null)?"":" Endereï¿½o "+usuario.getEndereco());
         String strNumRes = ((usuario.getNumeroResidencia()==null)?"":" Num."+usuario.getNumeroResidencia());
         String strBairro = ((usuario.getBairro()==null)?"":" Bairro "+usuario.getBairro());
-        String strCidade = ((usuario.getCidade()==null)?"":" Município "+usuario.getCidade());
+        String strCidade = ((usuario.getCidade()==null)?"":" Municï¿½pio "+usuario.getCidade());
         String strUF = ((usuario.getUnidadeFederativa()==null)?"":usuario.getUnidadeFederativa());
         String strCep = ((usuario.getCep()==null)?"":" Cep:"+usuario.getCep());
         
@@ -692,7 +692,7 @@ public class DocumentoServer {
     public static String criarDocumentoFilho(Usuario usuario, String hostPageBaseURL, String nomeFisicoDoc){
 
         
-        ArrayList<Curso> listCurso = CursoServer.getCursosPorAlunoAmbienteAluno(usuario);
+        ArrayList<Curso> listCurso = CursoServer.getCursosPorAlunoAmbienteAluno(usuario, true);
         
         String strCursos="";
         for (int i = 0; i < listCurso.size(); i++) {

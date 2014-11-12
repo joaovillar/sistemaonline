@@ -201,6 +201,7 @@ public class ContratoUsuario extends VerticalPanel {
         return mpPanel;
     }
 
+    @SuppressWarnings("deprecation")
     public MpPanelPageMainView drawPassoFiltrarPaisPorCurso() {
 
         MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.documentoCursoParaFilterPais(), "images/parents-16.png");
@@ -312,6 +313,7 @@ public class ContratoUsuario extends VerticalPanel {
     }
     
     
+    @SuppressWarnings("deprecation")
     public MpPanelPageMainView drawPassoFiltrarFilhosPorCurso() {
 
         MpPanelPageMainView mpPanel = new MpPanelPageMainView("Por favor, selecione o curso para filtrar os alunos.", "images/elementary_school_16.png");

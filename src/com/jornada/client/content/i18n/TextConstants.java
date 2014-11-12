@@ -244,6 +244,9 @@ public interface TextConstants extends Messages {
 	String cursoAdminCompText3();
 	String cursoImportarAlunosDoCurso();
 	String cursoTodosAlunos();
+	String cursoStatus();
+	String cursoAtivo();
+	String cursoDesativado();
 	
 	/*******Curso End*******/
 	

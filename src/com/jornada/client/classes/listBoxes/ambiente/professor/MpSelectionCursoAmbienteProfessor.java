@@ -61,7 +61,7 @@ public class MpSelectionCursoAmbienteProfessor extends MpSelection {
 	
 	public void populateComboBox(Usuario usuario) {
 		startLoadingListBox();
-		GWTServiceCurso.Util.getInstance().getCursosAmbienteProfessor(usuario, callBackPopulateComboBox);
+		GWTServiceCurso.Util.getInstance().getCursosAmbienteProfessor(usuario, true, callBackPopulateComboBox);
 	}
 	
 	private void startLoadingListBox(){

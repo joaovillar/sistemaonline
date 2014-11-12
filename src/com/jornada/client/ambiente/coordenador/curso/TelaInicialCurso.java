@@ -44,7 +44,7 @@ public class TelaInicialCurso extends Composite {
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
-		adicionarCurso = new AdicionarCurso(this);		
+		adicionarCurso = AdicionarCurso.getInstanceAdicionar(this);		
 		editarCurso = new EditarCurso(this);
 		associarCursoAluno = new AssociarCursoAluno(this);
 

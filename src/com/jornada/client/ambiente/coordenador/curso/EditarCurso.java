@@ -1,3 +1,4 @@
+
 package com.jornada.client.ambiente.coordenador.curso;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
+import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxMediaNota;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPorcentagemPresenca;
 import com.jornada.client.classes.resources.CellTableStyle;
@@ -49,6 +51,7 @@ import com.jornada.client.classes.widgets.cells.MpStyledSelectionCell;
 import com.jornada.client.classes.widgets.cells.MpTextAreaEditCell;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
@@ -74,16 +77,22 @@ public class EditarCurso extends VerticalPanel {
 	private Column<Curso, String> porcetagemPresencaoColumn;
 	private Column<Curso, Date> dataInicialColumn;
 	private Column<Curso, Date> dataFinalColumn;
+	private Column<Curso, String> statusColumn;
 	
 	private MpListBoxMediaNota mpListBoxMediaNota;
 	private MpListBoxPorcentagemPresenca mpListBoxPorcentagemPresenca;
+	private MpSelection mpListBoxStatus;
 	
 	private LinkedHashMap<String, String> listaMediaNota = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> listaPorcentagemPresenca = new LinkedHashMap<String, String>();
+	private LinkedHashMap<String, String> listaStatus = new LinkedHashMap<String, String>();
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	private MpPanelLoading mpPanelLoading = new MpPanelLoading("images/radar.gif");
+
+    private static final String IMAGE_DELETE = "images/delete.png";
+    private static final String IMAGE_EDIT = "images/comment_edit.png";
 
 	private TelaInicialCurso telaInicialCurso;
 	
@@ -108,6 +117,12 @@ public class EditarCurso extends VerticalPanel {
 		mpListBoxMediaNota = new MpListBoxMediaNota();
 		mpListBoxPorcentagemPresenca= new MpListBoxPorcentagemPresenca();
 		
+        mpListBoxStatus = new MpSelection();
+        mpListBoxStatus.addItem(txtConstants.cursoAtivo(), "true");
+        mpListBoxStatus.addItem(txtConstants.cursoDesativado(), "false");		
+        mpListBoxStatus.setSelectItem("true");
+        mpListBoxStatus.setWidth("80px");
+		
 		for(int i=0;i<mpListBoxMediaNota.getItemCount();i++){
 			String key = mpListBoxMediaNota.getValue(i);
 			String text = mpListBoxMediaNota.getItemText(i);
@@ -119,12 +134,16 @@ public class EditarCurso extends VerticalPanel {
 			listaPorcentagemPresenca.put(key, text);
 		}
 		
+		listaStatus.put("true", txtConstants.cursoAtivo());
+		listaStatus.put("false", txtConstants.cursoDesativado());
 		
 		
 		FlexTable flexTableFiltrar = new FlexTable();		
 		flexTableFiltrar.setCellSpacing(3);
 		flexTableFiltrar.setCellPadding(3);
 		flexTableFiltrar.setBorderWidth(0);
+		
+		MpLabelRight lblStatusCurso = new MpLabelRight(txtConstants.cursoStatus());
 		
 		Label lblNomeCurso = new Label(txtConstants.cursoNome());
 		lblNomeCurso.setStyleName("design_label");
@@ -141,7 +160,6 @@ public class EditarCurso extends VerticalPanel {
 		vPanelEditGrid = new VerticalPanel();			
 		
 		cellTable = new CellTable<Curso>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-//		cellTable.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+ "px");		
 		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
@@ -162,8 +180,11 @@ public class EditarCurso extends VerticalPanel {
 		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, lblNomeCurso);
 		flexTableFiltrar.setWidget(0, 3, txtSearch);
-		flexTableFiltrar.setWidget(0, 4, btnFiltrar);
-		flexTableFiltrar.setWidget(0, 5, mpPanelLoading);	
+        flexTableFiltrar.setWidget(0, 4, new MpSpaceVerticalPanel());
+        flexTableFiltrar.setWidget(0, 5, lblStatusCurso);
+        flexTableFiltrar.setWidget(0, 6, mpListBoxStatus);		
+		flexTableFiltrar.setWidget(0, 7, btnFiltrar);
+		flexTableFiltrar.setWidget(0, 8, mpPanelLoading);	
 		
 		ScrollPanel scrollPanel = new ScrollPanel();
 //		scrollPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+20)+"px",Integer.toString(TelaInicialCurso.intHeightTable-90)+"px");
@@ -255,26 +276,33 @@ public class EditarCurso extends VerticalPanel {
 				final Curso curso = (Curso) context.getKey();
 				@SuppressWarnings("unused")
 				CloseHandler<PopupPanel> closeHandler;
+				
+                if (value.equals(IMAGE_EDIT)){
+                  MpDialogBoxAtualizarCurso.getInstance(telaInicialCurso, curso);
+//                  mpAtualizarUsuario.showDialog();
+//                    MpDialogBoxAtualizarUsuario.getInstance(telaInicialUsuario, object);
+                }else if (value.equals(IMAGE_DELETE)){
 
-				MpConfirmDialogBox confirmationDialog = new MpConfirmDialogBox(
-						txtConstants.cursoRemoverTitle(),txtConstants.cursoRemoverMsg(curso.getNome()), txtConstants.geralSim(), txtConstants.geralNao(),
+                    MpConfirmDialogBox confirmationDialog = new MpConfirmDialogBox(txtConstants.cursoRemoverTitle(), txtConstants.cursoRemoverMsg(curso.getNome()), txtConstants.geralSim(), txtConstants.geralNao(),
 
-						closeHandler = new CloseHandler<PopupPanel>() {
+                    closeHandler = new CloseHandler<PopupPanel>() {
 
-							public void onClose(CloseEvent<PopupPanel> event) {
+                        public void onClose(CloseEvent<PopupPanel> event) {
 
-								MpConfirmDialogBox x = (MpConfirmDialogBox) event.getSource();
+                            MpConfirmDialogBox x = (MpConfirmDialogBox) event.getSource();
 
-								if (x.primaryActionFired()) {
+                            if (x.primaryActionFired()) {
 
-									GWTServiceCurso.Util.getInstance().deleteCursoRow(curso.getIdCurso(),callbackDelete);
+                                GWTServiceCurso.Util.getInstance().deleteCursoRow(curso.getIdCurso(), callbackDelete);
 
-								}
-							}
-						}
+                            }
+                        }
+                    }
 
-				);
-				confirmationDialog.paint();
+                    );
+                    confirmationDialog.paint();
+                }
+				
 				break;
 
 			default:
@@ -284,11 +312,14 @@ public class EditarCurso extends VerticalPanel {
 		}
 
 	}
+	
+	
 
 	protected void populateGrid() {
 		mpPanelLoading.setVisible(true);	
 		
-		GWTServiceCurso.Util.getInstance().getCursos("%" + txtSearch.getText() + "%",
+		Boolean status =  Boolean.parseBoolean(mpListBoxStatus.getValue(mpListBoxStatus.getSelectedIndex()));
+		GWTServiceCurso.Util.getInstance().getCursos("%" + txtSearch.getText() + "%", status, 
 		
 				new AsyncCallback<ArrayList<Curso>>() {
 
@@ -339,7 +370,8 @@ public class EditarCurso extends VerticalPanel {
 	
 	public void loadCursos(){
 		mpPanelLoading.setVisible(true);	
-		GWTServiceCurso.Util.getInstance().getCursos("%" + txtSearch.getText() + "%", callbackGetCursosFiltro);		
+		boolean status =  Boolean.parseBoolean(mpListBoxStatus.getValue(mpListBoxStatus.getSelectedIndex()));
+		GWTServiceCurso.Util.getInstance().getCursos("%" + txtSearch.getText() + "%", status,callbackGetCursosFiltro);		
 	}
 	
 	
@@ -418,6 +450,24 @@ public class EditarCurso extends VerticalPanel {
 			}
 		});
 		
+		MpStyledSelectionCell statusCell = new MpStyledSelectionCell(listaStatus,"design_text_boxes");
+        statusColumn = new Column<Curso, String>(statusCell) {
+            @Override
+            public String getValue(Curso object) {                
+                String status = Boolean.toString(object.isStatus());
+                return status;
+            }
+        };
+        statusColumn.setFieldUpdater(new FieldUpdater<Curso, String>() {
+            @Override
+            public void update(int index, Curso object, String value) {
+                // Called when the user changes the value.
+                object.setStatus(Boolean.parseBoolean(value));
+                GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+            }
+        });		
+		
+		
 	    MpStyledSelectionCell mediaNotaCell = new MpStyledSelectionCell(listaMediaNota,"design_text_boxes");
 	    mediaNotaColumn = new Column<Curso, String>(mediaNotaCell) {
 	      @Override
@@ -481,26 +531,38 @@ public class EditarCurso extends VerticalPanel {
 				GWTServiceCurso.Util.getInstance().updateCursoRow(curso,callbackUpdateRow);
 			}
 		});
+		
+		
+        Column<Curso, String> editColumn = new Column<Curso, String>(new MyImageCell()) {
+            @Override
+            public String getValue(Curso object) {
+                return IMAGE_EDIT;
+            }
+        };		
 
 		Column<Curso, String> removeColumn = new Column<Curso, String>(new MyImageCell()) {
 			@Override
 			public String getValue(Curso object) {
-				return "images/delete.png";
+				return IMAGE_DELETE;
 			}
 		};
 
 		cellTable.addColumn(nomeCursoColumn, txtConstants.cursoNome());
-		cellTable.addColumn(descricaoColumn, txtConstants.cursoDescricao());
-		cellTable.addColumn(objetivoColumn, txtConstants.cursoEmenta());
+//		cellTable.addColumn(descricaoColumn, txtConstants.cursoDescricao());
+//		cellTable.addColumn(objetivoColumn, txtConstants.cursoEmenta());
+		cellTable.addColumn(statusColumn, txtConstants.cursoStatus());
 		cellTable.addColumn(mediaNotaColumn, txtConstants.cursoMediaNota());
 		cellTable.addColumn(porcetagemPresencaoColumn, txtConstants.cursoPorcentagemPresenca());
 		cellTable.addColumn(dataInicialColumn, txtConstants.cursoDataInicial());
 		cellTable.addColumn(dataFinalColumn, txtConstants.cursoDataFinal());
+		cellTable.addColumn(editColumn, txtConstants.geralEditar());
 		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
+		
 
 		cellTable.getColumn(cellTable.getColumnIndex(nomeCursoColumn)).setCellStyleNames("edit-cell");
-		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("edit-cell");
-		cellTable.getColumn(cellTable.getColumnIndex(objetivoColumn)).setCellStyleNames("edit-cell");
+//		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("edit-cell");
+//		cellTable.getColumn(cellTable.getColumnIndex(objetivoColumn)).setCellStyleNames("edit-cell");
+		cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");
 		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");
 	}
 
@@ -529,6 +591,16 @@ public class EditarCurso extends VerticalPanel {
 	        return o1.getEmenta().compareTo(o2.getEmenta());
 	      }
 	    });
+	    
+        statusColumn.setSortable(true);
+        sortHandler.setComparator(statusColumn, new Comparator<Curso>() {
+            @Override
+            public int compare(Curso o1, Curso o2) {
+                String boo1 = Boolean.toString(o1.isStatus());
+                String boo2 = Boolean.toString(o2.isStatus());
+                return boo1.compareTo(boo2);
+            }
+        });
 	    
 	    mediaNotaColumn.setSortable(true);
 	    sortHandler.setComparator(mediaNotaColumn, new Comparator<Curso>() {

@@ -612,7 +612,7 @@ public class UsuarioServer{
 
             Usuario usuario = listUsuarios.get(i);
 
-            ArrayList<Curso> listCurso = CursoServer.getCursosPorAlunoAmbienteAluno(usuario);
+            ArrayList<Curso> listCurso = CursoServer.getCursosPorAlunoAmbienteAluno(usuario, true);
             String strCursos="";
             for (int j = 0; j < listCurso.size(); j++) {
                 if(j==0){

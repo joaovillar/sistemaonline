@@ -73,7 +73,7 @@ public class OcorrenciaServer {
 			+ "inner join curso c on p.id_curso = c.id_curso "
 			+ "inner join rel_curso_usuario rcu on c.id_curso  = rcu.id_curso "
 			+ "inner join usuario u on u.id_usuario=ruo.id_usuario "
-			+ "where liberar_leitura_pai=?  " + "order by o.data desc ";
+			+ "where liberar_leitura_pai=? and c.status=true order by o.data desc ";
 
 	public static String DB_SELECT_REL_PAI_ALUNO = "SELECT id_usuario_pais FROM rel_pai_aluno where id_usuario_aluno=?";
 
@@ -93,8 +93,7 @@ public class OcorrenciaServer {
 			}
 
 			int count = 0;
-			PreparedStatement ps = connection
-					.prepareStatement(DB_INSERT_OCORRENCIA);
+            PreparedStatement ps = connection.prepareStatement(DB_INSERT_OCORRENCIA);
 			ps.setString(++count, object.getAssunto());
 			ps.setString(++count, object.getDescricao());
 			// java.sql.Date(object.getData().getTime()));
@@ -272,7 +271,7 @@ public class OcorrenciaServer {
 			if (numberUpdate == 1) {
 				isOperationDone = true;
 
-/******************Codigo comentado para liberar ter tempo de testar antes de liberar para produção ******/
+/******************Codigo comentado para liberar ter tempo de testar antes de liberar para produï¿½ï¿½o ******/
 //				if (object.isLiberarLeituraPai()) {
 //					ArrayList<Integer> paisId = new ArrayList<Integer>();
 //
@@ -291,7 +290,7 @@ public class OcorrenciaServer {
 //
 //                    EmailServer.sendOcorrenciaPorEmail(paisId, object.getAssunto(), content);
 //				}
-/******************Codigo comentado para liberar ter tempo de testar antes de liberar para produção ******/
+/******************Codigo comentado para liberar ter tempo de testar antes de liberar para produï¿½ï¿½o ******/
 			}
 
 		} catch (SQLException sqlex) {

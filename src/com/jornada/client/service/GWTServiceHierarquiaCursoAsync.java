@@ -11,7 +11,7 @@ public interface GWTServiceHierarquiaCursoAsync {
 	public void getHierarquiaCursos(AsyncCallback<ArrayList<Curso>> callback);
 	public void getHierarquiaCursosAmbientePais(Usuario usuarioPais, AsyncCallback<ArrayList<Curso>> callback);
 	public void getHierarquiaCursosAmbienteAluno(Usuario usuarioAluno, AsyncCallback<ArrayList<Curso>> callback);	
-	public void getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor, AsyncCallback<ArrayList<Curso>> callback);
+	public void getHierarquiaCursosAmbienteProfessor(Usuario usuarioProfessor, Boolean status, AsyncCallback<ArrayList<Curso>> callback);
     public void getHierarquiaCursos(String strFilter, AsyncCallback<ArrayList<Curso>> callback);	
 
 }
