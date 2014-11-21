@@ -3,6 +3,7 @@ package com.jornada.server.classes.utility;
 import java.io.File;
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -148,6 +149,8 @@ public class MpUtilServer {
 
     public static ArrayList<String> getMaxTestCaseQueryRowsAllowed(ArrayList<String> strArray, int maxValuesOnQuery) {
 
+        
+
         ArrayList<String> arrayDest = new ArrayList<String>();
 
         StringBuilder strBuffer = new StringBuilder();
@@ -180,6 +183,12 @@ public class MpUtilServer {
 
         return arrayDest;
 
+    }
+    
+    public static String getDecimalFormated(double doubleNumber){
+        DecimalFormat oneDigit = new DecimalFormat("0.#");
+        String strDouble = oneDigit.format(doubleNumber).replace(",", ".");
+        return strDouble;
     }
 
 }

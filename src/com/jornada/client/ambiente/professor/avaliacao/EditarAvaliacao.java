@@ -38,6 +38,7 @@ import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPesoNota;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.cells.MpDatePickerCell;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -67,12 +68,14 @@ public class EditarAvaliacao extends VerticalPanel {
 	private Column<Avaliacao, String> assuntoColumn;
 	private Column<Avaliacao, String> descricaoColumn;
 	private Column<Avaliacao, String> columnTipoAvaliacao;
+	private Column<Avaliacao, String> columnPesoNota;
 	private Column<Avaliacao, Date> dataColumn;
 	private Column<Avaliacao, String> horaColumn;
 	private ListDataProvider<Avaliacao> dataProvider = new ListDataProvider<Avaliacao>();	
 	
 	private LinkedHashMap<String, String> listaTipoAvaliacao = new LinkedHashMap<String, String>();	
 	private LinkedHashMap<String, String> listaHora = new LinkedHashMap<String, String>();
+	private LinkedHashMap<String, String> listaPesoNota = new LinkedHashMap<String, String>();
 	
 	private MpSelectionCursoAmbienteProfessor listBoxCurso;
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;	
@@ -486,6 +489,28 @@ public class EditarAvaliacao extends VerticalPanel {
 			}
 		});
 	    
+	    
+        MpSelectionPesoNota mpListBoxPesoNota = new MpSelectionPesoNota();
+        for (int i = 0; i < mpListBoxPesoNota.getItemCount(); i++) {
+            listaPesoNota.put(mpListBoxPesoNota.getValue(i), mpListBoxPesoNota.getItemText(i));
+        }
+
+        MpStyledSelectionCell pesoNotaCell = new MpStyledSelectionCell(listaPesoNota,"design_text_boxes");
+        columnPesoNota = new Column<Avaliacao, String>(pesoNotaCell) {
+          @Override
+          public String getValue(Avaliacao object) {
+            return object.getPesoNota();
+          }
+        };
+        columnPesoNota.setFieldUpdater(new FieldUpdater<Avaliacao, String>() {
+            @Override
+            public void update(int index, Avaliacao object, String value) {
+                // Called when the user changes the value.
+                object.setPesoNota(value);
+                GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
+            }
+        });	    
+	    
 		dataColumn = new Column<Avaliacao, Date>(new MpDatePickerCell()) {
 			@Override
 			public Date getValue(Avaliacao object) {
@@ -515,15 +540,6 @@ public class EditarAvaliacao extends VerticalPanel {
 	      @Override
 			public String getValue(Avaliacao object) {
 				String strHora = MpUtilClient.add_AM_PM(object.getHora());
-//				strHora = strHora.substring(0, strHora.lastIndexOf(":"));
-//				String aux = MpUtilClient.getHourFromString(strHora);
-//				int intaux = Integer.parseInt(aux);
-//				if (intaux>=12){
-//					strHora = strHora + " PM";
-//				}
-//				else{
-//					strHora = strHora + " AM";
-//				}
 				return strHora;
 			}
 	    };
@@ -548,6 +564,7 @@ public class EditarAvaliacao extends VerticalPanel {
 		cellTable.addColumn(assuntoColumn, txtConstants.avaliacaoAssunto());
 		cellTable.addColumn(descricaoColumn, txtConstants.avaliacaoDescricao());
 		cellTable.addColumn(columnTipoAvaliacao, txtConstants.avaliacaoTipo());
+        cellTable.addColumn(columnPesoNota, "Peso Nota");		
 		cellTable.addColumn(dataColumn, txtConstants.avaliacaoData());
 		cellTable.addColumn(horaColumn, txtConstants.avaliacaoHora());
 		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
@@ -555,6 +572,7 @@ public class EditarAvaliacao extends VerticalPanel {
 		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(columnTipoAvaliacao)).setCellStyleNames("edit-cell");
+		cellTable.getColumn(cellTable.getColumnIndex(columnPesoNota)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");		
 		
 	}

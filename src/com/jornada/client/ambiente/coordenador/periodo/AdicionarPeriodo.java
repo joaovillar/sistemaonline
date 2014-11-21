@@ -12,10 +12,8 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
@@ -23,6 +21,7 @@ import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
@@ -45,9 +44,10 @@ public class AdicionarPeriodo extends VerticalPanel {
 //	private ListBox listBoxCurso;
 	private MpSelectionCurso listBoxNomeCurso;
 	
-	private TextBox txtNomePeriodo;
+	private MpTextBox txtNomePeriodo;
 	private TextArea txtDescricaoPeriodo;
 	private TextArea txtObjetivoPeriodo;
+	private MpTextBox txtPesoPeriodo;
 	private MpDateBoxWithImage mpDateBoxInicial;
 	private MpDateBoxWithImage mpDateBoxFinal;
 	
@@ -93,42 +93,30 @@ public class AdicionarPeriodo extends VerticalPanel {
 		// Add a title to the form
 //		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
-		txtNomePeriodo = new TextBox();
+		txtNomePeriodo = new MpTextBox();
 		txtDescricaoPeriodo = new TextArea();
 		txtObjetivoPeriodo = new TextArea();
+		txtPesoPeriodo = new MpTextBox();
 		mpDateBoxInicial = new MpDateBoxWithImage();
 		mpDateBoxInicial.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
 		mpDateBoxFinal = new MpDateBoxWithImage();
 		mpDateBoxFinal.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
-		txtNomePeriodo.setStyleName("design_text_boxes");
 		txtDescricaoPeriodo.setStyleName("design_text_boxes");
 		txtObjetivoPeriodo.setStyleName("design_text_boxes");
-//		formDateInicial.getDate().setStyleName("design_text_boxes");
-//		formDateFinal.setStyleName("design_text_boxes");
 
-		Label lblCurso = new Label(txtConstants.curso());
-		Label lblNomePeriodo = new Label(txtConstants.periodoNome());		
-		Label lblDescricaoPeriodo = new Label(txtConstants.periodoDescricao());		
-		Label lblObjetivoPeriodo = new Label(txtConstants.periodoObjetivo());		
-		Label lblDateInicial = new Label(txtConstants.periodoDataInicial());		
-		Label lblDateFinal = new Label(txtConstants.periodoDataFinal());
+
+		MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
+		MpLabelRight lblNomePeriodo = new MpLabelRight(txtConstants.periodoNome());		
+		MpLabelRight lblDescricaoPeriodo = new MpLabelRight(txtConstants.periodoDescricao());		
+		MpLabelRight lblObjetivoPeriodo = new MpLabelRight(txtConstants.periodoObjetivo());		
+		MpLabelRight lblPesoPeriodo = new MpLabelRight("Peso");
+		MpLabelRight lblDateInicial = new MpLabelRight(txtConstants.periodoDataInicial());		
+		MpLabelRight lblDateFinal = new MpLabelRight(txtConstants.periodoDataFinal());
 		
 		lblErroNomePeriodo = new MpLabelTextBoxError();
 		
-		lblCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
-		lblNomePeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblDescricaoPeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblObjetivoPeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblDateInicial.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblDateFinal.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-
-		lblCurso.setStyleName("design_label");
-		lblNomePeriodo.setStyleName("design_label");
-		lblDescricaoPeriodo.setStyleName("design_label");
-		lblObjetivoPeriodo.setStyleName("design_label");
-		lblDateInicial.setStyleName("design_label");
-		lblDateFinal.setStyleName("design_label");
 		txtNomePeriodo.setWidth("350px");
+		txtPesoPeriodo.setWidth("80px");
 		txtDescricaoPeriodo.setSize("350px", "50px");
 		txtObjetivoPeriodo.setSize("350px", "50px");
 		mpDateBoxInicial.getDate().setWidth("170px");
@@ -150,6 +138,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 		flexTable.setWidget(row, 0, lblNomePeriodo);flexTable.setWidget(row, 1, txtNomePeriodo);flexTable.setWidget(row++, 2, lblErroNomePeriodo);
 		flexTable.setWidget(row, 0, lblDescricaoPeriodo);flexTable.setWidget(row++, 1, txtDescricaoPeriodo);
 		flexTable.setWidget(row, 0, lblObjetivoPeriodo);flexTable.setWidget(row++, 1, txtObjetivoPeriodo);
+		flexTable.setWidget(row, 0, lblPesoPeriodo);flexTable.setWidget(row++, 1, txtPesoPeriodo);
 		flexTable.setWidget(row, 0, lblDateInicial);flexTable.setWidget(row++, 1, mpDateBoxInicial);
 		flexTable.setWidget(row, 0, lblDateFinal);flexTable.setWidget(row++, 1, mpDateBoxFinal);
 
@@ -194,11 +183,6 @@ public class AdicionarPeriodo extends VerticalPanel {
 				hPanelLoading.setVisible(false);
 				int isSuccess = result;
 				if (isSuccess>0) {
-//					txtNomePeriodo.getTextBox().setValue("");
-//					txtDescricaoPeriodo.setValue("");
-//					txtObjetivoPeriodo.setValue("");
-//					mpDateBoxInicial.getDate().setValue(null);
-//					mpDateBoxFinal.getDate().setValue(null);
 					cleanFields();
 					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
 					mpDialogBoxConfirm.setBodyText(txtConstants.periodoSalvoSucesso());
@@ -289,6 +273,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 		txtNomePeriodo.setValue("");
 		txtDescricaoPeriodo.setValue("");
 		txtObjetivoPeriodo.setValue("");
+		txtPesoPeriodo.setValue("");
 		mpDateBoxInicial.getDate().setValue(null);
 		mpDateBoxFinal.getDate().setValue(null);
 	}

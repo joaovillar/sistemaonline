@@ -143,37 +143,10 @@ public class AssociarCursoAluno extends VerticalPanel{
 		flexTableFiltrar.setWidget(0, 0, lblFiltrarCurso);
 		flexTableFiltrar.setWidget(0, 1, listBoxNomeCurso);
 		flexTableFiltrar.setWidget(0, 2, txtFiltroNomeCurso);
-//		flexTableFiltrar.setWidget(0, 3, btnFiltrar);
-//		flexTableFiltrar.setWidget(0, 4, mpPanelCursoLoading);	
 		flexTableFiltrar.setWidget(0, 3, mpPanelCursoLoading);
 		
 		mpPanel.add(flexTableFiltrar);
 		
-//		callbackGetCursosFiltro = new AsyncCallback<ArrayList<Curso>>() {
-//
-//			public void onSuccess(ArrayList<Curso> list) {
-//				
-//				mpPanelCursoLoading.setVisible(false);	
-//				
-//				listBoxCursos.clear();
-//				for(int i=0;i<list.size();i++){
-//					Curso curso = list.get(i);
-//					listBoxCursos.addItem(curso.getNome(), Integer.toString(curso.getIdCurso()));
-//				}
-//				
-//				popularAlunosAssociados();
-//				
-//			}
-//			
-//			public void onFailure(Throwable caught) {
-//				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-//				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroCarregar());
-//				mpDialogBoxWarning.showDialog();
-//
-//			}
-//		};		
-		
-//		popularOnLoadListBoxCursos();
 		
 		return mpPanel;
 		

@@ -18,8 +18,8 @@ import com.jornada.shared.classes.Usuario;
 public class PeriodoServer {
 	
 	
-	public static String DB_INSERT_PERIODO = "INSERT INTO periodo (nome_periodo, descricao, numeracao, objetivo, id_curso, data_inicial, data_final) VALUES (?,?,?,?,?,?,?) returning id_periodo";
-	public static String DB_UPDATE_PERIODO = "UPDATE periodo set nome_periodo=?, descricao=?, objetivo=?, id_curso=?, data_inicial=?, data_final=? where id_periodo=?";
+	public static String DB_INSERT_PERIODO = "INSERT INTO periodo (nome_periodo, descricao, numeracao, objetivo, id_curso, data_inicial, data_final, peso) VALUES (?,?,?,?,?,?,?,?) returning id_periodo";
+	public static String DB_UPDATE_PERIODO = "UPDATE periodo set nome_periodo=?, descricao=?, objetivo=?, id_curso=?, data_inicial=?, data_final=?, peso=? where id_periodo=?";
 	public static String DB_SELECT_PERIODO = "SELECT * FROM periodo where (nome_periodo ilike ?);";
 	public static String DB_SELECT_PERIODO_ID = "SELECT * FROM periodo where id_periodo=?;";
 	public static String DB_SELECT_PERIODO_ALL = "SELECT * FROM periodo order by nome_periodo asc;";
@@ -67,6 +67,7 @@ public class PeriodoServer {
 				pstmtInsertPeriodo.setInt(++param, periodo.getIdCurso());				
 				pstmtInsertPeriodo.setDate(++param, new java.sql.Date(periodo.getDataInicial().getTime()));
 				pstmtInsertPeriodo.setDate(++param, new java.sql.Date(periodo.getDataFinal().getTime()));
+				pstmtInsertPeriodo.setString(++param, periodo.getPeso());   
 				
 				ResultSet rs = pstmtInsertPeriodo.executeQuery();			
 				rs.next();
@@ -295,6 +296,7 @@ public class PeriodoServer {
 			updatePeriodo.setInt(++count, periodo.getIdCurso());
 			updatePeriodo.setDate(++count, new java.sql.Date(periodo.getDataInicial().getTime()));
 			updatePeriodo.setDate(++count, new java.sql.Date(periodo.getDataFinal().getTime()));
+			updatePeriodo.setString(++count, periodo.getPeso());
 			updatePeriodo.setInt(++count, periodo.getIdPeriodo());
 
 			int numberUpdate = updatePeriodo.executeUpdate();
@@ -318,42 +320,6 @@ public class PeriodoServer {
 	}	
 	
 	
-	public static Periodo getPeriodo(Connection connection, int id_periodo) {
-
-		Periodo currentPeriodo = new Periodo();
-
-		try 
-		{
-
-
-			PreparedStatement ps = connection.prepareStatement(PeriodoServer.DB_SELECT_PERIODO_ID);
-			
-			int count=0;
-			ps.setInt(++count, id_periodo);
-
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) 
-			{	
-				currentPeriodo.setIdPeriodo(rs.getInt("id_periodo"));
-				currentPeriodo.setNomePeriodo(rs.getString("nome_periodo"));
-				currentPeriodo.setDescricao(rs.getString("descricao"));
-				currentPeriodo.setObjetivo(rs.getString("objetivo"));
-				currentPeriodo.setDataInicial(rs.getDate("data_inicial"));
-				currentPeriodo.setDataFinal(rs.getDate("data_final"));
-//				currentCurso.put("id_departamento", rs.getDate("id_departamento"));
-
-			}
-
-		} catch (SQLException sqlex) {
-			currentPeriodo=null;
-			System.err.println(sqlex.getMessage());
-		}
-		
-		return currentPeriodo;
-
-	}	
-	
-	
 	private static ArrayList<Periodo> getPeriodoParameters(ResultSet rs){
 
 		ArrayList<Periodo> data = new ArrayList<Periodo>();
@@ -365,6 +331,7 @@ public class PeriodoServer {
 			object.setIdPeriodo(rs.getInt("id_periodo"));
 			object.setIdCurso(rs.getInt("id_curso"));
 			object.setNomePeriodo(rs.getString("nome_periodo"));
+			object.setPeso(rs.getString("peso"));
 			object.setDescricao(rs.getString("descricao"));
 			object.setObjetivo(rs.getString("objetivo"));
 			object.setDataInicial(rs.getDate("data_inicial"));

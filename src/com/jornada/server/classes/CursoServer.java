@@ -42,7 +42,7 @@ public class CursoServer{
 			"	select id_curso from rel_curso_usuario where id_usuario in " +
 			"	(  select id_usuario_aluno from rel_pai_aluno where id_usuario_pais=? ) " +
 			"   group by id_curso "+
-			") ";
+			")  and status=? ; ";
 	
 	public static String DB_SELECT_CURSO_ID_ALUNO =  
 			"select * from curso where status=true and id_curso in " +
@@ -358,7 +358,7 @@ public class CursoServer{
 
 	}		
 	
-	public static ArrayList<Curso> getCursosPorPaiAmbientePais(Usuario usuario) {
+	public static ArrayList<Curso> getCursosPorPaiAmbientePais(Usuario usuario, Boolean status) {
 		ArrayList<Curso> data = new ArrayList<Curso>();		
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection conn = ConnectionManager.getConnection();
@@ -371,6 +371,7 @@ public class CursoServer{
 			
 			int count=0;
 			ps.setInt(++count, usuario.getIdUsuario());
+			ps.setBoolean(++count, status);
 			
 			data = getCursoParameters(ps.executeQuery());
 

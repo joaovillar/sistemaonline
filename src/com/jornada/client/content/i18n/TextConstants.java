@@ -39,6 +39,7 @@ public interface TextConstants extends Messages {
     String menuTokenFerramentaCoordenadorHierarquia();
     String menuTokenFerramentaCoordenadorUsuario();
     String menuTokenFerramentaCoordenadorDiario();
+    String menuTokenFerramentaCoordenadorRelatorio();
 	String menuTokenFerramentaProfessor();
 	String menuTokenFerramentaProfessorAvaliacao();
 	String menuTokenFerramentaProfessorNota();
@@ -712,6 +713,17 @@ public interface TextConstants extends Messages {
     String emailTodosOsCursos();
     String emailEscolherArquivo();
     String emailEnviarEmail();
+    /*******EMAIL END*******/
+    
+    
+    /*******EMAIL BEGIN*******/
+    String relatorio();
+    String relatorios();
+    String relatorioBoletimPorPeriodo();
+    String relatorioVisualisarImprimirRelatorios();
+    String relatorioHistoricosEscolar();
+    String relatorioBoletimSalas();
+    String relatorioFechamentoAno();
     /*******EMAIL END*******/
 
 }

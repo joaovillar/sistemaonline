@@ -12,13 +12,14 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoAvaliacao;
+import com.jornada.client.classes.listBoxes.ambiente.general.MpSelectionSimNao;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPesoNota;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -26,6 +27,8 @@ import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextArea;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.classes.widgets.timepicker.MpTimePicker;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAvaliacao;
@@ -48,8 +51,10 @@ public class AdicionarAvaliacao extends VerticalPanel {
 //	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;	
 	private MpSelectionTipoAvaliacao listBoxTipoAvaliacao;
 	
-	private TextBox txtAssunto;
-	private TextArea txtDescricao;	
+	private MpSelectionPesoNota listBoxPesoNota;
+	
+	private MpTextBox txtAssunto;
+	private MpTextArea txtDescricao;	
 	private MpDateBoxWithImage dateBoxData;
 	private MpTimePicker mpTimePicker;
 	
@@ -79,8 +84,8 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		// layout.setHTML(0, 0, "");
 //		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
-		txtAssunto = new TextBox();
-		txtDescricao = new TextArea();
+		txtAssunto = new MpTextBox();
+		txtDescricao = new MpTextArea();
 		dateBoxData = new MpDateBoxWithImage();
 		mpTimePicker = new MpTimePicker(7,22);
 		
@@ -90,6 +95,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		MpLabelRight lblDisciplina = new MpLabelRight(txtConstants.disciplina());		
 //		Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());		
 		
+		MpLabelRight lblPesoNota = new MpLabelRight("Peso Nota");  
 		MpLabelRight lblAssunto = new MpLabelRight(txtConstants.avaliacaoAssunto());		
 		MpLabelRight lblDescricao = new MpLabelRight(txtConstants.avaliacaoDescricao());
 		MpLabelRight lblTipoAvaliacao = new MpLabelRight(txtConstants.avaliacaoTipo());
@@ -99,23 +105,16 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		lblErrorAssunto = new MpLabelTextBoxError();
 		lblErrorDisciplina = new MpLabelTextBoxError();
 		
-				
-		txtAssunto.setWidth("350px");
-		txtDescricao.setSize("350px", "50px");
 		dateBoxData.getDate().setWidth("170px");
-
-		txtAssunto.setStyleName("design_text_boxes");
-		txtDescricao.setStyleName("design_text_boxes");
-//		dateBoxData.setStyleName("design_text_boxes");
 
 		listBoxCurso = new MpSelectionCursoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
 		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
-		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
-//		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();
+		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
+		
+		listBoxPesoNota = new MpSelectionPesoNota();
 		
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());		
-//		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
 		
 		listBoxTipoAvaliacao = new MpSelectionTipoAvaliacao();
 		
@@ -130,6 +129,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		flexTableLayout.setWidget(row, 0, lblAssunto);flexTableLayout.setWidget(row, 1, txtAssunto);flexTableLayout.setWidget(row++, 2, lblErrorAssunto);
 		flexTableLayout.setWidget(row, 0, lblDescricao);flexTableLayout.setWidget(row++, 1, txtDescricao);
 		flexTableLayout.setWidget(row, 0, lblTipoAvaliacao);flexTableLayout.setWidget(row++, 1, listBoxTipoAvaliacao);		
+		flexTableLayout.setWidget(row, 0, lblPesoNota);flexTableLayout.setWidget(row++, 1, listBoxPesoNota);        
 		flexTableLayout.setWidget(row, 0, lblData);flexTableLayout.setWidget(row++, 1, dateBoxData);
 		flexTableLayout.setWidget(row, 0, lblHora);flexTableLayout.setWidget(row++, 1, mpTimePicker);
 
@@ -210,6 +210,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 				int intIdDisciplina = Integer.parseInt(listBoxDisciplina.getValue(listBoxDisciplina.getSelectedIndex()));
 				int intIdTipoAvaliacao = Integer.parseInt(listBoxTipoAvaliacao.getValue(listBoxTipoAvaliacao.getSelectedIndex()));
 				String strHora = mpTimePicker.getValue(mpTimePicker.getSelectedIndex());
+				String pesoNota = listBoxPesoNota.getValue(listBoxPesoNota.getSelectedIndex());
 				
 				Avaliacao object = new Avaliacao();
 				object.setIdDisciplina(intIdDisciplina);
@@ -217,6 +218,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 				object.setDescricao(txtDescricao.getText());
 				object.setIdTipoAvaliacao(intIdTipoAvaliacao);
 				object.setData(dateBoxData.getDate().getValue());
+				object.setPesoNota(pesoNota);
 				object.setHora(strHora);				
 
 				

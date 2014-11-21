@@ -1142,3 +1142,38 @@ li.multiValueSuggestBox-input-token {
 	top: 2px;
 }
 
+.gwt-SuggestBox {
+	border: 1px solid #666;
+	border-top: 0;
+	text-align: left;
+	width: 400px;
+	background-color: white;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.gwt-SuggestBoxPopup {
+	text-align: left;
+	cursor: pointer;
+	cursor: hand;
+	border: 1px solid #666;
+	border-top: 0;
+	background-color: #fff;
+	background-color: white;
+	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.gwt-SuggestBoxPopup .item {
+		    border                       :    1px  #aaa;
+	/*     width                        :    398px; */
+	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: white;
+}
+.gwt-SuggestBoxPopup .item-selected {
+	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: white;
+}
+

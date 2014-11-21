@@ -543,7 +543,7 @@ public class DocumentoServer {
                 ArrayList<Curso> cursosUsuario;
                 
                 if (idTipoUsuario == TipoUsuario.PAIS) {
-                    cursosUsuario = CursoServer.getCursosPorPaiAmbientePais(user);    
+                    cursosUsuario = CursoServer.getCursosPorPaiAmbientePais(user, true);    
                 }else{
                     cursosUsuario = CursoServer.getCursosPorAlunoAmbienteAluno(user, true);
                 }
@@ -571,7 +571,7 @@ public class DocumentoServer {
                 user.setIdUsuario(Integer.parseInt(listIdUsuarios.get(i)));
                 ArrayList<Curso> cursosUsuarios;
                 if (idTipoUsuario == TipoUsuario.PAIS) {
-                    cursosUsuarios = CursoServer.getCursosPorPaiAmbientePais(user);    
+                    cursosUsuarios = CursoServer.getCursosPorPaiAmbientePais(user, true);    
                 }else{
                     cursosUsuarios = CursoServer.getCursosPorAlunoAmbienteAluno(user, true);
                 }

@@ -67,6 +67,7 @@ public class EditarPeriodo extends VerticalPanel {
 	private Column<Periodo, String> nomePeriodoColumn;
 	private Column<Periodo, String> descricaoColumn;
 	private Column<Periodo, String> objetivoColumn;
+	private Column<Periodo, String> pesoColumn;
 	private Column<Periodo, Date> dataInicialColumn;
 	private Column<Periodo, Date> dataFinalColumn;
 
@@ -409,6 +410,23 @@ public class EditarPeriodo extends VerticalPanel {
 				GWTServicePeriodo.Util.getInstance().updatePeriodoRow(periodo,callbackUpdateRow);
 			}
 		});
+		
+		
+        pesoColumn = new Column<Periodo, String>(new EditTextCell()) {
+            @Override
+            public String getValue(Periodo periodo) {
+                return periodo.getPeso();
+            }
+
+        };
+        pesoColumn.setFieldUpdater(new FieldUpdater<Periodo, String>() {
+            @Override
+            public void update(int index, Periodo periodo, String value) {
+                // Called when the user changes the value.
+                periodo.setPeso(value);
+                GWTServicePeriodo.Util.getInstance().updatePeriodoRow(periodo,callbackUpdateRow);
+            }
+        });		
 
 		dataInicialColumn = new Column<Periodo, Date>(new MpDatePickerCell()) {
 			@Override
@@ -450,6 +468,7 @@ public class EditarPeriodo extends VerticalPanel {
 		cellTable.addColumn(nomePeriodoColumn, txtConstants.periodoNome());
 		cellTable.addColumn(descricaoColumn, txtConstants.periodoDescricao());
 		cellTable.addColumn(objetivoColumn, txtConstants.periodoObjetivo());
+		cellTable.addColumn(pesoColumn, "Peso");
 		cellTable.addColumn(dataInicialColumn, txtConstants.periodoDataInicial());
 		cellTable.addColumn(dataFinalColumn, txtConstants.periodoDataFinal());
 		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
@@ -460,6 +479,7 @@ public class EditarPeriodo extends VerticalPanel {
 		cellTable.getColumn(cellTable.getColumnIndex(nomePeriodoColumn)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(objetivoColumn)).setCellStyleNames("edit-cell");
+		cellTable.getColumn(cellTable.getColumnIndex(pesoColumn)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");		
 		
 	}	
@@ -488,6 +508,14 @@ public class EditarPeriodo extends VerticalPanel {
 	        return o1.getObjetivo().compareTo(o2.getObjetivo());
 	      }
 	    });		
+		
+        pesoColumn.setSortable(true);
+        sortHandler.setComparator(pesoColumn, new Comparator<Periodo>() {
+          @Override
+          public int compare(Periodo o1, Periodo o2) {
+            return o1.getPeso().compareTo(o2.getPeso());
+          }
+        }); 		
 		
 		dataInicialColumn.setSortable(true);
 		sortHandler.setComparator(dataInicialColumn, new Comparator<Periodo>() {
@@ -541,11 +569,12 @@ public class EditarPeriodo extends VerticalPanel {
 					String strNome = dataProvider.getList().get(i).getNomePeriodo();			
 					String strDescricao = dataProvider.getList().get(i).getDescricao();
 					String strObjetivo = dataProvider.getList().get(i).getObjetivo();
+					String strPeso = dataProvider.getList().get(i).getPeso();
 					String strDataInicial = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getDataInicial(), "EEEE, MMMM dd, yyyy");
 					String strDataFinal = MpUtilClient.convertDateToString(dataProvider.getList().get(i).getDataFinal(), "EEEE, MMMM dd, yyyy");
 
 					String strJuntaTexto = strNome.toUpperCase() + " " + strDescricao.toUpperCase() + " " + strObjetivo.toUpperCase();
-					strJuntaTexto +=  " " + strDataInicial.toUpperCase() + " " + strDataFinal.toUpperCase();
+					strJuntaTexto +=  strPeso.toUpperCase() + " " + " " + strDataInicial.toUpperCase() + " " + strDataFinal.toUpperCase();
 
 					if (!strJuntaTexto.contains(strFiltro)) {
 						dataProvider.getList().remove(i);

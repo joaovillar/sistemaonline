@@ -239,6 +239,7 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 	
 	private FlexTable createBoletimTable(String[][] listBoletim){
 		
+	    Double doubleMediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
 		
 		flexTableBoletim = new FlexTable();
 		flexTableBoletim.setCellSpacing(0);
@@ -298,12 +299,12 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 						doubleMedia = doubleMedia +doubleNota;
 						intCalcularMedia++;
 						//se nota maior que 6 coloque o fundo verde
-						if(doubleNota>=6.0){
+						if(doubleNota>=doubleMediaNotaCurso){
 							flexTableBoletim.getWidget(row, column).setStyleName("table-boletim-cell-green");
 							lblText.addClickHandler(new ClickHandlerFlexTableNotas());
 						}
 						//se nota menor que 6 coloque o fundo vermelho
-						else if(doubleNota<6.0){
+						else if(doubleNota<doubleMediaNotaCurso){
 							flexTableBoletim.getWidget(row, column).setStyleName("table-boletim-cell-red");
 							lblText.addClickHandler(new ClickHandlerFlexTableNotas());
 						}
@@ -334,10 +335,10 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 
 				flexTableBoletim.setWidget(row, col + 1, lblMedia);
 				
-				if (doubleMedia >= 6.0) {
+				if (doubleMedia >= doubleMediaNotaCurso) {
 					flexTableBoletim.getWidget(row, col + 1).setStyleName("table-boletim-cell-green-media");
 				}
-				else if (doubleMedia < 6.0) { // se nota menor que 6 coloque o fundo vermelho 
+				else if (doubleMedia < doubleMediaNotaCurso) { // se nota menor que 6 coloque o fundo vermelho 
 					flexTableBoletim.getWidget(row, col + 1).setStyleName("table-boletim-cell-red-media");
 				}
 				else{

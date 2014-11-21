@@ -24,6 +24,7 @@ import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.ambiente.coordenador.disciplina.TelaInicialDisciplina;
 import com.jornada.client.ambiente.coordenador.hierarquia.HierarquiaCursoCoordenador;
 import com.jornada.client.ambiente.coordenador.periodo.TelaInicialPeriodo;
+import com.jornada.client.ambiente.coordenador.relatorio.TelaInicialRelatorio;
 import com.jornada.client.ambiente.coordenador.topico.TelaInicialTopico;
 import com.jornada.client.ambiente.coordenador.usuario.TelaInicialUsuario;
 import com.jornada.client.ambiente.pais.TelaInicialPais;
@@ -549,12 +550,6 @@ public class MainView extends Composite implements HistoryListener{
 	public void openFerramentaCoordenadorDiario(){
 		
 		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_DIARIO);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialDiarioProfessor telaInicialDiarioProfessor = TelaInicialDiarioProfessor.getInstance(this);		
-//		this.vPanelBody.add(telaInicialDiarioProfessor);
-//		this.vPanelMenu.setVisible(true);	
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -573,6 +568,30 @@ public class MainView extends Composite implements HistoryListener{
 			}
 		});
 	}	
+	
+	
+	
+    public void openFerramentaCoordenadorRelatorio(){
+        
+        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO);     
+        
+        mpPopupLoading.show();
+        GWT.runAsync(new RunAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                mpPopupLoading.hide();
+                Window.alert("Code download failed");
+            }
+
+            public void onSuccess() {
+                mpPopupLoading.hide();
+                vPanelBody.clear();
+                vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+                TelaInicialRelatorio telaInicialRelatorio = TelaInicialRelatorio.getInstance(MainView.this);      
+                vPanelBody.add(telaInicialRelatorio);
+                vPanelMenu.setVisible(true);
+            }
+        });
+    }   	
 	
 	
 	

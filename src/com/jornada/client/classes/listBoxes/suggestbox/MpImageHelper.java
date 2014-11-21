@@ -3,8 +3,12 @@ package com.jornada.client.classes.listBoxes.suggestbox;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Image;
@@ -14,6 +18,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
+import com.jornada.client.classes.listBoxes.MpSelectionAluno;
 
 public class MpImageHelper extends Image {
 
@@ -30,58 +35,35 @@ public class MpImageHelper extends Image {
         MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
         defaults = new ArrayList<String>();
         box = new SuggestBox(oracle);
+        
 
         box.setWidth(Integer.toString(list.getElement().getOffsetWidth())+"px");      
         
         setStyleName("img_style");
-        box.setStyleName("design_list_boxes");
         box.setLimit(5);
 
         
-      this.addDomHandler(new MouseDownHandler() {
-      
-      @Override
-      public void onMouseDown(MouseDownEvent event) {
-          myPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-              public void setPosition(int offsetWidth, int offsetHeight) {
-                  int left = listBox.getAbsoluteLeft();
-                  int top = listBox.getAbsoluteTop() + 19;                  
-                  myPopup.setPopupPosition(left, top);
-              }
-          });                 
-//          myPopup.setStyleName("documentClass-PopPup");
-          box.setFocus(true);
-          myPopup.show();
-          
-          box.setText("");      
-          box.setFocus(true);
-//          box.setAutoSelectEnabled(true);
-//          box.setAnimationEnabled(true);
-          box.showSuggestionList();
-          box.setFocus(true);
-      }
-  }, MouseDownEvent.getType());
+        this.addDomHandler(new MouseDownHandler() {
+
+            @Override
+            public void onMouseDown(MouseDownEvent event) {
+                myPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+                    public void setPosition(int offsetWidth, int offsetHeight) {
+                        int left = listBox.getAbsoluteLeft();
+                        int top = listBox.getAbsoluteTop() + 19;
+                        myPopup.setPopupPosition(left, top);
+                        
+                    }
+                });
+                
+                myPopup.show();                
+                box.showSuggestionList();                
+                box.setFocus(true);
+                box.setText("");
+            }
+        }, MouseDownEvent.getType());
         
-//        listBox.addDomHandler(new MouseDownHandler() {
-//            
-//            @Override
-//            public void onMouseDown(MouseDownEvent event) {
-//                myPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-//                    public void setPosition(int offsetWidth, int offsetHeight) {
-//                        int left = listBox.getAbsoluteLeft();
-//                        int top = listBox.getAbsoluteTop() + 19;
-//                        
-//                        myPopup.setPopupPosition(left, top);
-//                    }
-//                });                 
-//                myPopup.setStyleName("documentClass-PopPup");
-//                myPopup.show();
-//                box.setFocus(true);
-//                box.setText("");
-//                box.showSuggestionList();                
-//            }
-//        }, MouseDownEvent.getType());
-        
+       
         
         int itens = listBox.getItemCount();
         for (int i = 0; i < itens; i++) {
@@ -93,9 +75,9 @@ public class MpImageHelper extends Image {
         
         
         box.setWidth("250px");
-        box.setStyleName("design_list_boxes");
+        box.setStyleName("design_text_boxes");
         
-        
+        box.setAutoSelectEnabled(true);
         box.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
             
             @Override
@@ -105,6 +87,7 @@ public class MpImageHelper extends Image {
                 for(int i=0; i<itens;i++){
                     if(listBox.getItemText(i).equals(box.getText())){
                         listBox.setSelectedIndex(i);
+                        DomEvent.fireNativeEvent(Document.get().createChangeEvent(), listBox);
                         myPopup.hide();
                         break;                        
                     }
@@ -114,28 +97,9 @@ public class MpImageHelper extends Image {
         
         myPopup = new PopupPanel(true);
         myPopup.setWidget(box);
-        
-        
+        myPopup.setStyleName("design_text_boxes");
+        myPopup.setGlassEnabled(true);
+        box.setFocus(true);
     }
-
-//    @Override
-//    public void onClick(ClickEvent event) {
-//        myPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-//            public void setPosition(int offsetWidth, int offsetHeight) {
-//                int left = listBox.getAbsoluteLeft();
-//                int top = listBox.getAbsoluteTop() + 19;
-//                
-//                myPopup.setPopupPosition(left, top);
-//            }
-//        });                 
-//        myPopup.setStyleName("documentClass-PopPup");
-//        myPopup.show();
-//        box.setFocus(true);
-//        box.setText("");
-//        box.showSuggestionList();  
-//        
-//    }
-
-
 
 }

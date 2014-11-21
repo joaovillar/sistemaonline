@@ -72,7 +72,7 @@ public class HierarquiaCursoServer {
 	}	
 	
 	public static ArrayList<Curso> getHierarquiaCursosAmbientePais(Usuario usuarioPais){		
-		return getHierarquiaCursos(CursoServer.getCursosPorPaiAmbientePais(usuarioPais));		
+		return getHierarquiaCursos(CursoServer.getCursosPorPaiAmbientePais(usuarioPais, true));		
 	}	
 	
 	public static ArrayList<Curso> getHierarquiaCursosAmbienteAluno(Usuario usuarioAluno){		

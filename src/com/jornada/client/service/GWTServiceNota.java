@@ -29,6 +29,7 @@ public interface GWTServiceNota extends RemoteService {
 	public boolean updateRow(Nota object);
 	public ArrayList<Nota> getNotaPelaAvaliacao(int idCurso, int idAvaliacao);
 	public  String[][] getBoletimNotasPorAlunoPorCurso(int idCurso, int idTipoUsuario, int idUsuario);
+	public ArrayList<ArrayList<String>> getBoletimTrimestre(int idCurso, int idPeriodo) ;
 	
 	public static class Util {
 		private static GWTServiceNotaAsync instance;

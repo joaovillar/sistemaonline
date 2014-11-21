@@ -72,9 +72,9 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 	
 	public ArrayList<Curso> getCursosPorPaiAmbientePais(Usuario usuario){			
 		switch(usuario.getIdTipoUsuario()){
-			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos();
-			case TipoUsuario.COORDENADOR : return CursoServer.getCursos();
-			case TipoUsuario.PAIS : return CursoServer.getCursosPorPaiAmbientePais(usuario);
+			case TipoUsuario.ADMINISTRADOR : return CursoServer.getCursos(true);
+			case TipoUsuario.COORDENADOR : return CursoServer.getCursos(true);
+			case TipoUsuario.PAIS : return CursoServer.getCursosPorPaiAmbientePais(usuario, true);
 			default: return null;
 		}
 	}

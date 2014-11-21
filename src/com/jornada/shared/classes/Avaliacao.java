@@ -14,6 +14,8 @@ public class Avaliacao implements Serializable{
 	private int idTipoAvaliacao;
 	private String assunto;
 	private String descricao;
+	private boolean valeNota;
+	private String pesoNota;
 	private Date data;
 	private String hora;
 	
@@ -81,8 +83,28 @@ public class Avaliacao implements Serializable{
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
+	
+	
 
-	public ArrayList<Nota> getListNota() {
+	public boolean isValeNota() {
+        return valeNota;
+    }
+
+    public void setValeNota(boolean valeNota) {
+        this.valeNota = valeNota;
+    }
+    
+    
+
+    public String getPesoNota() {
+        return pesoNota;
+    }
+
+    public void setPesoNota(String pesoNota) {
+        this.pesoNota = pesoNota;
+    }
+
+    public ArrayList<Nota> getListNota() {
 		return listNota;
 	}
 

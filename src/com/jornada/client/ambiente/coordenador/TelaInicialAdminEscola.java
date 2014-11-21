@@ -9,17 +9,13 @@ import com.jornada.client.MainView;
 
 public class TelaInicialAdminEscola extends Composite {
 
-//	ComponenteCurso componenteCurso;
-//	ComponentePeriodo componentePeriodo;
-//	ComponenteDisciplina componenteDisciplina;
-//	ComponenteConteudoProgramatico componenteConteudoProgramatico;
-//	ComponenteTopico componenteTopico;
 	ComponenteCursoAdmin componenteCursoAdmin; 
 	ComponenteUsuario componenteUsuarios;	
 	ComponenteComunicados componenteComunicados;
 	ComponenteOcorrencia componenteOcorrencia;
 	ComponenteVisualizarCurso componenteVisualizarCurso;
 	ComponenteDiarioCoordenador componenteDiarioCoordenador;
+	ComponenteRelatorios componenteRelatorios;
 
 
 	VerticalPanel verticalPanel;
@@ -44,24 +40,20 @@ public class TelaInicialAdminEscola extends Composite {
 		
 		this.mainView = mainView;
 		
-//		componenteCurso = ComponenteCurso.getInstance(mainView);
-//		componentePeriodo = ComponentePeriodo.getInstance(mainView);
-//		componenteDisciplina = ComponenteDisciplina.getInstance(mainView);
-//		componenteConteudoProgramatico = ComponenteConteudoProgramatico.getInstance(mainView);
-//		componenteTopico = ComponenteTopico.getInstance(mainView);
 		componenteCursoAdmin = ComponenteCursoAdmin.getInstance(mainView);
 		componenteUsuarios = ComponenteUsuario.getInstance(mainView);				
 		componenteComunicados = ComponenteComunicados.getInstance(mainView);
 		componenteOcorrencia = ComponenteOcorrencia.getInstance(mainView);
 		componenteVisualizarCurso = new ComponenteVisualizarCurso();
 		componenteDiarioCoordenador = ComponenteDiarioCoordenador.getInstance();
+		componenteRelatorios = ComponenteRelatorios.getInstance(mainView);
 
 	
 		verticalPanel = new VerticalPanel();
 		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.setSize("100%", "100%");
 		
-		grid = new Grid(2, 3);
+		grid = new Grid(3, 3);
 		grid.setCellSpacing(3);
 		grid.setCellPadding(3);
 //		grid.setWidget(0, 0, componenteCurso);
@@ -74,7 +66,8 @@ public class TelaInicialAdminEscola extends Composite {
 		grid.setWidget(0, 2, componenteComunicados);
 		grid.setWidget(1, 0, componenteOcorrencia);
 		grid.setWidget(1, 1, componenteDiarioCoordenador);
-		grid.setWidget(1, 2, componenteVisualizarCurso);
+		grid.setWidget(1, 2, componenteRelatorios);
+		grid.setWidget(2, 0, componenteVisualizarCurso);
 		
 		verticalPanel.add(grid);
 		

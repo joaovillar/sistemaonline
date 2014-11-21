@@ -18,6 +18,7 @@ public class Periodo implements Serializable, Comparable<Periodo>  {
 	private String descricao;
 	private String numeracao;
 	private String objetivo;
+	private String peso;
 	private Date dataInicial;
 	private Date dataFinal;
 	
@@ -121,10 +122,18 @@ public class Periodo implements Serializable, Comparable<Periodo>  {
 	public void setListDisciplinas(ArrayList<Disciplina> listDisciplinas) {
 		this.listDisciplinas = listDisciplinas;
 	}
+	
+	public String getPeso() {
+        return peso;
+    }
+
+    public void setPeso(String peso) {
+        this.peso = peso;
+    }
 
 
 
-	public static long getSerialversionuid() {
+    public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 	

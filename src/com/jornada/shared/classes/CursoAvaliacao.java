@@ -14,6 +14,7 @@ public class CursoAvaliacao implements Serializable{
 	private int idAvaliacao;
 	private String assuntoAvaliacao;
 	private String descricaoAvaliacao;
+	private String pesoNota;
 	private Date dataAvaliacao;
 	private String horaAvaliacao;	
 	private int idTipoAvaliacao;
@@ -113,5 +114,16 @@ public class CursoAvaliacao implements Serializable{
 		this.descricaoTipoAvaliacao = descricaoTipoAvaliacao;
 	}
 
+
+    public String getPesoNota() {
+        return pesoNota;
+    }
+
+
+    public void setPesoNota(String pesoNota) {
+        this.pesoNota = pesoNota;
+    }
+
+	
 
 }

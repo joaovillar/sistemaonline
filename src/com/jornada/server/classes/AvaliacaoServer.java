@@ -17,15 +17,16 @@ import com.jornada.shared.classes.boletim.AvaliacaoNota;
 public class AvaliacaoServer {
 	
 	
-	public static final String DB_INSERT_AVALIACAO = "INSERT INTO avaliacao (id_disciplina, id_tipo_avaliacao, assunto, descricao, data, hora) VALUES (?,?,?,?,?,?);";
-	public static final String DB_UPDATE = "UPDATE avaliacao set id_tipo_avaliacao=?, assunto=?, descricao=?, data=?, hora=? where id_avaliacao=?;";
+	public static final String DB_INSERT_AVALIACAO = "INSERT INTO avaliacao (id_disciplina, id_tipo_avaliacao, assunto, descricao, data, hora, peso_nota) VALUES (?,?,?,?,?,?,?);";
+	public static final String DB_UPDATE = "UPDATE avaliacao set id_tipo_avaliacao=?, assunto=?, descricao=?, data=?, hora=?, peso_nota=? where id_avaliacao=?;";
 	public static final String DB_DELETE = "delete from avaliacao where id_avaliacao=?;";	
 	public static final String DB_SELECT_AVALIACAO_PELA_DISCIPLINA = "SELECT * FROM avaliacao where id_disciplina=? order by assunto asc;";	
 	public static final String DB_SELECT_TIPO_AVALIACAO_ALL = "SELECT * FROM tipo_avaliacao order by nome_tipo_avaliacao asc;";
 	public static final String DB_SELECT_TIPO_AVALIACAO = "SELECT * FROM tipo_avaliacao where id_tipo_avaliacao=? order by nome_tipo_avaliacao asc;";
 	public static final String DB_SELECT_AVALIACAO_PELO_CURSO=
 			"select  c.nome_curso, p.nome_periodo, d.nome_disciplina, " +
-			"a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, ta.nome_tipo_avaliacao  "+
+			"a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, a.peso_nota, " +
+			"ta.nome_tipo_avaliacao  "+
 			"from curso c "+
 			"inner join periodo p on c.id_curso = p.id_curso "+
 			"inner join disciplina d on p.id_periodo = d.id_periodo "+
@@ -84,10 +85,8 @@ public class AvaliacaoServer {
 				ps.setString(++count, object.getAssunto());
 				ps.setString(++count, object.getDescricao());
 				ps.setDate(++count, new java.sql.Date(object.getData().getTime()));				
-//				ps.setTime(++count, object.getHora());
-
-//				ps.setDate(++count, MpUtilServer.convertStringToSqlDate(object.getData()));				
 				ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
+				ps.setString(++count, object.getPesoNota());
 
 				
 				int numberUpdate = ps.executeUpdate();
@@ -128,9 +127,8 @@ public class AvaliacaoServer {
 			ps.setString(++count, object.getAssunto());
 			ps.setString(++count, object.getDescricao());
 			ps.setDate(++count, new java.sql.Date(object.getData().getTime()));				
-//			ps.setTime(++count, object.getHora());
-//			ps.setDate(++count, MpUtilServer.convertStringToSqlDate(object.getData()));				
 			ps.setTime(++count, MpUtilServer.convertStringToSqlTime(object.getHora()));
+			ps.setString(++count, object.getPesoNota()); 
 			
 			
 			ps.setInt(++count, object.getIdAvaliacao());
@@ -216,6 +214,7 @@ public class AvaliacaoServer {
 				current.setDescricao(rs.getString("descricao"));
 				current.setData(rs.getDate("data"));
 				current.setHora(rs.getString("hora"));
+				current.setPesoNota(rs.getString("peso_nota"));
 
 				data.add(current);
 			}
@@ -258,15 +257,14 @@ public class AvaliacaoServer {
                 current.setNomeCurso(rs.getString("nome_curso"));
                 current.setNomePeriodo(rs.getString("nome_periodo"));
                 current.setNomeDisciplina(rs.getString("nome_disciplina"));
-//              current.setNomeConteudoProgramatico(rs.getString("nome_conteudo_programatico"));
                 current.setIdAvaliacao(rs.getInt("id_avaliacao"));
                 current.setAssuntoAvaliacao(rs.getString("assunto"));
                 current.setDescricaoAvaliacao(rs.getString("descricao"));
-//              current.setDataAvaliacao(MpUtilServer.convertDateToString(rs.getDate("data"), locale));
                 current.setDataAvaliacao(rs.getDate("data"));
                 current.setHoraAvaliacao(MpUtilServer.convertTimeToString(rs.getTime("hora")));
                 current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
                 current.setDescricaoTipoAvaliacao(rs.getString("nome_tipo_avaliacao"));
+                current.setPesoNota(rs.getString("peso_nota"));
 
                 data.add(current);
             }

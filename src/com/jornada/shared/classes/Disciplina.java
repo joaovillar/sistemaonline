@@ -16,11 +16,7 @@ public class Disciplina implements Serializable {
 	private String nome;
 	private int cargaHoraria;	
 	private String descricao;
-//	private String numeracao;
 	private String objetivo;
-//	private Date dataInicial;
-//	private Date dataFinal;		
-//	private Periodo periodo;
 	
 	private Usuario professor;
 	
@@ -102,15 +98,8 @@ public class Disciplina implements Serializable {
 		this.objetivo = objetivo;
 	}
 
-//	public Periodo getPeriodo() {
-//		return periodo;
-//	}
-//
-//	public void setPeriodo(Periodo periodo) {
-//		this.periodo = periodo;
-//	}
 
-	public int getIdUsuario() {
+    public int getIdUsuario() {
 		return idUsuario;
 	}
 
@@ -147,6 +136,36 @@ public class Disciplina implements Serializable {
 
     public void setListAvaliacao(ArrayList<Avaliacao> listAvaliacao) {
         this.listAvaliacao = listAvaliacao;
+    }
+    
+    public String getMediaAlunoDisciplina(int idUsuario){
+        String media = "";
+        int countNota=0;
+        double somaMedia=0;
+        for (Avaliacao avaliacao : getListAvaliacao()) {
+            
+            if (avaliacao.getIdDisciplina() == this.getIdDisciplina()) {
+                
+                for (Nota nota : avaliacao.getListNota()) {
+                    
+                    if (nota.getIdUsuario() == idUsuario) {
+                        countNota++;
+                        somaMedia = (somaMedia + Double.parseDouble(nota.getNota()));
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        if (countNota != 0) {
+            somaMedia = somaMedia / countNota;
+            media = Double.toString(somaMedia);
+        }
+        
+        return media;
+        
     }
 
 

@@ -49,7 +49,7 @@ public class VisualizarPaisAvaliacao extends VerticalPanel {
 	private CellTable<CursoAvaliacao> cellTable;
 	private Column<CursoAvaliacao, String> nomePeriodoColumn;
 	private Column<CursoAvaliacao, String> nomeDisciplinaColumn;
-//	private Column<CursoAvaliacao, String> nomeConteudoProgramaticoColumn;
+	private Column<CursoAvaliacao, String> nomePesoNotaColumn;
 	private Column<CursoAvaliacao, String> nomeAvaliacaoColumn;
 	private Column<CursoAvaliacao, Date> dataColumn;
 	private Column<CursoAvaliacao, String> horaColumn;	
@@ -256,12 +256,12 @@ public class VisualizarPaisAvaliacao extends VerticalPanel {
 		};
 
 
-//        nomeConteudoProgramaticoColumn = new Column<CursoAvaliacao, String>(new TextCell()) {
-//            @Override
-//            public String getValue(CursoAvaliacao object) {
-//                return object.getNomeConteudoProgramatico();
-//            }
-//        };
+        nomePesoNotaColumn = new Column<CursoAvaliacao, String>(new TextCell()) {
+            @Override
+            public String getValue(CursoAvaliacao object) {
+                return object.getPesoNota();
+            }
+        };
 		
 		nomeAvaliacaoColumn = new Column<CursoAvaliacao, String>(new TextCell()) {
 			@Override
@@ -288,18 +288,19 @@ public class VisualizarPaisAvaliacao extends VerticalPanel {
 		//cellTable.addColumn(nomeCursoColumn, "Curso");
 
 		cellTable.addColumn(nomeAvaliacaoColumn, txtConstants.avaliacao());
+		cellTable.addColumn(nomePesoNotaColumn, txtConstants.conteudoProgramatico());
 		cellTable.addColumn(dataColumn, txtConstants.avaliacaoData());
 		cellTable.addColumn(horaColumn, txtConstants.avaliacaoHora());
 		cellTable.addColumn(nomePeriodoColumn, txtConstants.periodo());
 		cellTable.addColumn(nomeDisciplinaColumn,  txtConstants.disciplina());
-//		cellTable.addColumn(nomeConteudoProgramaticoColumn, txtConstants.conteudoProgramatico());	
+			
 
 		cellTable.getColumn(cellTable.getColumnIndex(nomeAvaliacaoColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(dataColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(horaColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(nomePeriodoColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(nomeDisciplinaColumn)).setCellStyleNames("hand-over-default");
-//		cellTable.getColumn(cellTable.getColumnIndex(nomeConteudoProgramaticoColumn)).setCellStyleNames("hand-over-default");		
+		cellTable.getColumn(cellTable.getColumnIndex(nomePesoNotaColumn)).setCellStyleNames("hand-over-default");		
 		
 		
 	}
@@ -346,13 +347,13 @@ public class VisualizarPaisAvaliacao extends VerticalPanel {
 	      }
 	    });		
 	    
-//	    nomeConteudoProgramaticoColumn.setSortable(true);
-//	    sortHandler.setComparator(nomeConteudoProgramaticoColumn, new Comparator<CursoAvaliacao>() {
-//	      @Override
-//	      public int compare(CursoAvaliacao o1, CursoAvaliacao o2) {
-//	        return o1.getNomeConteudoProgramatico().compareTo(o2.getNomeConteudoProgramatico());
-//	      }
-//	    });		  	    
+	    nomePesoNotaColumn.setSortable(true);
+	    sortHandler.setComparator(nomePesoNotaColumn, new Comparator<CursoAvaliacao>() {
+	      @Override
+	      public int compare(CursoAvaliacao o1, CursoAvaliacao o2) {
+	        return o1.getPesoNota().compareTo(o2.getPesoNota());
+	      }
+	    });		  	    
 	    
 		
 	}
@@ -395,10 +396,10 @@ public class VisualizarPaisAvaliacao extends VerticalPanel {
 					String strHora = dataProvider.getList().get(i).getHoraAvaliacao();
 					String strPeriodo = dataProvider.getList().get(i).getNomePeriodo();
 					String strDisciplina = dataProvider.getList().get(i).getNomeDisciplina();
-//					String strMateria = dataProvider.getList().get(i).getNomeConteudoProgramatico();
+					String strPesoNota = dataProvider.getList().get(i).getPesoNota();
 
 					String strJuntaTexto = strAvaliacao.toUpperCase() + " " + strData.toUpperCase() + " " + strHora.toUpperCase();
-					strJuntaTexto +=  " " + strPeriodo.toUpperCase() + " " + strDisciplina.toUpperCase(); //+ " " + strMateria.toUpperCase();
+					strJuntaTexto +=  " " + strPeriodo.toUpperCase() + " " + strDisciplina.toUpperCase() + " " + strPesoNota.toUpperCase();
 
 					if (!strJuntaTexto.contains(strFiltro)) {
 						dataProvider.getList().remove(i);

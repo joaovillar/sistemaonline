@@ -364,8 +364,6 @@ public class EditarDiarioProfessor extends VerticalPanel {
 	
 	public void initializeCellTable(){
 		cellTable = new CellTable<ArrayList<String>>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
-
-//		cellTable.setWidth(Integer.toString(TelaInicialDiarioProfessor.intWidthTable)+ "px");		
 		cellTable.setWidth("90%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
@@ -374,11 +372,6 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		
 		final MpSimplePager mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
-//		mpPager.setPageSize(10);
-//		cellTable.setPageSize(cellTablePageIndex);
-//		mpPager.setPage
-		
-		
 		
 		/////////////////////////ColumnName//////////////////////////////////
 		IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME);

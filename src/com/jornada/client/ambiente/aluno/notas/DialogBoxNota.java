@@ -220,8 +220,7 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 
         mpLoading.setVisible(true);
 
-        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNotaPeriodoDisciplina(idUsuario, 
-                idCurso, strNomePeriodo, strNomeDisciplina, new CallbackAvaliacaoNota());
+        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNotaPeriodoDisciplina(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina, new CallbackAvaliacaoNota());
 
     }        
     

@@ -11,5 +11,6 @@ public interface GWTServiceNotaAsync {
 	public void updateRow(Nota object, AsyncCallback<Boolean> callback);
 	public void getNotaPelaAvaliacao(int idNota, int idAvaliacao, AsyncCallback<ArrayList<Nota>> callback);
 	public void getBoletimNotasPorAlunoPorCurso(int idCurso, int idTipoUsuario, int idUsuario, AsyncCallback<String[][]> callback);
+	public void getBoletimTrimestre(int idCurso, int idPeriodo, AsyncCallback<ArrayList<ArrayList<String>>> callback);
 	
 }
