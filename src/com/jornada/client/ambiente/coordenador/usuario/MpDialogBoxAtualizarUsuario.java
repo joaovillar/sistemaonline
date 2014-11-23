@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Usuario;
@@ -61,7 +62,12 @@ public class MpDialogBoxAtualizarUsuario extends DecoratedPopupPanel implements 
 		dock.setWidth("100%");
 //		AdicionarUsuario adicionarUsuario = new AdicionarUsuario(telaInicialUsuario);
 //		setWidget(adicionarUsuario);
-		setWidget(dock);
+		
+		VerticalPanel vBody = new VerticalPanel();
+        vBody.setStyleName("dialogVPanelWhite");
+		
+        vBody.add(dock);
+		setWidget(vBody);
 
 		AdicionarUsuario adicionarUsuario = AdicionarUsuario.getInstanceAtualizar(telaInicialUsuario, usuario);
 		dock.add(adicionarUsuario, DockPanel.NORTH);
@@ -74,18 +80,13 @@ public class MpDialogBoxAtualizarUsuario extends DecoratedPopupPanel implements 
 	}
 
 	public void onClick(Widget sender) {
-//		logoutAndRefresh();
-
 		 hide();
-		// Window.Location.reload();
 	}
 
 	private class EnterKeyUpHandler implements KeyUpHandler {
 		public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				 hide();
-				// Window.Location.reload();
-//				logoutAndRefresh();
 			}
 		}
 	}

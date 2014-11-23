@@ -6,10 +6,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.poi.hssf.util.CellRangeAddress;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
+import com.jornada.server.framework.excel.ExcelFramework;
+import com.jornada.shared.FieldVerifier;
+import com.jornada.shared.classes.Curso;
+import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Nota;
+import com.jornada.shared.classes.Periodo;
+import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.TabelaBoletim;
 
+@SuppressWarnings("deprecation")
 public class NotaServer {	
 	
 	public static final String DB_INSERT = "INSERT INTO nota (id_avaliacao, id_usuario, nota) VALUES (?,?,?);";
@@ -203,6 +217,116 @@ public class NotaServer {
 	}
 	
 	
+ 
+    
+    
+    public static ArrayList<ArrayList<String>> getBoletimPeriodo(int idCurso, int idPeriodo) {
+        
+        ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinasComAvaliacoes(idPeriodo);
+        
+        ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
 
+        return getMediaNotaAlunosNasDisciplinas(listUsuario, listDisciplinas);
+    }
+    
+    
+    public static ArrayList<ArrayList<String>> getMediaNotaAlunosNasDisciplinas(ArrayList<Usuario> listUsuario, ArrayList<Disciplina> listDisciplinas){
+        ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
+        
+        for (Usuario usuario : listUsuario) {
+            ArrayList<String> item = new ArrayList<String>();
+            
+            item.add(usuario.getPrimeiroNome() + " "+usuario.getSobreNome());
+            for (Disciplina disciplina : listDisciplinas) {
+                String strMedia = disciplina.getMediaAlunoDisciplina(usuario.getIdUsuario());
+                if(strMedia==null || strMedia.isEmpty()){
+                    strMedia = "-";
+                    item.add(strMedia);
+                }else{
+                    double doubleMediaAluno = Double.parseDouble(strMedia);
+                    item.add(MpUtilServer.getDecimalFormated(doubleMediaAluno));
+                }
+            }
+            item.add(Integer.toString(usuario.getIdUsuario()));
+            list.add(item);
+        }
+       
+        return list;
+    }
+    
+    
+    public static String gerarExcelBoletimPeriodo(int idCurso, int idPeriodo) {
+       
+
+        XSSFWorkbook wb = new XSSFWorkbook();
+
+        
+        // /Creating Tabs
+        XSSFSheet sheet = wb.createSheet("Boletim Periodo");
+        
+        ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinasComAvaliacoes(idPeriodo);
+        ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
+        Periodo periodo = PeriodoServer.getPeriodo(idPeriodo);
+        Curso curso = CursoServer.getCurso(idCurso);
+        
+        ArrayList<ArrayList<String>> listMediaNotaAlunos = getMediaNotaAlunosNasDisciplinas(listUsuario, listDisciplinas);
+        
+        int intColumn=0;
+        int intLine=0;
+        Row row = sheet.createRow((short) intLine);  
+        row.createCell((short) intColumn).setCellValue("PLANILHA DE NOTAS     -     "+curso.getNome()+"     -     "+periodo.getNomePeriodo());
+        row.getCell((short) intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));
+        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,8));
+        intLine++;
+        
+        row = sheet.createRow((short) intLine++);  
+        row.createCell((short) intColumn).setCellValue("Aluno");
+        row.getCell((short) intColumn++).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));
+        
+        for (Disciplina disciplina : listDisciplinas) {
+            String nomeDisciplina = Curso.getAbreviarNomeCurso(disciplina.getNome());
+            row.createCell((short) intColumn).setCellValue(nomeDisciplina);
+            row.getCell((short) intColumn).setCellType(Cell.CELL_TYPE_STRING);  
+            row.getCell((short) intColumn++).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));              
+        }
+      
+        for (ArrayList<String> listAlunoNotas : listMediaNotaAlunos) {
+            row = sheet.createRow((short) intLine++);
+            for (int i = 0; i < listAlunoNotas.size()-1; i++) { 
+                String strText = listAlunoNotas.get(i);   
+                row.createCell((short) i);
+                
+                if(i==0){
+                    row.getCell((short) i).setCellValue(strText);                     
+                    row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb)); 
+                }else{
+                    if(FieldVerifier.isNumeric(strText)){
+                        row.getCell((short) i).setCellValue(Double.parseDouble(strText));                     
+                        row.getCell((short) i).setCellType(Cell.CELL_TYPE_NUMERIC); 
+                    }else{
+                        row.getCell((short) i).setCellValue(strText);                     
+                        row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                    }
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));     
+                }        
+            }
+        }    
+        
+        for (int i = 0; i < intColumn; i++) {   
+            if(i==0){
+                sheet.autoSizeColumn(i,true);
+            }else{
+                sheet.setColumnWidth(i, 2000);
+            }
+        }
+
+        return ExcelFramework.getExcelAddress(wb,"GerarExcelBoletimPeriodo_");
+
+    }
+    
+    
+
+    
 
 }

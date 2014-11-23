@@ -29,6 +29,7 @@ import com.googlecode.gwt.charts.client.options.Legend;
 import com.googlecode.gwt.charts.client.options.LegendPosition;
 import com.googlecode.gwt.charts.client.options.VAxis;
 import com.jornada.client.ambiente.coordenador.periodo.TelaInicialPeriodo;
+import com.jornada.client.ambiente.general.nota.DialogBoxNota;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
 import com.jornada.client.classes.listBoxes.ambiente.aluno.MpSelectionCursoAmbienteAluno;
 import com.jornada.client.classes.widgets.button.MpImageButton;

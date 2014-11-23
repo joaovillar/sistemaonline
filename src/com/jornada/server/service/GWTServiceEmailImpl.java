@@ -7,7 +7,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceEmail;
 import com.jornada.server.classes.EmailServer;
 import com.jornada.server.classes.utility.MpUtilServer;
-import com.jornada.server.framework.EmailFrameWork;
+import com.jornada.server.framework.email.EmailFrameWork;
 import com.jornada.shared.classes.Comunicado;
 
 public class GWTServiceEmailImpl extends RemoteServiceServlet implements GWTServiceEmail {

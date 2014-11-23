@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.ClickableTextCell;
-import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -19,18 +19,20 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
+import com.jornada.client.ambiente.coordenador.usuario.TelaInicialUsuario;
+import com.jornada.client.ambiente.general.nota.DialogBoxNota;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
-import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelRight;
@@ -39,6 +41,7 @@ import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceDisciplina;
 import com.jornada.client.service.GWTServiceNota;
+import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
@@ -69,7 +72,7 @@ public class BoletimSala extends VerticalPanel {
 	
 	ScrollPanel scrollPanel = new ScrollPanel();
 	VerticalPanel vFormPanel;
-	VerticalPanel vNotaPanel;
+	FlexTable flexTableNota;
 	
 	private static BoletimSala uniqueInstance;
 	
@@ -98,12 +101,13 @@ public class BoletimSala extends VerticalPanel {
 		FlexTable flexTable = new FlexTable();
 		flexTable.setCellSpacing(3);
 		flexTable.setCellPadding(3);
-		flexTable.setSize(Integer.toString(TelaInicialRelatorio.intWidthTable),Integer.toString(TelaInicialRelatorio.intHeightTable));
-		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
+
+//		flexTable.setSize(Integer.toString(TelaInicialRelatorio.intWidthTable),Integer.toString(TelaInicialRelatorio.intHeightTable));
+//		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 
 		// Add a title to the form
 //		cellFormatter.setColSpan(0, 0, 0);
-		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
+//		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 
 		MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
 		MpLabelRight lblPeriodo = new MpLabelRight(txtConstants.periodo());
@@ -116,75 +120,33 @@ public class BoletimSala extends VerticalPanel {
 		listBoxPeriodo = new MpSelectionPeriodo();
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());
 		
-		
-		
 		// Add some standard form options
 		int row = 1;
 
 		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row, 1, listBoxCurso); flexTable.setWidget(row++, 2, mpHelperCurso);//flexTable.setWidget(row++, 2, txtFiltroNomeCurso);
 		flexTable.setWidget(row, 0, lblPeriodo);flexTable.setWidget(row, 1, listBoxPeriodo); flexTable.setWidget(row++, 2, mpLoading); 
 
-		MpImageButton btnImprimir = new MpImageButton(txtConstants.geralImprimir(), "images/Print.16.png");
-		btnImprimir.addClickHandler(new ClickHandlerImprimir());
-		MpImageButton btnClean = new MpImageButton(txtConstants.geralLimpar(), "images/erase.png");
-		btnClean.addClickHandler(new ClickHandlerClean());
+
 
 		vFormPanel = new VerticalPanel();
-		vNotaPanel = new VerticalPanel();
+		flexTableNota = new FlexTable();
 
-		Grid gridSave = new Grid(1, 3);
-		gridSave.setCellSpacing(2);
-		gridSave.setCellPadding(2);
-		{
-			int i = 0;
-			gridSave.setWidget(0, i++, btnImprimir);
-			gridSave.setWidget(0, i++, btnClean);
-//			gridSave.setWidget(0, i++, mpLoading);
-		}
 		
-		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
-		mpSpaceVerticalPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable-700)+"px");
-
 		vFormPanel.add(flexTable);
-//		vFormPanel.add(gridSave);
-		vFormPanel.add(vNotaPanel);
-		vFormPanel.add(mpSpaceVerticalPanel);
+		vFormPanel.add(flexTableNota);
 
-		scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Integer.toString(TelaInicialRelatorio.intWidthTable+30)+"px",Integer.toString(TelaInicialRelatorio.intHeightTable-40)+"px");
+        scrollPanel = new ScrollPanel();
+        scrollPanel.setHeight(Integer.toString(TelaInicialRelatorio.intHeightTable - 40) + "px");
+        scrollPanel.setWidth("100%");
 		scrollPanel.setAlwaysShowScrollBars(false);		
 		scrollPanel.add(vFormPanel);
+		
+		super.setWidth("100%");
 
 		super.add(scrollPanel);
-//		super.add(vFormPanel);
 
 	}
 
-	
-	
-	/****************Begin Event Handlers*****************/
-	
-	private class ClickHandlerImprimir implements ClickHandler {
-
-		public void onClick(ClickEvent event) {
-
-				mpLoading.setVisible(true);
-
-//				int intIdCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
-
-		}
-	}
-	
-	private class ClickHandlerClean implements ClickHandler {
-		public void onClick(ClickEvent event) {
-			
-			
-		}
-	}	
-	
-	/****************End Event Handlers*****************/
-
-	
 
 	public void updateClientData() {
 		listBoxCurso.populateComboBox();
@@ -195,7 +157,7 @@ public class BoletimSala extends VerticalPanel {
             mpHelperCurso.populateSuggestBox(listBoxCurso);
             int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
             listBoxPeriodo.populateComboBox(idCurso);
-            vNotaPanel.clear();
+            flexTableNota.clear();
         }  
     }  
     
@@ -241,7 +203,7 @@ public class BoletimSala extends VerticalPanel {
     }
     
     public void initializeCellTable(){
-        cellTable = new CellTable<ArrayList<String>>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
+        cellTable = new CellTable<ArrayList<String>>(15,GWT.<CellTableStyle> create(CellTableStyle.class));
         cellTable.setAutoHeaderRefreshDisabled(true);
         cellTable.setAutoFooterRefreshDisabled(true);
         
@@ -252,8 +214,6 @@ public class BoletimSala extends VerticalPanel {
         
         /////////////////////////ColumnName//////////////////////////////////
         IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME);
-        
-        
         
         ListHandler<ArrayList<String>> sortHandler = new ListHandler<ArrayList<String>>(dataProvider.getList());
         
@@ -275,20 +235,42 @@ public class BoletimSala extends VerticalPanel {
         cellTable.addColumn(indexColumnName, safeHtml);
         
         for (int column = 0; column < arrayDisciplinaColumns.size(); column++) { 
-            final String strDisciplina =arrayDisciplinaColumns.get(column); 
+            final String strDisciplina = Curso.getAbreviarNomeCurso(arrayDisciplinaColumns.get(column)); 
+//            final String strDisciplina = arrayDisciplinaColumns.get(column); 
             final IndexedColumn indexedColumn = new IndexedColumn(column+INT_POSITION_NAME+1);
             
-            Header<String> header = new Header<String>(new ClickableTextCell()) {
+            final Header<String> header = new Header<String>(new ClickableTextCell()) {
                 @Override
                 public String getValue() {
                     return  strDisciplina;
-                }      
+                }    
+                
             };
             
+           
             final int intColumn = column;
             
             indexedColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
             indexedColumn.setSortable(true);
+            
+            indexedColumn.setFieldUpdater(new FieldUpdater<ArrayList<String>, String>() {
+                @Override
+                public void update(int index, ArrayList<String> object, final String value) {
+                    
+
+                    String strIdUsuario = dataProvider.getList().get(index).get(dataProvider.getList().get(index).size()-1);
+                    int idUsuario = Integer.parseInt(strIdUsuario);
+                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+                    String strNomeCurso = listBoxCurso.getSelectedItemText();
+                    String strNomePeriodo = listBoxPeriodo.getSelectedItemText();
+                    String strNomeDisciplina = arrayDisciplinaColumns.get(indexedColumn.getIndex()-1);
+                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+                    
+//                    Window.alert(Integer.toString(column)+":"+value+":"+nomeUsuario+":"+idUsuario+":"+header.getValue());
+                    DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+                }
+            });
+            
             sortHandler.setComparator(indexedColumn, new Comparator<ArrayList<String>>() {
                 @Override
                 public int compare(ArrayList<String> o1, ArrayList<String> o2) {
@@ -301,29 +283,45 @@ public class BoletimSala extends VerticalPanel {
         }
         
         
-//        VerticalPanel vPanelInScroll = new VerticalPanel();
-//        vPanelInScroll.setWidth("90%");
-//        vPanelInScroll.setCellVerticalAlignment(cellTable, ALIGN_TOP);
-////        vPanelInScroll.add(flexTableFiltrarAluno);
-//        vPanelInScroll.add(cellTable);
-//        scrollPanel.clear();
-//        scrollPanel.add(vPanelInScroll);
-        vNotaPanel.clear();
-        vNotaPanel.add(cellTable);
         
-
+        Image imgExcel = new Image("images/excel.24.png");
+        imgExcel.addClickHandler(new ClickHandlerExcel());
+        imgExcel.setStyleName("hand-over");
+        imgExcel.setTitle(txtConstants.geralExcel());
+        
+        int columnImg = 0;
+        FlexTable flexTableImg = new FlexTable();
+        flexTableImg.setCellPadding(2);
+        flexTableImg.setCellSpacing(2);
+        flexTableImg.setWidget(0, columnImg++, imgExcel);
+        flexTableImg.setBorderWidth(0);
+        
+        FlexTable flexTableMenu = new FlexTable();
+        flexTableMenu.setCellPadding(0);
+        flexTableMenu.setCellSpacing(0);
+        flexTableMenu.setBorderWidth(0);
+        flexTableMenu.setWidth("100%");     
+        flexTableMenu.setWidget(0, 0, mpPager);
+        flexTableMenu.setWidget(0, 1, flexTableImg);
+        flexTableMenu.getCellFormatter().setWidth(0, 0, "70%");
+        flexTableMenu.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
+        flexTableMenu.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_BOTTOM);
+        flexTableMenu.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_BOTTOM);
+        flexTableNota.setBorderWidth(0);
+        flexTableNota.clear();
+        flexTableNota.setWidget(0,0,flexTableMenu);
+        flexTableNota.setWidget(1,0,cellTable);
         
     }
     
     class IndexedColumn extends Column<ArrayList<String>, String> {
         private int index;
-        private String teste; 
         public IndexedColumn(int index) {
-            super(new TextCell());
+            super(new ClickableTextCell());
             this.index = index;
-            teste="1";
         }
-       
+        
+      
         public int getIndex(){
             return this.index;
         }
@@ -333,8 +331,8 @@ public class BoletimSala extends VerticalPanel {
             String strTest="";
             try{
                 strTest = object.get(this.index);
+                System.out.println("Teste:"+strTest);
             }catch(Exception ex){
-                System.out.println("Teste:"+teste);
                 System.out.println(ex.getMessage());
             }
             
@@ -358,7 +356,7 @@ public class BoletimSala extends VerticalPanel {
             }
               
         }  
-        
+                
     }    
     
     private void populateColunasDisciplinas(int idPeriodo) {
@@ -369,7 +367,7 @@ public class BoletimSala extends VerticalPanel {
         mpLoading.setVisible(true);
         int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
         int idPeriodo = Integer.parseInt(listBoxPeriodo.getValue(listBoxPeriodo.getSelectedIndex()));
-       GWTServiceNota.Util.getInstance().getBoletimTrimestre(idCurso, idPeriodo, new CallBackCarregarNotas());
+       GWTServiceNota.Util.getInstance().getBoletimPeriodo(idCurso, idPeriodo, new CallBackCarregarNotas());
     }
     
     
@@ -395,6 +393,14 @@ public class BoletimSala extends VerticalPanel {
         }
     }
 	
-	
+    private class ClickHandlerExcel implements ClickHandler{
+        @Override
+        public void onClick(ClickEvent event) {
+            int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+            int idPeriodo = Integer.parseInt(listBoxPeriodo.getSelectedValue());
+            MpDialogBoxExcelRelatorio.getInstance(idCurso, idPeriodo);                 
+        }
+    }
+    
 	
 }

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.jornada.server.database.ConnectionManager;
+import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.disciplina.ProfessorDisciplina;
@@ -154,6 +155,17 @@ public class DisciplinaServer {
 		return data;
 
 	}	
+	
+	public static ArrayList<Disciplina> getDisciplinasComAvaliacoes(int idPeriodo){
+        ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinas(idPeriodo);
+        for (Disciplina disciplina : listDisciplinas) {
+            disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacao(disciplina.getIdDisciplina()));
+            for (Avaliacao avaliacao : disciplina.getListAvaliacao()) {
+                avaliacao.setListNota(NotaServer.getNotas(avaliacao.getIdAvaliacao()));
+            }
+        }        
+        return listDisciplinas;
+	}
 	
 	
     public static ArrayList<ProfessorDisciplina> getPeriodoDisciplinaProfessor(int idCurso) {

@@ -342,7 +342,33 @@ public class PeriodoServer {
 			System.err.println(ex.getMessage());
 		}		
 		return data;
-	}	
+	}
+
+
+    public static Periodo getPeriodo(int idPeriodo) {
+        ArrayList<Periodo> data = new ArrayList<Periodo>();     
+        Connection conn = ConnectionManager.getConnection();
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(PeriodoServer.DB_SELECT_PERIODO_ID);
+            int count=0;
+            ps.setInt(++count, idPeriodo);
+            
+            data = getPeriodoParameters(ps.executeQuery());
+
+        } catch (SQLException sqlex) {
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        
+        if(data==null || data.size()==0){
+            return null;
+        }
+        else{
+            return data.get(0);
+        }
+    }	
 		
 
 }

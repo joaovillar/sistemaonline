@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.jornada.server.database.ConnectionManager;
-import com.jornada.server.framework.EmailFrameWork;
-import com.jornada.server.framework.WordFramework;
+import com.jornada.server.framework.email.EmailFrameWork;
+import com.jornada.server.framework.word.WordFramework;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Documento;
 import com.jornada.shared.classes.RelDocumentoUsuario;

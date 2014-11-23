@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import com.jornada.server.database.ConnectionManager;
-import com.jornada.server.framework.EmailFrameWork;
+import com.jornada.server.framework.email.EmailFrameWork;
 import com.jornada.shared.classes.Comunicado;
 import com.jornada.shared.classes.Usuario;
 

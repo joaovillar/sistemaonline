@@ -190,5 +190,18 @@ public class MpUtilServer {
         String strDouble = oneDigit.format(doubleNumber).replace(",", ".");
         return strDouble;
     }
+    
+    public static boolean isNumeric(String str)  
+    {  
+      try  
+      {  
+        double d = Double.parseDouble(str);  
+      }  
+      catch(NumberFormatException nfe)  
+      {  
+        return false;  
+      }  
+      return true;  
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.jornada.server.framework;
+package com.jornada.server.framework.word;
 
 import java.io.File;
 import java.io.FileInputStream;

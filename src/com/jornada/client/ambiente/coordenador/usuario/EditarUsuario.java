@@ -279,20 +279,12 @@ public class EditarUsuario extends VerticalPanel {
 		scrollPanel.setHeight(Integer.toString(TelaInicialUsuario.intHeightTable-80)+"px");
 		scrollPanel.setWidth("100%");
 		scrollPanel.add(cellTable);
-
-//		HorizontalPanel hPanel = new HorizontalPanel();
-//		hPanel.add(mpPager);hPanel.add(new Image("images/excel.png"));hPanel.add(new Image("images/print.png"));
 		
-		Image imgExcel = new Image("images/excel.24.png");
-//		Image imgPrint = new Image("images/Print.24.v2.png");
-		
+		Image imgExcel = new Image("images/excel.24.png");		
 		imgExcel.addClickHandler(new clickHandlerExcel());
-//		imgPrint.addClickHandler(new clickHandlerPrint());
 		imgExcel.setStyleName("hand-over");
-//		imgPrint.setStyleName("hand-over");
 		
 		imgExcel.setTitle(txtConstants.geralExcel());
-//		imgPrint.setTitle(txtConstants.geralImprimir());
 		
 		FlexTable flexTableImg = new FlexTable();
 		

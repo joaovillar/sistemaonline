@@ -1,4 +1,4 @@
-package com.jornada.server.framework;
+package com.jornada.server.framework.email;
 
 import java.io.File;
 import java.util.ArrayList;

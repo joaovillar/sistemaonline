@@ -1,4 +1,4 @@
-package com.jornada.client.ambiente.aluno.notas;
+package com.jornada.client.ambiente.general.nota;
 
 import java.util.ArrayList;
 import java.util.Comparator;

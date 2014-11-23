@@ -143,6 +143,21 @@ public class Curso implements Serializable, Comparable<Curso> {
     public void setStatus(boolean status) {
         this.status = status;
     }
+    
+    
+    public static String getAbreviarNomeCurso(String strNomeCurso){
+        String strNome="";
+        
+        String[] strArrayNome = strNomeCurso.split(" ");
+        
+        if(strArrayNome.length==1){
+            strNome += strArrayNome[0].substring(0, 3).toUpperCase();
+        }else{
+            strNome += strArrayNome[0].substring(0, 1).toUpperCase()+".";
+            strNome += strArrayNome[strArrayNome.length-1].substring(0, 3).toUpperCase();
+        }
+        return strNome;
+    }
 
 
     public String toString(){

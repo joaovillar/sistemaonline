@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Curso;
@@ -60,7 +61,13 @@ public class MpDialogBoxAtualizarCurso extends DecoratedPopupPanel implements Cl
 		dock.setWidth("100%");
 //		AdicionarUsuario adicionarUsuario = new AdicionarUsuario(telaInicialUsuario);
 //		setWidget(adicionarUsuario);
-		setWidget(dock);
+		
+		
+        VerticalPanel vBody = new VerticalPanel();
+        vBody.setStyleName("dialogVPanelWhite");
+
+        vBody.add(dock);
+        setWidget(vBody);
 
 		AdicionarCurso adicionarCurso = AdicionarCurso.getInstanceAtualizar(telaInicialCurso, curso);
 		dock.add(adicionarCurso, DockPanel.NORTH);
