@@ -22,14 +22,12 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
-import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
-import com.jornada.client.ambiente.coordenador.usuario.TelaInicialUsuario;
 import com.jornada.client.ambiente.general.nota.DialogBoxNota;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
+import com.jornada.client.classes.listBoxes.MpSelectionDisciplina;
 import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
@@ -37,17 +35,17 @@ import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
+import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.client.service.GWTServiceDisciplina;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
-public class BoletimSala extends VerticalPanel {
+public class BoletimDisciplina extends VerticalPanel {
 
-    private final static int INT_POSITION_NAME=0;
+    private final static int INT_POSITION_NAME=1;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -60,10 +58,11 @@ public class BoletimSala extends VerticalPanel {
 	private CellTable<ArrayList<String>> cellTable;
     private ListDataProvider<ArrayList<String>> dataProvider;
     
-    ArrayList<String> arrayDisciplinaColumns = new ArrayList<String>();
+    ArrayList<String> arrayAvaliacaoColumns = new ArrayList<String>();
 
 	private MpSelectionCurso listBoxCurso;	
 	private MpSelectionPeriodo listBoxPeriodo; 
+	private MpSelectionDisciplina listBoxDisciplina; 
 
 	@SuppressWarnings("unused")
 	private TelaInicialRelatorio telaInicialPeriodo;
@@ -74,19 +73,19 @@ public class BoletimSala extends VerticalPanel {
 	VerticalPanel vFormPanel;
 	FlexTable flexTableNota;
 	
-	private static BoletimSala uniqueInstance;
+	private static BoletimDisciplina uniqueInstance;
 	
-	public static BoletimSala getInstance(final TelaInicialRelatorio telaInicialRelatorio){
+	public static BoletimDisciplina getInstance(final TelaInicialRelatorio telaInicialRelatorio){
 
 		if(uniqueInstance==null){
-			uniqueInstance = new BoletimSala(telaInicialRelatorio);
+			uniqueInstance = new BoletimDisciplina(telaInicialRelatorio);
 		}
 		
 		return uniqueInstance;
 		
 	}
 
-	private BoletimSala(final TelaInicialRelatorio telaInicialRelatorio) {
+	private BoletimDisciplina(final TelaInicialRelatorio telaInicialRelatorio) {
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
@@ -102,15 +101,9 @@ public class BoletimSala extends VerticalPanel {
 		flexTable.setCellSpacing(3);
 		flexTable.setCellPadding(3);
 
-//		flexTable.setSize(Integer.toString(TelaInicialRelatorio.intWidthTable),Integer.toString(TelaInicialRelatorio.intHeightTable));
-//		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
-
-		// Add a title to the form
-//		cellFormatter.setColSpan(0, 0, 0);
-//		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
-
 		MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
 		MpLabelRight lblPeriodo = new MpLabelRight(txtConstants.periodo());
+		MpLabelRight lblDisciplina= new MpLabelRight(txtConstants.disciplina());
 		
 		mpHelperCurso = new  MpListBoxPanelHelper();
 		
@@ -120,17 +113,18 @@ public class BoletimSala extends VerticalPanel {
 		listBoxPeriodo = new MpSelectionPeriodo();
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());
 		
+        listBoxDisciplina = new MpSelectionDisciplina();
+        listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
+		
 		// Add some standard form options
 		int row = 1;
 
 		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row, 1, listBoxCurso); flexTable.setWidget(row++, 2, mpHelperCurso);//flexTable.setWidget(row++, 2, txtFiltroNomeCurso);
-		flexTable.setWidget(row, 0, lblPeriodo);flexTable.setWidget(row, 1, listBoxPeriodo); flexTable.setWidget(row++, 2, mpLoading); 
-
-
+		flexTable.setWidget(row, 0, lblPeriodo);flexTable.setWidget(row++, 1, listBoxPeriodo); 
+		flexTable.setWidget(row, 0, lblDisciplina);flexTable.setWidget(row, 1, listBoxDisciplina); flexTable.setWidget(row++, 2, mpLoading);
 
 		vFormPanel = new VerticalPanel();
 		flexTableNota = new FlexTable();
-
 		
 		vFormPanel.add(flexTable);
 		vFormPanel.add(flexTableNota);
@@ -162,14 +156,24 @@ public class BoletimSala extends VerticalPanel {
     }  
     
     private class MpPeriodoSelectionChangeHandler implements ChangeHandler {
-        public void onChange(ChangeEvent event) {  
-            
+        public void onChange(ChangeEvent event) {              
             int indexIdPeriodo = listBoxPeriodo.getSelectedIndex();
             if (indexIdPeriodo != -1) {
                 int idPeriodo = Integer.parseInt(listBoxPeriodo.getValue(indexIdPeriodo));
+                listBoxDisciplina.populateComboBox(idPeriodo);
+         
+            }else{
+                    listBoxDisciplina.clear();  
+            }
+        }  
+    }     
+    
+    private class MpDisciplinaSelectionChangeHandler implements ChangeHandler {
+        public void onChange(ChangeEvent event) {              
+            int indexIdDisciplina = listBoxDisciplina.getSelectedIndex();
+            if (indexIdDisciplina != -1) {
                 mpLoading.setVisible(true);
-                populateColunasDisciplinas(idPeriodo);
-                
+                populateColunasAvaliacoes();                
             }
         }  
     }      
@@ -234,15 +238,21 @@ public class BoletimSala extends VerticalPanel {
         SafeHtml safeHtml = builder.toSafeHtml();
         cellTable.addColumn(indexColumnName, safeHtml);
         
-        for (int column = 0; column < arrayDisciplinaColumns.size(); column++) { 
-            final String strDisciplina = Curso.getAbreviarNomeCurso(arrayDisciplinaColumns.get(column)); 
-//            final String strDisciplina = arrayDisciplinaColumns.get(column); 
+        for (int column = 0; column < arrayAvaliacaoColumns.size(); column++) { 
+           
+            String strAvaliacaoText = arrayAvaliacaoColumns.get(column); 
+            int indexIdAvaliacao = strAvaliacaoText.indexOf("|");
+            if(indexIdAvaliacao!=-1){
+                strAvaliacaoText = strAvaliacaoText.substring(indexIdAvaliacao+1);
+            }
+            final String strAvaliacao = strAvaliacaoText;
+
             final IndexedColumn indexedColumn = new IndexedColumn(column+INT_POSITION_NAME+1);
             
             final Header<String> header = new Header<String>(new ClickableTextCell()) {
                 @Override
                 public String getValue() {
-                    return  strDisciplina;
+                    return  strAvaliacao;
                 }    
                 
             };
@@ -258,16 +268,25 @@ public class BoletimSala extends VerticalPanel {
                 public void update(int index, ArrayList<String> object, final String value) {
                     
 
-                    String strIdUsuario = dataProvider.getList().get(index).get(dataProvider.getList().get(index).size()-1);
+                    String strIdUsuario = dataProvider.getList().get(index).get(0);
                     int idUsuario = Integer.parseInt(strIdUsuario);
                     int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
                     String strNomeCurso = listBoxCurso.getSelectedItemText();
                     String strNomePeriodo = listBoxPeriodo.getSelectedItemText();
-                    String strNomeDisciplina = arrayDisciplinaColumns.get(indexedColumn.getIndex()-1);
+                    String strNomeDisciplina = listBoxDisciplina.getSelectedItemText();
                     Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+ 
+                    String strAvaliacaoColumn = arrayAvaliacaoColumns.get(indexedColumn.getIndex()-INT_POSITION_NAME-1);
+                    int indexIdAvaliacao = strAvaliacaoColumn.indexOf("|");
+                    if(indexIdAvaliacao==-1){
+                        DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+                    }else{
+                        String strIdAvaliacao = strAvaliacaoColumn.substring(0,indexIdAvaliacao);
+                        int idAvaliacao = Integer.parseInt(strIdAvaliacao);
+                        DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, idAvaliacao, mediaNotaCurso);
+                    }
                     
-//                    Window.alert(Integer.toString(column)+":"+value+":"+nomeUsuario+":"+idUsuario+":"+header.getValue());
-                    DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+                    
                 }
             });
             
@@ -359,19 +378,23 @@ public class BoletimSala extends VerticalPanel {
                 
     }    
     
-    private void populateColunasDisciplinas(int idPeriodo) {
-        GWTServiceDisciplina.Util.getInstance().getDisciplinasPeloPeriodo(idPeriodo, new CallBackCarregarDisciplina());
+    private void populateColunasAvaliacoes() {
+        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+        int idPeriodo = Integer.parseInt(listBoxPeriodo.getSelectedValue());
+        int idDisciplina = Integer.parseInt(listBoxDisciplina.getSelectedValue());
+        GWTServiceAvaliacao.Util.getInstance().getHeaderRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina, new CallBackCarregarAvaliacao());
     }
     
     private void populateNotas(){
         mpLoading.setVisible(true);
-        int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
-        int idPeriodo = Integer.parseInt(listBoxPeriodo.getValue(listBoxPeriodo.getSelectedIndex()));
-       GWTServiceNota.Util.getInstance().getBoletimPeriodo(idCurso, idPeriodo, new CallBackCarregarNotas());
+        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+        int idPeriodo = Integer.parseInt(listBoxPeriodo.getSelectedValue());
+        int idDisciplina = Integer.parseInt(listBoxDisciplina.getSelectedValue());
+       GWTServiceNota.Util.getInstance().getRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina, new CallBackCarregarNotas());
     }
     
     
-    private class CallBackCarregarDisciplina implements AsyncCallback<ArrayList<Disciplina>>{
+    private class CallBackCarregarAvaliacao implements AsyncCallback<ArrayList<String>>{
         
         @Override
         public void onFailure(Throwable caught) {
@@ -380,16 +403,16 @@ public class BoletimSala extends VerticalPanel {
         }
 
         @Override
-        public void onSuccess(ArrayList<Disciplina> list) {
+        public void onSuccess(ArrayList<String> list) {
             mpLoading.setVisible(false);
             MpUtilClient.isRefreshRequired(list);
-            arrayDisciplinaColumns.clear();
+            arrayAvaliacaoColumns.clear();
             for (int i = 0; i < list.size(); i++) {
-                arrayDisciplinaColumns.add(list.get(i).getNome());
-            }        
+                arrayAvaliacaoColumns.add(list.get(i));
+            }       
 
             populateNotas();
-//            initializeCellTable();        
+
         }
     }
 	

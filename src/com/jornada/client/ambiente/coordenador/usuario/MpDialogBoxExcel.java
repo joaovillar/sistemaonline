@@ -76,6 +76,8 @@ public class MpDialogBoxExcel extends DecoratedPopupPanel implements ClickListen
 
 		dock.setCellHorizontalAlignment(closeButton, DockPanel.ALIGN_CENTER);
 		dock.setWidth("100%");
+		
+		
 
 		setWidget(dock);
 		

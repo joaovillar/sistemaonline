@@ -28,6 +28,7 @@ public interface GWTServiceAula extends RemoteService {
 	public boolean deleteAula(int idAula);	
 	public ArrayList<Aula> getAulas();
 	public ArrayList<Aula> getAulas(int idDisciplina);
+
 	
 	/**
 	 * Utility class for simplifying access to the instance of async service.

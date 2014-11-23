@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
@@ -16,6 +17,7 @@ import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.server.framework.excel.ExcelFramework;
 import com.jornada.shared.FieldVerifier;
+import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Nota;
@@ -229,6 +231,61 @@ public class NotaServer {
         return getMediaNotaAlunosNasDisciplinas(listUsuario, listDisciplinas);
     }
     
+    public static ArrayList<ArrayList<String>> getRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
+        
+        ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();   
+        ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);       
+        
+        
+        ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(idDisciplina,true);        
+        for (Avaliacao avaliacao : listAvaliacao) {
+            avaliacao.setListNota(NotaServer.getNotas(avaliacao.getIdAvaliacao()));
+        }   
+        
+        for (Usuario usuario : listUsuario) {
+            ArrayList<String> item = new ArrayList<String>();
+            item.add(Integer.toString(usuario.getIdUsuario()));
+            item.add(usuario.getPrimeiroNome()+" "+usuario.getSobreNome());
+            
+            for (Avaliacao avaliacao : listAvaliacao) {
+                String strNota="";
+                for(Nota nota : avaliacao.getListNota()){
+                    if(nota.getIdUsuario()==usuario.getIdUsuario()){
+                        if(avaliacao.getIdAvaliacao()==nota.getIdAvaliacao()){
+                            strNota = nota.getNota();
+                            break;
+                        }
+                    }
+                }
+                item.add(strNota);
+            }
+            list.add(item);
+        }
+        
+        Disciplina disciplina = DisciplinaServer.getDisciplina(idDisciplina);
+        disciplina.setListAvaliacao(listAvaliacao);
+        
+        for (int i=0;i<list.size();i++) {
+            int idUsuario = Integer.parseInt(list.get(i).get(0));
+            String strMedia = disciplina.getMediaAlunoDisciplina(idUsuario);
+            if(strMedia==null || strMedia.isEmpty()){
+                strMedia = "-";
+                list.get(i).add(strMedia);
+            }else{
+                double doubleMediaAluno = Double.parseDouble(strMedia);
+                list.get(i).add(MpUtilServer.getDecimalFormatedTwoDecimal(doubleMediaAluno));
+                list.get(i).add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+            }
+            
+        }
+        
+
+        
+        System.out.println(list);
+
+        return list;
+    }
+    
     
     public static ArrayList<ArrayList<String>> getMediaNotaAlunosNasDisciplinas(ArrayList<Usuario> listUsuario, ArrayList<Disciplina> listDisciplinas){
         ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
@@ -236,6 +293,7 @@ public class NotaServer {
         for (Usuario usuario : listUsuario) {
             ArrayList<String> item = new ArrayList<String>();
             
+            item.add(Integer.toString(usuario.getIdUsuario()));
             item.add(usuario.getPrimeiroNome() + " "+usuario.getSobreNome());
             for (Disciplina disciplina : listDisciplinas) {
                 String strMedia = disciplina.getMediaAlunoDisciplina(usuario.getIdUsuario());
@@ -244,10 +302,10 @@ public class NotaServer {
                     item.add(strMedia);
                 }else{
                     double doubleMediaAluno = Double.parseDouble(strMedia);
-                    item.add(MpUtilServer.getDecimalFormated(doubleMediaAluno));
+                    item.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
                 }
             }
-            item.add(Integer.toString(usuario.getIdUsuario()));
+            
             list.add(item);
         }
        
@@ -293,7 +351,7 @@ public class NotaServer {
         for (ArrayList<String> listAlunoNotas : listMediaNotaAlunos) {
             row = sheet.createRow((short) intLine++);
             for (int i = 0; i < listAlunoNotas.size()-1; i++) { 
-                String strText = listAlunoNotas.get(i);   
+                String strText = listAlunoNotas.get(i+1);   
                 row.createCell((short) i);
                 
                 if(i==0){

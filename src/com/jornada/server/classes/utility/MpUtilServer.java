@@ -185,8 +185,14 @@ public class MpUtilServer {
 
     }
     
-    public static String getDecimalFormated(double doubleNumber){
+    public static String getDecimalFormatedOneDecimal(double doubleNumber){
         DecimalFormat oneDigit = new DecimalFormat("0.#");
+        String strDouble = oneDigit.format(doubleNumber).replace(",", ".");
+        return strDouble;
+    }
+    
+    public static String getDecimalFormatedTwoDecimal(double doubleNumber){
+        DecimalFormat oneDigit = new DecimalFormat("0.##");
         String strDouble = oneDigit.format(doubleNumber).replace(",", ".");
         return strDouble;
     }

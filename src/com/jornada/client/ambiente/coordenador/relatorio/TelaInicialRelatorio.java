@@ -16,7 +16,8 @@ public class TelaInicialRelatorio extends Composite {
 	public  static final int intWidthTable=1400;
 	public static final int intHeightTable=500;
 	
-	private BoletimSala boletimSala;
+	private BoletimPeriodo boletimPeriodo;
+	private BoletimDisciplina boletimDisciplina;
 
 	
 	TextConstants txtConstants;
@@ -30,7 +31,8 @@ public class TelaInicialRelatorio extends Composite {
 		if(uniqueInstance==null){
 			uniqueInstance = new TelaInicialRelatorio(mainView);
 		}else{
-		    uniqueInstance.boletimSala.updateClientData();
+		    uniqueInstance.boletimPeriodo.updateClientData();
+		    uniqueInstance.boletimDisciplina.updateClientData();
 		}
 		
 		return uniqueInstance;
@@ -42,7 +44,8 @@ public class TelaInicialRelatorio extends Composite {
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
-		boletimSala = BoletimSala.getInstance(this);		
+		boletimPeriodo = BoletimPeriodo.getInstance(this);	
+		boletimDisciplina = BoletimDisciplina.getInstance(this);    
 
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
 		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
@@ -52,7 +55,8 @@ public class TelaInicialRelatorio extends Composite {
 
 		
 	
-		tabLayoutPanel.add(boletimSala, new MpHeaderWidget(txtConstants.relatorioBoletimPorPeriodo(), ""));
+		tabLayoutPanel.add(boletimPeriodo, new MpHeaderWidget(txtConstants.relatorioBoletimPorPeriodo(), ""));
+		tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget("Boletim Por Disciplina", ""));
 
 		initWidget(tabLayoutPanel);	
 		

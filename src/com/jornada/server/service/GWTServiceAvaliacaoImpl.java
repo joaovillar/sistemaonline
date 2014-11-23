@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.server.classes.AvaliacaoServer;
+import com.jornada.server.classes.UsuarioServer;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
 import com.jornada.shared.classes.TipoAvaliacao;
+import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.AvaliacaoNota;
 
 public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWTServiceAvaliacao {
@@ -54,10 +56,31 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
         return AvaliacaoServer.getAvaliacaoNota(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina); 
         
     }
+    
+    public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao) {
+        return AvaliacaoServer.getAvaliacaoNota(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina, idAvaliacao); 
+        
+    }
 	
 	public ArrayList<TipoAvaliacao> getTipoAvaliacao(){		
 		return AvaliacaoServer.getTipoAvaliacao();		
 	}
 	
+	
+	public ArrayList<String> getHeaderRelatorioBoletimDisciplina(int idCurso,int idPeriodo,  int idDisciplina){
+	    ArrayList<String> list = new ArrayList<String>();
+	    ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(idDisciplina, true);
+	    
+	    for (Avaliacao avaliacao : listAvaliacao) {
+	        TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(avaliacao.getIdTipoAvaliacao());
+            list.add(avaliacao.getIdAvaliacao()+"|"+tipoAvaliacao.getNomeTipoAvaliacao());
+        }	    
+
+	    list.add("Média");
+	    list.add("Média Arredondada");
+	   
+	    
+	    return list;
+	}
 	
 }

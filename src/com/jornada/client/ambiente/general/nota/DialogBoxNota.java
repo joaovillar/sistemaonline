@@ -44,7 +44,7 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 	
 	TextConstants txtConstants = GWT.create(TextConstants.class);
 	
-	private VerticalPanel vBody;
+	protected VerticalPanel vBody;
 	
     private CellTable<AvaliacaoNota> cellTable;
     private Column<AvaliacaoNota, String> notaColumn;
@@ -74,15 +74,30 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 		if(uniqueInstance==null){
 			uniqueInstance = new DialogBoxNota();
 			uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+			uniqueInstance.populateGridAvaliacoes();
 		}else{
 		    uniqueInstance.vBody.clear();
 			uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+			uniqueInstance.populateGridAvaliacoes();
 		}
 		return uniqueInstance;
 	}
 	
+	   public static DialogBoxNota getInstance(int idUsuario, int idCurso, String strNomeCurso, String strNomeDisciplina, String strNomePeriodo, int idAvaliacao, Double mediaNotaCurso){
+	        if(uniqueInstance==null){
+	            uniqueInstance = new DialogBoxNota();
+	            uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+	            uniqueInstance.populateGridAvaliacao(idAvaliacao);
+	        }else{
+	            uniqueInstance.vBody.clear();
+	            uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+	            uniqueInstance.populateGridAvaliacao(idAvaliacao);
+	        }
+	        return uniqueInstance;
+	    }
 	
-	private DialogBoxNota(){
+	
+	protected DialogBoxNota(){
 		
 //		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -99,7 +114,7 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 		
 	}
 	
-    private void showDialog(int idUsuario, int idCurso, String strNomeCurso, String strNomeDisciplina, String strNomePeriodo, Double mediaNotaCurso) {
+    protected void showDialog(int idUsuario, int idCurso, String strNomeCurso, String strNomeDisciplina, String strNomePeriodo, Double mediaNotaCurso) {
         
         this.idUsuario = idUsuario;
         this.idCurso = idCurso;
@@ -161,7 +176,6 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 
     }	
     
-    
     private VerticalPanel renderCellTable(){
         
         Label lblEmpty = new Label(txtConstants.avaliacaoNenhumaDisciplina());
@@ -194,7 +208,6 @@ public class DialogBoxNota extends DecoratedPopupPanel {
         gridPager.setWidget(0, 2, mpLoading);
         
         ScrollPanel scrollPanel = new ScrollPanel();
-//      scrollPanel.setSize(Integer.toString(TelaInicialAvaliacao.intWidthTable+30)+"px",Integer.toString(TelaInicialAvaliacao.intHeightTable-180)+"px");
         scrollPanel.setHeight(Integer.toString(TelaInicialAvaliacao.intHeightTable-180)+"px");
         scrollPanel.setAlwaysShowScrollBars(true);
         scrollPanel.setWidth("100%");
@@ -209,14 +222,14 @@ public class DialogBoxNota extends DecoratedPopupPanel {
         
         
         this.setWidth("100%");
-        populateGridAvaliacao();
+        
         
         return vPanel;
         
     }
     
     
-    protected void populateGridAvaliacao() {
+    protected void populateGridAvaliacoes() {
 
         mpLoading.setVisible(true);
 
@@ -224,17 +237,25 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 
     }        
     
-
-
-private void addCellTableData(ListDataProvider<AvaliacaoNota> dataProvider){
     
-    ListHandler<AvaliacaoNota> sortHandler = new ListHandler<AvaliacaoNota>(dataProvider.getList());
-    
-    cellTable.addColumnSortHandler(sortHandler);   
+    protected void populateGridAvaliacao(int idPeriodo) {
 
-    initSortHandler(sortHandler);
+        mpLoading.setVisible(true);
 
-}
+        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNotaPeriodoDisciplina(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina, idPeriodo, new CallbackAvaliacaoNota());
+
+    }  
+
+
+    private void addCellTableData(ListDataProvider<AvaliacaoNota> dataProvider) {
+
+        ListHandler<AvaliacaoNota> sortHandler = new ListHandler<AvaliacaoNota>(dataProvider.getList());
+
+        cellTable.addColumnSortHandler(sortHandler);
+
+        initSortHandler(sortHandler);
+
+    }
     
     
     private void initTableColumns(final SelectionModel<AvaliacaoNota> selectionModel) {
@@ -298,78 +319,68 @@ private void addCellTableData(ListDataProvider<AvaliacaoNota> dataProvider){
         cellTable.addColumn(dataColumn, txtConstants.avaliacaoData());
         cellTable.addColumn(horaColumn, txtConstants.avaliacaoHora());
         cellTable.addColumn(notaColumn, txtConstants.nota());
-   
-//        cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("edit-cell");
-//        cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("edit-cell");
-//        cellTable.getColumn(cellTable.getColumnIndex(columnTipoAvaliacao)).setCellStyleNames("edit-cell");
-        
+       
         
     }
     
-    
-    
-public void initSortHandler(ListHandler<AvaliacaoNota> sortHandler) {
-        
+    public void initSortHandler(ListHandler<AvaliacaoNota> sortHandler) {
+
         assuntoColumn.setSortable(true);
         sortHandler.setComparator(assuntoColumn, new Comparator<AvaliacaoNota>() {
-          @Override
-          public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
-            return o1.getAssunto().compareTo(o2.getAssunto());
-          }
-        }); 
-        
+            @Override
+            public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
+                return o1.getAssunto().compareTo(o2.getAssunto());
+            }
+        });
+
         descricaoColumn.setSortable(true);
         sortHandler.setComparator(descricaoColumn, new Comparator<AvaliacaoNota>() {
-          @Override
-          public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
-            return o1.getDescricao().compareTo(o2.getDescricao());
-          }
-        }); 
-        
+            @Override
+            public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
+                return o1.getDescricao().compareTo(o2.getDescricao());
+            }
+        });
+
         columnTipoAvaliacao.setSortable(true);
         sortHandler.setComparator(columnTipoAvaliacao, new Comparator<AvaliacaoNota>() {
-          @Override
-          public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
-              return o1.getTipoAvaliacao().getNomeTipoAvaliacao().compareTo(o2.getTipoAvaliacao().getNomeTipoAvaliacao());
-          }
-        });         
-        
+            @Override
+            public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
+                return o1.getTipoAvaliacao().getNomeTipoAvaliacao().compareTo(o2.getTipoAvaliacao().getNomeTipoAvaliacao());
+            }
+        });
+
         dataColumn.setSortable(true);
         sortHandler.setComparator(dataColumn, new Comparator<AvaliacaoNota>() {
-          @Override
-          public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
-            return o1.getData().compareTo(o2.getData());
-          }
-        }); 
-        
+            @Override
+            public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
+                return o1.getData().compareTo(o2.getData());
+            }
+        });
+
         horaColumn.setSortable(true);
         sortHandler.setComparator(horaColumn, new Comparator<AvaliacaoNota>() {
-          @Override
-          public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
-            return o1.getHora().compareTo(o2.getHora());
-          }
-        });             
-        
+            @Override
+            public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
+                return o1.getHora().compareTo(o2.getHora());
+            }
+        });
+
     }
-	
-	
+
     private class EnterKeyUpHandler implements KeyUpHandler {
         public void onKeyUp(KeyUpEvent event) {
             if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                 hide();
+                hide();
             }
         }
     }
-	
-	
-	
-    private class ClickHandlerFechar implements ClickHandler{		
-		public void onClick(ClickEvent event){
-			DialogBoxNota.this.hide();			
-		}		
-	}
-    
-    
+
+    private class ClickHandlerFechar implements ClickHandler {
+        public void onClick(ClickEvent event) {
+            DialogBoxNota.this.hide();
+        }
+    }
+
     private class CallbackAvaliacaoNota implements AsyncCallback<ArrayList<AvaliacaoNota>>{
         @Override
         public void onFailure(Throwable caught) {
@@ -393,5 +404,8 @@ public void initSortHandler(ListHandler<AvaliacaoNota> sortHandler) {
         }
         
     }
+    
+    
+
 
 }

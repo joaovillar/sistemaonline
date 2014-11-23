@@ -11,8 +11,6 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.jornada.client.classes.widgets.label.MpLabelLeft;
@@ -208,7 +206,6 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		txtCurso.setValue(ca.getNomeCurso());
 		txtPeriodo.setValue(ca.getNomePeriodo());
 		txtDisciplina.setValue(ca.getNomeDisciplina());
-//		txtMateria.setValue(ca.getNomeConteudoProgramatico());
 		txtAssunto.setValue(ca.getAssuntoAvaliacao());
 		txtDescricao.setValue(ca.getDescricaoAvaliacao());
 		txtPesoNota.setValue(ca.getPesoNota());
@@ -224,7 +221,6 @@ public class MpDialogBoxAppointment extends DialogBox implements ClickListener {
 		txtCurso.setValue("");
 		txtPeriodo.setValue("");
 		txtDisciplina.setValue("");
-//		txtMateria.setValue("");
 		txtAssunto.setValue("");
 		txtDescricao.setValue("");
 		txtPesoNota.setValue("");

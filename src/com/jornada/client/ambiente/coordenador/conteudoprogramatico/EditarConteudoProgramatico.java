@@ -298,7 +298,6 @@ public class EditarConteudoProgramatico extends VerticalPanel {
 			int index = listBoxPeriodo.getSelectedIndex();
 			if(index==-1){
 				listBoxDisciplina.clear();	
-//				dataProvider.getList().clear();
 			}
 			else{
 				int idPeriodo = Integer.parseInt(listBoxPeriodo.getValue(index));

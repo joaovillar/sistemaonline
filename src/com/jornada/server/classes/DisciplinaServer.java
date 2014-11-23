@@ -19,6 +19,7 @@ public class DisciplinaServer {
 	public static String DB_UPDATE_DISCIPLINA = "UPDATE disciplina set nome_disciplina=?, carga_horaria=?, descricao=?, objetivo=?, id_periodo=? where id_disciplina=?;";
 	public static String DB_UPDATE_PROFESSOR_DISCIPLINA = "UPDATE disciplina set id_usuario=? where id_disciplina=?;";	
 	public static String DB_SELECT_DISCIPLINA = "SELECT * FROM disciplina where (nome_disciplina ilike ?);";
+	public static String DB_SELECT_DISCIPLINA_POR_ID = "SELECT * FROM disciplina where id_disciplina=?;";
 	public static String DB_SELECT_ALL_DISCIPLINA = "SELECT * FROM disciplina order by nome_disciplina asc;";
 	public static String DB_SELECT_DISCIPLINA_PELO_PERIODO = "SELECT * FROM disciplina where id_periodo=? order by nome_disciplina asc;";
 	public static String DB_SELECT_DISCIPLINA_PELO_PERIODO_ILIKE = "SELECT * FROM disciplina where (id_periodo=?) and (nome_disciplina ilike ?) order by nome_disciplina asc;";
@@ -135,6 +136,33 @@ public class DisciplinaServer {
 	}
 	
 	
+	   public static Disciplina getDisciplina(int idDisciplina) {
+
+	        ArrayList<Disciplina> data = new ArrayList<Disciplina>();
+	        Connection conn = ConnectionManager.getConnection();
+	        try {
+	            PreparedStatement ps = conn.prepareStatement(DB_SELECT_DISCIPLINA_POR_ID);            
+	            int count=0;
+	            ps.setInt(++count, idDisciplina);                  
+	            data = getDisciplinaParameters(ps.executeQuery());
+
+	        } catch (SQLException sqlex) {
+	            data=null;
+	            System.err.println(sqlex.getMessage());
+	        } finally {
+	            ConnectionManager.closeConnection(conn);
+	        }
+	        
+	        if(data==null || data.size()==0){
+	            return null;
+	        }
+	        else{
+	            return data.get(0);
+	        }
+
+	    }   
+	
+	
 	public static ArrayList<Disciplina> getDisciplinas(int idPeriodo) {
 
 		ArrayList<Disciplina> data = new ArrayList<Disciplina>();
@@ -167,7 +195,16 @@ public class DisciplinaServer {
         return listDisciplinas;
 	}
 	
+	public static Disciplina getDisciplinaComAvaliacoes(int idDisciplina){
+      Disciplina disciplina = DisciplinaServer.getDisciplina(idDisciplina);
+            disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacao(disciplina.getIdDisciplina()));
+            for (Avaliacao avaliacao : disciplina.getListAvaliacao()) {
+                avaliacao.setListNota(NotaServer.getNotas(avaliacao.getIdAvaliacao()));
+            }    
+        return disciplina;
+    }
 	
+
     public static ArrayList<ProfessorDisciplina> getPeriodoDisciplinaProfessor(int idCurso) {
 
         ArrayList<ProfessorDisciplina> data = new ArrayList<ProfessorDisciplina>();

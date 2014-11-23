@@ -17,7 +17,9 @@ public interface GWTServiceAvaliacaoAsync {
 	public void getAvaliacaoPelaDisciplina(int idDisciplina, AsyncCallback<ArrayList<Avaliacao>> callback);	
 	public void getAvaliacaoPeloCurso(int idCurso, AsyncCallback<ArrayList<CursoAvaliacao>> callback);
 	public void getTipoAvaliacao(AsyncCallback<ArrayList<TipoAvaliacao>> callback);
-	public void getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, AsyncCallback<ArrayList<AvaliacaoNota>> callback);	
+	public void getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, AsyncCallback<ArrayList<AvaliacaoNota>> callback);
+	public void getHeaderRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina, AsyncCallback<ArrayList<String>> callback);
+	public void getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao, AsyncCallback<ArrayList<AvaliacaoNota>> callback);	
 
 	
 }
