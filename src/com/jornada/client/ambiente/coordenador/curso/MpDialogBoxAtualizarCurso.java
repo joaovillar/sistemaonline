@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.Curso;
-import com.jornada.shared.classes.Curso;
 
 @SuppressWarnings("deprecation")
 public class MpDialogBoxAtualizarCurso extends DecoratedPopupPanel implements ClickListener {

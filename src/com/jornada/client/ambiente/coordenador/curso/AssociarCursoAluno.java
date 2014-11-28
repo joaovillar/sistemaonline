@@ -153,7 +153,8 @@ public class AssociarCursoAluno extends VerticalPanel{
 	}
 	
 	
-	public MpPanelPageMainView drawPassoDoisSelecioneAluno(){
+	@SuppressWarnings("deprecation")
+    public MpPanelPageMainView drawPassoDoisSelecioneAluno(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.cursoSelecionarAluno(), "images/people.png");
 //		mpPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");

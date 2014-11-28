@@ -361,7 +361,8 @@ public class AdicionarOcorrencia extends VerticalPanel {
 		
 	}	
 	
-	public MpPanelPageMainView mpPanelAssociarAlunos(){
+	@SuppressWarnings("deprecation")
+    public MpPanelPageMainView mpPanelAssociarAlunos(){
 		
 		MpPanelPageMainView mpPanelAssociarAluno = new MpPanelPageMainView(txtConstants.ocorrenciaSelecionarAlunoEnviar(), "images/elementary_school_16.png");
 //		mpPanelAssociarAluno.setWidth(Integer.toString(TelaInicialUsuario.intWidthTable)+"px");

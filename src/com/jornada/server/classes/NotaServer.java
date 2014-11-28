@@ -5,7 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.HashSet;
 
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
@@ -231,23 +232,108 @@ public class NotaServer {
         return getMediaNotaAlunosNasDisciplinas(listUsuario, listDisciplinas);
     }
     
+    
+    public static ArrayList<ArrayList<String>> getBoletimAnual(int idCurso) {
+        ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();
+        ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
+        ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
+        
+        
+        HashSet<String> hashSetDisciplinas = new HashSet<String>();
+        //Pegando nome das disciplinas de todo o ano letivo
+        for (Periodo periodo : listPeriodo) {
+            ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+            for (Disciplina disciplina : listDisciplina) {
+                hashSetDisciplinas.add(disciplina.getNome());
+            }
+        }
+        
+        ArrayList<String> listDisciplinasAno = new ArrayList<String>(hashSetDisciplinas);
+        Collections.sort(listDisciplinasAno);      
+        
+        ArrayList<String> listDisciplinasAnoAluno = new ArrayList<String>();
+        listDisciplinasAnoAluno.add("IdUsuario");
+        listDisciplinasAnoAluno.add("Alunos");
+        for (String string : listDisciplinasAno) {
+            listDisciplinasAnoAluno.add(string);
+        }
+        
+        listNotas.add(listDisciplinasAnoAluno);
+        for(Usuario usuario : listUsuario){
+            ArrayList<String> array = new ArrayList<String>();
+            array.add(Integer.toString(usuario.getIdUsuario()));
+            array.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
+            
+            for(int i=2;i<listDisciplinasAnoAluno.size();i++){
+                String nomeDisciplina = listDisciplinasAnoAluno.get(i);
+//                String text = getMediaAnoAlunoDisciplina(usuario.getIdUsuario(), idCurso,listPeriodo,nomeDisciplina) + "||"+nomeDisciplina;\
+                String text = getMediaAnoAlunoDisciplina(usuario.getIdUsuario(), idCurso,listPeriodo,nomeDisciplina);
+                array.add(text);
+            }
+            
+            listNotas.add(array);      
+        }
+        System.out.println(listNotas.toString());
+        
+
+        return listNotas;
+    }
+    
+    
+    
+    public static String getMediaAnoAlunoDisciplina(int idUsuario, int idCurso, ArrayList<Periodo> listPeriodo, String strDisciplina){
+        String strMedia="";
+        double doubleMediaAluno=0;
+        int countMedia=0;
+       
+        for (Periodo periodo : listPeriodo) {
+            
+            ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+            
+            for (Disciplina disciplina : listDisciplina) {              
+                
+                if (disciplina.getNome().equals(strDisciplina)) {
+                    
+                    disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
+                    strMedia = disciplina.getMediaAlunoDisciplina(idUsuario);
+                    if(strMedia==null || strMedia.isEmpty()){}else{
+                        doubleMediaAluno = doubleMediaAluno + Double.parseDouble(strMedia);
+                        countMedia++;
+                        break;
+                    }
+                }
+            }     
+        }
+       
+        if (countMedia != 0) {
+            doubleMediaAluno = doubleMediaAluno / countMedia;
+            strMedia = MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno);           
+        }
+        
+        return strMedia;
+    }
+    
+    
+
+    
+
+    
     public static ArrayList<ArrayList<String>> getRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
         
         ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();   
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);       
         
         
-        ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(idDisciplina,true);        
-        for (Avaliacao avaliacao : listAvaliacao) {
-            avaliacao.setListNota(NotaServer.getNotas(avaliacao.getIdAvaliacao()));
-        }   
-        
+        Disciplina disciplina = DisciplinaServer.getDisciplina(idDisciplina);
+        disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(idDisciplina));
+                
         for (Usuario usuario : listUsuario) {
             ArrayList<String> item = new ArrayList<String>();
             item.add(Integer.toString(usuario.getIdUsuario()));
             item.add(usuario.getPrimeiroNome()+" "+usuario.getSobreNome());
             
-            for (Avaliacao avaliacao : listAvaliacao) {
+            for (Avaliacao avaliacao : disciplina.getListAvaliacao()) {
+                
                 String strNota="";
                 for(Nota nota : avaliacao.getListNota()){
                     if(nota.getIdUsuario()==usuario.getIdUsuario()){
@@ -257,19 +343,21 @@ public class NotaServer {
                         }
                     }
                 }
+                if(strNota==null || strNota.isEmpty()){
+                    strNota = "-";
+                }
                 item.add(strNota);
             }
             list.add(item);
-        }
-        
-        Disciplina disciplina = DisciplinaServer.getDisciplina(idDisciplina);
-        disciplina.setListAvaliacao(listAvaliacao);
+        }        
+
         
         for (int i=0;i<list.size();i++) {
             int idUsuario = Integer.parseInt(list.get(i).get(0));
             String strMedia = disciplina.getMediaAlunoDisciplina(idUsuario);
             if(strMedia==null || strMedia.isEmpty()){
                 strMedia = "-";
+                list.get(i).add(strMedia);
                 list.get(i).add(strMedia);
             }else{
                 double doubleMediaAluno = Double.parseDouble(strMedia);
@@ -278,10 +366,6 @@ public class NotaServer {
             }
             
         }
-        
-
-        
-        System.out.println(list);
 
         return list;
     }
@@ -313,12 +397,77 @@ public class NotaServer {
     }
     
     
-    public static String gerarExcelBoletimPeriodo(int idCurso, int idPeriodo) {
-       
-
+    public static String getExcelBoletimAnual(int idCurso) {
         XSSFWorkbook wb = new XSSFWorkbook();
 
+        // /Creating Tabs
+        XSSFSheet sheet = wb.createSheet("Boletim Anual");
         
+        ArrayList<ArrayList<String>> listNotas = getBoletimAnual(idCurso);
+        
+        int intColumn=0;
+        int intLine=0;
+        Row row = sheet.createRow((short) intLine);  
+        row.createCell((short) intColumn).setCellValue("PLANILHA DE NOTAS ");
+        row.getCell((short) intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));
+        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,8));
+        intLine++;
+        row = sheet.createRow((short) intLine++);  
+        
+        ArrayList<String> listHeader = listNotas.get(0);
+        
+        for(int i=1;i<listHeader.size();i++){
+            String header = "";
+            if(i==1){
+                header = listHeader.get(i);
+            }else{
+                header = Curso.getAbreviarNomeCurso(listHeader.get(i));
+            }
+            
+            row.createCell((short) intColumn).setCellValue(header);
+            row.getCell((short) intColumn).setCellType(Cell.CELL_TYPE_STRING);  
+            row.getCell((short) intColumn++).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));  
+        }
+//        intLine++;
+        
+        for(int r=1;r<listNotas.size();r++){
+            ArrayList<String> listRow = listNotas.get(r);
+            row = sheet.createRow((short) intLine++);
+            for (int c=1; c< listRow.size(); c++) {
+                String strText = listRow.get(c);
+                row.createCell((short) c-1);
+                
+                if(c==1){
+                    row.getCell((short) c-1).setCellValue(strText);                     
+                    row.getCell((short) c-1).setCellType(Cell.CELL_TYPE_STRING); 
+                    row.getCell((short) c-1).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb)); 
+                }else{
+                    if(FieldVerifier.isNumeric(strText)){
+                        row.getCell((short) c-1).setCellValue(Double.parseDouble(strText));                     
+                        row.getCell((short) c-1).setCellType(Cell.CELL_TYPE_NUMERIC); 
+                    }else{
+                        row.getCell((short) c-1).setCellValue(strText);                     
+                        row.getCell((short) c-1).setCellType(Cell.CELL_TYPE_STRING); 
+                    }
+                    row.getCell((short) c-1).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));     
+                }        
+            }
+        }
+        
+        for (int i = 0; i < intColumn; i++) {   
+            if(i==0){
+                sheet.autoSizeColumn(i,true);
+            }else{
+                sheet.setColumnWidth(i, 2000);
+            }
+        }
+        
+        return ExcelFramework.getExcelAddress(wb,"GerarExcelBoletimAnual_");
+    }
+    
+    public static String gerarExcelBoletimPeriodo(int idCurso, int idPeriodo) {
+
+        XSSFWorkbook wb = new XSSFWorkbook();
         // /Creating Tabs
         XSSFSheet sheet = wb.createSheet("Boletim Periodo");
         
@@ -383,8 +532,79 @@ public class NotaServer {
 
     }
     
-    
-
+    public static String gerarExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("Boletim Disciplina");
+        
+        ArrayList<String> listHeader = AvaliacaoServer.getHeaderRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina);
+        ArrayList<ArrayList<String>> listMediaNotaAlunos = getRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina);
+        Curso curso = CursoServer.getCurso(idCurso);
+        Periodo periodo = PeriodoServer.getPeriodo(idPeriodo);
+        Disciplina disciplina = DisciplinaServer.getDisciplina(idDisciplina);        
+        
+        int intColumn=0;
+        int intLine=0;
+        Row row = sheet.createRow((short) intLine);  
+        row.createCell((short) intColumn).setCellValue("PLANILHA DE NOTAS");
+        row.getCell((short) intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));
+        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,8));
+        intLine++;
+        
+        row = sheet.createRow((short) intLine);  
+        row.createCell((short) intColumn).setCellValue(curso.getNome()+"     -     "+periodo.getNomePeriodo()+"     -     "+disciplina.getNome());
+        row.getCell((short) intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));
+        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,8));
+        intLine++;        
+        
+        row = sheet.createRow((short) intLine++);  
+        row.createCell((short) intColumn).setCellValue("Aluno");
+        row.getCell((short) intColumn++).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));
+        
+        for (String strHeader : listHeader) {            
+            
+            int indexIdAvaliacao = strHeader.indexOf("|");
+            if(indexIdAvaliacao!=-1){
+                strHeader = strHeader.substring(indexIdAvaliacao+1);
+            }
+            row.createCell((short) intColumn).setCellValue(strHeader);
+            row.getCell((short) intColumn).setCellType(Cell.CELL_TYPE_STRING);  
+            row.getCell((short) intColumn++).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));              
+        }
+        
+        for (ArrayList<String> listAlunoNotas : listMediaNotaAlunos) {
+            row = sheet.createRow((short) intLine++);
+            for (int i = 0; i < listAlunoNotas.size()-1; i++) { 
+                String strText = listAlunoNotas.get(i+1);   
+                row.createCell((short) i);
+                
+                if(i==0){
+                    row.getCell((short) i).setCellValue(strText);                     
+                    row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb)); 
+                }else{
+                    if(FieldVerifier.isNumeric(strText)){
+                        row.getCell((short) i).setCellValue(Double.parseDouble(strText));                     
+                        row.getCell((short) i).setCellType(Cell.CELL_TYPE_NUMERIC); 
+                    }else{
+                        row.getCell((short) i).setCellValue(strText);                     
+                        row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                    }
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));     
+                }        
+            }
+        }
+        
+        for (int i = 0; i < intColumn; i++) {   
+//            if(i==0){
+                sheet.autoSizeColumn(i,true);
+//            }else{
+//                sheet.setColumnWidth(i, 6000);
+//            }
+        }
+        
+//        return "";
+        return ExcelFramework.getExcelAddress(wb,"GerarExcelBoletimDisciplina_");
+    }
     
 
 }

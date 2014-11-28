@@ -1,6 +1,8 @@
 package com.jornada.client.ambiente.coordenador.periodo;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -18,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -40,9 +43,12 @@ public class AdicionarPeriodo extends VerticalPanel {
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading hPanelLoading = new MpPanelLoading("images/radar.gif");
+	
+	
 
 //	private ListBox listBoxCurso;
-	private MpSelectionCurso listBoxNomeCurso;
+	private MpSelectionCurso listBoxCurso;
+	MpListBoxPanelHelper mpHelperCurso;
 	
 	private MpTextBox txtNomePeriodo;
 	private TextArea txtDescricaoPeriodo;
@@ -82,6 +88,8 @@ public class AdicionarPeriodo extends VerticalPanel {
 		hPanelLoading.setTxtLoading(txtConstants.geralCarregando());
 		hPanelLoading.show();
 		hPanelLoading.setVisible(false);
+		
+		mpHelperCurso = new  MpListBoxPanelHelper();
 
 		FlexTable flexTable = new FlexTable();
 		flexTable.setCellSpacing(3);
@@ -128,12 +136,13 @@ public class AdicionarPeriodo extends VerticalPanel {
 	    txtFiltroNomeCurso.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCurso());
 
 		
-		listBoxNomeCurso = new MpSelectionCurso(true);
+		listBoxCurso = new MpSelectionCurso(true);
+		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		
 		// Add some standard form options
 		int row = 1;
 
-		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row++, 1, listBoxNomeCurso);//flexTable.setWidget(row++, 2, new MpImageHelper(listBoxNomeCurso));//flexTable.setWidget(row++, 2, txtFiltroNomeCurso);
+		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row, 1, listBoxCurso);flexTable.setWidget(row++, 2, mpHelperCurso);//flexTable.setWidget(row++, 2, txtFiltroNomeCurso);
 		
 		flexTable.setWidget(row, 0, lblNomePeriodo);flexTable.setWidget(row, 1, txtNomePeriodo);flexTable.setWidget(row++, 2, lblErroNomePeriodo);
 		flexTable.setWidget(row, 0, lblDescricaoPeriodo);flexTable.setWidget(row++, 1, txtDescricaoPeriodo);
@@ -225,7 +234,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 
 				hPanelLoading.setVisible(true);
 
-				int intIdCurso = Integer.parseInt(listBoxNomeCurso.getValue(listBoxNomeCurso.getSelectedIndex()));
+				int intIdCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 
 				Periodo periodo = new Periodo();
 				periodo.setIdCurso(intIdCurso);
@@ -280,18 +289,22 @@ public class AdicionarPeriodo extends VerticalPanel {
 
 
 	public void updateClientData() {
-		listBoxNomeCurso.populateComboBox();
+		listBoxCurso.populateComboBox();
 	}
 	
     private class EnterKeyUpHandlerFiltrarCurso implements KeyUpHandler {
         public void onKeyUp(KeyUpEvent event) {
             if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
+                listBoxCurso.filterComboBox(txtFiltroNomeCurso.getText());
             }
         }
     }
 	
-	
+    private class MpCursoSelectionChangeHandler implements ChangeHandler {
+        public void onChange(ChangeEvent event) {  
+            mpHelperCurso.populateSuggestBox(listBoxCurso);
+        }  
+    }
 	
 	
 }

@@ -42,6 +42,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpDatePickerCell;
@@ -72,6 +73,7 @@ public class EditarPeriodo extends VerticalPanel {
 	private Column<Periodo, Date> dataFinalColumn;
 
 	private MpSelectionCurso listBoxCurso;
+	private MpListBoxPanelHelper mpHelperCurso;
 	
 	private TextBox txtSearch;
 	ArrayList<Periodo> arrayListBackup = new ArrayList<Periodo>();
@@ -114,6 +116,8 @@ public class EditarPeriodo extends VerticalPanel {
 		listBoxCurso = new MpSelectionCurso(true);
 		listBoxCurso.setWidth("250px");
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
+		
+		mpHelperCurso = new  MpListBoxPanelHelper();
 
 //		MpImageButton btnSearch = new MpImageButton("Filtrar","images/magnifier.png");
 //		btnSearch.addClickHandler(new ClickHandlerFilter());
@@ -126,9 +130,9 @@ public class EditarPeriodo extends VerticalPanel {
 			gridComboBox.setWidget(0, 0, lblCursoEdit);
 			gridComboBox.setWidget(0, 1, listBoxCurso);
 			gridComboBox.setWidget(0, 2, new InlineHTML("&nbsp;"));
-//			gridComboBox.setWidget(0, 3, btnSearch);
-//			gridComboBox.setWidget(0, 4, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(0, 3, mpPanelLoading);
+			gridComboBox.setWidget(0, 3, mpHelperCurso);
+			gridComboBox.setWidget(0, 4, new InlineHTML("&nbsp;"));
+			gridComboBox.setWidget(0, 5, mpPanelLoading);
 			
 		}
 
@@ -333,9 +337,10 @@ public class EditarPeriodo extends VerticalPanel {
 	}
 	
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
-		public void onChange(ChangeEvent event) {
-				populateGrid();			
-		}	  
+        public void onChange(ChangeEvent event) {
+            mpHelperCurso.populateSuggestBox(listBoxCurso);
+            populateGrid();
+        }  
 	}
 
 	public void updateClientData() {

@@ -388,7 +388,7 @@ public class BoletimPeriodo extends VerticalPanel {
         public void onClick(ClickEvent event) {
             int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
             int idPeriodo = Integer.parseInt(listBoxPeriodo.getSelectedValue());
-            MpDialogBoxExcelRelatorio.getInstance(idCurso, idPeriodo);                 
+            MpDialogBoxExcelRelatorioBoletim.getInstance(idCurso, idPeriodo);                 
         }
     }
     

@@ -201,6 +201,7 @@ public class MpUtilServer {
     {  
       try  
       {  
+        @SuppressWarnings("unused")
         double d = Double.parseDouble(str);  
       }  
       catch(NumberFormatException nfe)  

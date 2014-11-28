@@ -167,7 +167,8 @@ public class AssociarProfessorDisciplina extends VerticalPanel{
 	}
 	
 	
-	public MpPanelPageMainView drawPassoDoisSelecioneDisciplina(){
+	@SuppressWarnings("deprecation")
+    public MpPanelPageMainView drawPassoDoisSelecioneDisciplina(){
 		
 		MpPanelPageMainView mpPanel = new MpPanelPageMainView(txtConstants.disciplinaSelecionar(), "images/disciplina.png");
 //		mpPanel.setWidth(Integer.toString(TelaInicialDisciplina.intWidthTable)+"px");

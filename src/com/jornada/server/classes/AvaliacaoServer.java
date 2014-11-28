@@ -576,7 +576,31 @@ public static ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCur
 
 		return currentObject;
 
-	}				
+	}		
 	
+	
+	public static ArrayList<String> getHeaderRelatorioBoletimDisciplina(int idCurso,int idPeriodo,  int idDisciplina){
+	     ArrayList<String> list = new ArrayList<String>();
+	        ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(idDisciplina, true);
+	        
+	        for (Avaliacao avaliacao : listAvaliacao) {
+	            TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(avaliacao.getIdTipoAvaliacao());
+	            list.add(avaliacao.getIdAvaliacao()+"|"+tipoAvaliacao.getNomeTipoAvaliacao());
+	        }       
+
+	        list.add("Média");
+	        list.add("Média Arredondada");
+	        
+	        return list;  
+	}
+	
+	
+    public static ArrayList<Avaliacao> getAvaliacaoComNotas(int idDisciplina) {
+        ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(idDisciplina, true);
+        for (Avaliacao avaliacao : listAvaliacao) {
+            avaliacao.setListNota(NotaServer.getNotas(avaliacao.getIdAvaliacao()));
+        }        
+        return listAvaliacao;
+    }
 
 }

@@ -1161,8 +1161,10 @@ li.multiValueSuggestBox-input-token {
 	background-color: white;
 	font-size: 11px;
 	font-family: Arial, Helvetica, sans-serif;
-	    -moz-border-radius: 5px;
+	-moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+    overflow-y: auto !important; 
+    max-height: 250px; 
 }
 .gwt-SuggestBoxPopup .item {
 		    border                       :    1px  #aaa;

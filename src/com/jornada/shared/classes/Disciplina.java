@@ -178,5 +178,7 @@ public class Disciplina implements Serializable {
 	public String toString(){
 		return "projeto:com.jornada.shared.classes.Disciplina";
 	}
+	
+
 
 }
