@@ -12,6 +12,9 @@ public class Periodo implements Serializable, Comparable<Periodo>  {
 	 * 
 	 */
 	private static final long serialVersionUID = 4710332602168218200L;
+	
+	public static final String DB_UNIQUE_KEY = "unike_idcurso_nomeperiodo";
+	
 	private int idCurso;
 	private int idPeriodo;
 	private String nomePeriodo;

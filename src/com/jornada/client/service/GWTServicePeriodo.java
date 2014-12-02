@@ -20,6 +20,7 @@ public interface GWTServicePeriodo  extends RemoteService {
 	public ArrayList<Curso> getCursos();
 	public boolean deletePeriodoRow(int id_periodo); 
 	public boolean updatePeriodoRow(Periodo periodo);
+	public String adicionarPeriodoString(Periodo periodo);    
 	
 	
 	/**
@@ -33,6 +34,9 @@ public interface GWTServicePeriodo  extends RemoteService {
 			}
 			return instance;
 		}
-	}	
+	}
+
+
+    
 	
 }

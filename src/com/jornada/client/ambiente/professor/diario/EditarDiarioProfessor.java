@@ -42,6 +42,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -72,6 +73,8 @@ public class EditarDiarioProfessor extends VerticalPanel {
 	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;	
 //	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;
 	private LinkedHashMap<String, String> listaTipoPresenca = new LinkedHashMap<String, String>();
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
 	private TextBox txtSearch;
 //	private MpLabelTextBoxError lblErroDisciplina;
@@ -117,8 +120,8 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		mpPanelLoadingAluno.setVisible(false);
 
 		FlexTable flexTableWithListBoxes = new FlexTable();
-		flexTableWithListBoxes.setCellSpacing(3);
-		flexTableWithListBoxes.setCellPadding(3);
+		flexTableWithListBoxes.setCellSpacing(2);
+		flexTableWithListBoxes.setCellPadding(2);
 		flexTableWithListBoxes.setBorderWidth(0);		
 		FlexCellFormatter cellFormatter = flexTableWithListBoxes.getFlexCellFormatter();
 		
@@ -158,7 +161,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
 
 		
-		flexTableWithListBoxes.setWidget(row, 0, lblCurso);	flexTableWithListBoxes.setWidget(row++, 1, listBoxCurso);
+		flexTableWithListBoxes.setWidget(row, 0, lblCurso);	flexTableWithListBoxes.setWidget(row, 1, listBoxCurso);flexTableWithListBoxes.setWidget(row++, 2, mpHelperCurso);
 		flexTableWithListBoxes.setWidget(row, 0, lblPeriodo);flexTableWithListBoxes.setWidget(row++, 1, listBoxPeriodo);
 		flexTableWithListBoxes.setWidget(row, 0, lblDisciplina);flexTableWithListBoxes.setWidget(row, 1, listBoxDisciplina);flexTableWithListBoxes.setWidget(row++, 2, mpPanelLoadingAluno);
 //		flexTableWithListBoxes.setWidget(row, 0, lblCurso);flexTableWithListBoxes.setWidget(row, 1, lblPeriodo);flexTableWithListBoxes.setWidget(row++, 2, lblDisciplina);
@@ -188,6 +191,7 @@ public class EditarDiarioProfessor extends VerticalPanel {
 	
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {			
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			listBoxPeriodo.populateComboBox(idCurso);
 		}  

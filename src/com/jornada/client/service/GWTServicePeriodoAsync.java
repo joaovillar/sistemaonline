@@ -17,5 +17,6 @@ public interface GWTServicePeriodoAsync {
 	public void getCursos(AsyncCallback<ArrayList<Curso>> callback);	
 	public void deletePeriodoRow(int id_periodo, AsyncCallback<Boolean> callback);	
 	public void updatePeriodoRow(Periodo periodo, AsyncCallback<Boolean> callback);
+	public void adicionarPeriodoString(Periodo periodo, AsyncCallback<String> callback);
 
 }

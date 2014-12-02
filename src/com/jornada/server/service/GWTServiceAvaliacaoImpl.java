@@ -50,9 +50,13 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 		return AvaliacaoServer.getAvaliacaoPeloCurso(idCurso);
 	}
 	
+	
+	public ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomeDisciplina){
+	    return  AvaliacaoServer.getAvaliacaoNota(idUsuario, idCurso, strNomeDisciplina);
+	}
+	
     public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
-        return AvaliacaoServer.getAvaliacaoNota(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina); 
-        
+        return AvaliacaoServer.getAvaliacaoNota(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina);         
     }
     
     public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao) {

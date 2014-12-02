@@ -40,13 +40,15 @@ import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.shared.classes.boletim.AvaliacaoNota;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
-public class DialogBoxNota extends DecoratedPopupPanel {
+public class DialogBoxNotasAno extends DecoratedPopupPanel {
 	
 	TextConstants txtConstants = GWT.create(TextConstants.class);
 	
 	protected VerticalPanel vBody;
 	
     private CellTable<AvaliacaoNota> cellTable;
+    private Column<AvaliacaoNota, String> periodoColumn;
+//    private Column<AvaliacaoNota, String> disciplinaColumn;
     private Column<AvaliacaoNota, String> notaColumn;
     private Column<AvaliacaoNota, String> assuntoColumn;
     private Column<AvaliacaoNota, String> descricaoColumn;
@@ -64,40 +66,26 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 	private int idCurso;
 	private String strNomeCurso;
 	private String strNomeDisciplina;
-	private String strNomePeriodo;
 	private Double mediaNotaCurso;
 	
 	
-	private static DialogBoxNota uniqueInstance;
+	private static DialogBoxNotasAno uniqueInstance;
 	
-	public static DialogBoxNota getInstance(int idUsuario, int idCurso, String strNomeCurso, String strNomeDisciplina, String strNomePeriodo, Double mediaNotaCurso){
+	public static DialogBoxNotasAno getInstance(int idUsuario, int idCurso, String strNomeCurso, String strNomeDisciplina, Double mediaNotaCurso){
 		if(uniqueInstance==null){
-			uniqueInstance = new DialogBoxNota();
-			uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+			uniqueInstance = new DialogBoxNotasAno();
+			uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
 			uniqueInstance.populateGridAvaliacoes();
 		}else{
 		    uniqueInstance.vBody.clear();
-			uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+			uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
 			uniqueInstance.populateGridAvaliacoes();
 		}
 		return uniqueInstance;
 	}
 	
-	   public static DialogBoxNota getInstance(int idUsuario, int idCurso, String strNomeCurso, String strNomeDisciplina, String strNomePeriodo, int idAvaliacao, Double mediaNotaCurso){
-	        if(uniqueInstance==null){
-	            uniqueInstance = new DialogBoxNota();
-	            uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
-	            uniqueInstance.populateGridAvaliacao(idAvaliacao);
-	        }else{
-	            uniqueInstance.vBody.clear();
-	            uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
-	            uniqueInstance.populateGridAvaliacao(idAvaliacao);
-	        }
-	        return uniqueInstance;
-	    }
 	
-	
-	protected DialogBoxNota(){
+	protected DialogBoxNotasAno(){
 		
 
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -114,13 +102,12 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 		
 	}
 	
-    protected void showDialog(int idUsuario, int idCurso, String strNomeCurso, String strNomeDisciplina, String strNomePeriodo, Double mediaNotaCurso) {
+    protected void showDialog(int idUsuario, int idCurso, String strNomeCurso, String strNomeDisciplina, Double mediaNotaCurso) {
         
         this.idUsuario = idUsuario;
         this.idCurso = idCurso;
         this.strNomeCurso = strNomeCurso;
         this.strNomeDisciplina = strNomeDisciplina;
-        this.strNomePeriodo = strNomePeriodo;
         this.mediaNotaCurso = mediaNotaCurso;
         
         MpImageButton btnFechar = new MpImageButton(txtConstants.geralFecharJanela(), "");
@@ -132,28 +119,28 @@ public class DialogBoxNota extends DecoratedPopupPanel {
         
         MpLabelLeft lblCurso = new MpLabelLeft(txtConstants.curso());
         MpLabelLeft lblDisciplina = new MpLabelLeft(txtConstants.disciplina());
-        MpLabelLeft lblPeriodo = new MpLabelLeft(txtConstants.periodo());
+//        MpLabelLeft lblPeriodo = new MpLabelLeft(txtConstants.periodo());
         
         lblCurso.setStyleName("label_comum_bold_12px");
         lblDisciplina.setStyleName("label_comum_bold_12px");
-        lblPeriodo.setStyleName("label_comum_bold_12px");
+//        lblPeriodo.setStyleName("label_comum_bold_12px");
         
         MpLabelLeft lblNomeCurso = new MpLabelLeft(this.strNomeCurso);
         MpLabelLeft lblNomeDisciplina = new MpLabelLeft(this.strNomeDisciplina);
-        MpLabelLeft lblNomePeriodo = new MpLabelLeft(this.strNomePeriodo);
+//        MpLabelLeft lblNomePeriodo = new MpLabelLeft(this.strNomePeriodo);
         
-        Grid gridListBox = new Grid(3,3);
+        Grid gridListBox = new Grid(2,3);
         gridListBox.setCellPadding(2);
         gridListBox.setCellSpacing(2);
 
         int row=0;
         gridListBox.setWidget(row, 0, lblCurso);
         gridListBox.setWidget(row++, 1, lblNomeCurso);
-        gridListBox.setWidget(row, 0, lblPeriodo);
-        gridListBox.setWidget(row++, 1, lblNomePeriodo);
+//        gridListBox.setWidget(row, 0, lblPeriodo);
+//        gridListBox.setWidget(row++, 1, lblNomePeriodo);
         gridListBox.setWidget(row, 0, lblDisciplina);
         gridListBox.setWidget(row, 1, lblNomeDisciplina);
-//        gridListBox.setWidget(row++, 2, mpLoading);
+        gridListBox.setWidget(row++, 2, mpLoading);
         
         Grid gridBotoes = new Grid(1,1);
         row=0;
@@ -232,19 +219,13 @@ public class DialogBoxNota extends DecoratedPopupPanel {
     protected void populateGridAvaliacoes() {
 
         mpLoading.setVisible(true);
-
-        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNotaPeriodoDisciplina(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina, new CallbackAvaliacaoNota());
+        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNota(idUsuario, idCurso, strNomeDisciplina, new CallbackAvaliacaoNota());
+//        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNota(idUsuario, idCurso new CallbackAvaliacaoNota());
 
     }        
     
     
-    protected void populateGridAvaliacao(int idPeriodo) {
 
-        mpLoading.setVisible(true);
-
-        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNotaPeriodoDisciplina(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina, idPeriodo, new CallbackAvaliacaoNota());
-
-    }  
 
 
     private void addCellTableData(ListDataProvider<AvaliacaoNota> dataProvider) {
@@ -259,6 +240,16 @@ public class DialogBoxNota extends DecoratedPopupPanel {
     
     
     private void initTableColumns(final SelectionModel<AvaliacaoNota> selectionModel) {
+        
+        
+        periodoColumn = new Column<AvaliacaoNota, String>(new TextCell()) {
+            @Override
+            public String getValue(AvaliacaoNota object) {
+                return object.getNomePeriodo();
+            }
+
+        };
+        
         
         assuntoColumn = new Column<AvaliacaoNota, String>(new TextCell()) {
             @Override
@@ -313,6 +304,8 @@ public class DialogBoxNota extends DecoratedPopupPanel {
               }  
           };        
 
+        cellTable.addColumn(periodoColumn, txtConstants.periodo());
+//        cellTable.addColumn(disciplinaColumn, txtConstants.disciplina());
         cellTable.addColumn(assuntoColumn, txtConstants.avaliacaoAssunto());
         cellTable.addColumn(descricaoColumn, txtConstants.avaliacaoDescricao());
         cellTable.addColumn(columnTipoAvaliacao, txtConstants.avaliacaoTipo());
@@ -325,6 +318,23 @@ public class DialogBoxNota extends DecoratedPopupPanel {
     
     public void initSortHandler(ListHandler<AvaliacaoNota> sortHandler) {
 
+        
+        periodoColumn.setSortable(true);
+        sortHandler.setComparator(periodoColumn, new Comparator<AvaliacaoNota>() {
+            @Override
+            public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
+                return o1.getNomePeriodo().compareTo(o2.getNomePeriodo());
+            }
+        });
+        
+//        disciplinaColumn.setSortable(true);
+//        sortHandler.setComparator(disciplinaColumn, new Comparator<AvaliacaoNota>() {
+//            @Override
+//            public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
+//                return o1.getNomeDisciplina().compareTo(o2.getNomeDisciplina());
+//            }
+//        });
+        
         assuntoColumn.setSortable(true);
         sortHandler.setComparator(assuntoColumn, new Comparator<AvaliacaoNota>() {
             @Override
@@ -377,7 +387,7 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 
     private class ClickHandlerFechar implements ClickHandler {
         public void onClick(ClickEvent event) {
-            DialogBoxNota.this.hide();
+            DialogBoxNotasAno.this.hide();
         }
     }
 

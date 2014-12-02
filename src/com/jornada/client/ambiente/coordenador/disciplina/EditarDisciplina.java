@@ -42,6 +42,7 @@ import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -58,7 +59,7 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class EditarDisciplina extends VerticalPanel {
 
-	private AsyncCallback<Boolean> callbackUpdateRow;
+	private AsyncCallback<String> callbackUpdateRow;
 	private AsyncCallback<Boolean> callbackDelete;
 
 	private CellTable<Disciplina> cellTable;
@@ -70,9 +71,11 @@ public class EditarDisciplina extends VerticalPanel {
 	
 	private TextBox txtSearch;
 	ArrayList<Disciplina> arrayListBackup = new ArrayList<Disciplina>();
-
+	
 	private MpSelectionCurso listBoxCurso;
 	private MpSelectionPeriodo listBoxPeriodo;
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -107,12 +110,11 @@ public class EditarDisciplina extends VerticalPanel {
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());
 
 
-		Grid gridComboBox = new Grid(2, 4);
+		Grid gridComboBox = new Grid(3, 4);
 		gridComboBox.setCellSpacing(2);
 		gridComboBox.setCellPadding(2);
-		gridComboBox.setWidget(0, 0, lblCursoEdit);
-		gridComboBox.setWidget(0, 1, listBoxCurso);
-		gridComboBox.setWidget(0, 2, new InlineHTML("&nbsp;"));
+		gridComboBox.setWidget(0, 0, lblCursoEdit);gridComboBox.setWidget(0, 1, listBoxCurso);gridComboBox.setWidget(0, 2, mpHelperCurso);
+//		gridComboBox.setWidget(0, 2, new InlineHTML("&nbsp;"));
 		gridComboBox.setWidget(1, 0, lblPeriodoEdit);
 		gridComboBox.setWidget(1, 1, listBoxPeriodo);
 		gridComboBox.setWidget(1, 2, new InlineHTML("&nbsp;"));
@@ -182,15 +184,23 @@ public class EditarDisciplina extends VerticalPanel {
 		/************************* Begin Callback's *************************/
 
 
-		callbackUpdateRow = new AsyncCallback<Boolean>() {
+		callbackUpdateRow = new AsyncCallback<String>() {
 
-			public void onSuccess(Boolean success) {
+			public void onSuccess(String success) {
 
 				mpPanelLoading.setVisible(false);
 				
-				if(success){
+				if(success.equals("true")){
 					getTelaInicialDisciplina().getAdicionarProfessorDisciplina().updateClientData();
-				}else{
+				}else if(success.contains(Disciplina.DB_UNIQUE_KEY)){
+				    String strDisciplina = success.substring(success.indexOf("=(")+2);
+                    strDisciplina = strDisciplina.substring(strDisciplina.indexOf(",")+1);
+                    strDisciplina = strDisciplina.substring(0,strDisciplina.indexOf(")"));
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroSalvar() + " "+txtConstants.disciplinaDuplicada((strDisciplina)));  
+                    mpDialogBoxWarning.showDialog();
+				}
+				else{
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
 					mpDialogBoxWarning.showDialog();
@@ -294,6 +304,7 @@ public class EditarDisciplina extends VerticalPanel {
 	
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			listBoxPeriodo.populateComboBox(idCurso);
 		}  

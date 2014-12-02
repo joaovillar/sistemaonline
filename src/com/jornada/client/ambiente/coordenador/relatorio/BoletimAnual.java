@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
+import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
@@ -45,7 +46,7 @@ public class BoletimAnual extends VerticalPanel {
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
 	
-	MpListBoxPanelHelper mpHelperCurso;
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
 	VerticalPanel panel = new VerticalPanel();
 	
@@ -97,12 +98,8 @@ public class BoletimAnual extends VerticalPanel {
 		MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
 //		MpLabelRight lblPeriodo = new MpLabelRight(txtConstants.periodo());
 		
-		mpHelperCurso = new  MpListBoxPanelHelper();
-		
 		listBoxCurso = new MpSelectionCurso(true);
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
-		
-
 		
 		// Add some standard form options
 		int row = 1;
@@ -210,7 +207,10 @@ public class BoletimAnual extends VerticalPanel {
         cellTable.addColumn(indexColumnName, safeHtml);
         
         for (int column = 0; column < arrayDisciplinaColumns.size(); column++) { 
-            final String strDisciplina = Curso.getAbreviarNomeCurso(arrayDisciplinaColumns.get(column)); 
+
+            final String strDisciplina = (column==arrayDisciplinaColumns.size()-1)?arrayDisciplinaColumns.get(column):Curso.getAbreviarNomeCurso(arrayDisciplinaColumns.get(column)); 
+
+            
             final IndexedColumn indexedColumn = new IndexedColumn(column+INT_POSITION_NAME+1);
             
             final Header<String> header = new Header<String>(new ClickableTextCell()) {
@@ -232,15 +232,16 @@ public class BoletimAnual extends VerticalPanel {
                 public void update(int index, ArrayList<String> object, final String value) {
                     
 
-//                    String strIdUsuario = dataProvider.getList().get(index).get(0);
-//                    int idUsuario = Integer.parseInt(strIdUsuario);
-//                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-//                    String strNomeCurso = listBoxCurso.getSelectedItemText();
-//                    String strNomeDisciplina = arrayDisciplinaColumns.get(indexedColumn.getIndex()-INT_POSITION_NAME-1);
-//                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
-//                    
-//                    Window.alert(Integer.toString(column)+":"+value+":"+nomeUsuario+":"+idUsuario+":"+header.getValue());
-//                    DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+                    String strIdUsuario = dataProvider.getList().get(index).get(0);
+                    int idUsuario = Integer.parseInt(strIdUsuario);
+                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+                    String strNomeCurso = listBoxCurso.getSelectedItemText();
+                    String strNomeDisciplina = arrayDisciplinaColumns.get(indexedColumn.getIndex()-INT_POSITION_NAME-1);
+                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+
+                    if (indexedColumn.getIndex() != arrayDisciplinaColumns.size() + INT_POSITION_NAME) {
+                        DialogBoxNotasAno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
+                    }
                 }
             });
             
@@ -304,7 +305,6 @@ public class BoletimAnual extends VerticalPanel {
             String strTest="";
             try{
                 strTest = object.get(this.index);
-                System.out.println("Teste:"+strTest);
             }catch(Exception ex){
                 System.out.println(ex.getMessage());
             }
@@ -344,27 +344,6 @@ public class BoletimAnual extends VerticalPanel {
     }
     
     
-//    private class CallBackCarregarDisciplina implements AsyncCallback<ArrayList<Disciplina>>{
-//        
-//        @Override
-//        public void onFailure(Throwable caught) {
-//            mpLoading.setVisible(false);
-//            MpUtilClient.isRefreshRequired();
-//        }
-//
-//        @Override
-//        public void onSuccess(ArrayList<Disciplina> list) {
-//            mpLoading.setVisible(false);
-//            MpUtilClient.isRefreshRequired(list);
-//            arrayDisciplinaColumns.clear();
-//            for (int i = 0; i < list.size(); i++) {
-//                arrayDisciplinaColumns.add(list.get(i).getNome());
-//            }        
-//
-//            populateNotas();
-////            initializeCellTable();        
-//        }
-//    }
 	
     private class ClickHandlerExcel implements ClickHandler{
         @Override

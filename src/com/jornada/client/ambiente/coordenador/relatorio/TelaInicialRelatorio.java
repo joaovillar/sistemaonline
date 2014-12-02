@@ -58,8 +58,9 @@ public class TelaInicialRelatorio extends Composite {
 
 		
 	
+		
+		tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget("Boletim Disciplina", ""));
 		tabLayoutPanel.add(boletimPeriodo, new MpHeaderWidget(txtConstants.relatorioBoletimPorPeriodo(), ""));
-		tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget("Boletim Por Disciplina", ""));
 		tabLayoutPanel.add(boletimAnual, new MpHeaderWidget("Boletim Anual", ""));
 
 		initWidget(tabLayoutPanel);	

@@ -36,6 +36,53 @@ public class PeriodoServer {
 		
 	}
 
+    public static String AdicionarPeriodoString(Periodo periodo) {
+
+        String success = "false";
+
+        // JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+
+        try {
+            // dataBase.createConnection();
+            // Connection conn = dataBase.getConnection();
+
+            Date date = new Date();
+
+            if (periodo.getDataInicial() == null) {
+                periodo.setDataInicial(date);
+            }
+            if (periodo.getDataFinal() == null) {
+                periodo.setDataFinal(date);
+            }
+
+            int param = 0;
+            PreparedStatement pstmtInsertPeriodo = connection.prepareStatement(DB_INSERT_PERIODO);
+            pstmtInsertPeriodo.setString(++param, periodo.getNomePeriodo());
+            pstmtInsertPeriodo.setString(++param, periodo.getDescricao());
+            pstmtInsertPeriodo.setString(++param, periodo.getNumeracao());
+            pstmtInsertPeriodo.setString(++param, periodo.getObjetivo());
+            pstmtInsertPeriodo.setInt(++param, periodo.getIdCurso());
+            pstmtInsertPeriodo.setDate(++param, new java.sql.Date(periodo.getDataInicial().getTime()));
+            pstmtInsertPeriodo.setDate(++param, new java.sql.Date(periodo.getDataFinal().getTime()));
+            pstmtInsertPeriodo.setString(++param, periodo.getPeso());
+
+            ResultSet rs = pstmtInsertPeriodo.executeQuery();
+            rs.next();
+
+            success = "true";
+
+        } catch (Exception ex) {
+            success = ex.getMessage();
+            System.err.println(ex.getMessage());
+        } finally {
+            // dataBase.close();
+            ConnectionManager.closeConnection(connection);
+
+        }
+
+        return success;
+    }
 	
 	public static int AdicionarPeriodo(Periodo periodo) {
 		

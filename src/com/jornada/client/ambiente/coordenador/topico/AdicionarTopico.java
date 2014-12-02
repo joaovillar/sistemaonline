@@ -21,6 +21,7 @@ import com.jornada.client.classes.listBoxes.MpSelectionConteudoProgramatico;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionDisciplina;
 import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
@@ -43,6 +44,8 @@ public class AdicionarTopico extends VerticalPanel {
 	private MpSelectionPeriodo listBoxPeriodo;
 	private MpSelectionDisciplina listBoxDisciplina;	
 	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
 	private TextBox txtNome;
 	private TextBox txtNumeracao;	
@@ -70,8 +73,8 @@ public class AdicionarTopico extends VerticalPanel {
 		hPanelLoading.setVisible(false);
 
 		FlexTable layout = new FlexTable();
-		layout.setCellSpacing(3);
-		layout.setCellPadding(3);
+		layout.setCellSpacing(2);
+		layout.setCellPadding(2);
 		layout.setBorderWidth(0);
 		layout.setSize(Integer.toString(TelaInicialTopico.intWidthTable),Integer.toString(TelaInicialTopico.intHeightTable));
 		FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
@@ -141,7 +144,7 @@ public class AdicionarTopico extends VerticalPanel {
 		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
 
 		
-		layout.setWidget(row, 0, lblCurso);	layout.setWidget(row++, 1, listBoxCurso);
+		layout.setWidget(row, 0, lblCurso);	layout.setWidget(row, 1, listBoxCurso);layout.setWidget(row++, 2, mpHelperCurso);
 		layout.setWidget(row, 0, lblPeriodo);layout.setWidget(row++, 1, listBoxPeriodo);
 		layout.setWidget(row, 0, lblDisciplina);layout.setWidget(row++, 1, listBoxDisciplina);
 		layout.setWidget(row, 0, lblConteudoProgramatico);layout.setWidget(row, 1, listBoxConteudoProgramatico);layout.setWidget(row++, 2, lblErrorConteudo);
@@ -259,7 +262,8 @@ public class AdicionarTopico extends VerticalPanel {
 	
 	
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
-		public void onChange(ChangeEvent event) {			
+		public void onChange(ChangeEvent event) {		
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			listBoxPeriodo.populateComboBox(idCurso);
 		}  

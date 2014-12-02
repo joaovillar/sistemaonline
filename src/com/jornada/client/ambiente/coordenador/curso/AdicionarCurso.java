@@ -130,8 +130,8 @@ public class AdicionarCurso extends VerticalPanel {
 
 
 		FlexTable flexTableAddNewCourse = new FlexTable();
-		flexTableAddNewCourse.setCellSpacing(3);
-		flexTableAddNewCourse.setCellPadding(3);
+		flexTableAddNewCourse.setCellSpacing(2);
+		flexTableAddNewCourse.setCellPadding(2);
 		flexTableAddNewCourse.setBorderWidth(0);
 		FlexCellFormatter cellFormatter = flexTableAddNewCourse.getFlexCellFormatter();
 

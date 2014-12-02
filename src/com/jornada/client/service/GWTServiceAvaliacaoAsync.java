@@ -9,8 +9,7 @@ import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.boletim.AvaliacaoNota;
 
 public interface GWTServiceAvaliacaoAsync {
-
-	
+    
 	public void AdicionarAvaliacao(Avaliacao object, AsyncCallback<Boolean> callback);
 	public void updateRow(Avaliacao object, AsyncCallback<Boolean> callback);	
 	public void deleteRow(int id_avaliacao, AsyncCallback<Boolean> callback);	
@@ -19,7 +18,7 @@ public interface GWTServiceAvaliacaoAsync {
 	public void getTipoAvaliacao(AsyncCallback<ArrayList<TipoAvaliacao>> callback);
 	public void getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, AsyncCallback<ArrayList<AvaliacaoNota>> callback);
 	public void getHeaderRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina, AsyncCallback<ArrayList<String>> callback);
-	public void getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao, AsyncCallback<ArrayList<AvaliacaoNota>> callback);	
+	public void getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao, AsyncCallback<ArrayList<AvaliacaoNota>> callback);
+	public void getAvaliacaoNota(int idUsuario, int idCurso, String strDisciplina, AsyncCallback<ArrayList<AvaliacaoNota>> callback);	
 
-	
 }

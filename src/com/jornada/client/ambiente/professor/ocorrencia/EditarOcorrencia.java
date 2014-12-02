@@ -46,6 +46,7 @@ import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -83,6 +84,8 @@ public class EditarOcorrencia extends VerticalPanel {
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;	
 	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
 //	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
 	private int intSelectedIndexToDelete;
 	
@@ -158,7 +161,7 @@ public class EditarOcorrencia extends VerticalPanel {
 			int row=0;
 			gridComboBox.setWidget(row, 0, lblCurso);
 			gridComboBox.setWidget(row, 1, listBoxCurso);
-			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
+			gridComboBox.setWidget(row++, 2, mpHelperCurso);
 			gridComboBox.setWidget(row, 0, lblPeriodo);
 			gridComboBox.setWidget(row, 1, listBoxPeriodo);
 			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
@@ -278,7 +281,8 @@ public class EditarOcorrencia extends VerticalPanel {
 	/**************** Begin Event Handlers *****************/
 
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
-		public void onChange(ChangeEvent event) {			
+		public void onChange(ChangeEvent event) {	
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			listBoxPeriodo.populateComboBox(idCurso);
 		}  

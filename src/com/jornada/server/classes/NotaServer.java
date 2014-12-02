@@ -234,6 +234,7 @@ public class NotaServer {
     
     
     public static ArrayList<ArrayList<String>> getBoletimAnual(int idCurso) {
+        Curso curso = CursoServer.getCurso(idCurso);
         ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();
         ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
@@ -257,6 +258,7 @@ public class NotaServer {
         for (String string : listDisciplinasAno) {
             listDisciplinasAnoAluno.add(string);
         }
+        listDisciplinasAnoAluno.add("RESULTADO FINAL");
         
         listNotas.add(listDisciplinasAnoAluno);
         for(Usuario usuario : listUsuario){
@@ -264,18 +266,46 @@ public class NotaServer {
             array.add(Integer.toString(usuario.getIdUsuario()));
             array.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
             
-            for(int i=2;i<listDisciplinasAnoAluno.size();i++){
+            for(int i=2;i<listDisciplinasAnoAluno.size()-1;i++){
                 String nomeDisciplina = listDisciplinasAnoAluno.get(i);
-//                String text = getMediaAnoAlunoDisciplina(usuario.getIdUsuario(), idCurso,listPeriodo,nomeDisciplina) + "||"+nomeDisciplina;\
                 String text = getMediaAnoAlunoDisciplina(usuario.getIdUsuario(), idCurso,listPeriodo,nomeDisciplina);
                 array.add(text);
             }
             
             listNotas.add(array);      
         }
-        System.out.println(listNotas.toString());
+        
         
 
+        
+        for(int line=0; line< listNotas.size();line++){            
+            if (line > 0) {         
+                boolean aprovado=true;
+                ArrayList<String> row = listNotas.get(line);
+
+                for (int column = 0; column < row.size(); column++) {
+                    if(column>1){
+                        try {
+                            double nota = Double.parseDouble(row.get(column));
+                            double mediaCurso = Double.parseDouble(curso.getMediaNota());
+                            if (nota < mediaCurso) {
+                                aprovado = false;                                
+                                break;
+                            }
+                        } catch (Exception ex) {
+                        }
+                    }
+                }
+                if(aprovado==true){
+                    row.add("Aprovado");
+                }else{
+                    row.add("Reprovado");
+                }
+            }
+        }
+        
+        
+        System.out.println(listNotas.toString());
         return listNotas;
     }
     
@@ -285,7 +315,7 @@ public class NotaServer {
         String strMedia="";
         double doubleMediaAluno=0;
         int countMedia=0;
-       
+
         for (Periodo periodo : listPeriodo) {
             
             ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
@@ -415,10 +445,10 @@ public class NotaServer {
         row = sheet.createRow((short) intLine++);  
         
         ArrayList<String> listHeader = listNotas.get(0);
-        
+
         for(int i=1;i<listHeader.size();i++){
             String header = "";
-            if(i==1){
+            if(i==1 || i==listHeader.size()-1){
                 header = listHeader.get(i);
             }else{
                 header = Curso.getAbreviarNomeCurso(listHeader.get(i));
@@ -455,7 +485,7 @@ public class NotaServer {
         }
         
         for (int i = 0; i < intColumn; i++) {   
-            if(i==0){
+            if(i==0 || i==intColumn-1){
                 sheet.autoSizeColumn(i,true);
             }else{
                 sheet.setColumnWidth(i, 2000);

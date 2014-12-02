@@ -11,6 +11,8 @@ import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
+import com.jornada.shared.classes.Disciplina;
+import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.boletim.AvaliacaoNota;
 
@@ -350,7 +352,7 @@ public class AvaliacaoServer {
 	
 	
 		
-    public static ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int idCurso) {
+ public static ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int idCurso) {
 
         ArrayList<CursoAvaliacao> data = new ArrayList<CursoAvaliacao>();
 //      JornadaDataBase dataBase = new JornadaDataBase();
@@ -398,112 +400,129 @@ public class AvaliacaoServer {
     }           
 
     
-public static ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
 
-    ArrayList<AvaliacaoNota> data = new ArrayList<AvaliacaoNota>();
-//  JornadaDataBase dataBase = new JornadaDataBase();
-    Connection conn = ConnectionManager.getConnection();
-    try 
-    {
-//      dataBase.createConnection();
+ public static ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomeDisciplina) {
+     ArrayList<AvaliacaoNota> listAvaliacaoNota = new ArrayList<AvaliacaoNota>();
+     
+     ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
+     
+     for (Periodo periodo : listPeriodo) {
+         
+         ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+         
+         for (Disciplina disciplina : listDisciplina) {
+             if(strNomeDisciplina.equals(disciplina.getNome())){
+                 listAvaliacaoNota.addAll(getAvaliacaoNota(idUsuario, idCurso, periodo.getNomePeriodo(), disciplina.getNome()));
+             }             
+        }
+         
+    }
+     
+     return listAvaliacaoNota;
+     
+ }
 
-        PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_NOTA);
-        
-        int count=0;
-        ps.setInt(++count, idCurso);           
-        ps.setString(++count, strNomePeriodo);
-        ps.setString(++count, strNomeDisciplina);
-        ps.setInt(++count, idUsuario);
+    public static ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) 
-        {
+        ArrayList<AvaliacaoNota> data = new ArrayList<AvaliacaoNota>();
+        // JornadaDataBase dataBase = new JornadaDataBase();
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            // dataBase.createConnection();
 
-            AvaliacaoNota current = new AvaliacaoNota();
-            
-            current.setNomeCurso(rs.getString("nome_curso"));
-            current.setNomePeriodo(rs.getString("nome_periodo"));
-            current.setNomeDisciplina(rs.getString("nome_disciplina"));
-            current.setIdAvaliacao(rs.getInt("id_avaliacao"));
-            current.setAssunto(rs.getString("assunto"));
-            current.setDescricao(rs.getString("descricao"));
-            current.setData(rs.getDate("data"));
-            current.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
-            current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
-            current.setNota(rs.getDouble("nota"));
-            
-            TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao()); 
-            current.setTipoAvaliacao(tipoAvaliacao);
+            PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_NOTA);
 
-            data.add(current);
+            int count = 0;
+            ps.setInt(++count, idCurso);
+            ps.setString(++count, strNomePeriodo);
+            ps.setString(++count, strNomeDisciplina);
+            ps.setInt(++count, idUsuario);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                AvaliacaoNota current = new AvaliacaoNota();
+
+                current.setNomeCurso(rs.getString("nome_curso"));
+                current.setNomePeriodo(rs.getString("nome_periodo"));
+                current.setNomeDisciplina(rs.getString("nome_disciplina"));
+                current.setIdAvaliacao(rs.getInt("id_avaliacao"));
+                current.setAssunto(rs.getString("assunto"));
+                current.setDescricao(rs.getString("descricao"));
+                current.setData(rs.getDate("data"));
+                current.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
+                current.setNota(rs.getDouble("nota"));
+
+                TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao());
+                current.setTipoAvaliacao(tipoAvaliacao);
+
+                data.add(current);
+            }
+
+        } catch (SQLException sqlex) {
+            data = null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+            // dataBase.close();
+            ConnectionManager.closeConnection(conn);
         }
 
-    } catch (SQLException sqlex) {
-        data=null;
-        System.err.println(sqlex.getMessage());
-    } finally {
-//      dataBase.close();
-        ConnectionManager.closeConnection(conn);
+        return data;
+
     }
 
-    return data;
+    public static ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao) {
 
-}      
+        ArrayList<AvaliacaoNota> data = new ArrayList<AvaliacaoNota>();
+        // JornadaDataBase dataBase = new JornadaDataBase();
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            // dataBase.createConnection();
 
-public static ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao) {
+            PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_NOTA_ID);
 
-    ArrayList<AvaliacaoNota> data = new ArrayList<AvaliacaoNota>();
-//  JornadaDataBase dataBase = new JornadaDataBase();
-    Connection conn = ConnectionManager.getConnection();
-    try 
-    {
-//      dataBase.createConnection();
+            int count = 0;
+            ps.setInt(++count, idCurso);
+            ps.setString(++count, strNomePeriodo);
+            ps.setString(++count, strNomeDisciplina);
+            ps.setInt(++count, idUsuario);
+            ps.setInt(++count, idAvaliacao);
 
-        PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_NOTA_ID);
-        
-        int count=0;
-        ps.setInt(++count, idCurso);           
-        ps.setString(++count, strNomePeriodo);
-        ps.setString(++count, strNomeDisciplina);
-        ps.setInt(++count, idUsuario);
-        ps.setInt(++count, idAvaliacao);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) 
-        {
+                AvaliacaoNota current = new AvaliacaoNota();
 
-            AvaliacaoNota current = new AvaliacaoNota();
-            
-            current.setNomeCurso(rs.getString("nome_curso"));
-            current.setNomePeriodo(rs.getString("nome_periodo"));
-            current.setNomeDisciplina(rs.getString("nome_disciplina"));
-            current.setIdAvaliacao(rs.getInt("id_avaliacao"));
-            current.setAssunto(rs.getString("assunto"));
-            current.setDescricao(rs.getString("descricao"));
-            current.setData(rs.getDate("data"));
-            current.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
-            current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
-            current.setNota(rs.getDouble("nota"));
-            
-            TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao()); 
-            current.setTipoAvaliacao(tipoAvaliacao);
+                current.setNomeCurso(rs.getString("nome_curso"));
+                current.setNomePeriodo(rs.getString("nome_periodo"));
+                current.setNomeDisciplina(rs.getString("nome_disciplina"));
+                current.setIdAvaliacao(rs.getInt("id_avaliacao"));
+                current.setAssunto(rs.getString("assunto"));
+                current.setDescricao(rs.getString("descricao"));
+                current.setData(rs.getDate("data"));
+                current.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
+                current.setNota(rs.getDouble("nota"));
 
-            data.add(current);
+                TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao());
+                current.setTipoAvaliacao(tipoAvaliacao);
+
+                data.add(current);
+            }
+
+        } catch (SQLException sqlex) {
+            data = null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+            // dataBase.close();
+            ConnectionManager.closeConnection(conn);
         }
 
-    } catch (SQLException sqlex) {
-        data=null;
-        System.err.println(sqlex.getMessage());
-    } finally {
-//      dataBase.close();
-        ConnectionManager.closeConnection(conn);
+        return data;
+
     }
 
-    return data;
-
-}  
-    
-	
 	public static ArrayList<TipoAvaliacao> getTipoAvaliacao() {
 
 		ArrayList<TipoAvaliacao> data = new ArrayList<TipoAvaliacao>();

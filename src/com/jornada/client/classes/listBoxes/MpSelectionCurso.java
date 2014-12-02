@@ -30,13 +30,14 @@ public class MpSelectionCurso extends MpSelection {
 				try {
 					finishLoadingListBox();
 
+
 					for (Curso object : lista) {
 						addItem(object.getNome(),Integer.toString(object.getIdCurso()));
 						listBoxAux.addItem(object.getNome(),Integer.toString(object.getIdCurso()));
 						listCurso.add(object);
 					}
+
 					
-					//update();
 
 					setVisibleItemCount(1);
 					
@@ -74,6 +75,7 @@ public class MpSelectionCurso extends MpSelection {
 
 		
 	}	
+
 	
 	public void populateComboBox() {
 		startLoadingListBox();

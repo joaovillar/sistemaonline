@@ -44,6 +44,7 @@ import com.jornada.client.classes.listBoxes.MpSelectionConteudoProgramatico;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionDisciplina;
 import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -74,6 +75,8 @@ public class EditarTopico extends VerticalPanel {
 	private MpSelectionPeriodo listBoxPeriodo;	
 	private MpSelectionDisciplina listBoxDisciplina;
 	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
 	private TextBox txtSearch;
 	ArrayList<Topico> arrayListBackup = new ArrayList<Topico>();	
@@ -122,7 +125,7 @@ public class EditarTopico extends VerticalPanel {
 			int row=0;
 			gridComboBox.setWidget(row, 0, lblCurso);
 			gridComboBox.setWidget(row, 1, listBoxCurso);
-			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
+			gridComboBox.setWidget(row++, 2, mpHelperCurso);
 			gridComboBox.setWidget(row, 0, lblPeriodo);
 			gridComboBox.setWidget(row, 1, listBoxPeriodo);
 			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
@@ -290,7 +293,8 @@ public class EditarTopico extends VerticalPanel {
 	/**************** Begin Event Handlers *****************/
 
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
-		public void onChange(ChangeEvent event) {			
+		public void onChange(ChangeEvent event) {		
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			listBoxPeriodo.populateComboBox(idCurso);
 		}  

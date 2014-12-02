@@ -21,7 +21,7 @@ public class GWTServiceDisciplinaImpl extends RemoteServiceServlet implements GW
 	}
 	
 	@Override
-	public int AdicionarDisciplina(Integer[] intPeriodos, Disciplina disciplina) {		
+	public String AdicionarDisciplina(Integer[] intPeriodos, Disciplina disciplina) {		
 		return DisciplinaServer.AdicionarDisciplina(intPeriodos, disciplina);			
 	}	
 	
@@ -64,7 +64,7 @@ public class GWTServiceDisciplinaImpl extends RemoteServiceServlet implements GW
 		return DisciplinaServer.deleteDisciplinaRow(id_disciplina);
 	}
 	
-	public boolean updateDisciplinaRow(Disciplina disciplina) {
+	public String updateDisciplinaRow(Disciplina disciplina) {
 		return DisciplinaServer.updateDisciplinaRow(disciplina);
 	}
 	

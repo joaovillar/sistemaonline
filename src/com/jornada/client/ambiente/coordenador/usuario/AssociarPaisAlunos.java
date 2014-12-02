@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.listBoxes.MpSelectionAluno;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
@@ -49,6 +50,8 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	
 	private TextBox txtFiltroAlunos;	
 	private TextBox txtFiltroPais;
+	
+	MpListBoxPanelHelper mpHelperAluno = new  MpListBoxPanelHelper();
 	
 	private MpSelectionAluno listBoxAlunos;
 	private ListBox multiBoxPaisFiltrado;
@@ -120,9 +123,10 @@ public class AssociarPaisAlunos extends VerticalPanel{
 		
 		gridFiltrar.setWidget(0, 0, lblFiltrarAluno);
 		gridFiltrar.setWidget(0, 1, listBoxAlunos);
-		gridFiltrar.setWidget(0, 2, txtFiltroAlunos);
-		gridFiltrar.setWidget(0, 3, btnFiltrarAluno);
-		gridFiltrar.setWidget(0, 4, mpPanelAlunoLoading);	
+//		gridFiltrar.setWidget(0, 2, txtFiltroAlunos);
+//		gridFiltrar.setWidget(0, 3, btnFiltrarAluno);
+		gridFiltrar.setWidget(0, 2, mpHelperAluno);
+		gridFiltrar.setWidget(0, 3, mpPanelAlunoLoading);	
 		
 		mpPanel.add(gridFiltrar);
 		
@@ -427,6 +431,7 @@ public class AssociarPaisAlunos extends VerticalPanel{
 	
 	private class ChangeHandlerPopularPaisAssociados implements ChangeHandler{
 		public void onChange(ChangeEvent event){
+		    mpHelperAluno.populateSuggestBox(listBoxAlunos);
 			popularPaisAssociados();
 		}	
 	}

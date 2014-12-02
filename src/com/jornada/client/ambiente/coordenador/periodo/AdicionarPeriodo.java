@@ -36,7 +36,7 @@ import com.jornada.shared.classes.Periodo;
 
 public class AdicionarPeriodo extends VerticalPanel {
 
-	private AsyncCallback<Integer> callbackAddPeriodo;
+	private AsyncCallback<String> callbackAddPeriodo;
 
 	private MpTextBox txtFiltroNomeCurso; 
 
@@ -48,7 +48,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 
 //	private ListBox listBoxCurso;
 	private MpSelectionCurso listBoxCurso;
-	MpListBoxPanelHelper mpHelperCurso;
+    MpListBoxPanelHelper mpHelperCurso = new MpListBoxPanelHelper();
 	
 	private MpTextBox txtNomePeriodo;
 	private TextArea txtDescricaoPeriodo;
@@ -92,8 +92,8 @@ public class AdicionarPeriodo extends VerticalPanel {
 		mpHelperCurso = new  MpListBoxPanelHelper();
 
 		FlexTable flexTable = new FlexTable();
-		flexTable.setCellSpacing(3);
-		flexTable.setCellPadding(3);
+		flexTable.setCellSpacing(2);
+		flexTable.setCellPadding(2);
 		flexTable.setBorderWidth(0);
 		flexTable.setSize(Integer.toString(TelaInicialPeriodo.intWidthTable),Integer.toString(TelaInicialPeriodo.intHeightTable));
 		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
@@ -178,7 +178,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 		/***********************Begin Callbacks**********************/
 
 		// Callback para adicionar Periodo.
-		callbackAddPeriodo = new AsyncCallback<Integer>() {
+		callbackAddPeriodo = new AsyncCallback<String>() {
 
 			public void onFailure(Throwable caught) {
 				hPanelLoading.setVisible(false);
@@ -188,16 +188,24 @@ public class AdicionarPeriodo extends VerticalPanel {
 			}
 
 			@Override
-			public void onSuccess(Integer result) {
+			public void onSuccess(String result) {
 				hPanelLoading.setVisible(false);
-				int isSuccess = result;
-				if (isSuccess>0) {
+				
+				if (result.equals("true")) {
 					cleanFields();
 					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
 					mpDialogBoxConfirm.setBodyText(txtConstants.periodoSalvoSucesso());
 					mpDialogBoxConfirm.showDialog();
 					telaInicialPeriodo.populateGrid();
-				} else {
+				}else if(result.contains(Periodo.DB_UNIQUE_KEY)){
+                    String strPeriodo = result.substring(result.indexOf("=(")+2);
+                    strPeriodo = strPeriodo.substring(strPeriodo.indexOf(",")+1);
+                    strPeriodo = strPeriodo.substring(0,strPeriodo.indexOf(")"));
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.periodoErroSalvar() + " "+txtConstants.periodoDuplicado((strPeriodo)));  
+                    mpDialogBoxWarning.showDialog();   
+				}
+				else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.periodoErroSalvar()+" "+txtConstants.geralRecarregarAmbiente());
 					mpDialogBoxWarning.showDialog();
@@ -244,7 +252,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 				periodo.setDataInicial(mpDateBoxInicial.getDate().getValue());
 				periodo.setDataFinal(mpDateBoxFinal.getDate().getValue());
 
-				GWTServicePeriodo.Util.getInstance().AdicionarPeriodo(periodo, callbackAddPeriodo);
+				GWTServicePeriodo.Util.getInstance().adicionarPeriodoString(periodo, callbackAddPeriodo);
 
 			}
 

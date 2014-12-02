@@ -89,10 +89,10 @@ public class DisciplinaServer {
 	
 	
 	
-	public static int AdicionarDisciplina(Integer[] intPeriodos, Disciplina disciplina) {
+	public static String AdicionarDisciplina(Integer[] intPeriodos, Disciplina disciplina) {
 		
 //		Boolean isOperationDone = false; 
-		int idDisciplina=0;
+		String success="false";
 		
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection conn = ConnectionManager.getConnection();
@@ -116,13 +116,13 @@ public class DisciplinaServer {
 				rs.next();
 				
 //				idDisciplina = rs.getInt("id_disciplina");
-				idDisciplina++;
+				success="true";
 			}
 			
 		}
 		catch(Exception ex)
 		{
-			idDisciplina=0;
+		    success=ex.getMessage();
 			System.err.println(ex.getMessage());
 		}
 		finally
@@ -132,7 +132,7 @@ public class DisciplinaServer {
 			
 		}
 		
-		return idDisciplina;
+		return success;
 	}
 	
 	
@@ -435,8 +435,8 @@ public class DisciplinaServer {
 		return success;
 	}		
 	
-	public static boolean updateDisciplinaRow(Disciplina disciplina){
-		boolean success=false;
+	public static String updateDisciplinaRow(Disciplina disciplina){
+		String success="false";
 
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection conn = ConnectionManager.getConnection();
@@ -457,12 +457,12 @@ public class DisciplinaServer {
 
 
 			if (numberUpdate == 1) {
-				success = true;
+				success = "true";
 			}
 
 
 		} catch (SQLException sqlex) {
-			success=false;
+			success=sqlex.getMessage();
 			System.err.println(sqlex.getMessage());			
 		} finally {
 //			dataBase.close();

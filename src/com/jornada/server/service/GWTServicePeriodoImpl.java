@@ -14,6 +14,12 @@ public class GWTServicePeriodoImpl extends RemoteServiceServlet implements	GWTSe
 
 	private static final long serialVersionUID = 3912070639094359182L;
 
+	
+    @Override
+    public String adicionarPeriodoString(Periodo periodo) {
+        return PeriodoServer.AdicionarPeriodoString(periodo);
+    }
+	   
 	@Override
 	public int AdicionarPeriodo(Periodo periodo) {		
 		return PeriodoServer.AdicionarPeriodo(periodo);			

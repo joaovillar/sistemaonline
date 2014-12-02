@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
@@ -32,7 +33,7 @@ import com.jornada.shared.classes.Disciplina;
 
 public class AdicionarDisciplina extends VerticalPanel {
 
-	private AsyncCallback<Integer> callbackAddDisciplina;
+	private AsyncCallback<String> callbackAddDisciplina;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -44,6 +45,8 @@ public class AdicionarDisciplina extends VerticalPanel {
 	
 	private MpSelectionCurso listBoxCurso;
 	private MpSelectionPeriodo listBoxPeriodo;
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
 	private TextBox txtNome;
 	private TextBox txtCargaHoraria;	
@@ -69,8 +72,8 @@ public class AdicionarDisciplina extends VerticalPanel {
 		hPanelLoading.setVisible(false);
 
 		FlexTable flexTable = new FlexTable();
-		flexTable.setCellSpacing(3);
-		flexTable.setCellPadding(3);
+		flexTable.setCellSpacing(2);
+		flexTable.setCellPadding(2);
 		flexTable.setBorderWidth(0);
 		flexTable.setSize(Integer.toString(TelaInicialDisciplina.intWidthTable),Integer.toString(TelaInicialDisciplina.intHeightTable));
 		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
@@ -147,7 +150,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		
 
 		
-		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row++, 1, listBoxCurso);
+		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row, 1, listBoxCurso);flexTable.setWidget(row++, 2, mpHelperCurso);
 		flexTable.setWidget(row, 0, lblPeriodo);flexTable.setWidget(row, 1, listBoxPeriodo);flexTable.setWidget(row++, 2, lblErroPeriodo);
 		flexTable.setWidget(row, 0, lblNome);flexTable.setWidget(row, 1, txtNome);flexTable.setWidget(row++, 2, lblErroNomeDisciplina);
 		flexTable.setWidget(row, 0, lblCargaHoraria);flexTable.setWidget(row, 1, txtCargaHoraria);flexTable.setWidget(row++, 2, lblErroCargaHoraria);		
@@ -186,7 +189,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		/***********************Begin Callbacks**********************/
 
 		// Callback para adicionar Disciplina.
-		callbackAddDisciplina = new AsyncCallback<Integer>() {
+		callbackAddDisciplina = new AsyncCallback<String>() {
 
 			public void onFailure(Throwable caught) {
 				hPanelLoading.setVisible(false);
@@ -196,18 +199,26 @@ public class AdicionarDisciplina extends VerticalPanel {
 			}
 
 			@Override
-			public void onSuccess(Integer result) {
+			public void onSuccess(String result) {
 				// lblLoading.setVisible(false);
 				hPanelLoading.setVisible(false);
-				int idObject = result;
-				if (idObject>0) {
+				
+				if (result.equals("true")) {
 					cleanFields();
 					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
 					mpDialogBoxConfirm.setBodyText(txtConstants.disciplinaSalva());
 					mpDialogBoxConfirm.showDialog();
 					telaInicialDisciplina.getAdicionarProfessorDisciplina().updateClientData();
 					telaInicialDisciplina.getEditarDisciplina().updateClientData();
-				} else {
+				} else if(result.contains(Disciplina.DB_UNIQUE_KEY)){
+                    String strDisciplina = result.substring(result.indexOf("=(")+2);
+                    strDisciplina = strDisciplina.substring(strDisciplina.indexOf(",")+1);
+                    strDisciplina = strDisciplina.substring(0,strDisciplina.indexOf(")"));
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroSalvar() + " "+txtConstants.disciplinaDuplicada((strDisciplina)));  
+                    mpDialogBoxWarning.showDialog();
+				}
+				else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.disciplinaErroSalvar()+" "+txtConstants.geralRegarregarPagina());
 					mpDialogBoxWarning.showDialog();
@@ -270,6 +281,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 	
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			listBoxPeriodo.populateComboBox(idCurso);
 		}  

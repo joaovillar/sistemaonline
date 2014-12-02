@@ -30,6 +30,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -56,6 +57,7 @@ public class AdicionarProfessorDisciplina extends VerticalPanel {
 	
 	private LinkedHashMap<String, String> listaNomeProfessor = new LinkedHashMap<String, String>();    
 
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	private MpSelectionCurso listBoxCurso;
 //	private MpSelectionProfessor listBoxProfessor;
 	
@@ -113,8 +115,9 @@ public class AdicionarProfessorDisciplina extends VerticalPanel {
 		{
 			gridComboBox.setWidget(0, 0, lblCursoEdit);
 			gridComboBox.setWidget(0, 1, listBoxCurso);
-			gridComboBox.setWidget(0, 2, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(0, 3, mpPanelLoading);
+			gridComboBox.setWidget(0, 2, mpHelperCurso);
+			gridComboBox.setWidget(0, 3, new InlineHTML("&nbsp;"));
+			gridComboBox.setWidget(0, 4, mpPanelLoading);
 		}
 
 		Label lblEmpty = new Label(txtConstants.periodoNenhum());
@@ -236,6 +239,7 @@ public class AdicionarProfessorDisciplina extends VerticalPanel {
 	
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 				populateGrid();
 //		    listBoxProfessor.populateComboBox();
 		}	  

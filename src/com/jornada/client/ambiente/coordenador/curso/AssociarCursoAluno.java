@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionCursoItemTodos;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
@@ -50,13 +51,16 @@ public class AssociarCursoAluno extends VerticalPanel{
 //	private CellTable<Curso> cellTable;
 //	private ListDataProvider<Curso> dataProvider = new ListDataProvider<Curso>();	
 //	private NoSelectionModel<Curso> selModel;
-//	
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
+	MpListBoxPanelHelper mpHelperCursoAluno = new  MpListBoxPanelHelper();
+
 	
 	private TextBox txtFiltroNomeCurso;	
-	private TextBox txtFiltroCursoParaAluno;	
+//	private TextBox txtFiltroCursoParaAluno;	
 	private TextBox txtFiltroAluno;
 	
-	private MpSelectionCurso listBoxNomeCurso;
+	private MpSelectionCurso listBoxCurso;
 	private MpSelectionCursoItemTodos listBoxCursoParaAluno;
 	
 	private ListBox multiBoxAlunoFiltrado;
@@ -136,13 +140,14 @@ public class AssociarCursoAluno extends VerticalPanel{
 		lblFiltrarCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
 		txtFiltroNomeCurso.setStyleName("design_text_boxes");		
 		
-		listBoxNomeCurso = new MpSelectionCurso(true);
-		listBoxNomeCurso.addChangeHandler(new ChangeHandlerPopularAlunosAssociados());			
+		listBoxCurso = new MpSelectionCurso(true);
+		listBoxCurso.addChangeHandler(new ChangeHandlerPopularAlunosAssociados());			
 
 		
 		flexTableFiltrar.setWidget(0, 0, lblFiltrarCurso);
-		flexTableFiltrar.setWidget(0, 1, listBoxNomeCurso);
-		flexTableFiltrar.setWidget(0, 2, txtFiltroNomeCurso);
+		flexTableFiltrar.setWidget(0, 1, listBoxCurso);
+//		flexTableFiltrar.setWidget(0, 2, txtFiltroNomeCurso);
+		flexTableFiltrar.setWidget(0, 2, mpHelperCurso);
 		flexTableFiltrar.setWidget(0, 3, mpPanelCursoLoading);
 		
 		mpPanel.add(flexTableFiltrar);
@@ -173,10 +178,10 @@ public class AssociarCursoAluno extends VerticalPanel{
 		Label lblFiltrarCurso = new Label(txtConstants.curso());		
 		Label lblFiltrarAluno = new Label(txtConstants.alunoNome());
 		
-		txtFiltroCursoParaAluno = new TextBox();		
-		txtFiltroCursoParaAluno.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCursoParaAluno());
-		MpImageButton btnFiltrarCursoParaAluno = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
-		btnFiltrarCursoParaAluno.addClickHandler(new ClickHandlerFiltrarCursoParaAluno());		
+//		txtFiltroCursoParaAluno = new TextBox();		
+//		txtFiltroCursoParaAluno.addKeyUpHandler(new EnterKeyUpHandlerFiltrarCursoParaAluno());
+//		MpImageButton btnFiltrarCursoParaAluno = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
+//		btnFiltrarCursoParaAluno.addClickHandler(new ClickHandlerFiltrarCursoParaAluno());		
 		
 		
 		txtFiltroAluno = new TextBox();		
@@ -189,13 +194,15 @@ public class AssociarCursoAluno extends VerticalPanel{
 		lblFiltrarAluno.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		lblFiltrarAluno.setStyleName("design_label");	
-		txtFiltroCursoParaAluno.setStyleName("design_text_boxes");		
+//		txtFiltroCursoParaAluno.setStyleName("design_text_boxes");		
 		txtFiltroAluno.setStyleName("design_text_boxes");		
 		
 		
 		int row=0;
-		flexFiltrar.setWidget(row, 0, lblFiltrarCurso);flexFiltrar.setWidget(row, 1, listBoxCursoParaAluno);flexFiltrar.setWidget(row++, 2, txtFiltroCursoParaAluno);
-		//flexFiltrar.setWidget(row++, 3, new InlineHTML("&nbsp;"));
+		flexFiltrar.setWidget(row, 0, lblFiltrarCurso);
+		flexFiltrar.setWidget(row, 1, listBoxCursoParaAluno);
+//		flexFiltrar.setWidget(row++, 2, txtFiltroCursoParaAluno);
+		flexFiltrar.setWidget(row++, 2, mpHelperCursoAluno);
 		flexFiltrar.setWidget(row, 0, lblFiltrarAluno);flexFiltrar.setWidget(row, 1, txtFiltroAluno);flexFiltrar.setWidget(row++, 2, btnFiltrar);
 		//flexFiltrar.setWidget(row, 3, mpPanelAlunoLoading);
 		
@@ -386,16 +393,16 @@ public class AssociarCursoAluno extends VerticalPanel{
 //		mpPanelCursoLoading.setVisible(true);				
 //		GWTServiceCurso.Util.getInstance().getCursos("%" + txtFiltroCurso.getText() + "%", callbackGetCursosFiltro);
 //		listBoxCursos.populateComboBox();
-		listBoxNomeCurso.populateComboBox();
+		listBoxCurso.populateComboBox();
 	}
 	
 	public void popularAlunosAssociados(){
 		mpPanelCursoLoading.setVisible(true);	
-		int index = listBoxNomeCurso.getSelectedIndex();
+		int index = listBoxCurso.getSelectedIndex();
 		if(index==-1){
 		    mpPanelCursoLoading.setVisible(false);
 		}else{
-	        int id_curso = Integer.parseInt(listBoxNomeCurso.getValue(index));
+	        int id_curso = Integer.parseInt(listBoxCurso.getValue(index));
 	        GWTServiceCurso.Util.getInstance().getTodosOsAlunosDoCurso(id_curso, callbackGetAlunosAssociados);		    
 		}
 	}
@@ -405,7 +412,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 	private void eventoFiltrarCurso(){
         multiBoxAlunoFiltrado.clear();
         txtFiltroAluno.setText("");
-	    listBoxNomeCurso.filterComboBox(txtFiltroNomeCurso.getText());
+	    listBoxCurso.filterComboBox(txtFiltroNomeCurso.getText());
 	    popularAlunosAssociados();
 	}
 	
@@ -426,19 +433,19 @@ public class AssociarCursoAluno extends VerticalPanel{
 		}
 	}	
 	
-	private class ClickHandlerFiltrarCursoParaAluno implements ClickHandler {
-		public void onClick(ClickEvent event) {
-			listBoxCursoParaAluno.filterComboBox(txtFiltroCursoParaAluno.getText());
-		}
-	}
+//	private class ClickHandlerFiltrarCursoParaAluno implements ClickHandler {
+//		public void onClick(ClickEvent event) {
+//			listBoxCursoParaAluno.filterComboBox(txtFiltroCursoParaAluno.getText());
+//		}
+//	}
 	
-	private class EnterKeyUpHandlerFiltrarCursoParaAluno implements KeyUpHandler{
-		public void onKeyUp(KeyUpEvent event){
-			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				listBoxCursoParaAluno.filterComboBox(txtFiltroCursoParaAluno.getText());
-			}
-		}
-	}		
+//	private class EnterKeyUpHandlerFiltrarCursoParaAluno implements KeyUpHandler{
+//		public void onKeyUp(KeyUpEvent event){
+//			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+//				listBoxCursoParaAluno.filterComboBox(txtFiltroCursoParaAluno.getText());
+//			}
+//		}
+//	}		
 	
 	private class ClickHandlerFiltrarAluno implements ClickHandler {
 		public void onClick(ClickEvent event) {
@@ -512,12 +519,14 @@ public class AssociarCursoAluno extends VerticalPanel{
 	
 	private class ChangeHandlerPopularAlunosAssociados implements ChangeHandler{
 		public void onChange(ChangeEvent event){
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			popularAlunosAssociados();	
 		}	
 	}
 	
 	private class ChangeHandlerCleanAlunos implements ChangeHandler{
 		public void onChange(ChangeEvent event){
+		    mpHelperCursoAluno.populateSuggestBox(listBoxCursoParaAluno);
 			//popularAlunosAssociados();
 			multiBoxAlunoFiltrado.clear();
 		}	
@@ -536,7 +545,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 				int idAluno = Integer.parseInt(multiBoxAlunoAssociado.getValue(i));
 				list_id_aluno.add(idAluno);
 			}
-			int id_curso = Integer.parseInt(listBoxNomeCurso.getValue(listBoxNomeCurso.getSelectedIndex()));
+			int id_curso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			GWTServiceCurso.Util.getInstance().associarAlunosAoCurso(id_curso, list_id_aluno, callbackAssociarAlunoAoCurso);
 			
 		}

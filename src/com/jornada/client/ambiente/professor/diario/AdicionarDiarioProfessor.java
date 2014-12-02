@@ -34,6 +34,7 @@ import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -66,6 +67,8 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
 	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;	
 //	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
 	private MpLabelTextBoxError lblErroDisciplina;
 	private MpLabelTextBoxError lblErroDateBox;	
@@ -111,8 +114,8 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		mpPanelLoadingAluno.setVisible(false);
 
 		FlexTable flexTableComboBoxes = new FlexTable();
-		flexTableComboBoxes.setCellSpacing(3);
-		flexTableComboBoxes.setCellPadding(3);
+		flexTableComboBoxes.setCellSpacing(2);
+		flexTableComboBoxes.setCellPadding(2);
 		flexTableComboBoxes.setBorderWidth(0);
 //		flexTable.setSize(Integer.toString(TelaInicialDiarioProfessor.intWidthTable),Integer.toString(TelaInicialDiarioProfessor.intHeightTable));
 //		flexTable.setHeight(Integer.toString(TelaInicialDiarioProfessor.intHeightTable)+"px");
@@ -157,7 +160,7 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
 
 		
-		flexTableComboBoxes.setWidget(row, 0, lblCurso);	flexTableComboBoxes.setWidget(row++, 1, listBoxCurso);
+		flexTableComboBoxes.setWidget(row, 0, lblCurso);	flexTableComboBoxes.setWidget(row, 1, listBoxCurso);flexTableComboBoxes.setWidget(row++, 2, mpHelperCurso);
 		flexTableComboBoxes.setWidget(row, 0, lblPeriodo);flexTableComboBoxes.setWidget(row++, 1, listBoxPeriodo);
 		flexTableComboBoxes.setWidget(row, 0, lblDisciplina);flexTableComboBoxes.setWidget(row, 1, listBoxDisciplina);flexTableComboBoxes.setWidget(row++, 2, lblErroDisciplina);
 		flexTableComboBoxes.setWidget(row, 0, lblDataInicial);flexTableComboBoxes.setWidget(row, 1, mpDateBoxInicial);flexTableComboBoxes.setWidget(row++, 2, lblErroDateBox);
@@ -317,7 +320,8 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	
 	
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
-		public void onChange(ChangeEvent event) {		
+		public void onChange(ChangeEvent event) {	
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			arrayListBackup.clear();
 			pendingChanges.clear();
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));

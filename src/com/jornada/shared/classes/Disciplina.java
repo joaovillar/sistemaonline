@@ -6,10 +6,10 @@ import java.util.ArrayList;
 public class Disciplina implements Serializable {
 
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2606695220488374696L;
+	
+	public static final String DB_UNIQUE_KEY = "unike_idperiodo_nomedisciplina";
+	 
 	private int idPeriodo;
 	private int idDisciplina;
 	private int idUsuario;

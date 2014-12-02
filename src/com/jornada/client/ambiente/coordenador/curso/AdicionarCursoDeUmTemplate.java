@@ -140,8 +140,8 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 		
 		
 		FlexTable flexTable = new FlexTable();
-		flexTable.setCellSpacing(3);
-		flexTable.setCellPadding(3);
+		flexTable.setCellSpacing(2);
+		flexTable.setCellPadding(2);
 		flexTable.setBorderWidth(0);
 		int row=0;
 		

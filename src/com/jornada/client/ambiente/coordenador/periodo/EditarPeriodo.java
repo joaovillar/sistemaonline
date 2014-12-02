@@ -129,10 +129,10 @@ public class EditarPeriodo extends VerticalPanel {
 //			gridComboBox.setWidget(0, 0, new InlineHTML("&nbsp;"));
 			gridComboBox.setWidget(0, 0, lblCursoEdit);
 			gridComboBox.setWidget(0, 1, listBoxCurso);
-			gridComboBox.setWidget(0, 2, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(0, 3, mpHelperCurso);
-			gridComboBox.setWidget(0, 4, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(0, 5, mpPanelLoading);
+//			gridComboBox.setWidget(0, 2, new InlineHTML("&nbsp;"));
+			gridComboBox.setWidget(0, 2, mpHelperCurso);
+			gridComboBox.setWidget(0, 3, new InlineHTML("&nbsp;"));
+			gridComboBox.setWidget(0, 4, mpPanelLoading);
 			
 		}
 

@@ -270,6 +270,7 @@ public interface TextConstants extends Messages {
 	String periodoCompText1();
 	String periodoCompText2();
 	String periodoCompText3();
+	String periodoDuplicado(String nomeDisciplina);
 	/*******Periodo End*******/
 	
 	
@@ -300,6 +301,7 @@ public interface TextConstants extends Messages {
 	String disciplinaCompText1();
 	String disciplinaCompText2();
 	String disciplinaCompText3();
+	String disciplinaDuplicada(String nomeDisciplina);
 	/*******Disciplina End*******/	
 	
 	/*******ConteudoProgramatico Begin*******/

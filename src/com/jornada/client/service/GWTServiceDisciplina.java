@@ -14,7 +14,7 @@ import com.jornada.shared.classes.disciplina.ProfessorDisciplina;
 public interface GWTServiceDisciplina  extends RemoteService {
 
 	public int AdicionarDisciplina(Disciplina disciplina);
-	public int AdicionarDisciplina(Integer[] instPeriodos, Disciplina disciplina);
+	public String AdicionarDisciplina(Integer[] instPeriodos, Disciplina disciplina);
 	public ArrayList<Disciplina> getDisciplinasPeloPeriodo(int idPeriodo);
 	public ArrayList<Disciplina> getDisciplinasPeloPeriodo(int idPeriodo, String strSearch);
 	public ArrayList<Disciplina> getDisciplinas(String strFilter);
@@ -25,7 +25,7 @@ public interface GWTServiceDisciplina  extends RemoteService {
 	public ArrayList<Disciplina> getDisciplinas();
 	public ArrayList<Periodo> getPeriodos();
 	public boolean deleteDisciplinaRow(int id_disciplina); 
-	public boolean updateDisciplinaRow(Disciplina disciplina);
+	public String updateDisciplinaRow(Disciplina disciplina);
 	public boolean updateDisciplinaComIdProfessor(int id_professor, ArrayList<String> list_id_disciplina);
 	public boolean updateDisciplinaComIdProfessor(int idProfessor, int idDisciplina);
 	

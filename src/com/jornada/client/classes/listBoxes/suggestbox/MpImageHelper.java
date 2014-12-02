@@ -3,6 +3,7 @@ package com.jornada.client.classes.listBoxes.suggestbox;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -32,12 +33,9 @@ public class MpImageHelper extends Image {
         MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
         defaults = new ArrayList<String>();
         box = new SuggestBox(oracle);
-        
-
-        box.setWidth(Integer.toString(list.getElement().getOffsetWidth())+"px");      
-        
+ 
         setStyleName("img_style");
-        box.setLimit(5);
+//        box.setLimit(5);
 
         
         this.addDomHandler(new MouseDownHandler() {
@@ -47,7 +45,7 @@ public class MpImageHelper extends Image {
                 myPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
                     public void setPosition(int offsetWidth, int offsetHeight) {
                         int left = listBox.getAbsoluteLeft();
-                        int top = listBox.getAbsoluteTop() + 19;
+                        int top = listBox.getAbsoluteTop();
                         myPopup.setPopupPosition(left, top);
                         
                     }
@@ -55,8 +53,8 @@ public class MpImageHelper extends Image {
                 
                 myPopup.show();                
                 box.showSuggestionList();                
-                box.setFocus(true);
                 box.setText("");
+                requestFocus();
             }
         }, MouseDownEvent.getType());
         
@@ -71,7 +69,6 @@ public class MpImageHelper extends Image {
         oracle.setDefaultSuggestionsFromText(defaults);
         
         
-        box.setWidth("250px");
         box.setStyleName("design_text_boxes");
         
         box.setAutoSelectEnabled(true);
@@ -96,7 +93,15 @@ public class MpImageHelper extends Image {
         myPopup.setWidget(box);
         myPopup.setStyleName("design_text_boxes");
         myPopup.setGlassEnabled(true);
-        box.setFocus(true);
     }
 
+    public void requestFocus() {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                public void execute() {
+                    box.setWidth(Integer.toString(listBox.getElement().getOffsetWidth()-1)+"px");
+                    box.setHeight(Integer.toString(listBox.getElement().getOffsetHeight())+"px");
+                    box.setFocus(true);
+                }
+        });
+}
 }

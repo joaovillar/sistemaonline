@@ -27,6 +27,7 @@ import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -66,6 +67,8 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
 	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;	
 //	private MpSelectionConteudoProgramatico listBoxConteudo;	
+	
+	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
 	private MpSelection listBoxCursoUpdate;
 	private MpSelection listBoxPeriodoUpdate;
@@ -252,7 +255,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 
 		// Add some standard form options
 		int row = 1;
-		layout.setWidget(row, 0, lblCurso);layout.setWidget(row++, 1, listBoxCurso);
+		layout.setWidget(row, 0, lblCurso);layout.setWidget(row, 1, listBoxCurso);layout.setWidget(row++, 2, mpHelperCurso);
 		layout.setWidget(row, 0, lblPeriodo);layout.setWidget(row++, 1, listBoxPeriodo);		
 		layout.setWidget(row, 0, lblDisciplina);layout.setWidget(row, 1, listBoxDisciplina);layout.setWidget(row++, 2, lblErroDisciplina);
 //		layout.setWidget(row, 0, lblConteudo);layout.setWidget(row, 1, listBoxConteudo);layout.setWidget(row++, 2, lblErroConteudo);
@@ -603,6 +606,7 @@ public class AdicionarOcorrencia extends VerticalPanel {
 	
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {	
+		    mpHelperCurso.populateSuggestBox(listBoxCurso);
 			multiBoxAlunosFiltrado.clear();
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
 			listBoxPeriodo.populateComboBox(idCurso);
