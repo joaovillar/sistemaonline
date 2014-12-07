@@ -42,141 +42,145 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class BoletimDisciplina extends VerticalPanel {
 
-    private final static int INT_POSITION_NAME=1;
+    private final static int INT_POSITION_NAME = 1;
 
-	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
-	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
-	MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
-	
-	MpListBoxPanelHelper mpHelperCurso;
-	
-	VerticalPanel panel = new VerticalPanel();
-	
-	private CellTable<ArrayList<String>> cellTable;
+    MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
+    MpDialogBox mpDialogBoxWarning = new MpDialogBox();
+    MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
+
+    MpListBoxPanelHelper mpHelperCurso;
+
+    VerticalPanel panel = new VerticalPanel();
+
+    private CellTable<ArrayList<String>> cellTable;
     private ListDataProvider<ArrayList<String>> dataProvider;
-    
+
     ArrayList<String> arrayAvaliacaoColumns = new ArrayList<String>();
 
-	private MpSelectionCurso listBoxCurso;	
-	private MpSelectionPeriodo listBoxPeriodo; 
-	private MpSelectionDisciplina listBoxDisciplina; 
+    private MpSelectionCurso listBoxCurso;
+    private MpSelectionPeriodo listBoxPeriodo;
+    private MpSelectionDisciplina listBoxDisciplina;
 
-	@SuppressWarnings("unused")
-	private TelaInicialRelatorio telaInicialPeriodo;
-	
-	TextConstants txtConstants;
-	
-	ScrollPanel scrollPanel = new ScrollPanel();
-	VerticalPanel vFormPanel;
-	FlexTable flexTableNota;
-	
-	private static BoletimDisciplina uniqueInstance;
-	
-	public static BoletimDisciplina getInstance(final TelaInicialRelatorio telaInicialRelatorio){
+    @SuppressWarnings("unused")
+    private TelaInicialRelatorio telaInicialPeriodo;
 
-		if(uniqueInstance==null){
-			uniqueInstance = new BoletimDisciplina(telaInicialRelatorio);
-		}
-		
-		return uniqueInstance;
-		
-	}
+    TextConstants txtConstants;
 
-	private BoletimDisciplina(final TelaInicialRelatorio telaInicialRelatorio) {
-		
-		txtConstants = GWT.create(TextConstants.class);
-		
-		this.telaInicialPeriodo=telaInicialRelatorio;
+    ScrollPanel scrollPanel = new ScrollPanel();
+    VerticalPanel vFormPanel;
+    FlexTable flexTableNota;
 
-		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
-		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
-		mpLoading.setTxtLoading(txtConstants.geralCarregando());
-		mpLoading.show();
-		mpLoading.setVisible(false);
+    private static BoletimDisciplina uniqueInstance;
 
-		FlexTable flexTable = new FlexTable();
-		flexTable.setCellSpacing(3);
-		flexTable.setCellPadding(3);
+    public static BoletimDisciplina getInstance(final TelaInicialRelatorio telaInicialRelatorio) {
 
-		MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
-		MpLabelRight lblPeriodo = new MpLabelRight(txtConstants.periodo());
-		MpLabelRight lblDisciplina= new MpLabelRight(txtConstants.disciplina());
-		
-		mpHelperCurso = new  MpListBoxPanelHelper();
-		
-		listBoxCurso = new MpSelectionCurso(true);
-		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
-		
-		listBoxPeriodo = new MpSelectionPeriodo();
-		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());
-		
+        if (uniqueInstance == null) {
+            uniqueInstance = new BoletimDisciplina(telaInicialRelatorio);
+        }
+
+        return uniqueInstance;
+
+    }
+
+    private BoletimDisciplina(final TelaInicialRelatorio telaInicialRelatorio) {
+
+        txtConstants = GWT.create(TextConstants.class);
+
+        this.telaInicialPeriodo = telaInicialRelatorio;
+
+        mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
+        mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
+        mpLoading.setTxtLoading(txtConstants.geralCarregando());
+        mpLoading.show();
+        mpLoading.setVisible(false);
+
+        FlexTable flexTable = new FlexTable();
+        flexTable.setCellSpacing(3);
+        flexTable.setCellPadding(3);
+
+        MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
+        MpLabelRight lblPeriodo = new MpLabelRight(txtConstants.periodo());
+        MpLabelRight lblDisciplina = new MpLabelRight(txtConstants.disciplina());
+
+        mpHelperCurso = new MpListBoxPanelHelper();
+
+        listBoxCurso = new MpSelectionCurso(true);
+        listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
+
+        listBoxPeriodo = new MpSelectionPeriodo();
+        listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());
+
         listBoxDisciplina = new MpSelectionDisciplina();
         listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
-		
-		// Add some standard form options
-		int row = 1;
 
-		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row, 1, listBoxCurso); flexTable.setWidget(row++, 2, mpHelperCurso);//flexTable.setWidget(row++, 2, txtFiltroNomeCurso);
-		flexTable.setWidget(row, 0, lblPeriodo);flexTable.setWidget(row++, 1, listBoxPeriodo); 
-		flexTable.setWidget(row, 0, lblDisciplina);flexTable.setWidget(row, 1, listBoxDisciplina); flexTable.setWidget(row++, 2, mpLoading);
+        // Add some standard form options
+        int row = 1;
 
-		vFormPanel = new VerticalPanel();
-		flexTableNota = new FlexTable();
-		
-		vFormPanel.add(flexTable);
-		vFormPanel.add(flexTableNota);
+        flexTable.setWidget(row, 0, lblCurso);
+        flexTable.setWidget(row, 1, listBoxCurso);
+        flexTable.setWidget(row++, 2, mpHelperCurso);// flexTable.setWidget(row++,
+                                                     // 2, txtFiltroNomeCurso);
+        flexTable.setWidget(row, 0, lblPeriodo);
+        flexTable.setWidget(row++, 1, listBoxPeriodo);
+        flexTable.setWidget(row, 0, lblDisciplina);
+        flexTable.setWidget(row, 1, listBoxDisciplina);
+        flexTable.setWidget(row++, 2, mpLoading);
+
+        vFormPanel = new VerticalPanel();
+        flexTableNota = new FlexTable();
+
+        vFormPanel.add(flexTable);
+        vFormPanel.add(flexTableNota);
 
         scrollPanel = new ScrollPanel();
         scrollPanel.setHeight(Integer.toString(TelaInicialRelatorio.intHeightTable - 40) + "px");
         scrollPanel.setWidth("100%");
-		scrollPanel.setAlwaysShowScrollBars(false);		
-		scrollPanel.add(vFormPanel);
-		
-		super.setWidth("100%");
+        scrollPanel.setAlwaysShowScrollBars(false);
+        scrollPanel.add(vFormPanel);
 
-		super.add(scrollPanel);
+        super.setWidth("100%");
 
-	}
+        super.add(scrollPanel);
 
+    }
 
-	public void updateClientData() {
-		listBoxCurso.populateComboBox();
-	}
-	
+    public void updateClientData() {
+        listBoxCurso.populateComboBox();
+    }
+
     private class MpCursoSelectionChangeHandler implements ChangeHandler {
-        public void onChange(ChangeEvent event) {  
+        public void onChange(ChangeEvent event) {
             mpHelperCurso.populateSuggestBox(listBoxCurso);
             int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
             listBoxPeriodo.populateComboBox(idCurso);
             flexTableNota.clear();
-        }  
-    }  
-    
+        }
+    }
+
     private class MpPeriodoSelectionChangeHandler implements ChangeHandler {
-        public void onChange(ChangeEvent event) {              
+        public void onChange(ChangeEvent event) {
             int indexIdPeriodo = listBoxPeriodo.getSelectedIndex();
             if (indexIdPeriodo != -1) {
                 int idPeriodo = Integer.parseInt(listBoxPeriodo.getValue(indexIdPeriodo));
                 listBoxDisciplina.populateComboBox(idPeriodo);
-         
-            }else{
-                    listBoxDisciplina.clear();  
+
+            } else {
+                listBoxDisciplina.clear();
             }
-        }  
-    }     
-    
+        }
+    }
+
     private class MpDisciplinaSelectionChangeHandler implements ChangeHandler {
-        public void onChange(ChangeEvent event) {              
+        public void onChange(ChangeEvent event) {
             int indexIdDisciplina = listBoxDisciplina.getSelectedIndex();
             if (indexIdDisciplina != -1) {
                 mpLoading.setVisible(true);
-                populateColunasAvaliacoes();                
+                populateColunasAvaliacoes();
             }
-        }  
-    }      
-    
+        }
+    }
 
-    private class CallBackCarregarNotas implements AsyncCallback<ArrayList<ArrayList<String>>>{
+    private class CallBackCarregarNotas implements AsyncCallback<ArrayList<ArrayList<String>>> {
 
         @Override
         public void onFailure(Throwable caught) {
@@ -188,135 +192,132 @@ public class BoletimDisciplina extends VerticalPanel {
         public void onSuccess(ArrayList<ArrayList<String>> list) {
             mpLoading.setVisible(false);
             MpUtilClient.isRefreshRequired(list);
-            
+
             dataProvider = new ListDataProvider<ArrayList<String>>();
 
             dataProvider.getList().clear();
 
             for (int i = 0; i < list.size(); i++) {
-                dataProvider.getList().add(list.get(i));               
+                dataProvider.getList().add(list.get(i));
             }
-            
+
             initializeCellTable();
-        
+
         }
-        
+
     }
-    
-    public void initializeCellTable(){
-        cellTable = new CellTable<ArrayList<String>>(15,GWT.<CellTableStyle> create(CellTableStyle.class));
+
+    public void initializeCellTable() {
+        cellTable = new CellTable<ArrayList<String>>(15, GWT.<CellTableStyle> create(CellTableStyle.class));
         cellTable.setAutoHeaderRefreshDisabled(true);
         cellTable.setAutoFooterRefreshDisabled(true);
-        
-        dataProvider.addDataDisplay(cellTable); 
-        
+
+        dataProvider.addDataDisplay(cellTable);
+
         final MpSimplePager mpPager = new MpSimplePager();
         mpPager.setDisplay(cellTable);
-        
-        /////////////////////////ColumnName//////////////////////////////////
+
+        // ///////////////////////ColumnName//////////////////////////////////
         IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME);
-        
+
         ListHandler<ArrayList<String>> sortHandler = new ListHandler<ArrayList<String>>(dataProvider.getList());
-        
+
         indexColumnName.setSortable(true);
         sortHandler.setComparator(indexColumnName, new Comparator<ArrayList<String>>() {
-          @Override
-          public int compare(ArrayList<String> o1, ArrayList<String> o2) {
-              System.out.println(o1.get(INT_POSITION_NAME));
-            return o1.get(INT_POSITION_NAME).compareTo(o2.get(INT_POSITION_NAME));
-          }
-        }); 
+            @Override
+            public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+                System.out.println(o1.get(INT_POSITION_NAME));
+                return o1.get(INT_POSITION_NAME).compareTo(o2.get(INT_POSITION_NAME));
+            }
+        });
         cellTable.addColumnSortHandler(sortHandler);
-        /////////////////////////ColumnName//////////////////////////////////
-        
+        // ///////////////////////ColumnName//////////////////////////////////
+
         String strSpace = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
         builder.appendHtmlConstant(strSpace + strSpace + txtConstants.aluno() + strSpace + strSpace);
         SafeHtml safeHtml = builder.toSafeHtml();
         cellTable.addColumn(indexColumnName, safeHtml);
-        
-        for (int column = 0; column < arrayAvaliacaoColumns.size(); column++) { 
-           
-            String strAvaliacaoText = arrayAvaliacaoColumns.get(column); 
+
+        for (int column = 0; column < arrayAvaliacaoColumns.size(); column++) {
+
+            String strAvaliacaoText = arrayAvaliacaoColumns.get(column);
             int indexIdAvaliacao = strAvaliacaoText.indexOf("|");
-            if(indexIdAvaliacao!=-1){
-                strAvaliacaoText = strAvaliacaoText.substring(indexIdAvaliacao+1);
+            if (indexIdAvaliacao != -1) {
+                strAvaliacaoText = strAvaliacaoText.substring(indexIdAvaliacao + 1);
             }
             final String strAvaliacao = strAvaliacaoText;
 
-            final IndexedColumn indexedColumn = new IndexedColumn(column+INT_POSITION_NAME+1);
-            
+            final IndexedColumn indexedColumn = new IndexedColumn(column + INT_POSITION_NAME + 1);
+
             final Header<String> header = new Header<String>(new ClickableTextCell()) {
                 @Override
                 public String getValue() {
-                    return  strAvaliacao;
-                }    
-                
+                    return strAvaliacao;
+                }
+
             };
-            
-           
+
             final int intColumn = column;
-            
+
             indexedColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
             indexedColumn.setSortable(true);
-            
+
             indexedColumn.setFieldUpdater(new FieldUpdater<ArrayList<String>, String>() {
                 @Override
                 public void update(int index, ArrayList<String> object, final String value) {
-                    
 
-                    String strIdUsuario = dataProvider.getList().get(index).get(0);
-                    int idUsuario = Integer.parseInt(strIdUsuario);
-                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-                    String strNomeCurso = listBoxCurso.getSelectedItemText();
-                    String strNomePeriodo = listBoxPeriodo.getSelectedItemText();
-                    String strNomeDisciplina = listBoxDisciplina.getSelectedItemText();
-                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
- 
-                    String strAvaliacaoColumn = arrayAvaliacaoColumns.get(indexedColumn.getIndex()-INT_POSITION_NAME-1);
-                    int indexIdAvaliacao = strAvaliacaoColumn.indexOf("|");
-                    if(indexIdAvaliacao==-1){
-                        DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
-                    }else{
-                        String strIdAvaliacao = strAvaliacaoColumn.substring(0,indexIdAvaliacao);
-                        int idAvaliacao = Integer.parseInt(strIdAvaliacao);
-                        DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, idAvaliacao, mediaNotaCurso);
+                    if (!value.equals("-")) {
+                        String strIdUsuario = dataProvider.getList().get(index).get(0);
+                        int idUsuario = Integer.parseInt(strIdUsuario);
+                        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+                        String strNomeCurso = listBoxCurso.getSelectedItemText();
+                        String strNomePeriodo = listBoxPeriodo.getSelectedItemText();
+                        String strNomeDisciplina = listBoxDisciplina.getSelectedItemText();
+                        Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+
+                        String strAvaliacaoColumn = arrayAvaliacaoColumns.get(indexedColumn.getIndex() - INT_POSITION_NAME - 1);
+                        int indexIdAvaliacao = strAvaliacaoColumn.indexOf("|");
+                        if (indexIdAvaliacao == -1) {
+                            DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+                        } else {
+                            String strIdAvaliacao = strAvaliacaoColumn.substring(0, indexIdAvaliacao);
+                            int idAvaliacao = Integer.parseInt(strIdAvaliacao);
+                            DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, idAvaliacao, mediaNotaCurso);
+                        }
+
                     }
-                    
-                    
                 }
             });
-            
+
             sortHandler.setComparator(indexedColumn, new Comparator<ArrayList<String>>() {
                 @Override
                 public int compare(ArrayList<String> o1, ArrayList<String> o2) {
-                    System.out.println(o1.get(intColumn+INT_POSITION_NAME+1));
-                  return o1.get(intColumn+INT_POSITION_NAME+1).compareTo(o2.get(intColumn+INT_POSITION_NAME+1));
+                    System.out.println(o1.get(intColumn + INT_POSITION_NAME + 1));
+                    return o1.get(intColumn + INT_POSITION_NAME + 1).compareTo(o2.get(intColumn + INT_POSITION_NAME + 1));
                 }
-              }); 
-            
-            cellTable.addColumn(indexedColumn,header);
+            });
+
+            cellTable.addColumn(indexedColumn, header);
         }
-        
-        
-        
+
         Image imgExcel = new Image("images/excel.24.png");
         imgExcel.addClickHandler(new ClickHandlerExcel());
         imgExcel.setStyleName("hand-over");
         imgExcel.setTitle(txtConstants.geralExcel());
-        
+
         int columnImg = 0;
         FlexTable flexTableImg = new FlexTable();
         flexTableImg.setCellPadding(2);
         flexTableImg.setCellSpacing(2);
         flexTableImg.setWidget(0, columnImg++, imgExcel);
         flexTableImg.setBorderWidth(0);
-        
+
         FlexTable flexTableMenu = new FlexTable();
         flexTableMenu.setCellPadding(0);
         flexTableMenu.setCellSpacing(0);
         flexTableMenu.setBorderWidth(0);
-        flexTableMenu.setWidth("100%");     
+        flexTableMenu.setWidth("100%");
         flexTableMenu.setWidget(0, 0, mpPager);
         flexTableMenu.setWidget(0, 1, flexTableImg);
         flexTableMenu.getCellFormatter().setWidth(0, 0, "70%");
@@ -325,38 +326,38 @@ public class BoletimDisciplina extends VerticalPanel {
         flexTableMenu.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_BOTTOM);
         flexTableNota.setBorderWidth(0);
         flexTableNota.clear();
-        flexTableNota.setWidget(0,0,flexTableMenu);
-        flexTableNota.setWidget(1,0,cellTable);
-        
+        flexTableNota.setWidget(0, 0, flexTableMenu);
+        flexTableNota.setWidget(1, 0, cellTable);
+
     }
-    
+
     class IndexedColumn extends Column<ArrayList<String>, String> {
         private int index;
+
         public IndexedColumn(int index) {
             super(new ClickableTextCell());
             this.index = index;
         }
-        
-      
-        public int getIndex(){
+
+        public int getIndex() {
             return this.index;
         }
 
         @Override
         public String getValue(ArrayList<String> object) {
-            String strTest="";
-            try{
+            String strTest = "";
+            try {
                 strTest = object.get(this.index);
-                System.out.println("Teste:"+strTest);
-            }catch(Exception ex){
+                System.out.println("Teste:" + strTest);
+            } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
-            
+
             return strTest;
         }
-        
+
         @Override
-        public String getCellStyleNames(Context context, ArrayList<String>  object) {
+        public String getCellStyleNames(Context context, ArrayList<String> object) {
             Double doubleMediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
             try {
                 double doubleNumber = Double.parseDouble(object.get(this.index));
@@ -364,35 +365,34 @@ public class BoletimDisciplina extends VerticalPanel {
                     return "table-boletim-cell-green";
                 } else if (doubleNumber < doubleMediaNotaCurso) {
                     return "table-boletim-cell-red";
-                }else{
+                } else {
                     return "";
                 }
             } catch (Exception ex) {
                 return "";
             }
-              
-        }  
-                
-    }    
-    
+
+        }
+
+    }
+
     private void populateColunasAvaliacoes() {
         int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
         int idPeriodo = Integer.parseInt(listBoxPeriodo.getSelectedValue());
         int idDisciplina = Integer.parseInt(listBoxDisciplina.getSelectedValue());
         GWTServiceAvaliacao.Util.getInstance().getHeaderRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina, new CallBackCarregarAvaliacao());
     }
-    
-    private void populateNotas(){
+
+    private void populateNotas() {
         mpLoading.setVisible(true);
         int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
         int idPeriodo = Integer.parseInt(listBoxPeriodo.getSelectedValue());
         int idDisciplina = Integer.parseInt(listBoxDisciplina.getSelectedValue());
-       GWTServiceNota.Util.getInstance().getRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina, new CallBackCarregarNotas());
+        GWTServiceNota.Util.getInstance().getRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina, new CallBackCarregarNotas());
     }
-    
-    
-    private class CallBackCarregarAvaliacao implements AsyncCallback<ArrayList<String>>{
-        
+
+    private class CallBackCarregarAvaliacao implements AsyncCallback<ArrayList<String>> {
+
         @Override
         public void onFailure(Throwable caught) {
             mpLoading.setVisible(false);
@@ -406,22 +406,21 @@ public class BoletimDisciplina extends VerticalPanel {
             arrayAvaliacaoColumns.clear();
             for (int i = 0; i < list.size(); i++) {
                 arrayAvaliacaoColumns.add(list.get(i));
-            }       
+            }
 
             populateNotas();
 
         }
     }
-	
-    private class ClickHandlerExcel implements ClickHandler{
+
+    private class ClickHandlerExcel implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
             int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
             int idPeriodo = Integer.parseInt(listBoxPeriodo.getSelectedValue());
             int idDisciplina = Integer.parseInt(listBoxDisciplina.getSelectedValue());
-            MpDialogBoxExcelRelatorioBoletim.getInstance(idCurso, idPeriodo, idDisciplina);                 
+            MpDialogBoxExcelRelatorioBoletim.getInstance(idCurso, idPeriodo, idDisciplina);
         }
     }
-    
-	
+
 }

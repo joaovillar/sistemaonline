@@ -10,11 +10,11 @@ import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.service.GWTServiceUnidadeEscola;
 import com.jornada.shared.classes.UnidadeEscola;
 
-public class MpSelectionUnidadeEscola extends MpSelection {	
+public class MpListBoxUnidadeEscola extends MpSelection {	
 	
 	private AsyncCallback<ArrayList<UnidadeEscola>> callBackPopulateComboBox;
 	
-	public MpSelectionUnidadeEscola(){
+	public MpListBoxUnidadeEscola(){
 
 		
 		/***********************Begin Callbacks**********************/
@@ -34,7 +34,7 @@ public class MpSelectionUnidadeEscola extends MpSelection {
 					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
 					// MpSelectionTipoAvaliacao.this);
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionUnidadeEscola.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxUnidadeEscola.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}

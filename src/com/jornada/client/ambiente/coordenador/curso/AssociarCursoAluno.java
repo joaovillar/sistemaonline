@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
-import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionCursoItemTodos;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxCursoItemTodos;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -61,7 +61,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 	private TextBox txtFiltroAluno;
 	
 	private MpSelectionCurso listBoxCurso;
-	private MpSelectionCursoItemTodos listBoxCursoParaAluno;
+	private MpListBoxCursoItemTodos listBoxCursoParaAluno;
 	
 	private ListBox multiBoxAlunoFiltrado;
 	private ListBox multiBoxAlunoAssociado;
@@ -165,7 +165,7 @@ public class AssociarCursoAluno extends VerticalPanel{
 //		mpPanel.setWidth(Integer.toString(TelaInicialCurso.intWidthTable)+"px");
 		mpPanel.setWidth("100%");
 		
-		listBoxCursoParaAluno = new MpSelectionCursoItemTodos(true,txtConstants.cursoTodosAlunos());
+		listBoxCursoParaAluno = new MpListBoxCursoItemTodos(true,txtConstants.cursoTodosAlunos());
 		listBoxCursoParaAluno.addChangeHandler(new ChangeHandlerCleanAlunos());			
 		
 		listBoxCursoParaAluno.setWidth("250px");

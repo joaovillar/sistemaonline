@@ -54,6 +54,7 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.FieldVerifier;
+import com.jornada.shared.classes.TipoStatusUsuario;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.UnidadeEscola;
 import com.jornada.shared.classes.Usuario;
@@ -84,6 +85,8 @@ public class EditarUsuario extends VerticalPanel {
 	
 //	private ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();		
 	private LinkedHashMap<String, String> listaTipoUsuario = new LinkedHashMap<String, String>();
+	
+//	private MpListBoxStatusUsuario listBoxStatusUsuario = new MpListBoxStatusUsuario();
 //	private SimplePager pager;
 	
 	private ListDataProvider<Usuario> dataProvider = new ListDataProvider<Usuario>();	
@@ -97,6 +100,7 @@ public class EditarUsuario extends VerticalPanel {
 //	private Column<Usuario, String> columnTelefoneResidencial;
 //	private Column<Usuario, String> columnTelefoneComercial;
 	private Column<Usuario, String> columnTipoUsuario;
+//	private Column<Usuario, String> columnTipoStatusUsuario;
 //	private SingleSelectionModel<Usuario> selectionModel;
 	
 	private TextBox txtSearch;
@@ -139,6 +143,7 @@ public class EditarUsuario extends VerticalPanel {
 		selectCampoFiltrar.addItem(txtConstants.usuarioCPF(),Usuario.DB_CPF);
 		selectCampoFiltrar.addItem(txtConstants.usuarioTipo(),TipoUsuario.DB_NOME_TIPO_USUARIO);
 		selectCampoFiltrar.addItem(txtConstants.usuarioUnidadeEscola(),UnidadeEscola.DB_NOME_UNIDADE_ESCOLA);
+//		selectCampoFiltrar.addItem(txtConstants.usuarioStatus(),TipoStatusUsuario.DB_ID_TIPO_STATUS_USUARIO);
 		
 		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
 		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
@@ -513,6 +518,18 @@ public class EditarUsuario extends VerticalPanel {
 	      }
 	    };
 	    
+	    
+//        LinkedHashMap<String, String> listaTipoStatusUsuario = new LinkedHashMap<String, String>();
+//        for (int i = 0; i < listBoxStatusUsuario.getItemCount(); i++) {
+//            listaTipoStatusUsuario.put(listBoxStatusUsuario.getValue(i), listBoxStatusUsuario.getItemText(i));
+//        }
+//        MpStyledSelectionCell tipoUsuarioStatusCell = new MpStyledSelectionCell(listaTipoStatusUsuario, "design_text_boxes");
+//        columnTipoStatusUsuario = new Column<Usuario, String>(tipoUsuarioStatusCell) {
+//            @Override
+//            public String getValue(Usuario object) {
+//                return Integer.toString(object.getIdTipoStatusUsuario());
+//            }
+//        };
     
 		columnTipoUsuario.setFieldUpdater(new FieldUpdater<Usuario, String>() {
 			@Override
@@ -758,7 +775,7 @@ public class EditarUsuario extends VerticalPanel {
 		cellTable.addColumn(columnEmail, txtConstants.usuarioEmail());
 		cellTable.addColumn(columnCPF, txtConstants.usuarioCPF());
 		cellTable.addColumn(columnDataNascimento, txtConstants.usuarioDataNascimento());
-//		cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
+//		cellTable.addColumn(columnTipoStatusUsuario, txtConstants.usuarioStatus());
 //		cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
 //		cellTable.addColumn(columnTelefoneComercial, txtConstants.usuarioTelComercial());
 		cellTable.addColumn(editColumn, txtConstants.geralEditar());
@@ -770,7 +787,7 @@ public class EditarUsuario extends VerticalPanel {
 		cellTable.getColumn(cellTable.getColumnIndex(columnCPF)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(columnEmail)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(columnDataNascimento)).setCellStyleNames("edit-cell");
-//		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneCelular)).setCellStyleNames("edit-cell");
+//		cellTable.getColumn(cellTable.getColumnIndex(columnTipoStatusUsuario)).setCellStyleNames("edit-cell");
 //		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("edit-cell");
 //		cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneComercial)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(columnLogin)).setCellStyleNames("edit-cell");		

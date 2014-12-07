@@ -231,16 +231,17 @@ public class BoletimAnual extends VerticalPanel {
                 @Override
                 public void update(int index, ArrayList<String> object, final String value) {
                     
+                    if (!value.equals("-")) {
+                        String strIdUsuario = dataProvider.getList().get(index).get(0);
+                        int idUsuario = Integer.parseInt(strIdUsuario);
+                        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+                        String strNomeCurso = listBoxCurso.getSelectedItemText();
+                        String strNomeDisciplina = arrayDisciplinaColumns.get(indexedColumn.getIndex() - INT_POSITION_NAME - 1);
+                        Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
 
-                    String strIdUsuario = dataProvider.getList().get(index).get(0);
-                    int idUsuario = Integer.parseInt(strIdUsuario);
-                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-                    String strNomeCurso = listBoxCurso.getSelectedItemText();
-                    String strNomeDisciplina = arrayDisciplinaColumns.get(indexedColumn.getIndex()-INT_POSITION_NAME-1);
-                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
-
-                    if (indexedColumn.getIndex() != arrayDisciplinaColumns.size() + INT_POSITION_NAME) {
-                        DialogBoxNotasAno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
+                        if (indexedColumn.getIndex() != arrayDisciplinaColumns.size() + INT_POSITION_NAME) {
+                            DialogBoxNotasAno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
+                        }
                     }
                 }
             });
@@ -332,15 +333,13 @@ public class BoletimAnual extends VerticalPanel {
                 
     }    
     
-//    private void populateColunasDisciplinas(int idPeriodo) {
-////        GWTServiceDisciplina.Util.getInstance().getDisciplinasPeloPeriodo(idPeriodo, new CallBackCarregarDisciplina());
-//    }
-//    
+ 
     private void populateNotas(){
         mpLoading.setVisible(true);
         int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
        
        GWTServiceNota.Util.getInstance().getBoletimAnual(idCurso, new CallBackCarregarNotas());
+       
     }
     
     

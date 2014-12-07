@@ -418,6 +418,8 @@ public interface TextConstants extends Messages {
 	String usuarioBaixarPlanilhaExcel();
 	String usuarioCliqueAquiParaBaixar();
 	String usuarioRegistro();
+	String usuarioObservacao();
+	String usuarioStatus();
 	/*******Usuario End*******/
 	
 	

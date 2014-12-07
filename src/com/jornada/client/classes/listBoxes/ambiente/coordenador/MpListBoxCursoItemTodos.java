@@ -11,7 +11,7 @@ import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.classes.Curso;
 
-public class MpSelectionCursoItemTodos extends MpSelection {	
+public class MpListBoxCursoItemTodos extends MpSelection {	
 	
 	private ListBox listBoxAux;
 	
@@ -21,7 +21,7 @@ public class MpSelectionCursoItemTodos extends MpSelection {
 	
 	private String strText="";
 	
-	public MpSelectionCursoItemTodos(boolean autoPopulate, String strTextPrimeiroItem){
+	public MpListBoxCursoItemTodos(boolean autoPopulate, String strTextPrimeiroItem){
 
 		listBoxAux = new ListBox();
 		
@@ -50,7 +50,7 @@ public class MpSelectionCursoItemTodos extends MpSelection {
 					setVisibleItemCount(1);
 
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionCursoItemTodos.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxCursoItemTodos.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}

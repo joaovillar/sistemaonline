@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import com.google.gwt.cell.client.EditTextCell;
@@ -47,6 +48,7 @@ import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpDatePickerCell;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
+import com.jornada.client.classes.widgets.cells.MpStyledSelectionCell;
 import com.jornada.client.classes.widgets.cells.MpTextAreaEditCell;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -74,6 +76,8 @@ public class EditarPeriodo extends VerticalPanel {
 
 	private MpSelectionCurso listBoxCurso;
 	private MpListBoxPanelHelper mpHelperCurso;
+	
+	private LinkedHashMap<String, String> listPeso = new LinkedHashMap<String, String>();
 	
 	private TextBox txtSearch;
 	ArrayList<Periodo> arrayListBackup = new ArrayList<Periodo>();
@@ -417,7 +421,10 @@ public class EditarPeriodo extends VerticalPanel {
 		});
 		
 		
-        pesoColumn = new Column<Periodo, String>(new EditTextCell()) {
+		for(int i=1;i<=10;i++){
+		    listPeso.put(Integer.toString(i), Integer.toString(i));
+		}
+        pesoColumn = new Column<Periodo, String>(new MpStyledSelectionCell(listPeso,"design_text_boxes")) {
             @Override
             public String getValue(Periodo periodo) {
                 return periodo.getPeso();

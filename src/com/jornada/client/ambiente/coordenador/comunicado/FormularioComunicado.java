@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoComunicado;
-import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionDocumentos;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxDocumentos;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -101,7 +101,7 @@ public class FormularioComunicado extends VerticalPanel {
     private MpPanelPageMainView drawPassoDoisSelecionarImagem;
     private MpPanelPageMainView drawPassoDoisEscolherDocumento;
     
-    private MpSelectionDocumentos mpSelectionDocumentos;
+    private MpListBoxDocumentos mpSelectionDocumentos;
     private RadioButton radioButtonYes;
     private RadioButton radioButtonNo;
 //    private Grid gridAnexarDocumento;
@@ -125,7 +125,7 @@ public class FormularioComunicado extends VerticalPanel {
         mpPanelLoading.show();
         mpPanelLoading.setVisible(false);
         
-        mpSelectionDocumentos = new MpSelectionDocumentos();
+        mpSelectionDocumentos = new MpListBoxDocumentos();
 
         vBodyPanel = new VerticalPanel();
 

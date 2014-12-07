@@ -247,17 +247,18 @@ public class BoletimPeriodo extends VerticalPanel {
                 @Override
                 public void update(int index, ArrayList<String> object, final String value) {
                     
+                    if (!value.equals("-")) {
+                        String strIdUsuario = dataProvider.getList().get(index).get(0);
+                        int idUsuario = Integer.parseInt(strIdUsuario);
+                        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+                        String strNomeCurso = listBoxCurso.getSelectedItemText();
+                        String strNomePeriodo = listBoxPeriodo.getSelectedItemText();
+                        String strNomeDisciplina = arrayDisciplinaColumns.get(indexedColumn.getIndex() - INT_POSITION_NAME - 1);
+                        Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
 
-                    String strIdUsuario = dataProvider.getList().get(index).get(0);
-                    int idUsuario = Integer.parseInt(strIdUsuario);
-                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-                    String strNomeCurso = listBoxCurso.getSelectedItemText();
-                    String strNomePeriodo = listBoxPeriodo.getSelectedItemText();
-                    String strNomeDisciplina = arrayDisciplinaColumns.get(indexedColumn.getIndex()-INT_POSITION_NAME-1);
-                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
-                    
-//                    Window.alert(Integer.toString(column)+":"+value+":"+nomeUsuario+":"+idUsuario+":"+header.getValue());
-                    DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+                        // Window.alert(Integer.toString(column)+":"+value+":"+nomeUsuario+":"+idUsuario+":"+header.getValue());
+                        DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
+                    }
                 }
             });
             

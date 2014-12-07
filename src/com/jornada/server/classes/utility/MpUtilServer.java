@@ -44,6 +44,13 @@ public class MpUtilServer {
 		return reportDate;
 	}
 	
+	   public static String convertDateToString(Date date, String formatDate){
+
+	        DateFormat df = new SimpleDateFormat(formatDate);          
+	        String reportDate = df.format(date);        
+	        return reportDate;
+	    }
+	
 	
 	public static String convertTimeToString(Time time){
 		DateFormat df = new SimpleDateFormat(FORMAT_HOUR);	

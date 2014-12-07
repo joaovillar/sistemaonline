@@ -1,12 +1,22 @@
 package com.jornada.server.framework.excel;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Picture;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.jornada.ConfigJornada;
@@ -34,20 +44,64 @@ public class ExcelFramework {
         return styleHeader;
     }
     
+    public static XSSFCellStyle getStyleTitleBoletimAno(XSSFWorkbook wb){
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+        styleHeader.setFont(getStyleFontBoldBoletim(wb));      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        return styleHeader;
+    }
+    
+    public static XSSFCellStyle getStyleCellFontBoletim(XSSFWorkbook wb){
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+        styleHeader.setFont(getStyleFontBoletimAno(wb));      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        return styleHeader;
+    }
+    
+    public static XSSFCellStyle getStyleCellFontBoletimDataFinalizacao(XSSFWorkbook wb){
+        
+        Font font = wb.createFont();
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        font.setFontName("Calibri");  
+        font.setFontHeightInPoints((short)8);
+        
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setAlignment(CellStyle.ALIGN_LEFT);
+        styleHeader.setFont(font);      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        styleHeader.setWrapText(true);
+        return styleHeader;
+    }
+    
     
     public static Font getStyleFontBoletim(XSSFWorkbook wb){
         Font font = wb.createFont();
         font.setColor(IndexedColors.BLACK.getIndex());
         font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
-        font.setFontName("sans-serif");        
+        font.setFontName("Calibri");  
+        font.setFontHeightInPoints((short)12);
         return font;
     }   
+    
+    public static Font getStyleFontBoletimAno(XSSFWorkbook wb){
+        Font font = wb.createFont();
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        font.setFontName("Calibri");  
+        font.setFontHeightInPoints((short)8);
+        return font;
+    }   
+    
     
     public static Font getStyleFontBoldBoletim(XSSFWorkbook wb){
         Font font = wb.createFont();
         font.setColor(IndexedColors.BLACK.getIndex());
         font.setBoldweight(Font.BOLDWEIGHT_BOLD);
-        font.setFontName("sans-serif");        
+        font.setFontName("Calibri"); 
+        font.setFontHeightInPoints((short)12);
         return font;
     }  
     
@@ -90,6 +144,40 @@ public class ExcelFramework {
     }
     
     
+    public static void createImage(XSSFWorkbook wb, XSSFSheet sheet) {
 
+        try {
+
+            // FileInputStream obtains input bytes from the image file
+            InputStream inputStream = new FileInputStream("images/logo/logoescola.png");
+            // Get the contents of an InputStream as a byte[].
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            // Adds a picture to the workbook
+            int pictureIdx = wb.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+            // close the input stream
+            inputStream.close();
+
+            // Returns an object that handles instantiating concrete classes
+            CreationHelper helper = wb.getCreationHelper();
+
+            // Creates the top-level drawing patriarch.
+            Drawing drawing = sheet.createDrawingPatriarch();
+
+            // Create an anchor that is attached to the worksheet
+            ClientAnchor anchor = helper.createClientAnchor();
+            // set top-left corner for the image
+            
+            anchor.setDx1(1);
+            anchor.setDy1(1);
+
+            // Creates a picture
+            Picture pict = drawing.createPicture(anchor, pictureIdx);
+            // Reset the image to the original size
+            pict.resize(0.4);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
 
 }

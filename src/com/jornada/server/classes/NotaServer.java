@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -23,8 +25,10 @@ import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.Periodo;
+import com.jornada.shared.classes.TipoStatusUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.TabelaBoletim;
+import com.jornada.shared.classes.utility.MpUtilClient;
 
 @SuppressWarnings("deprecation")
 public class NotaServer {	
@@ -264,11 +268,18 @@ public class NotaServer {
         for(Usuario usuario : listUsuario){
             ArrayList<String> array = new ArrayList<String>();
             array.add(Integer.toString(usuario.getIdUsuario()));
-            array.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
+            
+            if (usuario.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
+                array.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome() + " - "+ usuario.getTipoStatusUsuario().getNomeTipoStatusUsuario());
+            } else {
+                array.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
+            }
             
             for(int i=2;i<listDisciplinasAnoAluno.size()-1;i++){
                 String nomeDisciplina = listDisciplinasAnoAluno.get(i);
                 String text = getMediaAnoAlunoDisciplina(usuario.getIdUsuario(), idCurso,listPeriodo,nomeDisciplina);
+                if(text.isEmpty())text="-";
+                if(usuario.getIdTipoStatusUsuario()==TipoStatusUsuario.ALUNO_TRANSFERIDO)text="-";
                 array.add(text);
             }
             
@@ -283,6 +294,9 @@ public class NotaServer {
                 boolean aprovado=true;
                 ArrayList<String> row = listNotas.get(line);
 
+                int idAluno = Integer.parseInt(row.get(0));
+                Usuario aluno = UsuarioServer.getUsuarioPeloId(idAluno);
+                
                 for (int column = 0; column < row.size(); column++) {
                     if(column>1){
                         try {
@@ -296,10 +310,15 @@ public class NotaServer {
                         }
                     }
                 }
-                if(aprovado==true){
-                    row.add("Aprovado");
-                }else{
-                    row.add("Reprovado");
+                
+                if (aluno.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
+                    row.add(aluno.getTipoStatusUsuario().getNomeTipoStatusUsuario());
+                } else {
+                    if (aprovado == true) {
+                        row.add("Aprovado");
+                    } else {
+                        row.add("Reprovado");
+                    }
                 }
             }
         }
@@ -326,11 +345,17 @@ public class NotaServer {
                     
                     disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
                     strMedia = disciplina.getMediaAlunoDisciplina(idUsuario);
-                    if(strMedia==null || strMedia.isEmpty()){}else{
-                        doubleMediaAluno = doubleMediaAluno + Double.parseDouble(strMedia);
-                        countMedia++;
-                        break;
+                    
+                    int intPesoNotaPeriodo = Integer.parseInt(periodo.getPeso());
+                    for (int i = 0; i < intPesoNotaPeriodo; i++) {
+                        if (strMedia == null || strMedia.isEmpty()) {
+                        } else {
+                            doubleMediaAluno = doubleMediaAluno + Double.parseDouble(strMedia);
+                            countMedia++;
+//                            break;
+                        }
                     }
+                    
                 }
             }     
         }
@@ -358,23 +383,32 @@ public class NotaServer {
         disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(idDisciplina));
                 
         for (Usuario usuario : listUsuario) {
+            
             ArrayList<String> item = new ArrayList<String>();
             item.add(Integer.toString(usuario.getIdUsuario()));
-            item.add(usuario.getPrimeiroNome()+" "+usuario.getSobreNome());
+            if (usuario.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
+                item.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome()+" - "+usuario.getTipoStatusUsuario().getNomeTipoStatusUsuario());
+            } else {
+                item.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
+            }
             
             for (Avaliacao avaliacao : disciplina.getListAvaliacao()) {
                 
                 String strNota="";
-                for(Nota nota : avaliacao.getListNota()){
-                    if(nota.getIdUsuario()==usuario.getIdUsuario()){
-                        if(avaliacao.getIdAvaliacao()==nota.getIdAvaliacao()){
-                            strNota = nota.getNota();
-                            break;
+                if (usuario.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
+                    strNota="-";
+                } else {
+                    for (Nota nota : avaliacao.getListNota()) {
+                        if (nota.getIdUsuario() == usuario.getIdUsuario()) {
+                            if (avaliacao.getIdAvaliacao() == nota.getIdAvaliacao()) {
+                                strNota = nota.getNota();
+                                break;
+                            }
                         }
                     }
-                }
-                if(strNota==null || strNota.isEmpty()){
-                    strNota = "-";
+                    if (strNota == null || strNota.isEmpty()) {
+                        strNota = "-";
+                    }
                 }
                 item.add(strNota);
             }
@@ -384,15 +418,22 @@ public class NotaServer {
         
         for (int i=0;i<list.size();i++) {
             int idUsuario = Integer.parseInt(list.get(i).get(0));
-            String strMedia = disciplina.getMediaAlunoDisciplina(idUsuario);
-            if(strMedia==null || strMedia.isEmpty()){
-                strMedia = "-";
-                list.get(i).add(strMedia);
-                list.get(i).add(strMedia);
-            }else{
-                double doubleMediaAluno = Double.parseDouble(strMedia);
-                list.get(i).add(MpUtilServer.getDecimalFormatedTwoDecimal(doubleMediaAluno));
-                list.get(i).add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+            Usuario aluno = UsuarioServer.getUsuarioPeloId(idUsuario);
+            if (aluno.getIdTipoStatusUsuario() == 2) {
+                list.get(i).add("-");
+                list.get(i).add("-");
+
+            } else {
+                String strMedia = disciplina.getMediaAlunoDisciplina(idUsuario);
+                if (strMedia == null || strMedia.isEmpty()) {
+                    strMedia = "-";
+                    list.get(i).add(strMedia);
+                    list.get(i).add(strMedia);
+                } else {
+                    double doubleMediaAluno = Double.parseDouble(strMedia);
+                    list.get(i).add(MpUtilServer.getDecimalFormatedTwoDecimal(doubleMediaAluno));
+                    list.get(i).add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+                }
             }
             
         }
@@ -408,15 +449,23 @@ public class NotaServer {
             ArrayList<String> item = new ArrayList<String>();
             
             item.add(Integer.toString(usuario.getIdUsuario()));
-            item.add(usuario.getPrimeiroNome() + " "+usuario.getSobreNome());
+            if (usuario.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
+                item.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome() + " - " + usuario.getTipoStatusUsuario().getNomeTipoStatusUsuario());
+            } else {
+                item.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
+            }
             for (Disciplina disciplina : listDisciplinas) {
-                String strMedia = disciplina.getMediaAlunoDisciplina(usuario.getIdUsuario());
-                if(strMedia==null || strMedia.isEmpty()){
-                    strMedia = "-";
-                    item.add(strMedia);
-                }else{
-                    double doubleMediaAluno = Double.parseDouble(strMedia);
-                    item.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+                if (usuario.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
+                    item.add("-");
+                } else {
+                    String strMedia = disciplina.getMediaAlunoDisciplina(usuario.getIdUsuario());
+                    if (strMedia == null || strMedia.isEmpty()) {
+                        strMedia = "-";
+                        item.add(strMedia);
+                    } else {
+                        double doubleMediaAluno = Double.parseDouble(strMedia);
+                        item.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+                    }
                 }
             }
             
@@ -434,17 +483,60 @@ public class NotaServer {
         XSSFSheet sheet = wb.createSheet("Boletim Anual");
         
         ArrayList<ArrayList<String>> listNotas = getBoletimAnual(idCurso);
+        ArrayList<String> listHeader = listNotas.get(0);
         
+        Curso curso = CursoServer.getCurso(idCurso);
+       
+//        XSSFFont font1 = wb.createFont();
+//        font1.setItalic(true);
+//        font1.setUnderline(HSSFFont.U_DOUBLE);
+//        
+//        XSSFFont font2 = wb.createFont();
+//        font2.setItalic(true);
+//        font2.setUnderline(HSSFFont.U_DOUBLE);
+//       
+//        XSSFRichTextString richString = new XSSFRichTextString( "COLÉGIO \n INTEGRADO");
+//        richString.applyFont(0,5,font1);
+//        richString.applyFont(5,10,font2)
+        
+        String texto1  ="COLÉGIO INTEGRADO";
+        String texto2  ="Ato de Criação da Escola : Portaria do Dirigente Regional de Ensino de 26/01 - Publicado no D.O.E. de 27/01/99";
+        String texto3 = "Na data de "+ MpUtilServer.convertDateToString(curso.getDataFinal(),"dd MMMM yyyy")+", encerrou-se o ";
+        String texto4 = "processo de avaliação de aprendizagem dos alunos do : ";
+        String texto5 = curso.getNome()+", ";
+        String texto6 = "deste estabelecimento com o resultado abaixo discriminado. ";
+        String texto7 = "\n\nDias Letivos:200";
         int intColumn=0;
         int intLine=0;
-        Row row = sheet.createRow((short) intLine);  
-        row.createCell((short) intColumn).setCellValue("PLANILHA DE NOTAS ");
-        row.getCell((short) intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));
+        
+        Row row = sheet.createRow(intLine);  
+        row.createCell(0);
+        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine+1,0,listHeader.size()-2));
+        row.getCell(0).setCellValue(texto1);
+        row.getCell(0).setCellStyle(ExcelFramework.getStyleTitleBoletimAno(wb));   
+        
+        intLine=intLine+2;
+        row = sheet.createRow(intLine);
+        row.createCell(0).setCellValue(texto2);     
+        row.getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoletim(wb));
+        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,listHeader.size()-2));
+        
+        intLine=intLine+1;
+        row = sheet.createRow(intLine);
+        row.createCell(0).setCellValue(new XSSFRichTextString(texto3+texto4+texto5+texto6+texto7));     
+        row.getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoletimDataFinalizacao(wb));
+        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine+3,0,0));
+        
+        intLine=intLine+4;
+        row = sheet.createRow(intLine);
+        row.createCell(intColumn).setCellValue("PLANILHA DE NOTAS");
+        row.getCell(intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));        
         sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,8));
         intLine++;
-        row = sheet.createRow((short) intLine++);  
         
-        ArrayList<String> listHeader = listNotas.get(0);
+        row = sheet.createRow(intLine++);  
+        
+        
 
         for(int i=1;i<listHeader.size();i++){
             String header = "";
@@ -485,12 +577,16 @@ public class NotaServer {
         }
         
         for (int i = 0; i < intColumn; i++) {   
-            if(i==0 || i==intColumn-1){
+            if(i==0){
+                sheet.setColumnWidth(i, 20000); 
+            }else if(i==intColumn-1){
                 sheet.autoSizeColumn(i,true);
             }else{
                 sheet.setColumnWidth(i, 2000);
             }
         }
+        
+        ExcelFramework.createImage(wb, sheet);
         
         return ExcelFramework.getExcelAddress(wb,"GerarExcelBoletimAnual_");
     }

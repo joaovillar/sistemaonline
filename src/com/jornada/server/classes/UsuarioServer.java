@@ -68,10 +68,12 @@ public class UsuarioServer{
 			"situacao_responsaveis," +
 			"situacao_responsaveis_outros," +
 			"registro_aluno, " + 
-			"primeiro_login " +
+			"primeiro_login," +
+			"observacao," +
+			"id_tipo_status_usuario " +
 			") " +
 			"VALUES " +
-			"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	
 	public static String DB_UPDATE = 
 			"UPDATE usuario set " +
@@ -103,7 +105,9 @@ public class UsuarioServer{
 			"tipo_pais=?, " +
 			"situacao_responsaveis=?, " +
 			"situacao_responsaveis_outros=?, " +
-			"registro_aluno=? " +		
+			"registro_aluno=?, " +
+			"observacao=?, " +
+			"id_tipo_status_usuario=? " +		
 			"where id_usuario=?";
 	
 	public static final String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
@@ -266,6 +270,8 @@ public class UsuarioServer{
 			insert.setString(++count, usuario.getSituacaoResponsaveisOutros());
 			insert.setString(++count, usuario.getRegistroAluno());			
 			insert.setBoolean(++count, true);
+			insert.setString(++count, usuario.getObservacao());
+			insert.setInt(++count, usuario.getIdTipoStatusUsuario());
 
 			int numberUpdate = insert.executeUpdate();
 
@@ -326,6 +332,8 @@ public class UsuarioServer{
 			update.setString(++count, usuario.getSituacaoResponsaveis());
 			update.setString(++count, usuario.getSituacaoResponsaveisOutros());
 			update.setString(++count, usuario.getRegistroAluno());
+			update.setString(++count, usuario.getObservacao());
+			update.setInt(++count, usuario.getIdTipoStatusUsuario());
 
 						
 			update.setInt(++count, usuario.getIdUsuario());
@@ -480,7 +488,7 @@ public class UsuarioServer{
 		XSSFSheet sheetCoordenador = wb.createSheet("Coordenador");
 		XSSFSheet sheetPais = wb.createSheet("Pais");
 		XSSFSheet sheetProfessor = wb.createSheet("Professor");
-		XSSFSheet sheetPaisAlunos = wb.createSheet("Associa��o Pais e Alunos");
+		XSSFSheet sheetPaisAlunos = wb.createSheet("Associação Pais e Alunos");
 		
         gerarExcelAdministrador(sheetAdministrador, font, style);
         gerarExcelAluno(sheetAlunos, font, style);
@@ -511,15 +519,15 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usu�rio");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usu�rio");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");
         row.createCell((short) intColumn++).setCellValue("Sexo");
-        row.createCell((short) intColumn++).setCellValue("Endere�o");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -530,6 +538,7 @@ public class UsuarioServer{
         row.createCell((short) intColumn++).setCellValue("Tel Com");
         row.createCell((short) intColumn++).setCellValue("CPF");
         row.createCell((short) intColumn++).setCellValue("RG");
+        row.createCell((short) intColumn++).setCellValue("Status");
 
 
 		for (int i = 0; i < intColumn; i++) {
@@ -562,6 +571,7 @@ public class UsuarioServer{
             row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneComercial());
             row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
             row.createCell((short) intColumn++).setCellValue(usuario.getRg());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTipoStatusUsuario().getNomeTipoStatusUsuario());
         }        
         
 		for (int i = 0; i < intColumn; i++) {
@@ -577,18 +587,18 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usu�rio");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
-		row.createCell((short) intColumn++).setCellValue("Matr�cula");
+		row.createCell((short) intColumn++).setCellValue("Matrícula");
 		row.createCell((short) intColumn++).setCellValue("Data Matric");
 		row.createCell((short) intColumn++).setCellValue("Registro Aluno");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usu�rio");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");
         row.createCell((short) intColumn++).setCellValue("Sexo");
-        row.createCell((short) intColumn++).setCellValue("Endere�o");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -599,9 +609,10 @@ public class UsuarioServer{
         row.createCell((short) intColumn++).setCellValue("Tel Com");
         row.createCell((short) intColumn++).setCellValue("CPF");
         row.createCell((short) intColumn++).setCellValue("RG");
-        row.createCell((short) intColumn++).setCellValue("Situa��o do Pais");
-        row.createCell((short) intColumn++).setCellValue("Situa��o do Pais : Outros");
+        row.createCell((short) intColumn++).setCellValue("Situação do Pais");
+        row.createCell((short) intColumn++).setCellValue("Situação do Pais : Outros");
         row.createCell((short) intColumn++).setCellValue("Curso");
+        row.createCell((short) intColumn++).setCellValue("Status");
 
         
 		for (int i = 0; i < intColumn; i++) {
@@ -651,6 +662,8 @@ public class UsuarioServer{
             row.createCell((short) intColumn++).setCellValue(usuario.getSituacaoResponsaveis());
             row.createCell((short) intColumn++).setCellValue(usuario.getSituacaoResponsaveisOutros());
             row.createCell((short) intColumn++).setCellValue(strCursos);
+            row.createCell((short) intColumn++).setCellValue(usuario.getTipoStatusUsuario().getNomeTipoStatusUsuario());
+
 
         }     
         
@@ -667,15 +680,15 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usu�rio");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usu�rio");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");
         row.createCell((short) intColumn++).setCellValue("Sexo");
-        row.createCell((short) intColumn++).setCellValue("Endere�o");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -686,6 +699,7 @@ public class UsuarioServer{
         row.createCell((short) intColumn++).setCellValue("Tel Com");
         row.createCell((short) intColumn++).setCellValue("CPF");
         row.createCell((short) intColumn++).setCellValue("RG");
+        row.createCell((short) intColumn++).setCellValue("Status");
 
         
 		for (int i = 0; i < intColumn; i++) {
@@ -717,6 +731,7 @@ public class UsuarioServer{
             row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneComercial());
             row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
             row.createCell((short) intColumn++).setCellValue(usuario.getRg());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTipoStatusUsuario().getNomeTipoStatusUsuario());
         }        
         
 		for (int i = 0; i < intColumn; i++) {
@@ -732,15 +747,15 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usu�rio");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usu�rio");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");
         row.createCell((short) intColumn++).setCellValue("Sexo");
-        row.createCell((short) intColumn++).setCellValue("Endere�o");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -751,6 +766,7 @@ public class UsuarioServer{
         row.createCell((short) intColumn++).setCellValue("Tel Com");
         row.createCell((short) intColumn++).setCellValue("CPF");
         row.createCell((short) intColumn++).setCellValue("RG");
+        row.createCell((short) intColumn++).setCellValue("Status");
 
         
 		for (int i = 0; i < intColumn; i++) {
@@ -782,6 +798,7 @@ public class UsuarioServer{
             row.createCell((short) intColumn++).setCellValue(usuario.getTelefoneComercial());
             row.createCell((short) intColumn++).setCellValue(usuario.getCpf());
             row.createCell((short) intColumn++).setCellValue(usuario.getRg());
+            row.createCell((short) intColumn++).setCellValue(usuario.getTipoStatusUsuario().getNomeTipoStatusUsuario());
         }        
         
 		for (int i = 0; i < intColumn; i++) {
@@ -797,16 +814,16 @@ public class UsuarioServer{
 		Row row = sheet.createRow((short) 0);		
 		
 		int intColumn=0;
-		row.createCell((short) intColumn++).setCellValue("Tipo Usu�rio");
+		row.createCell((short) intColumn++).setCellValue("Tipo Usuário");
 		row.createCell((short) intColumn++).setCellValue("Unidade");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
-        row.createCell((short) intColumn++).setCellValue("Usu�rio");
+        row.createCell((short) intColumn++).setCellValue("Usuário");
         row.createCell((short) intColumn++).setCellValue("Email");        
         row.createCell((short) intColumn++).setCellValue("Data Nascimento");        
         row.createCell((short) intColumn++).setCellValue("Sexo");
         row.createCell((short) intColumn++).setCellValue("Tipo Pai");
-        row.createCell((short) intColumn++).setCellValue("Endere�o");
+        row.createCell((short) intColumn++).setCellValue("Endereço");
         row.createCell((short) intColumn++).setCellValue("Num Res");
         row.createCell((short) intColumn++).setCellValue("Bairro");
         row.createCell((short) intColumn++).setCellValue("Cidade");
@@ -819,8 +836,9 @@ public class UsuarioServer{
         row.createCell((short) intColumn++).setCellValue("RG");
         row.createCell((short) intColumn++).setCellValue("Empresa");
         row.createCell((short) intColumn++).setCellValue("Cargo");
-        row.createCell((short) intColumn++).setCellValue("Resp Acad�mico");
+        row.createCell((short) intColumn++).setCellValue("Resp Acadêmico");
         row.createCell((short) intColumn++).setCellValue("Resp Financeiro");
+        row.createCell((short) intColumn++).setCellValue("Status");
         
 		for (int i = 0; i < intColumn; i++) {
 			row.getCell((short) i).setCellStyle(style);
@@ -854,8 +872,9 @@ public class UsuarioServer{
             row.createCell((short) intColumn++).setCellValue(usuario.getRg());
             row.createCell((short) intColumn++).setCellValue(usuario.getEmpresaOndeTrabalha());
             row.createCell((short) intColumn++).setCellValue(usuario.getCargo());
-            row.createCell((short) intColumn++).setCellValue((usuario.isRespAcademico()==true)?"Sim":"N�o");
-            row.createCell((short) intColumn++).setCellValue((usuario.isRespFinanceiro()==true)?"Sim":"N�o");        
+            row.createCell((short) intColumn++).setCellValue((usuario.isRespAcademico()==true)?"Sim":"Não");
+            row.createCell((short) intColumn++).setCellValue((usuario.isRespFinanceiro()==true)?"Sim":"Não"); 
+            row.createCell((short) intColumn++).setCellValue(usuario.getTipoStatusUsuario().getNomeTipoStatusUsuario());
         }        
         
 		for (int i = 0; i < intColumn; i++) {
@@ -2315,6 +2334,7 @@ public class UsuarioServer{
 			usuario.setSituacaoResponsaveisOutros(rs.getString("situacao_responsaveis_outros"));   
 			usuario.setRegistroAluno(rs.getString("registro_aluno"));
 			usuario.setPrimeiroLogin(rs.getBoolean("primeiro_login"));
+			usuario.setObservacao(rs.getString("observacao"));
 
 			
 			
@@ -2341,6 +2361,13 @@ public class UsuarioServer{
 			}catch (Exception ex) {
 				usuario.setIdioma(null);
 			}
+			
+            try{
+                usuario.setIdTipoStatusUsuario(rs.getInt("id_tipo_status_usuario"));
+                usuario.setTipoStatusUsuario(TipoStatusUsuarioServer.getTipoStatusAluno(usuario.getIdTipoStatusUsuario()));
+            }catch (Exception ex) {
+                usuario.setTipoStatusUsuario(null);
+            }
 
 			data.add(usuario);
 		}

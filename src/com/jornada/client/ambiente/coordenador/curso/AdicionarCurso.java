@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
@@ -28,6 +27,7 @@ import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextArea;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceCursoAsync;
@@ -46,8 +46,8 @@ public class AdicionarCurso extends VerticalPanel {
 
 
 	private TextBox txtNomeCurso;
-	private TextArea txtDescricaoCurso;
-	private TextArea txtEmentaCurso;
+	private MpTextArea txtDescricaoCurso;
+	private MpTextArea txtEmentaCurso;
 	private MpSelection mpListBoxStatus;
 	private MpListBoxMediaNota mpListBoxMediaNota;
 	private MpListBoxPorcentagemPresenca mpListBoxPorcentagemPresenca;	
@@ -140,8 +140,8 @@ public class AdicionarCurso extends VerticalPanel {
 		//cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
 		txtNomeCurso = new TextBox();
-		txtDescricaoCurso = new TextArea();
-		txtEmentaCurso = new TextArea();
+		txtDescricaoCurso = new MpTextArea();
+		txtEmentaCurso = new MpTextArea();
 		
 		mpListBoxMediaNota = new MpListBoxMediaNota();
 		mpListBoxPorcentagemPresenca = new MpListBoxPorcentagemPresenca();

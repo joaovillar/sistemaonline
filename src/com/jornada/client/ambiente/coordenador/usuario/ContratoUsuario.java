@@ -23,8 +23,8 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionCursoItemTodos;
-import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionDocumentos;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxCursoItemTodos;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxDocumentos;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBoxRefreshPage;
@@ -50,7 +50,7 @@ public class ContratoUsuario extends VerticalPanel {
 //    private MpPanelPageMainView mpPanelFiltrarFilhoPor;
     private MpPanelPageMainView mpPanelFiltrarFilhoPorCurso;
 
-    private MpSelectionDocumentos mpSelectionDocumentos;
+    private MpListBoxDocumentos mpSelectionDocumentos;
 
     private RadioButton radioButtonFiltrarPaisPorNome;
     private RadioButton radioButtonFiltrarPaisPorCurso;
@@ -81,8 +81,8 @@ public class ContratoUsuario extends VerticalPanel {
     
 
     // private ListBox listBoxCurso;
-    private MpSelectionCursoItemTodos mpSelectionCursoPorPais;
-    private MpSelectionCursoItemTodos mpSelectionCursoPorFilhos;
+    private MpListBoxCursoItemTodos mpSelectionCursoPorPais;
+    private MpListBoxCursoItemTodos mpSelectionCursoPorFilhos;
     
     private ArrayList<Usuario> listAuxUsuarioPais;
     private ArrayList<Usuario> listAuxUsuarioFilhos;
@@ -135,11 +135,11 @@ public class ContratoUsuario extends VerticalPanel {
         mpPanelLoadingFiltrarCursoFilhos.setVisible(false);
         
 
-        mpSelectionDocumentos = new MpSelectionDocumentos();
+        mpSelectionDocumentos = new MpListBoxDocumentos();
         mpSelectionDocumentos.addChangeHandler(new ChangeHandlerPopularDocumentos());
-        mpSelectionCursoPorPais = new MpSelectionCursoItemTodos(false, "Todos os Cursos");
+        mpSelectionCursoPorPais = new MpListBoxCursoItemTodos(false, "Todos os Cursos");
         mpSelectionCursoPorPais.addChangeHandler(new ChangeHandlerPopularPaisAssociados());
-        mpSelectionCursoPorFilhos = new MpSelectionCursoItemTodos(false, "Todos os Cursos");
+        mpSelectionCursoPorFilhos = new MpListBoxCursoItemTodos(false, "Todos os Cursos");
         mpSelectionCursoPorFilhos.addChangeHandler(new ChangeHandlerPopularFilhosAssociados());
         
 

@@ -11,13 +11,13 @@ import com.jornada.client.service.GWTServiceDocumento;
 import com.jornada.shared.classes.Documento;
 
 
-public class MpSelectionDocumentos extends MpSelection {
+public class MpListBoxDocumentos extends MpSelection {
 	
 private AsyncCallback<ArrayList<Documento>> callBackPopulateComboBox;
     
     private ArrayList<Documento> listDocumentos;
 
-    public MpSelectionDocumentos(){
+    public MpListBoxDocumentos(){
 
         listDocumentos = new ArrayList<Documento>();
         
@@ -39,7 +39,7 @@ private AsyncCallback<ArrayList<Documento>> callBackPopulateComboBox;
                     // DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
                     // MpSelectionTipoAvaliacao.this);
                     try {
-                        DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionDocumentos.this);
+                        DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxDocumentos.this);
                     } catch (Exception ex) {
                         logoutAndRefreshPage();
                     }

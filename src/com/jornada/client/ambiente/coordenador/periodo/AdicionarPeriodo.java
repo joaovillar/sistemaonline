@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPesoPeriodo;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
@@ -49,11 +50,13 @@ public class AdicionarPeriodo extends VerticalPanel {
 //	private ListBox listBoxCurso;
 	private MpSelectionCurso listBoxCurso;
     MpListBoxPanelHelper mpHelperCurso = new MpListBoxPanelHelper();
+    
+    MpListBoxPesoPeriodo mpListBoxPeso = new MpListBoxPesoPeriodo(1,10);
 	
 	private MpTextBox txtNomePeriodo;
 	private TextArea txtDescricaoPeriodo;
 	private TextArea txtObjetivoPeriodo;
-	private MpTextBox txtPesoPeriodo;
+//	private MpTextBox txtPesoPeriodo;
 	private MpDateBoxWithImage mpDateBoxInicial;
 	private MpDateBoxWithImage mpDateBoxFinal;
 	
@@ -104,7 +107,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 		txtNomePeriodo = new MpTextBox();
 		txtDescricaoPeriodo = new TextArea();
 		txtObjetivoPeriodo = new TextArea();
-		txtPesoPeriodo = new MpTextBox();
+//		txtPesoPeriodo = new MpTextBox();
 		mpDateBoxInicial = new MpDateBoxWithImage();
 		mpDateBoxInicial.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
 		mpDateBoxFinal = new MpDateBoxWithImage();
@@ -124,7 +127,8 @@ public class AdicionarPeriodo extends VerticalPanel {
 		lblErroNomePeriodo = new MpLabelTextBoxError();
 		
 		txtNomePeriodo.setWidth("350px");
-		txtPesoPeriodo.setWidth("80px");
+//		txtPesoPeriodo.setWidth("80px");
+		mpListBoxPeso.setWidth("80px");
 		txtDescricaoPeriodo.setSize("350px", "50px");
 		txtObjetivoPeriodo.setSize("350px", "50px");
 		mpDateBoxInicial.getDate().setWidth("170px");
@@ -147,7 +151,7 @@ public class AdicionarPeriodo extends VerticalPanel {
 		flexTable.setWidget(row, 0, lblNomePeriodo);flexTable.setWidget(row, 1, txtNomePeriodo);flexTable.setWidget(row++, 2, lblErroNomePeriodo);
 		flexTable.setWidget(row, 0, lblDescricaoPeriodo);flexTable.setWidget(row++, 1, txtDescricaoPeriodo);
 		flexTable.setWidget(row, 0, lblObjetivoPeriodo);flexTable.setWidget(row++, 1, txtObjetivoPeriodo);
-		flexTable.setWidget(row, 0, lblPesoPeriodo);flexTable.setWidget(row++, 1, txtPesoPeriodo);
+		flexTable.setWidget(row, 0, lblPesoPeriodo);flexTable.setWidget(row++, 1, mpListBoxPeso);
 		flexTable.setWidget(row, 0, lblDateInicial);flexTable.setWidget(row++, 1, mpDateBoxInicial);
 		flexTable.setWidget(row, 0, lblDateFinal);flexTable.setWidget(row++, 1, mpDateBoxFinal);
 
@@ -290,7 +294,8 @@ public class AdicionarPeriodo extends VerticalPanel {
 		txtNomePeriodo.setValue("");
 		txtDescricaoPeriodo.setValue("");
 		txtObjetivoPeriodo.setValue("");
-		txtPesoPeriodo.setValue("");
+//		txtPesoPeriodo.setValue("");
+		mpListBoxPeso.setItemSelected(0, true);
 		mpDateBoxInicial.getDate().setValue(null);
 		mpDateBoxFinal.getDate().setValue(null);
 	}

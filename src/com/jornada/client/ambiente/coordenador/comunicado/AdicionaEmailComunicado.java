@@ -25,8 +25,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoEmail;
-import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionCursoItemTodos;
-import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpSelectionUnidadeEscola;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxCursoItemTodos;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxUnidadeEscola;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelLeft;
@@ -63,9 +63,9 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 	
 	private MpTextBox txtAssunto;
 	private MpRichTextArea mpRichTextAreaEmail;
-	private MpSelectionCursoItemTodos listBoxCursoItemTodos;
+	private MpListBoxCursoItemTodos listBoxCursoItemTodos;
 	
-	private MpSelectionUnidadeEscola listBoxUnidadeEscola;
+	private MpListBoxUnidadeEscola listBoxUnidadeEscola;
 	
 	private MpSelection multiBoxUsuariosFiltrados;
 	
@@ -157,13 +157,13 @@ public class AdicionaEmailComunicado extends VerticalPanel {
 		listBoxTipoEmail.addChangeHandler(new ChangeHandlerListBoxTipoEmail());
 		
 		
-		listBoxCursoItemTodos = new MpSelectionCursoItemTodos(true, txtConstants.emailTodosOsCursos());
+		listBoxCursoItemTodos = new MpListBoxCursoItemTodos(true, txtConstants.emailTodosOsCursos());
 //		listBoxCursoItemTodos.setMultipleSelect(true);
 //		listBoxCursoItemTodos.setVisibleItemCount(5);
 //		listBoxCursoItemTodos.setSize("350px", "70px");
         listBoxCursoItemTodos.addChangeHandler(new ChangeHandlerListBoxCurso());	
         
-        listBoxUnidadeEscola = new MpSelectionUnidadeEscola();
+        listBoxUnidadeEscola = new MpListBoxUnidadeEscola();
         listBoxUnidadeEscola.addChangeHandler(new ChangeHandlerListBoxUnidade());
         
         

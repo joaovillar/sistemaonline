@@ -46,10 +46,12 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	private String situacaoResponsaveisOutros;
 	private String registroAluno;
 	private int idUnidadeEscola;
+	private String observacao;
 
 	
 	private int idTipoUsuario;
 	private int idIdioma;
+	private int idTipoStatusUsuario;
 	
 	private Date dataNascimento;
 	
@@ -60,11 +62,13 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	private TipoUsuario tipoUsuario;
 	private Idioma idioma;
 	private UnidadeEscola unidadeEscola;
+	private TipoStatusUsuario tipoStatusUsuario;
 
 	public Usuario() {
 		this.tipoUsuario = new TipoUsuario();
 		this.idioma = new Idioma();
 		this.unidadeEscola = new UnidadeEscola();
+		this.tipoStatusUsuario= new TipoStatusUsuario(); 
 
 	}
 
@@ -355,10 +359,16 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 		this.registroAluno = registroAluno;
 	}
 	
-	
-	
 
-	public UnidadeEscola getUnidadeEscola() {
+	public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    public UnidadeEscola getUnidadeEscola() {
 		return unidadeEscola;
 	}
 
@@ -373,8 +383,26 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	public void setIdUnidadeEscola(int idUnidadeEscola) {
 		this.idUnidadeEscola = idUnidadeEscola;
 	}
+	
+	
 
-	@Override
+	public int getIdTipoStatusUsuario() {
+        return idTipoStatusUsuario;
+    }
+
+    public void setIdTipoStatusUsuario(int idTipoStatusUsuario) {
+        this.idTipoStatusUsuario = idTipoStatusUsuario;
+    }
+
+    public TipoStatusUsuario getTipoStatusUsuario() {
+        return tipoStatusUsuario;
+    }
+
+    public void setTipoStatusUsuario(TipoStatusUsuario tipoStatusUsuario) {
+        this.tipoStatusUsuario = tipoStatusUsuario;
+    }
+
+    @Override
     public int compareTo(Usuario o) {
       return (o == null || (o.primeiroNome+o.sobreNome) == null) ? -1 : -(o.primeiroNome+o.sobreNome).compareTo((o.primeiroNome+o.sobreNome));
     }
