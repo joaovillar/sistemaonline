@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Date;
 
+//import org.apache.poi.hssf.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -15,7 +17,9 @@ import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -36,6 +40,30 @@ public class ExcelFramework {
         styleHeader.setBorderRight(CellStyle.BORDER_THIN);        
         return styleHeader;
     }
+    
+    public static XSSFCellStyle getStyleHeaderBoletimRotation90(XSSFWorkbook wb){
+        
+        Font font = wb.createFont();
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        font.setFontName("Calibri");  
+        font.setFontHeightInPoints((short)10);
+
+        
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+        styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        styleHeader.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+        styleHeader.setFont(font);
+        styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+        styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+        styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
+        styleHeader.setBorderRight(CellStyle.BORDER_THIN);   
+        styleHeader.setRotation((short)90);
+        styleHeader.setWrapText(true);
+        
+        return styleHeader;
+    }    
     
     public static XSSFCellStyle getStyleTitleBoletim(XSSFWorkbook wb){
         XSSFCellStyle styleHeader = wb.createCellStyle();
@@ -69,6 +97,13 @@ public class ExcelFramework {
         font.setFontHeightInPoints((short)8);
         
         XSSFCellStyle styleHeader = wb.createCellStyle();
+        
+        styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+        styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+        styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
+        styleHeader.setBorderRight(CellStyle.BORDER_THIN);
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);  
+        
         styleHeader.setAlignment(CellStyle.ALIGN_LEFT);
         styleHeader.setFont(font);      
         styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -112,7 +147,7 @@ public class ExcelFramework {
         styleCellCenter.setBorderTop(CellStyle.BORDER_THIN);
         styleCellCenter.setBorderLeft(CellStyle.BORDER_THIN);
         styleCellCenter.setBorderRight(CellStyle.BORDER_THIN);
-        styleCellCenter.setAlignment(CellStyle.ALIGN_CENTER);         
+        styleCellCenter.setAlignment(CellStyle.ALIGN_CENTER);          
         return styleCellCenter;
     }
     
@@ -177,6 +212,30 @@ public class ExcelFramework {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+    }
+    
+    
+    public static void cleanBeforeMergeOnValidCells(XSSFSheet sheet, CellRangeAddress region, XSSFCellStyle cellStyle )
+    {
+        for(int rowNum =region.getFirstRow();rowNum<=region.getLastRow();rowNum++){
+            XSSFRow row= sheet.getRow(rowNum);
+            if(row==null){
+                row = sheet.createRow(rowNum);
+//                System.out.println("while check row "+rowNum+" was created");
+            }
+            for(int colNum=region.getFirstColumn();colNum<=region.getLastColumn();colNum++){
+                XSSFCell currentCell = row.getCell(colNum); 
+               if(currentCell==null){
+                   currentCell = row.createCell(colNum);
+//                   System.out.println("while check cell "+rowNum+":"+colNum+" was created");
+               }    
+
+               currentCell.setCellStyle(cellStyle);
+
+            }
+        }
+
 
     }
 

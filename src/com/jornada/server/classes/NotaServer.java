@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.util.CellRangeAddress;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -28,9 +29,7 @@ import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoStatusUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.TabelaBoletim;
-import com.jornada.shared.classes.utility.MpUtilClient;
 
-@SuppressWarnings("deprecation")
 public class NotaServer {	
 	
 	public static final String DB_INSERT = "INSERT INTO nota (id_avaliacao, id_usuario, nota) VALUES (?,?,?);";
@@ -481,23 +480,14 @@ public class NotaServer {
 
         // /Creating Tabs
         XSSFSheet sheet = wb.createSheet("Boletim Anual");
-        
+        sheet.setFitToPage(true);
+        sheet.getPrintSetup().setLandscape(true);
+        sheet.setMargin((short)1, 1.5);
+
         ArrayList<ArrayList<String>> listNotas = getBoletimAnual(idCurso);
         ArrayList<String> listHeader = listNotas.get(0);
         
         Curso curso = CursoServer.getCurso(idCurso);
-       
-//        XSSFFont font1 = wb.createFont();
-//        font1.setItalic(true);
-//        font1.setUnderline(HSSFFont.U_DOUBLE);
-//        
-//        XSSFFont font2 = wb.createFont();
-//        font2.setItalic(true);
-//        font2.setUnderline(HSSFFont.U_DOUBLE);
-//       
-//        XSSFRichTextString richString = new XSSFRichTextString( "COLÉGIO \n INTEGRADO");
-//        richString.applyFont(0,5,font1);
-//        richString.applyFont(5,10,font2)
         
         String texto1  ="COLÉGIO INTEGRADO";
         String texto2  ="Ato de Criação da Escola : Portaria do Dirigente Regional de Ensino de 26/01 - Publicado no D.O.E. de 27/01/99";
@@ -515,24 +505,34 @@ public class NotaServer {
         row.getCell(0).setCellValue(texto1);
         row.getCell(0).setCellStyle(ExcelFramework.getStyleTitleBoletimAno(wb));   
         
+
         intLine=intLine+2;
         row = sheet.createRow(intLine);
         row.createCell(0).setCellValue(texto2);     
         row.getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoletim(wb));
         sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,listHeader.size()-2));
         
+        int startMergedComments=3;
+        int sizeMergedComments=5;
         intLine=intLine+1;
         row = sheet.createRow(intLine);
         row.createCell(0).setCellValue(new XSSFRichTextString(texto3+texto4+texto5+texto6+texto7));     
-        row.getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoletimDataFinalizacao(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine+3,0,0));
+//        row.getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoletimDataFinalizacao(wb));
+        CellRangeAddress regionComments = new CellRangeAddress(intLine,intLine+sizeMergedComments,0,0);
+        ExcelFramework.cleanBeforeMergeOnValidCells(sheet, regionComments, ExcelFramework.getStyleCellFontBoletimDataFinalizacao(wb));
+        sheet.addMergedRegion(regionComments);
         
-        intLine=intLine+4;
-        row = sheet.createRow(intLine);
-        row.createCell(intColumn).setCellValue("PLANILHA DE NOTAS");
-        row.getCell(intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));        
-        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,8));
-        intLine++;
+        row.createCell(1).setCellValue("DISCIPLINAS - GRADE CURRICULAR"); 
+        CellRangeAddress regionGrade = new CellRangeAddress(intLine,intLine,1,listHeader.size()-3);
+        ExcelFramework.cleanBeforeMergeOnValidCells(sheet, regionGrade, ExcelFramework.getStyleHeaderBoletim(wb));
+        sheet.addMergedRegion(regionGrade);
+        row.createCell(listHeader.size()-2).setCellValue("RESULTADO FINAL"); 
+        row.getCell(listHeader.size()-2).setCellStyle(ExcelFramework.getStyleHeaderBoletimRotation90(wb));
+        
+
+        intLine=intLine+sizeMergedComments+1;
+        
+
         
         row = sheet.createRow(intLine++);  
         
@@ -540,17 +540,40 @@ public class NotaServer {
 
         for(int i=1;i<listHeader.size();i++){
             String header = "";
-            if(i==1 || i==listHeader.size()-1){
-                header = listHeader.get(i);
-            }else{
-                header = Curso.getAbreviarNomeCurso(listHeader.get(i));
-            }
+            row.createCell(intColumn);
+            row.getCell(intColumn).setCellType(Cell.CELL_TYPE_STRING);   
             
-            row.createCell((short) intColumn).setCellValue(header);
-            row.getCell((short) intColumn).setCellType(Cell.CELL_TYPE_STRING);  
-            row.getCell((short) intColumn++).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));  
+            if (i == 1) {
+
+                header = listHeader.get(i);
+                row.getCell(intColumn).setCellValue(header);
+                row.getCell(intColumn).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));  
+                
+            } else {
+                
+                int intSizeDisciplina=1;
+                if (i == listHeader.size() - 1) {
+                    header = listHeader.get(i);
+                    intSizeDisciplina=2;
+                } else {
+                    intSizeDisciplina=1;
+                    header = Curso.getAbreviarNomeCursoAno(listHeader.get(i));
+                }
+
+                row = sheet.getRow(startMergedComments + 1);
+                row.createCell(intColumn);
+                row.getCell(intColumn).setCellValue(header);
+                row.getCell(intColumn).setCellStyle(ExcelFramework.getStyleHeaderBoletimRotation90(wb));
+
+                CellRangeAddress region = new CellRangeAddress(intLine - sizeMergedComments - intSizeDisciplina, intLine - 1, intColumn, intColumn);
+                ExcelFramework.cleanBeforeMergeOnValidCells(sheet, region, ExcelFramework.getStyleHeaderBoletimRotation90(wb));
+                sheet.addMergedRegion(region);
+
+            }           
+            
+            intColumn++;
         }
-//        intLine++;
+
         
         for(int r=1;r<listNotas.size();r++){
             ArrayList<String> listRow = listNotas.get(r);
@@ -588,6 +611,12 @@ public class NotaServer {
         
         ExcelFramework.createImage(wb, sheet);
         
+        CellRangeAddress regionAll = new CellRangeAddress(0, intLine-1, 0, listHeader.size()-2);
+        RegionUtil.setBorderBottom(BorderStyle.THICK.ordinal(), regionAll, sheet, wb);
+        RegionUtil.setBorderTop(BorderStyle.THICK.ordinal(), regionAll, sheet, wb);
+        RegionUtil.setBorderLeft(BorderStyle.THICK.ordinal(), regionAll, sheet, wb);
+        RegionUtil.setBorderRight(BorderStyle.THICK.ordinal(), regionAll, sheet, wb);
+        
         return ExcelFramework.getExcelAddress(wb,"GerarExcelBoletimAnual_");
     }
     
@@ -596,6 +625,8 @@ public class NotaServer {
         XSSFWorkbook wb = new XSSFWorkbook();
         // /Creating Tabs
         XSSFSheet sheet = wb.createSheet("Boletim Periodo");
+        sheet.setFitToPage(true);
+        sheet.getPrintSetup().setLandscape(true);
         
         ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinasComAvaliacoes(idPeriodo);
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
@@ -661,6 +692,8 @@ public class NotaServer {
     public static String gerarExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Boletim Disciplina");
+        sheet.setFitToPage(true);
+        sheet.getPrintSetup().setLandscape(true);
         
         ArrayList<String> listHeader = AvaliacaoServer.getHeaderRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina);
         ArrayList<ArrayList<String>> listMediaNotaAlunos = getRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina);
