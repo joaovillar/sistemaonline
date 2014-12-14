@@ -412,7 +412,7 @@ public class AvaliacaoServer {
          
          for (Disciplina disciplina : listDisciplina) {
              if(strNomeDisciplina.equals(disciplina.getNome())){
-                 listAvaliacaoNota.addAll(getAvaliacaoNota(idUsuario, idCurso, periodo.getNomePeriodo(), disciplina.getNome()));
+                 listAvaliacaoNota.addAll(getAvaliacaoNotaPeriodoDisciplina(idUsuario, idCurso, periodo.getNomePeriodo(), disciplina.getNome()));
              }             
         }
          
@@ -422,7 +422,7 @@ public class AvaliacaoServer {
      
  }
 
-    public static ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
+    public static ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
 
         ArrayList<AvaliacaoNota> data = new ArrayList<AvaliacaoNota>();
         // JornadaDataBase dataBase = new JornadaDataBase();
@@ -453,6 +453,7 @@ public class AvaliacaoServer {
                 current.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
                 current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
                 current.setNota(rs.getDouble("nota"));
+                current.setPesoNota(rs.getString("peso_nota"));
 
                 TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao());
                 current.setTipoAvaliacao(tipoAvaliacao);
@@ -504,6 +505,7 @@ public class AvaliacaoServer {
                 current.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
                 current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
                 current.setNota(rs.getDouble("nota"));
+                current.setPesoNota(rs.getString("peso_nota"));
 
                 TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao());
                 current.setTipoAvaliacao(tipoAvaliacao);

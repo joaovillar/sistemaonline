@@ -236,6 +236,87 @@ public class NotaServer {
     }
     
     
+    
+    public static ArrayList<ArrayList<String>> getNotasAluno(int idCurso, int idUsuario) {
+        
+        ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();        
+        ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);        
+        
+        //Adicionando o Header 
+        ArrayList<String> itemPeriodo = new ArrayList<String>();
+        HashSet<String> hashSetDisciplinas = new HashSet<String>();
+        
+        itemPeriodo.add("Disciplinas");
+        //Pegando nome dos Periodos e de todas as disciplinas do ano
+        for (Periodo periodo : listPeriodo) {            
+            itemPeriodo.add(periodo.getNomePeriodo());
+            ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+            for (Disciplina disciplina : listDisciplina) {
+                hashSetDisciplinas.add(disciplina.getNome());
+            }
+        }
+        itemPeriodo.add("Média Final");
+        listNotas.add(itemPeriodo);
+        
+        ArrayList<String> listNomeDisciplinas = new ArrayList<String>(hashSetDisciplinas);
+        Collections.sort(listNomeDisciplinas);  
+        
+        
+        for (int i=0;i<listNomeDisciplinas.size();i++) {
+            ArrayList<String> array = new ArrayList<String>();
+            String nomeDisciplina = listNomeDisciplinas.get(i);
+
+            array.add(nomeDisciplina);
+
+            int numberPesoPeriodos=0;
+            double somaMedia=0;
+            for (Periodo periodo : listPeriodo) {
+                String notaDisciplinaPeriodo = "-";
+                ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+                for (Disciplina disciplina : listDisciplina) {
+
+                    if (disciplina.getNome().equals(nomeDisciplina)) {
+                        disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
+                        notaDisciplinaPeriodo = disciplina.getMediaAlunoDisciplina(idUsuario);
+                    }
+                }
+                if (notaDisciplinaPeriodo.isEmpty() || notaDisciplinaPeriodo.equals("-")) {
+                    notaDisciplinaPeriodo = "-";
+                } else {
+                    notaDisciplinaPeriodo = MpUtilServer.getDecimalFormatedOneDecimal(Double.parseDouble(notaDisciplinaPeriodo));
+                }               
+                
+                if (!notaDisciplinaPeriodo.equals("-")) {
+                    int peso = Integer.parseInt(periodo.getPeso());
+                    for (int countPesos = 0; countPesos < peso; countPesos++) {
+                        numberPesoPeriodos++;
+                        somaMedia = somaMedia + Double.parseDouble(notaDisciplinaPeriodo);
+                    }
+                }
+                
+                array.add(notaDisciplinaPeriodo);
+                
+            }
+            
+            if(numberPesoPeriodos>0){
+                double doubleMediaFinal = somaMedia / numberPesoPeriodos;
+//                String strMediaFinalDisciplina = MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaFinal);
+//                if(strMediaFinalDisciplina.isEmpty()){
+//                    strMediaFinalDisciplina="-";
+//                }
+                array.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaFinal));
+            }else{
+                array.add("-");
+            }
+            
+            listNotas.add(array);
+
+        }
+        
+        return listNotas;
+    }
+    
+    
     public static ArrayList<ArrayList<String>> getBoletimAnual(int idCurso) {
         Curso curso = CursoServer.getCurso(idCurso);
         ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();
@@ -326,9 +407,7 @@ public class NotaServer {
         System.out.println(listNotas.toString());
         return listNotas;
     }
-    
-    
-    
+        
     public static String getMediaAnoAlunoDisciplina(int idUsuario, int idCurso, ArrayList<Periodo> listPeriodo, String strDisciplina){
         String strMedia="";
         double doubleMediaAluno=0;
@@ -366,12 +445,7 @@ public class NotaServer {
         
         return strMedia;
     }
-    
-    
-
-    
-
-    
+        
     public static ArrayList<ArrayList<String>> getRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
         
         ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();   
@@ -439,8 +513,7 @@ public class NotaServer {
 
         return list;
     }
-    
-    
+  
     public static ArrayList<ArrayList<String>> getMediaNotaAlunosNasDisciplinas(ArrayList<Usuario> listUsuario, ArrayList<Disciplina> listDisciplinas){
         ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
         
@@ -473,8 +546,7 @@ public class NotaServer {
        
         return list;
     }
-    
-    
+       
     public static String getExcelBoletimAnual(int idCurso) {
         XSSFWorkbook wb = new XSSFWorkbook();
 

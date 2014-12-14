@@ -48,6 +48,7 @@ public class DialogBoxNota extends DecoratedPopupPanel {
 	
     private CellTable<AvaliacaoNota> cellTable;
     private Column<AvaliacaoNota, String> notaColumn;
+    private Column<AvaliacaoNota, String> pesoNotaColumn;
     private Column<AvaliacaoNota, String> assuntoColumn;
     private Column<AvaliacaoNota, String> descricaoColumn;
     private Column<AvaliacaoNota, String> columnTipoAvaliacao;
@@ -272,13 +273,21 @@ public class DialogBoxNota extends DecoratedPopupPanel {
             public String getValue(AvaliacaoNota object) {
                 return object.getDescricao();
             }
-        };        
+        };     
+        
         columnTipoAvaliacao = new Column<AvaliacaoNota, String>(new TextCell()) {
           @Override
           public String getValue(AvaliacaoNota object) {
             return object.getTipoAvaliacao().getNomeTipoAvaliacao();
           }
         };
+        
+        pesoNotaColumn = new Column<AvaliacaoNota, String>(new TextCell()) {
+            @Override
+            public String getValue(AvaliacaoNota object) {
+                return object.getPesoNota();
+            }
+        };          
         
         dataColumn = new Column<AvaliacaoNota, Date>(new MpDatePickerCell()) {
             @Override
@@ -316,6 +325,7 @@ public class DialogBoxNota extends DecoratedPopupPanel {
         cellTable.addColumn(assuntoColumn, txtConstants.avaliacaoAssunto());
         cellTable.addColumn(descricaoColumn, txtConstants.avaliacaoDescricao());
         cellTable.addColumn(columnTipoAvaliacao, txtConstants.avaliacaoTipo());
+        cellTable.addColumn(pesoNotaColumn, txtConstants.avaliacaoPesoNota());
         cellTable.addColumn(dataColumn, txtConstants.avaliacaoData());
         cellTable.addColumn(horaColumn, txtConstants.avaliacaoHora());
         cellTable.addColumn(notaColumn, txtConstants.nota());
@@ -346,6 +356,14 @@ public class DialogBoxNota extends DecoratedPopupPanel {
             @Override
             public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
                 return o1.getTipoAvaliacao().getNomeTipoAvaliacao().compareTo(o2.getTipoAvaliacao().getNomeTipoAvaliacao());
+            }
+        });
+        
+        descricaoColumn.setSortable(true);
+        sortHandler.setComparator(descricaoColumn, new Comparator<AvaliacaoNota>() {
+            @Override
+            public int compare(AvaliacaoNota o1, AvaliacaoNota o2) {
+                return o1.getPesoNota().compareTo(o2.getPesoNota());
             }
         });
 

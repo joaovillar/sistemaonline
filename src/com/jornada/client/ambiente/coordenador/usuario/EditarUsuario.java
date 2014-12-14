@@ -54,7 +54,6 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.FieldVerifier;
-import com.jornada.shared.classes.TipoStatusUsuario;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.UnidadeEscola;
 import com.jornada.shared.classes.Usuario;

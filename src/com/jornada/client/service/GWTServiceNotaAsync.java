@@ -17,5 +17,6 @@ public interface GWTServiceNotaAsync {
 	public void getExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina, AsyncCallback<String> callback);
 	public void getBoletimAnual(int idCurso, AsyncCallback<ArrayList<ArrayList<String>>> callback);
 	public void getExcelBoletimAnual(int idCurso, AsyncCallback<String> callback);
+	public void getNotasAluno(int idCurso, int idTipoUsuario, int idUsuario, AsyncCallback<ArrayList<ArrayList<String>>> callback);
 
 }

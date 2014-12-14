@@ -14,7 +14,8 @@ public class TelaInicialAlunoVisualizarNotas extends Composite{
 	public  static final int INT_WIDTH_TABLE=1500;
 	public static final int INI_HEIGHT_TABLE=550;
 	
-	private VisualizarAlunoNotasAluno visualizarAlunoNotasAluno;
+//	private VisualizarAlunoNotasAluno visualizarAlunoNotasAluno;
+	private VisualizarNotasAluno visualizarNotasAluno;
 //	private EditarNota editarNota;
 	
 	private MainView mainView;
@@ -28,7 +29,8 @@ public class TelaInicialAlunoVisualizarNotas extends Composite{
 			uniqueInstance = new TelaInicialAlunoVisualizarNotas(mainView);
 		}
 		else{
-			uniqueInstance.visualizarAlunoNotasAluno.updateClientData();
+//			uniqueInstance.visualizarAlunoNotasAluno.updateClientData();
+			uniqueInstance.visualizarNotasAluno.updateClientData();
 		}
 		
 		return uniqueInstance;
@@ -39,7 +41,8 @@ public class TelaInicialAlunoVisualizarNotas extends Composite{
 		this.mainView = mainView;
 		
 //		visualizarAlunoNotasAluno = new VisualizarAlunoNotasAluno(this);
-		visualizarAlunoNotasAluno = VisualizarAlunoNotasAluno.getInstance(this);
+//		visualizarAlunoNotasAluno = VisualizarAlunoNotasAluno.getInstance(this);
+		visualizarNotasAluno = VisualizarNotasAluno.getInstance(this);
 		
 
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
@@ -50,7 +53,8 @@ public class TelaInicialAlunoVisualizarNotas extends Composite{
 		tabLayoutPanel.setAnimationDuration(500);
 		tabLayoutPanel.setAnimationVertical(true);
 		
-		tabLayoutPanel.add(visualizarAlunoNotasAluno, new MpHeaderWidget(txtConstants.alunoAmbienteNotas(), "images/chart-icon_16.png"));
+//		tabLayoutPanel.add(visualizarAlunoNotasAluno, new MpHeaderWidget(txtConstants.alunoAmbienteNotas(), "images/chart-icon_16.png"));
+		tabLayoutPanel.add(visualizarNotasAluno, new MpHeaderWidget(txtConstants.alunoAmbienteNotas() + " Novo", "images/chart-icon_16.png"));
 
 	
      	initWidget(tabLayoutPanel);

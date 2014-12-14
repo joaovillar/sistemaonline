@@ -498,6 +498,7 @@ public interface TextConstants extends Messages {
 	String avaliacaoSelecioneCurso();	
 	String avaliacaoSalva();
 	String avaliacaoDesejaRemover(String assuntoAvaliacao);
+	String avaliacaoPesoNota();
 	/*******AVALIAÇÔES End*******/
 	
 	

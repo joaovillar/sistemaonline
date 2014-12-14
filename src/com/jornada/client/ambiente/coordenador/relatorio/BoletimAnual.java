@@ -51,8 +51,7 @@ public class BoletimAnual extends VerticalPanel {
 	VerticalPanel panel = new VerticalPanel();
 	
 	private CellTable<ArrayList<String>> cellTable;
-    private ListDataProvider<ArrayList<String>> dataProvider;
-    
+    private ListDataProvider<ArrayList<String>> dataProvider;    
     ArrayList<String> arrayDisciplinaColumns = new ArrayList<String>();
 
 	private MpSelectionCurso listBoxCurso;	

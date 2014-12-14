@@ -140,8 +140,8 @@ public class Disciplina implements Serializable {
     
     public String getMediaAlunoDisciplina(int idUsuario){
         String media = "";
-        int countNota=0;
-        double somaMedia=0;
+        double countPesoNota=0;
+        double somaMediaPonderada=0;
         for (Avaliacao avaliacao : getListAvaliacao()) {
             
             if (avaliacao.getIdDisciplina() == this.getIdDisciplina()) {
@@ -149,8 +149,10 @@ public class Disciplina implements Serializable {
                 for (Nota nota : avaliacao.getListNota()) {
                     
                     if (nota.getIdUsuario() == idUsuario) {
-                        countNota++;
-                        somaMedia = (somaMedia + Double.parseDouble(nota.getNota()));
+                        countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
+                        somaMediaPonderada = somaMediaPonderada + (Double.parseDouble(nota.getNota()) * Double.parseDouble(avaliacao.getPesoNota()));
+//                        countNota++;
+//                        somaMedia = (somaMedia + Double.parseDouble(nota.getNota()));
                     }
                     
                 }
@@ -159,9 +161,9 @@ public class Disciplina implements Serializable {
             
         }
         
-        if (countNota != 0) {
-            somaMedia = somaMedia / countNota;
-            media = Double.toString(somaMedia);
+        if (countPesoNota != 0) {
+            somaMediaPonderada = somaMediaPonderada / countPesoNota;
+            media = Double.toString(somaMediaPonderada);
         }
         
         return media;

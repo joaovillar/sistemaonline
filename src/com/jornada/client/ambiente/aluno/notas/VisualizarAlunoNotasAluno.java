@@ -48,7 +48,7 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	private String[][] list;
 	
-	private ColumnChart chart;
+	private ColumnChart chartNotas;
 	
 	private FlexTable flexTableBoletim;
 
@@ -246,8 +246,8 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		if(intIdCurso==-1){
 			mpPanelAlunosLoading.setVisible(false);
 			vPanelBoletim.clear();
-			if(chart!=null){
-			    chart.setVisible(false);
+			if(chartNotas!=null){
+			    chartNotas.setVisible(false);
 			}
 		}
 		else{
@@ -391,9 +391,9 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	private void draw(String[][] list) {
 		//chart.clearChart();
 //		chart.re
-		if (chart != null) {
-			chart.setWidth("600px");
-			chart.setHeight("350px");
+		if (chartNotas != null) {
+			chartNotas.setWidth("600px");
+			chartNotas.setHeight("350px");
 		}
 		
 		
@@ -402,7 +402,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 
         if (numeroLinhas > 1 && numeroColunas > 1) {
             
-            chart.setVisible(true);
+            chartNotas.setVisible(true);
 
             String[] disciplinas = new String[numeroLinhas - 1];
             for (int i = 0; i < disciplinas.length; i++) {
@@ -474,9 +474,9 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 
             // Draw the chart
 
-            chart.draw(dataTable, options);
+            chartNotas.draw(dataTable, options);
         }else{
-            chart.setVisible(false);
+            chartNotas.setVisible(false);
         }
 		
 //		chart.d
@@ -518,9 +518,9 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
                     // Create and attach the chart
 //                  gridBoletimChart.clear();
 //                    chart.clearChart();
-                    if (chart == null) {
-                        chart = new ColumnChart();
-                        getGridBoletimChart().setWidget(0, 1, chart);
+                    if (chartNotas == null) {
+                        chartNotas = new ColumnChart();
+                        getGridBoletimChart().setWidget(0, 1, chartNotas);
                     }
                     
                     draw(getList());

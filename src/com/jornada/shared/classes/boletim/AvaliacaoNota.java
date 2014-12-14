@@ -12,6 +12,7 @@ public class AvaliacaoNota extends Avaliacao implements Serializable{
     private String nomePeriodo;
     private String nomeDisciplina;
     private double nota;
+    private String pesoNota;
     
     public AvaliacaoNota(){
         
@@ -48,6 +49,16 @@ public class AvaliacaoNota extends Avaliacao implements Serializable{
     public void setNota(double nota) {
         this.nota = nota;
     }
+
+    public String getPesoNota() {
+        return pesoNota;
+    }
+
+    public void setPesoNota(String pesoNota) {
+        this.pesoNota = pesoNota;
+    }
+    
+    
     
     
 

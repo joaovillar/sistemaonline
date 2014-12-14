@@ -112,7 +112,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 
 		Label lblEmpty = new Label(txtConstants.avaliacaoNenhumaCurso());
 
-		cellTable = new CellTable<CursoAvaliacao>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
+		cellTable = new CellTable<CursoAvaliacao>(20,GWT.<CellTableStyle> create(CellTableStyle.class));
 //		cellTable.setWidth(Integer.toString(TelaInicialAlunoAgenda.intWidthTable)+ "px");	
 		cellTable.setWidth("100%");
 		cellTable.setEmptyTableWidget(lblEmpty);
