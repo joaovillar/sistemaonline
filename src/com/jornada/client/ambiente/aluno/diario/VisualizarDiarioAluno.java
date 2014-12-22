@@ -43,6 +43,7 @@ import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.TipoUsuario;
+import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.presenca.TabelaPresencaAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
@@ -70,6 +71,8 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 	private Column<TabelaPresencaAluno, String> situacaoColumn;
 	
 	private int idUsuario;
+	
+	private Usuario usuarioLogado;
 		
 	VerticalPanel vFormPanel = new VerticalPanel();
 	ScrollPanel scrollPanel = new ScrollPanel();
@@ -90,6 +93,7 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 		txtConstants = GWT.create(TextConstants.class);
 		
 		this.telaInicialDiarioAluno=telaInicialDiarioAluno;
+		usuarioLogado = telaInicialDiarioAluno.getMainView().getUsuarioLogado();
 
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -180,7 +184,7 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 				if (telaInicialDiarioAluno.getMainView().getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.ALUNO) {
 					populateGrid();
 				} else {
-					listBoxAlunosPorCurso.populateComboBox(idCurso);
+					listBoxAlunosPorCurso.populateComboBox(usuarioLogado, idCurso);
 				}
 			}	
 					

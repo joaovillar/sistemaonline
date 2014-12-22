@@ -54,7 +54,7 @@ public class TelaInicialAlunoVisualizarNotas extends Composite{
 		tabLayoutPanel.setAnimationVertical(true);
 		
 //		tabLayoutPanel.add(visualizarAlunoNotasAluno, new MpHeaderWidget(txtConstants.alunoAmbienteNotas(), "images/chart-icon_16.png"));
-		tabLayoutPanel.add(visualizarNotasAluno, new MpHeaderWidget(txtConstants.alunoAmbienteNotas() + " Novo", "images/chart-icon_16.png"));
+		tabLayoutPanel.add(visualizarNotasAluno, new MpHeaderWidget(txtConstants.alunoAmbienteNotas(), "images/chart-icon_16.png"));
 
 	
      	initWidget(tabLayoutPanel);

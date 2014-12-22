@@ -22,6 +22,7 @@ import com.jornada.client.service.GWTServiceLogin;
 import com.jornada.server.classes.UsuarioServer;
 import com.jornada.server.classes.password.BCrypt;
 import com.jornada.server.database.ConnectionManager;
+import com.jornada.shared.classes.TipoStatusUsuario;
 import com.jornada.shared.classes.Usuario;
 
 public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServiceLogin {
@@ -77,9 +78,21 @@ public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServ
         Object userObj = session.getAttribute("user");
         if (userObj != null && userObj instanceof Usuario)
         {
-            //user = (Usuario) userObj;
         	user = UsuarioServer.getUsuarioPeloId(((Usuario) userObj).getIdUsuario());
-        	user.setLoggedIn(true);
+        	user.setLoggedIn(false);
+        	
+        	if(user.getIdTipoStatusUsuario()==TipoStatusUsuario.ALUNO_ATIVO){
+        	    user.setLoggedIn(true);
+        	}else if(user.getIdTipoStatusUsuario()==TipoStatusUsuario.PAIS_ATIVO){
+                user.setLoggedIn(true);
+            }else if(user.getIdTipoStatusUsuario()==TipoStatusUsuario.COORDENADOR_ATIVO){
+                user.setLoggedIn(true);
+            }else if(user.getIdTipoStatusUsuario()==TipoStatusUsuario.PROFESSOR_ATIVO){
+                user.setLoggedIn(true);
+            }else if(user.getIdTipoStatusUsuario()==TipoStatusUsuario.ADMINISTRADOR_ATIVO){
+                user.setLoggedIn(true);
+            }
+        	
         }
         return user;
     }	

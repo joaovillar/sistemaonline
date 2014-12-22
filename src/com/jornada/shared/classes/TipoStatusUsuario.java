@@ -6,8 +6,17 @@ public class TipoStatusUsuario implements Serializable{
 
     private static final long serialVersionUID = -3160635726141013468L;
     
-    
+    public static final int ALUNO_ATIVO=1;
     public static final int ALUNO_TRANSFERIDO=2;
+    public static final int ALUNO_CONCLUIDO=3;
+    public static final int COORDENADOR_ATIVO=4;
+    public static final int COORDENADOR_DESATIVADO=5;
+    public static final int PROFESSOR_ATIVO=6;
+    public static final int PROFESSOR_DESATIVADO=7;
+    public static final int PAIS_ATIVO=8;
+    public static final int PAIS_DESATIVADO=9;
+    public static final int ADMINISTRADOR_ATIVO=10;
+    public static final int ADMINISTRADOR_DESATIVADO=11;
     
     public static final String DB_ID_TIPO_STATUS_USUARIO = "id_tipo_status_usuario";
     

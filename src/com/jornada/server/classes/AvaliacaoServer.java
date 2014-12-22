@@ -23,7 +23,7 @@ public class AvaliacaoServer {
 	public static final String DB_UPDATE = "UPDATE avaliacao set id_tipo_avaliacao=?, assunto=?, descricao=?, data=?, hora=?, peso_nota=?, vale_nota=? where id_avaliacao=?;";
 	public static final String DB_DELETE = "delete from avaliacao where id_avaliacao=?;";	
 	public static final String DB_SELECT_AVALIACAO_PELA_DISCIPLINA = "SELECT * FROM avaliacao where id_disciplina=? order by assunto asc;";	
-    public static final String DB_SELECT_AVALIACAO_PELA_DISCIPLINA_VALE_NOTA = "SELECT * FROM avaliacao where id_disciplina=? and vale_nota=? order by assunto asc;";    
+    public static final String DB_SELECT_AVALIACAO_PELA_DISCIPLINA_VALE_NOTA = "SELECT * FROM avaliacao where id_disciplina=? and vale_nota=? order by data, hora asc;";    
 	public static final String DB_SELECT_TIPO_AVALIACAO_ALL = "SELECT * FROM tipo_avaliacao order by nome_tipo_avaliacao asc;";
 	public static final String DB_SELECT_TIPO_AVALIACAO = "SELECT * FROM tipo_avaliacao where id_tipo_avaliacao=? order by nome_tipo_avaliacao asc;";
 	public static final String DB_SELECT_AVALIACAO_PELO_CURSO=

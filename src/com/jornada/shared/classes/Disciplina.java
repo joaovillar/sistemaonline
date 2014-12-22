@@ -149,6 +149,7 @@ public class Disciplina implements Serializable {
                 for (Nota nota : avaliacao.getListNota()) {
                     
                     if (nota.getIdUsuario() == idUsuario) {
+
                         countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
                         somaMediaPonderada = somaMediaPonderada + (Double.parseDouble(nota.getNota()) * Double.parseDouble(avaliacao.getPesoNota()));
 //                        countNota++;

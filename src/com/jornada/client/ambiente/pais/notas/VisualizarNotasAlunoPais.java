@@ -1,4 +1,4 @@
-package com.jornada.client.ambiente.aluno.notas;
+package com.jornada.client.ambiente.pais.notas;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,8 +38,8 @@ import com.googlecode.gwt.charts.client.options.LegendPosition;
 import com.googlecode.gwt.charts.client.options.VAxis;
 import com.jornada.client.ambiente.general.nota.DialogBoxNota;
 import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
-import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
-import com.jornada.client.classes.listBoxes.ambiente.aluno.MpSelectionCursoAmbienteAluno;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunosPorCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionCursoAmbientePais;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -53,7 +53,7 @@ import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
-public class VisualizarNotasAluno extends VerticalPanel {
+public class VisualizarNotasAlunoPais extends VerticalPanel {
 
     private ArrayList<ArrayList<String>> listForChart;
 
@@ -76,8 +76,8 @@ public class VisualizarNotasAluno extends VerticalPanel {
 //    private MpSelection listBoxCursoAluno;
 //    private MpSelection listBoxAlunosPorCursoAluno;
 
-    private MpSelectionCursoAmbienteAluno listBoxCursoAluno;
-    private MpSelectionAlunosPorCurso listBoxAlunosPorCursoAluno;
+    private MpSelectionCursoAmbientePais listBoxCursoAluno;
+    private MpSelectionAlunosPorCursoAmbientePais listBoxAlunosPorCursoAluno;
     
     private Usuario usuarioLogado;
 
@@ -86,23 +86,23 @@ public class VisualizarNotasAluno extends VerticalPanel {
 
     private VerticalPanel vPanelBoletim;
 
-    private TelaInicialAlunoVisualizarNotas telaInicialAlunoVisualizarNotas;
+    private TelaInicialPaisVisualizarNotas telaInicialPaisVisualizarNotas;
  
-    private static VisualizarNotasAluno uniqueInstance;
+    private static VisualizarNotasAlunoPais uniqueInstance;
 
-    public static VisualizarNotasAluno getInstance(TelaInicialAlunoVisualizarNotas telaInicialAlunoVisualizarNotas) {
+    public static VisualizarNotasAlunoPais getInstance(TelaInicialPaisVisualizarNotas telaInicialPaisVisualizarNotas) {
         if (uniqueInstance == null) {
-            uniqueInstance = new VisualizarNotasAluno(telaInicialAlunoVisualizarNotas);
+            uniqueInstance = new VisualizarNotasAlunoPais(telaInicialPaisVisualizarNotas);
         }
         return uniqueInstance;
     }
   
 
-    private VisualizarNotasAluno(TelaInicialAlunoVisualizarNotas telaInicialAlunoVisualizarNotas) {
+    private VisualizarNotasAlunoPais(TelaInicialPaisVisualizarNotas telaInicialPaisVisualizarNotas) {
 
-        this.telaInicialAlunoVisualizarNotas = telaInicialAlunoVisualizarNotas;
+        this.telaInicialPaisVisualizarNotas = telaInicialPaisVisualizarNotas;
         
-        usuarioLogado = telaInicialAlunoVisualizarNotas.getMainView().getUsuarioLogado();
+        usuarioLogado = telaInicialPaisVisualizarNotas.getMainView().getUsuarioLogado();
 
         mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
         mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -156,17 +156,17 @@ public class VisualizarNotasAluno extends VerticalPanel {
 
         MpPanelPageMainView mpPanelPasso1 = new MpPanelPageMainView(txtConstants.notaSelecionarAluno(), "images/user_male_black_red_16.png");
         mpPanelPasso1.setWidth("100%");
-        mpPanelPasso1.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.INI_HEIGHT_TABLE - 50) + "px");
+        mpPanelPasso1.setHeight(Integer.toString(TelaInicialPaisVisualizarNotas.INT_HEIGHT_TABLE - 50) + "px");
 
         
 
         Label lblNomeCurso = new Label(txtConstants.curso());
         Label lblNomeAluno = new Label(txtConstants.alunoNome());
 
-        listBoxCursoAluno = new MpSelectionCursoAmbienteAluno(usuarioLogado);
+        listBoxCursoAluno = new MpSelectionCursoAmbientePais(usuarioLogado);
         listBoxCursoAluno.addChangeHandler(new MpCursoSelectionChangeHandler());
 
-        listBoxAlunosPorCursoAluno = new MpSelectionAlunosPorCurso();
+        listBoxAlunosPorCursoAluno = new MpSelectionAlunosPorCursoAmbientePais();
         listBoxAlunosPorCursoAluno.addChangeHandler(new MpAlunosPorCursoSelectionChangeHandler());
         
         
@@ -209,7 +209,7 @@ public class VisualizarNotasAluno extends VerticalPanel {
         gridBoletimChart.setBorderWidth(0);
         gridBoletimChart.setCellPadding(2);
         gridBoletimChart.setCellSpacing(2);
-        gridBoletimChart.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.INI_HEIGHT_TABLE - 180) + "px");
+        gridBoletimChart.setHeight(Integer.toString(TelaInicialPaisVisualizarNotas.INT_HEIGHT_TABLE - 180) + "px");
 
         row = 0;
         Grid gridBoletim = new Grid(2, 1);
@@ -245,7 +245,7 @@ public class VisualizarNotasAluno extends VerticalPanel {
             mpHelperCurso.populateSuggestBox(listBoxCursoAluno);
             int idCurso = Integer.parseInt(listBoxCursoAluno.getValue(listBoxCursoAluno.getSelectedIndex()));
 
-            if (telaInicialAlunoVisualizarNotas.getMainView().getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.ALUNO) {
+            if (telaInicialPaisVisualizarNotas.getMainView().getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.ALUNO) {
                 populateBoletimAluno();
             } else {
                 listBoxAlunosPorCursoAluno.populateComboBox(usuarioLogado, idCurso);
@@ -282,7 +282,7 @@ public class VisualizarNotasAluno extends VerticalPanel {
     }
 
     public void updateClientData() {
-        listBoxCursoAluno.populateComboBox(this.telaInicialAlunoVisualizarNotas.getMainView().getUsuarioLogado());
+        listBoxCursoAluno.populateComboBox(this.telaInicialPaisVisualizarNotas.getMainView().getUsuarioLogado());
     }
 
     private class CallbackBoletim implements AsyncCallback<ArrayList<ArrayList<String>>> {

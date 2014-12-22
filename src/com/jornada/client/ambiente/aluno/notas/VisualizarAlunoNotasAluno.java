@@ -60,6 +60,8 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading mpPanelAlunosLoading = new MpPanelLoading("images/radar.gif");
 	
+	private Usuario usuarioLogado;
+	
 	String [][] arrayBoletim;
 
 	private MpTextBox txtFiltroAluno;		
@@ -83,6 +85,8 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 	
 	private VisualizarAlunoNotasAluno(TelaInicialAlunoVisualizarNotas telaInicialAlunoVisualizarNotas){
 		
+	    usuarioLogado = telaInicialAlunoVisualizarNotas.getMainView().getUsuarioLogado();
+	    
 		this.telaInicialAlunoVisualizarNotas = telaInicialAlunoVisualizarNotas;
 		
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
@@ -113,7 +117,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 		mpPanelPasso1.setWidth("100%");
 		mpPanelPasso1.setHeight(Integer.toString(TelaInicialAlunoVisualizarNotas.INI_HEIGHT_TABLE-50)+"px");
 		
-		Usuario usuarioLogado  = telaInicialAlunoVisualizarNotas.getMainView().getUsuarioLogado();
+		
 		
 		Label lblNomeCurso = new Label(txtConstants.curso());
 		Label lblNomeAluno = new Label(txtConstants.alunoNome());		
@@ -224,7 +228,7 @@ public class VisualizarAlunoNotasAluno extends VerticalPanel{
 				populateBoletimAluno();
 			}
 			else{
-				listBoxAlunosPorCurso.populateComboBox(idCurso);				
+				listBoxAlunosPorCurso.populateComboBox(usuarioLogado, idCurso);				
 			}
 			
 		}  
