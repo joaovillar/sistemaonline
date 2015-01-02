@@ -59,7 +59,7 @@ public class EditarAvaliacao extends VerticalPanel {
 	static TextConstants txtConstants = GWT.create(TextConstants.class);
 
 
-	private AsyncCallback<Boolean> callbackUpdateRow;
+	private AsyncCallback<String> callbackUpdateRow;
 	private AsyncCallback<Boolean> callbackDelete;
 
 	private VerticalPanel vPanelBody = new VerticalPanel();	
@@ -145,9 +145,21 @@ public class EditarAvaliacao extends VerticalPanel {
 
 		
 		
-		callbackUpdateRow = new AsyncCallback<Boolean>() {
+		callbackUpdateRow = new AsyncCallback<String>() {
 
-			public void onSuccess(Boolean success) {
+			public void onSuccess(String success) {
+			    
+			    if(success.equals("true")){
+			        
+                } else if (success.equals(TipoAvaliacao.EXISTE_RECUPERACAO)) {
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacao());
+                    mpDialogBoxWarning.showDialog();
+                }else{
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroAtualizar());
+                    mpDialogBoxWarning.showDialog();
+                }
 
 			}
 

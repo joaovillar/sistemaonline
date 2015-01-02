@@ -19,6 +19,7 @@ public class TelaInicialRelatorio extends Composite {
 	private BoletimPeriodo boletimPeriodo;
 	private BoletimDisciplina boletimDisciplina;
 	private BoletimAnual boletimAnual;
+	private BoletimNotas boletimNotas;
 
 	
 	TextConstants txtConstants;
@@ -49,6 +50,8 @@ public class TelaInicialRelatorio extends Composite {
 		boletimPeriodo = BoletimPeriodo.getInstance(this);	
 		boletimDisciplina = BoletimDisciplina.getInstance(this);  
 		boletimAnual = BoletimAnual.getInstance(this); 
+	    boletimNotas = BoletimNotas.getInstance(this);  
+		
 
 		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
 		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
@@ -62,6 +65,7 @@ public class TelaInicialRelatorio extends Composite {
 		tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget("Boletim Disciplina", ""));
 		tabLayoutPanel.add(boletimPeriodo, new MpHeaderWidget(txtConstants.relatorioBoletimPorPeriodo(), ""));
 		tabLayoutPanel.add(boletimAnual, new MpHeaderWidget("Boletim Anual", ""));
+		tabLayoutPanel.add(boletimNotas, new MpHeaderWidget("Boletim Notas", ""));
 
 		initWidget(tabLayoutPanel);	
 		

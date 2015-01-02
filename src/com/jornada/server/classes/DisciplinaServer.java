@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Avaliacao;
@@ -269,6 +272,8 @@ public class DisciplinaServer {
 		return data;
 
 	}
+	
+
 		
 	public static ArrayList<Disciplina> getDisciplinasPeloPeriodo(int id_periodo) {
 
@@ -291,7 +296,7 @@ public class DisciplinaServer {
 
 	}	
 	
-	public static ArrayList<Disciplina> getDisciplinasPeloPeriodo(int id_periodo, String strSearch) {
+	public static ArrayList<Disciplina> getDisciplinasPeloPeriodo(int id_periodo, String strSearchDisciplina) {
 
 		ArrayList<Disciplina> data = new ArrayList<Disciplina>();
 //		JornadaDataBase dataBase = new JornadaDataBase();
@@ -306,7 +311,7 @@ public class DisciplinaServer {
 			
 			int count=0;
 			ps.setInt(++count, id_periodo);	
-			ps.setString(++count, strSearch);			
+			ps.setString(++count, strSearchDisciplina);			
 			
 			data = getDisciplinaParameters(ps.executeQuery());
 
@@ -322,6 +327,33 @@ public class DisciplinaServer {
 
 	}		
 	
+	
+	   public static Disciplina getDisciplinaPeloPeriodo(int idPeriodo, String strSearchDisciplina) {
+
+           ArrayList<Disciplina> data = new ArrayList<Disciplina>();
+           Connection conn = ConnectionManager.getConnection();
+           try {
+               PreparedStatement ps = conn.prepareStatement(DB_SELECT_DISCIPLINA_PELO_PERIODO_ILIKE);         
+               int count=0;
+               ps.setInt(++count, idPeriodo);      
+               ps.setString(++count, strSearchDisciplina); 
+               data = getDisciplinaParameters(ps.executeQuery());
+
+           } catch (SQLException sqlex) {
+               data=null;
+               System.err.println(sqlex.getMessage());
+           } finally {
+               ConnectionManager.closeConnection(conn);
+           }
+           
+           if(data==null || data.size()==0){
+               return null;
+           }
+           else{
+               return data.get(0);
+           }
+
+       }   
 	
 	public static ArrayList<Disciplina> getDisciplinasAssociadosAoProfessor(int id_periodo, int id_usuario) {
 
@@ -577,5 +609,21 @@ public class DisciplinaServer {
 		return data;
 
 	}	
+	
+    public static Disciplina getDisciplinaFromArray(String strNomeDisciplina, ArrayList<Disciplina> listDisciplina){
+        
+        Disciplina disciplina = null;
+        
+        for (Disciplina disciplinaRow : listDisciplina) {
+            
+            if(disciplinaRow.getNome().equals(strNomeDisciplina)){
+                disciplina = disciplinaRow;
+            }
+        }
+        
+        return disciplina;
+    }
+	
+
 
 }

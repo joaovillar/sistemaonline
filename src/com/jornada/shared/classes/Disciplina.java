@@ -138,10 +138,12 @@ public class Disciplina implements Serializable {
         this.listAvaliacao = listAvaliacao;
     }
     
-    public String getMediaAlunoDisciplina(int idUsuario){
+    public String getMediaAlunoDisciplina(Curso curso, int idUsuario){
         String media = "";
         double countPesoNota=0;
         double somaMediaPonderada=0;
+        double notaRecuperacao=0;
+
         for (Avaliacao avaliacao : getListAvaliacao()) {
             
             if (avaliacao.getIdDisciplina() == this.getIdDisciplina()) {
@@ -149,9 +151,16 @@ public class Disciplina implements Serializable {
                 for (Nota nota : avaliacao.getListNota()) {
                     
                     if (nota.getIdUsuario() == idUsuario) {
+                        
+//                        countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
+                        if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
+//                            countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
+                            notaRecuperacao = Double.parseDouble(nota.getNota());
 
-                        countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
-                        somaMediaPonderada = somaMediaPonderada + (Double.parseDouble(nota.getNota()) * Double.parseDouble(avaliacao.getPesoNota()));
+                        }else{
+                            countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
+                            somaMediaPonderada = somaMediaPonderada + (Double.parseDouble(nota.getNota()) * Double.parseDouble(avaliacao.getPesoNota()));
+                        }
 //                        countNota++;
 //                        somaMedia = (somaMedia + Double.parseDouble(nota.getNota()));
                     }
@@ -164,6 +173,13 @@ public class Disciplina implements Serializable {
         
         if (countPesoNota != 0) {
             somaMediaPonderada = somaMediaPonderada / countPesoNota;
+            
+            //Media com Recuperação
+            if(notaRecuperacao>0)
+            if(somaMediaPonderada<Double.parseDouble(curso.getMediaNota())){
+                somaMediaPonderada = (somaMediaPonderada+notaRecuperacao)/2;    
+            }
+            
             media = Double.toString(somaMediaPonderada);
         }
         

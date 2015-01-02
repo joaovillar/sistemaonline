@@ -32,12 +32,13 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.Avaliacao;
+import com.jornada.shared.classes.TipoAvaliacao;
 
 public class AdicionarAvaliacao extends VerticalPanel {
 	
 	static TextConstants txtConstants = GWT.create(TextConstants.class);
 
-	private AsyncCallback<Boolean> callbackAddAvaliacao;
+	private AsyncCallback<String> callbackAddAvaliacao;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -115,6 +116,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());		
 		
 		listBoxTipoAvaliacao = new MpSelectionTipoAvaliacao();
+		listBoxTipoAvaliacao.addChangeHandler(new MpTipoAvaliacaoChangeHandler());
 		
 
 		// Add some standard form options
@@ -161,7 +163,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		
 		/***********************Begin Callbacks**********************/
 
-		callbackAddAvaliacao = new AsyncCallback<Boolean>() {
+		callbackAddAvaliacao = new AsyncCallback<String>() {
 
 			public void onFailure(Throwable caught) {
 				hPanelLoading.setVisible(false);
@@ -171,20 +173,24 @@ public class AdicionarAvaliacao extends VerticalPanel {
 			}
 
 			@Override
-			public void onSuccess(Boolean result) {
+			public void onSuccess(String result) {
 				// lblLoading.setVisible(false);
 				hPanelLoading.setVisible(false);
-				boolean isSuccess = result;
-				if (isSuccess) {
+				
+				if (result.equals("true")) {
 					mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
 					mpDialogBoxConfirm.setBodyText(txtConstants.avaliacaoSalva());
 					mpDialogBoxConfirm.showDialog();
 					telaInicialAvaliacao.populateGrid();
 					cleanFields();
-				} else {
+				} else if(result.equals("false")){
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroSalvar());
 					mpDialogBoxWarning.showDialog();
+				}else if(result.equals(TipoAvaliacao.EXISTE_RECUPERACAO)){
+	                  mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+	                  mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacao());
+	                  mpDialogBoxWarning.showDialog();  
 				}
 			}
 		};
@@ -249,6 +255,17 @@ public class AdicionarAvaliacao extends VerticalPanel {
 			}
 		}  
 	}
+	
+	   private class MpTipoAvaliacaoChangeHandler implements ChangeHandler {
+	        public void onChange(ChangeEvent event) {
+	            listBoxPesoNota.setEnabled(true);
+	            int idTipoAvaliacao = Integer.parseInt(listBoxTipoAvaliacao.getSelectedValue());
+	            if(idTipoAvaliacao == TipoAvaliacao.INT_RECUPERACAO){
+	                listBoxPesoNota.setEnabled(false);
+	            }
+
+	        }  
+	    }
 	
 //	private class MpDisciplinaSelectionChangeHandler implements ChangeHandler {
 //		public void onChange(ChangeEvent event) {

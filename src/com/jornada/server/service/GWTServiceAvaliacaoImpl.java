@@ -30,13 +30,55 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 	private static final long serialVersionUID = 2704141295428049564L;
 	
 	
-	public boolean AdicionarAvaliacao(Avaliacao object) {		
-		return AvaliacaoServer.Adicionar(object);	
+	public String AdicionarAvaliacao(Avaliacao object) {	
+	    
+	    String strIsSuccess="";	   
+        
+        if (getJaExisteRecupeacao(object)) {
+            strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
+        } else {
+            if(AvaliacaoServer.Adicionar(object)){
+                strIsSuccess="true";
+            }else{
+                strIsSuccess="false";
+            }
+        }
+        
+        return strIsSuccess;
+	    
+
 	}	
 	
-	public boolean updateRow(Avaliacao object) {
-		return AvaliacaoServer.updateRow(object);
+	public String updateRow(Avaliacao object) {
+	    String strIsSuccess="";       
+	    
+	    if (getJaExisteRecupeacao(object)) {
+            strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
+        } else {
+            if(AvaliacaoServer.updateRow(object)){
+                strIsSuccess="true";
+            }else{
+                strIsSuccess="false";
+            }
+        }
+        
+        return strIsSuccess;
+        
 	}	
+	
+	
+	public boolean getJaExisteRecupeacao(Avaliacao object){
+	    boolean existeRecuperacao=false;
+        if (object.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
+            ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(object.getIdDisciplina(), true);
+            for (Avaliacao avaliacao : listAvaliacao) {
+                if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
+                    existeRecuperacao = true;
+                }
+            }
+        } 
+        return existeRecuperacao;
+	}
 	
 	public boolean deleteRow(int id_avaliacao) {
 		return AvaliacaoServer.deleteRow(id_avaliacao);

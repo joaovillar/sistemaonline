@@ -44,6 +44,19 @@ public class MpDialogBoxExcelRelatorioBoletim extends DecoratedPopupPanel implem
         }
         return uniqueInstance;
     }
+    
+    public static MpDialogBoxExcelRelatorioBoletim getInstanceNotas(int idCurso) {
+
+        if (uniqueInstance == null) {
+            uniqueInstance = new MpDialogBoxExcelRelatorioBoletim();
+            uniqueInstance.showDialog();
+            uniqueInstance.generateExcelBoletimNotas(idCurso);
+        } else {
+            uniqueInstance.showDialog();
+            uniqueInstance.generateExcelBoletimNotas(idCurso);
+        }
+        return uniqueInstance;
+    }
 	
 	public static MpDialogBoxExcelRelatorioBoletim getInstance(int idCurso, int idPeriodo){
 		
@@ -153,6 +166,10 @@ public class MpDialogBoxExcelRelatorioBoletim extends DecoratedPopupPanel implem
 	
     private void generateExcelBoletimAnual(int idCurso) {
         GWTServiceNota.Util.getInstance().getExcelBoletimAnual(idCurso,  new CallBackBoletim());
+    }
+    
+    private void generateExcelBoletimNotas(int idCurso) {
+        GWTServiceNota.Util.getInstance().getExcelBoletimNotas(idCurso,  new CallBackBoletim());
     }
 	
 	private void generateExcelBoletimPeriodo(int idCurso , int idPeriodo){

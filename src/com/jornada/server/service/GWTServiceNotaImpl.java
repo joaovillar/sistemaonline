@@ -96,8 +96,16 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
        return NotaServer.getBoletimAnual(idCurso);
     }
     
+    public ArrayList<ArrayList<String>> getBoletimNotas(int idCurso){
+        return NotaServer.getBoletimNotas(idCurso);
+     }
+    
     public ArrayList<ArrayList<String>> getRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
         return NotaServer.getRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina);
+     }
+    
+    public String getExcelBoletimNotas(int idCurso){
+        return NotaServer.getExcelBoletimNotas(idCurso);
      }
     
     public String getExcelBoletimPeriodo(int idCurso, int idPeriodo) {

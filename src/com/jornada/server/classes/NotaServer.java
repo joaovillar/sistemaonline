@@ -26,6 +26,7 @@ import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.Periodo;
+import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.TipoStatusUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.TabelaBoletim;
@@ -232,13 +233,14 @@ public class NotaServer {
         
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
 
-        return getMediaNotaAlunosNasDisciplinas(listUsuario, listDisciplinas);
+        return getMediaNotaAlunosNasDisciplinas(idCurso, listUsuario, listDisciplinas);
     }
     
     
     
     public static ArrayList<ArrayList<String>> getNotasAluno(int idCurso, int idUsuario) {
         
+        Curso curso = CursoServer.getCurso(idCurso);
         ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();        
         ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);        
         
@@ -277,7 +279,7 @@ public class NotaServer {
 
                     if (disciplina.getNome().equals(nomeDisciplina)) {
                         disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
-                        notaDisciplinaPeriodo = disciplina.getMediaAlunoDisciplina(idUsuario);
+                        notaDisciplinaPeriodo = disciplina.getMediaAlunoDisciplina(curso, idUsuario);
                     }
                 }
                 if (notaDisciplinaPeriodo.isEmpty() || notaDisciplinaPeriodo.equals("-")) {
@@ -322,7 +324,6 @@ public class NotaServer {
         ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();
         ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
-        
         
         HashSet<String> hashSetDisciplinas = new HashSet<String>();
         //Pegando nome das disciplinas de todo o ano letivo
@@ -408,10 +409,172 @@ public class NotaServer {
         return listNotas;
     }
         
+    
+    public static ArrayList<ArrayList<String>> getBoletimNotas(int idCurso){
+        
+        ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();
+        
+        Curso curso = CursoServer.getCurso(idCurso);
+        ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(curso.getIdCurso());
+        ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
+        
+        HashSet<String> hashSetDisciplinas = new HashSet<String>();
+        //Pegando nome das disciplinas de todo o ano letivo
+        for (Periodo periodo : listPeriodo) {
+            ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+            for (Disciplina disciplina : listDisciplina) {
+                hashSetDisciplinas.add(disciplina.getNome());
+            }
+        }
+           
+        
+        ArrayList<String> listDisciplinasAno = new ArrayList<String>(hashSetDisciplinas);        
+        Collections.sort(listDisciplinasAno);      
+        
+        
+        //Nome das disciplinas do curso
+        ArrayList<String> listDisciplinasAnoAluno = new ArrayList<String>();
+        listDisciplinasAnoAluno.add("IdUsuario");
+        listDisciplinasAnoAluno.add("Alunos");
+        listDisciplinasAnoAluno.add("Etapas");
+        for (String string : listDisciplinasAno) {
+            listDisciplinasAnoAluno.add(string);
+        }
+        
+        
+        
+        //Pegando nome de avaliações
+        HashSet<String> hashSetAvaliacao = new HashSet<String>();
+        for(Periodo periodo : listPeriodo){            
+            ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());            
+            for (Disciplina disciplina : listDisciplinas) {
+                ArrayList<Avaliacao> listAvaliacoes = AvaliacaoServer.getAvaliacao(disciplina.getIdDisciplina());
+                for (Avaliacao avaliacao : listAvaliacoes) {
+                    if (avaliacao.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO) {
+                        avaliacao.setTipoAvaliacao(AvaliacaoServer.getTipoAvaliacao(avaliacao.getIdTipoAvaliacao()));
+                        hashSetAvaliacao.add(avaliacao.getTipoAvaliacao().getNomeTipoAvaliacao());
+                    }
+                }
+            }
+        }
+        
+        ArrayList<String> listNomeAvaliacao = new ArrayList<String>(hashSetAvaliacao);
+        listNomeAvaliacao.add(TipoAvaliacao.STR_RECUPERACAO);
+        listNomeAvaliacao.add("Média Final");
+        
+        listNotas.add(listDisciplinasAnoAluno);
+        
+        
+        //Montando linha a linha os resultadas de cada aluno por disciplina e avaliação
+        for (Usuario usuario : listUsuario) {
+            
+            for (Periodo periodo : listPeriodo) {
+                ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinasComAvaliacoes(periodo.getIdPeriodo());
+                
+                for (String strNomeAvaliacao : listNomeAvaliacao) {
+                    ArrayList<String> listRow = new ArrayList<String>();
+                    int idUser = usuario.getIdUsuario();
+//                    int idPeriodo = periodo.getIdPeriodo();
+                   
+                    listRow.add(Integer.toString(idUser));
+                    listRow.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
+                    listRow.add("["+periodo.getNomePeriodo()+"] "+strNomeAvaliacao);
+                    
+                    for (String strNomeDisc : listDisciplinasAno) {        
+                        
+                        Disciplina disciplina = DisciplinaServer.getDisciplinaFromArray(strNomeDisc, listDisciplinas);
+
+                        if (strNomeAvaliacao.equals("Média Final")) {                            
+//                            listRow.add(disciplina.getMediaAlunoDisciplina(curso,idUser));
+                            String strMedia ="";
+                            if(disciplina==null){
+                                strMedia = "";
+                            }else{
+                                strMedia = disciplina.getMediaAlunoDisciplina(curso,idUser);
+                                if (strMedia == null || strMedia.isEmpty()) {
+                                    strMedia = "";
+                                    listRow.add(strMedia);
+                                } else {
+                                    double doubleMediaAluno = Double.parseDouble(strMedia);
+                                    listRow.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+                                }
+                            }
+
+                        } else {
+
+                            String strNota = "";
+                            // Disciplina disciplina =
+                            // DisciplinaServer.getDisciplinaPeloPeriodo(idPeriodo,"%"+strNomeDisc+"%");
+                            
+
+                            if (disciplina == null) {
+                                strNota = "";
+                            } else {
+                                int idDisciplina = disciplina.getIdDisciplina();
+                                strNota = getNota(listDisciplinas, idUser, idDisciplina, strNomeAvaliacao);
+                                if (strNota == null || strNota.isEmpty()) {
+                                    strNota = "";
+                                }
+                            }
+                            listRow.add(strNota);
+                        }
+                    }
+                    //Adicionando Provas
+                    listNotas.add(listRow);
+                }
+
+            }
+            
+        }
+                
+        
+        return listNotas;
+    }
+    
+    
+//    private static Disciplina getDisciplinaFromArray(String strNomeDisciplina, ArrayList<Disciplina> listDisciplina){
+//        
+//        Disciplina disciplina = null;
+//        
+//        for (Disciplina disciplinaRow : listDisciplina) {
+//            
+//            if(disciplinaRow.getNome().equals(strNomeDisciplina)){
+//                disciplina = disciplinaRow;
+//            }
+//        }
+//        
+//        return disciplina;
+//    }
+//    
+    private static String getNota(ArrayList<Disciplina> listDisciplina, int idUsuario, int idDisciplina, String strNomeTipoAvaliacao){
+        String strNota = "";
+        
+        for(Disciplina disciplina : listDisciplina){
+            if(disciplina.getIdDisciplina()==idDisciplina){
+                ArrayList<Avaliacao> listAvaliacao = disciplina.getListAvaliacao();
+                for(Avaliacao avaliacao : listAvaliacao){
+                    if(avaliacao.getTipoAvaliacao().getNomeTipoAvaliacao().equals(strNomeTipoAvaliacao)){
+                        ArrayList<Nota> listNota = avaliacao.getListNota();
+                        for(Nota nota : listNota){
+                            if(nota.getIdUsuario()==idUsuario ){
+                                strNota = nota.getNota();
+                            }
+                        }  
+                    }   
+                }                
+            }
+
+        }
+        
+        
+        return strNota;
+    }
+    
     public static String getMediaAnoAlunoDisciplina(int idUsuario, int idCurso, ArrayList<Periodo> listPeriodo, String strDisciplina){
         String strMedia="";
         double doubleMediaAluno=0;
         int countMedia=0;
+        Curso curso = CursoServer.getCurso(idCurso);
 
         for (Periodo periodo : listPeriodo) {
             
@@ -422,7 +585,7 @@ public class NotaServer {
                 if (disciplina.getNome().equals(strDisciplina)) {
                     
                     disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
-                    strMedia = disciplina.getMediaAlunoDisciplina(idUsuario);
+                    strMedia = disciplina.getMediaAlunoDisciplina(curso, idUsuario);
                     
                     int intPesoNotaPeriodo = Integer.parseInt(periodo.getPeso());
                     for (int i = 0; i < intPesoNotaPeriodo; i++) {
@@ -448,6 +611,7 @@ public class NotaServer {
         
     public static ArrayList<ArrayList<String>> getRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
         
+        Curso curso = CursoServer.getCurso(idCurso);
         ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();   
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);       
         
@@ -497,7 +661,7 @@ public class NotaServer {
                 list.get(i).add("-");
 
             } else {
-                String strMedia = disciplina.getMediaAlunoDisciplina(idUsuario);
+                String strMedia = disciplina.getMediaAlunoDisciplina(curso, idUsuario);
                 if (strMedia == null || strMedia.isEmpty()) {
                     strMedia = "-";
                     list.get(i).add(strMedia);
@@ -514,8 +678,10 @@ public class NotaServer {
         return list;
     }
   
-    public static ArrayList<ArrayList<String>> getMediaNotaAlunosNasDisciplinas(ArrayList<Usuario> listUsuario, ArrayList<Disciplina> listDisciplinas){
+    public static ArrayList<ArrayList<String>> getMediaNotaAlunosNasDisciplinas(int idCurso, ArrayList<Usuario> listUsuario, ArrayList<Disciplina> listDisciplinas){
         ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
+        
+        Curso curso = CursoServer.getCurso(idCurso);
         
         for (Usuario usuario : listUsuario) {
             ArrayList<String> item = new ArrayList<String>();
@@ -530,7 +696,7 @@ public class NotaServer {
                 if (usuario.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
                     item.add("-");
                 } else {
-                    String strMedia = disciplina.getMediaAlunoDisciplina(usuario.getIdUsuario());
+                    String strMedia = disciplina.getMediaAlunoDisciplina(curso, usuario.getIdUsuario());
                     if (strMedia == null || strMedia.isEmpty()) {
                         strMedia = "-";
                         item.add(strMedia);
@@ -546,6 +712,92 @@ public class NotaServer {
        
         return list;
     }
+    
+    
+    
+    public static String getExcelBoletimNotas(int idCurso) {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("Boletim Notas");
+        sheet.setFitToPage(true);
+        sheet.getPrintSetup().setLandscape(true);
+        
+        
+        ArrayList<ArrayList<String>> listAvaliacaoNotasAlunos = getBoletimNotas(idCurso);
+        Curso curso = CursoServer.getCurso(idCurso);
+        
+        int intColumn=0;
+        int intLine=0;
+        Row row = sheet.createRow((short) intLine);  
+        row.createCell((short) intColumn).setCellValue("PLANILHA DE NOTAS - "+curso.getNome());
+        row.getCell((short) intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));
+        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,8));
+        intLine++;
+        
+//        row = sheet.createRow((short) intLine);  
+//        row.createCell((short) intColumn).setCellValue(curso.getNome());
+//        row.getCell((short) intColumn).setCellStyle(ExcelFramework.getStyleTitleBoletim(wb));
+//        sheet.addMergedRegion(new CellRangeAddress(intLine,intLine,0,8));
+//        intLine++;        
+        
+//        row = sheet.createRow((short) intLine++);  
+//        row.createCell((short) intColumn).setCellValue("Aluno");
+//        row.getCell((short) intColumn++).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));
+       
+            ArrayList<String> listHeaderAlunoNotas = listAvaliacaoNotasAlunos.get(0);
+            row = sheet.createRow((short) intLine++);
+            intColumn = listHeaderAlunoNotas.size();
+            for (int i = 0; i < listHeaderAlunoNotas.size()-1; i++) {
+                row.createCell((short) i);
+                if(i==0 || i==1){
+                    String strText = listHeaderAlunoNotas.get(i+1); 
+                    row.getCell((short) i).setCellValue(strText);                     
+                    row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb)); 
+                }else{
+                    String strText = listHeaderAlunoNotas.get(i+1); 
+                    strText = Curso.getAbreviarNomeCurso(strText);
+                    row.getCell((short) i).setCellValue(strText);            
+                    row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb)); 
+                }
+            }
+     
+        
+        for (int line=1; line<listAvaliacaoNotasAlunos.size();line++) {
+            ArrayList<String> listAlunoNotas = listAvaliacaoNotasAlunos.get(line);
+            row = sheet.createRow((short) intLine++);
+            for (int i = 0; i < listAlunoNotas.size()-1; i++) { 
+                String strText = listAlunoNotas.get(i+1);   
+                row.createCell((short) i);
+                
+                if(i==0 || i==1){
+                    row.getCell((short) i).setCellValue(strText);                     
+                    row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb)); 
+                    
+                }else{
+                    if(FieldVerifier.isNumeric(strText)){
+                        row.getCell((short) i).setCellValue(Double.parseDouble(strText));                     
+                        row.getCell((short) i).setCellType(Cell.CELL_TYPE_NUMERIC); 
+                    }else{
+                        row.getCell((short) i).setCellValue(strText);                     
+                        row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                    }
+
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));               
+                     
+                }        
+            }
+        }
+        
+        for (int i = 0; i < intColumn; i++) {   
+                sheet.autoSizeColumn(i,true);
+        }
+        
+        return ExcelFramework.getExcelAddress(wb,"GerarExcelBoletimNotas_");
+    }    
+    
+    
        
     public static String getExcelBoletimAnual(int idCurso) {
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -705,7 +957,7 @@ public class NotaServer {
         Periodo periodo = PeriodoServer.getPeriodo(idPeriodo);
         Curso curso = CursoServer.getCurso(idCurso);
         
-        ArrayList<ArrayList<String>> listMediaNotaAlunos = getMediaNotaAlunosNasDisciplinas(listUsuario, listDisciplinas);
+        ArrayList<ArrayList<String>> listMediaNotaAlunos = getMediaNotaAlunosNasDisciplinas(idCurso, listUsuario, listDisciplinas);
         
         int intColumn=0;
         int intLine=0;
@@ -836,6 +1088,8 @@ public class NotaServer {
 //        return "";
         return ExcelFramework.getExcelAddress(wb,"GerarExcelBoletimDisciplina_");
     }
+    
+
     
 
 }

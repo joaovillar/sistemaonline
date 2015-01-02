@@ -28,8 +28,8 @@ import com.jornada.shared.classes.boletim.AvaliacaoNota;
 public interface GWTServiceAvaliacao extends RemoteService {
 
 
-	public boolean AdicionarAvaliacao(Avaliacao object);	
-	public boolean updateRow(Avaliacao object);
+	public String AdicionarAvaliacao(Avaliacao object);	
+	public String updateRow(Avaliacao object);
 	public boolean deleteRow(int id_avaliacao); 	
 	public ArrayList<Avaliacao> getAvaliacaoPelaDisciplina(int idDisciplina);	
 	public ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int idCurso);
