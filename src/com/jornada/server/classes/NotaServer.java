@@ -486,36 +486,40 @@ public class NotaServer {
 
                         if (strNomeAvaliacao.equals("Média Final")) {                            
 //                            listRow.add(disciplina.getMediaAlunoDisciplina(curso,idUser));
-                            String strMedia ="";
+                            String strMedia ="-";
                             if(disciplina==null){
-                                strMedia = "";
+                                strMedia = "-";
                             }else{
                                 strMedia = disciplina.getMediaAlunoDisciplina(curso,idUser);
                                 if (strMedia == null || strMedia.isEmpty()) {
-                                    strMedia = "";
-                                    listRow.add(strMedia);
+                                    strMedia = "-";
+//                                    listRow.add(strMedia);
                                 } else {
                                     double doubleMediaAluno = Double.parseDouble(strMedia);
-                                    listRow.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+                                    strMedia = MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno);
+//                                    listRow.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
                                 }
+                                
                             }
+                            listRow.add(strMedia);
 
                         } else {
 
-                            String strNota = "";
+                            String strNota = "-";
                             // Disciplina disciplina =
                             // DisciplinaServer.getDisciplinaPeloPeriodo(idPeriodo,"%"+strNomeDisc+"%");
                             
 
                             if (disciplina == null) {
-                                strNota = "";
+                                strNota = "-";
                             } else {
                                 int idDisciplina = disciplina.getIdDisciplina();
                                 strNota = getNota(listDisciplinas, idUser, idDisciplina, strNomeAvaliacao);
                                 if (strNota == null || strNota.isEmpty()) {
-                                    strNota = "";
+                                    strNota = "-";
                                 }
                             }
+                            
                             listRow.add(strNota);
                         }
                     }
@@ -777,8 +781,18 @@ public class NotaServer {
                     
                 }else{
                     if(FieldVerifier.isNumeric(strText)){
-                        row.getCell((short) i).setCellValue(Double.parseDouble(strText));                     
-                        row.getCell((short) i).setCellType(Cell.CELL_TYPE_NUMERIC); 
+                        double nota = Double.parseDouble(strText);
+                        double mediaCurso = Double.parseDouble(curso.getMediaNota());
+                        String strSinal="";
+                        if(nota<mediaCurso){
+                            strSinal="*";
+                            row.getCell((short) i).setCellValue(strSinal+strText);                     
+                            row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
+                        }else{
+                            row.getCell((short) i).setCellValue(nota);                     
+                            row.getCell((short) i).setCellType(Cell.CELL_TYPE_NUMERIC); 
+                        }
+
                     }else{
                         row.getCell((short) i).setCellValue(strText);                     
                         row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING); 
