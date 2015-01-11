@@ -794,9 +794,9 @@ public class MainView extends Composite implements HistoryListener{
 		});
 	}		
 	
-	public void openFerramentaProfessorDiario(){
+	public void openFerramentaProfessorRelatorio(){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO);		
+		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_RELATORIO);		
 
 //		this.vPanelBody.clear();
 //		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
@@ -815,12 +815,35 @@ public class MainView extends Composite implements HistoryListener{
 				mpPopupLoading.hide();
 				vPanelBody.clear();
 				vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-				TelaInicialDiarioProfessor telaInicialDiarioProfessor = TelaInicialDiarioProfessor.getInstance(MainView.this);		
-				vPanelBody.add(telaInicialDiarioProfessor);
+				TelaInicialRelatorio telaInicialRelatorio = TelaInicialRelatorio.getInstance(MainView.this);		
+				vPanelBody.add(telaInicialRelatorio);
 				vPanelMenu.setVisible(true);	
 			}
 		});
 	}		
+	
+	
+	   public void openFerramentaProfessorDiario(){
+	        
+	        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO);       
+
+	        mpPopupLoading.show();
+	        GWT.runAsync(new RunAsyncCallback() {
+	            public void onFailure(Throwable caught) {
+	                mpPopupLoading.hide();
+	                Window.alert("Code download failed");
+	            }
+
+	            public void onSuccess() {
+	                mpPopupLoading.hide();
+	                vPanelBody.clear();
+	                vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+	                TelaInicialDiarioProfessor telaInicialDiarioProfessor = TelaInicialDiarioProfessor.getInstance(MainView.this);      
+	                vPanelBody.add(telaInicialDiarioProfessor);
+	                vPanelMenu.setVisible(true);    
+	            }
+	        });
+	    }   
 	
 	
 	

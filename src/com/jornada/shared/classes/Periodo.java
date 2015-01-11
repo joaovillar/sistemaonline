@@ -127,6 +127,7 @@ public class Periodo implements Serializable, Comparable<Periodo>  {
 	}
 	
 	public String getPeso() {
+	    if(peso==null)peso="1";
         return peso;
     }
 

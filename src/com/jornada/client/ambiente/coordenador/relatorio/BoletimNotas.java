@@ -55,8 +55,9 @@ public class BoletimNotas extends VerticalPanel {
 
 	private MpSelectionCurso listBoxCurso;	
 
+
 	@SuppressWarnings("unused")
-	private TelaInicialRelatorio telaInicialPeriodo;
+    private TelaInicialRelatorio telaInicialPeriodo;
 	
 	TextConstants txtConstants;
 	
@@ -64,6 +65,7 @@ public class BoletimNotas extends VerticalPanel {
 	VerticalPanel vFormPanel;
 	FlexTable flexTableNota;
 	
+
 	private static BoletimNotas uniqueInstance;
 	
 	public static BoletimNotas getInstance(final TelaInicialRelatorio telaInicialRelatorio){
@@ -322,9 +324,9 @@ public class BoletimNotas extends VerticalPanel {
             try {
                 double doubleNumber = Double.parseDouble(object.get(this.index));
                 if (doubleNumber >= doubleMediaNotaCurso) {
-                    return "table-boletim-cell-green";
+                    return "table-boletim-cell-green-media";
                 } else if (doubleNumber < doubleMediaNotaCurso) {
-                    return "table-boletim-cell-red";
+                    return "table-boletim-cell-red-media";
                 }else{
                     return "";
                 }

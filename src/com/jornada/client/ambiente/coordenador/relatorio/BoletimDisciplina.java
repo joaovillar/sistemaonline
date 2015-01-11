@@ -26,9 +26,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.ambiente.general.nota.DialogBoxNota;
-import com.jornada.client.classes.listBoxes.MpSelectionCurso;
-import com.jornada.client.classes.listBoxes.MpSelectionDisciplina;
-import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -38,6 +38,7 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.client.service.GWTServiceNota;
+import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class BoletimDisciplina extends VerticalPanel {
@@ -57,18 +58,20 @@ public class BoletimDisciplina extends VerticalPanel {
 
     ArrayList<String> arrayAvaliacaoColumns = new ArrayList<String>();
 
-    private MpSelectionCurso listBoxCurso;
-    private MpSelectionPeriodo listBoxPeriodo;
-    private MpSelectionDisciplina listBoxDisciplina;
+    private MpSelectionCursoAmbienteProfessor listBoxCurso;
+    private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
+    private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
 
-    @SuppressWarnings("unused")
-    private TelaInicialRelatorio telaInicialPeriodo;
+
+    private TelaInicialRelatorio telaInicialRelatorio;
 
     TextConstants txtConstants;
 
     ScrollPanel scrollPanel = new ScrollPanel();
     VerticalPanel vFormPanel;
     FlexTable flexTableNota;
+    
+    private Usuario usuarioLogado;
 
     private static BoletimDisciplina uniqueInstance;
 
@@ -86,7 +89,9 @@ public class BoletimDisciplina extends VerticalPanel {
 
         txtConstants = GWT.create(TextConstants.class);
 
-        this.telaInicialPeriodo = telaInicialRelatorio;
+        this.telaInicialRelatorio = telaInicialRelatorio;
+        
+        usuarioLogado = this.telaInicialRelatorio.getMainView().getUsuarioLogado();
 
         mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
         mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -104,13 +109,13 @@ public class BoletimDisciplina extends VerticalPanel {
 
         mpHelperCurso = new MpListBoxPanelHelper();
 
-        listBoxCurso = new MpSelectionCurso(true);
+        listBoxCurso = new MpSelectionCursoAmbienteProfessor(usuarioLogado);
         listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 
-        listBoxPeriodo = new MpSelectionPeriodo();
+        listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(usuarioLogado);
         listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());
 
-        listBoxDisciplina = new MpSelectionDisciplina();
+        listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(usuarioLogado);
         listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
 
         // Add some standard form options
@@ -145,7 +150,7 @@ public class BoletimDisciplina extends VerticalPanel {
     }
 
     public void updateClientData() {
-        listBoxCurso.populateComboBox();
+        listBoxCurso.populateComboBox(usuarioLogado);
     }
 
     private class MpCursoSelectionChangeHandler implements ChangeHandler {

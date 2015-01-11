@@ -472,64 +472,78 @@ public class NotaServer {
                 ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinasComAvaliacoes(periodo.getIdPeriodo());
                 
                 for (String strNomeAvaliacao : listNomeAvaliacao) {
-                    ArrayList<String> listRow = new ArrayList<String>();
-                    int idUser = usuario.getIdUsuario();
-//                    int idPeriodo = periodo.getIdPeriodo();
-                   
-                    listRow.add(Integer.toString(idUser));
-                    listRow.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
-                    listRow.add("["+periodo.getNomePeriodo()+"] "+strNomeAvaliacao);
-                    
-                    for (String strNomeDisc : listDisciplinasAno) {        
-                        
-                        Disciplina disciplina = DisciplinaServer.getDisciplinaFromArray(strNomeDisc, listDisciplinas);
 
-                        if (strNomeAvaliacao.equals("Média Final")) {                            
-//                            listRow.add(disciplina.getMediaAlunoDisciplina(curso,idUser));
-                            String strMedia ="-";
-                            if(disciplina==null){
-                                strMedia = "-";
-                            }else{
-                                strMedia = disciplina.getMediaAlunoDisciplina(curso,idUser);
-                                if (strMedia == null || strMedia.isEmpty()) {
+                        ArrayList<String> listRow = new ArrayList<String>();
+                        int idUser = usuario.getIdUsuario();
+
+                        listRow.add(Integer.toString(idUser));
+                        listRow.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
+                        listRow.add("[" + periodo.getNomePeriodo() + "] " + strNomeAvaliacao);
+
+                        for (String strNomeDisc : listDisciplinasAno) {
+
+                            Disciplina disciplina = DisciplinaServer.getDisciplinaFromArray(strNomeDisc, listDisciplinas);
+
+                            if (strNomeAvaliacao.equals("Média Final")) {
+                                String strMedia = "-";
+                                if (disciplina == null) {
                                     strMedia = "-";
-//                                    listRow.add(strMedia);
                                 } else {
-                                    double doubleMediaAluno = Double.parseDouble(strMedia);
-                                    strMedia = MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno);
-//                                    listRow.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+                                    strMedia = disciplina.getMediaAlunoDisciplina(curso, idUser);
+                                    if (strMedia == null || strMedia.isEmpty()) {
+                                        strMedia = "-";
+                                    } else {
+                                        double doubleMediaAluno = Double.parseDouble(strMedia);
+                                        strMedia = MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno);
+                                    }
+
                                 }
-                                
-                            }
-                            listRow.add(strMedia);
+                                listRow.add(strMedia);
 
-                        } else {
-
-                            String strNota = "-";
-                            // Disciplina disciplina =
-                            // DisciplinaServer.getDisciplinaPeloPeriodo(idPeriodo,"%"+strNomeDisc+"%");
-                            
-
-                            if (disciplina == null) {
-                                strNota = "-";
                             } else {
-                                int idDisciplina = disciplina.getIdDisciplina();
-                                strNota = getNota(listDisciplinas, idUser, idDisciplina, strNomeAvaliacao);
-                                if (strNota == null || strNota.isEmpty()) {
-                                    strNota = "-";
-                                }
-                            }
-                            
-                            listRow.add(strNota);
-                        }
-                    }
-                    //Adicionando Provas
-                    listNotas.add(listRow);
-                }
 
-            }
-            
+                                String strNota = "-";
+
+                                if (disciplina == null) {
+                                    strNota = "-";
+                                } else {
+                                    int idDisciplina = disciplina.getIdDisciplina();
+                                    strNota = getNota(listDisciplinas, idUser, idDisciplina, strNomeAvaliacao);
+                                    if (strNota == null || strNota.isEmpty()) {
+                                        strNota = "-";
+                                    }
+                                }
+
+                                listRow.add(strNota);
+                            }
+                        }
+                        // Adicionando Provas
+                        listNotas.add(listRow);
+                    }
+             
+
+            }            
         }
+        
+        
+//        for (Usuario usuario : listUsuario) {
+//            
+//            for (Periodo periodo : listPeriodo) {
+//                
+//                ArrayList<String> listRow = new ArrayList<String>();
+//                int idUser = usuario.getIdUsuario();
+//                listRow.add(Integer.toString(idUser));
+//                listRow.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
+//                
+//                ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo()); 
+//          
+//
+//                
+//                listNotas.add(listRow);
+//            }
+//            
+//        }
+        
                 
         
         return listNotas;
@@ -722,8 +736,12 @@ public class NotaServer {
     public static String getExcelBoletimNotas(int idCurso) {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Boletim Notas");
-        sheet.setFitToPage(true);
+//        sheet.setColumnBreak(15);
         sheet.getPrintSetup().setLandscape(true);
+        sheet.setAutobreaks(true);
+        sheet.setFitToPage(true);
+        sheet.getPrintSetup().setFitWidth((short)1);
+        sheet.getPrintSetup().setFitHeight((short)0);
         
         
         ArrayList<ArrayList<String>> listAvaliacaoNotasAlunos = getBoletimNotas(idCurso);

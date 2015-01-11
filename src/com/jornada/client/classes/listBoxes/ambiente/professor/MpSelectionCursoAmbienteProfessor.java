@@ -15,8 +15,11 @@ public class MpSelectionCursoAmbienteProfessor extends MpSelection {
 	
 	private AsyncCallback<ArrayList<Curso>> callBackPopulateComboBox;
 	
+	private ArrayList<Curso> listCurso;
+	
 	public MpSelectionCursoAmbienteProfessor(Usuario usuario){
 
+	    listCurso = new ArrayList<Curso>();
 		
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Curso>>() {
@@ -26,6 +29,7 @@ public class MpSelectionCursoAmbienteProfessor extends MpSelection {
 
 					for (Curso object : lista) {
 						addItem(object.getNome(),Integer.toString(object.getIdCurso()));
+						listCurso.add(object);
 					}
 
 					setVisibleItemCount(1);
@@ -73,6 +77,8 @@ public class MpSelectionCursoAmbienteProfessor extends MpSelection {
 		clear();
 	}
 
-
+    public ArrayList<Curso> getListCurso() {
+        return listCurso;
+    }
 	
 }

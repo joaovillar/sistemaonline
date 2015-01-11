@@ -97,6 +97,7 @@ public class Avaliacao implements Serializable{
     
 
     public String getPesoNota() {
+        if(pesoNota==null)pesoNota="10";
         return pesoNota;
     }
 

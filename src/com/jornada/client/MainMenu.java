@@ -110,6 +110,10 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     private Hyperlink linkFerramentaProfessorDiario;
     private Image imgFerramentaProfessorDiario;     
     
+    public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR_RELATORIO = txtConstants.menuTokenFerramentaProfessorRelatorio();
+    private Hyperlink linkFerramentaProfessorRelatorio;
+    private Image imgFerramentaProfessorRelatorio;       
+    
     
     public static final String MENU_TOKEN_FERRAMENTA_ALUNO = txtConstants.menuTokenFerramentaAluno();
     private Hyperlink linkFerramentaAluno;
@@ -405,7 +409,17 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 				isFirstEventFire = false;
 				mainView.openFerramentaProfessorDiario();
 			}
-		}		
+		}	
+        else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_RELATORIO)) {
+            this.linkPaginaPrincipal(true);         
+            this.linkFerramentaProfessor(true);
+            this.linkFerramentaProfessorRelatorio();    
+            
+            if (isFirstEventFire == true) {
+                isFirstEventFire = false;
+                mainView.openFerramentaProfessorRelatorio();
+            }
+        }   		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaAluno(false);
@@ -837,6 +851,16 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(new InlineHTML("&nbsp"));
         hPanel.add(linkFerramentaProfessorDiario);
 	}	
+	
+    public void linkFerramentaProfessorRelatorio(){
+        imgFerramentaProfessorRelatorio = new Image("images/product_documentation-16.png");
+        linkFerramentaProfessorRelatorio = new Hyperlink(txtConstants.relatorios(), txtConstants.menuTokenFerramentaProfessorRelatorio());
+        linkFerramentaProfessorRelatorio.setStyleName("a");
+        
+        hPanel.add(imgFerramentaProfessorRelatorio);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkFerramentaProfessorRelatorio);
+    }   	
 	
 	public void linkFerramentaAluno(boolean showConnectionLabel){
 

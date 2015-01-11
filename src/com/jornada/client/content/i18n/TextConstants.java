@@ -48,6 +48,7 @@ public interface TextConstants extends Messages {
 	String menuTokenFerramentaProfessorOcorrencia();
 	String menuTokenFerramentaProfessorHierarquia();
 	String menuTokenFerramentaProfessorDiario();
+    String menuTokenFerramentaProfessorRelatorio();
 	String menuTokenFerramentaAluno();
 	String menuTokenFerramentaAlunoNota();
 	String menuTokenFerramentaAlunoAgenda();

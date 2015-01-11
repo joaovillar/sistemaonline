@@ -95,12 +95,8 @@ public class EditarUsuario extends VerticalPanel {
 	private Column<Usuario, String> columnEmail;
 	private Column<Usuario, String> columnLogin;
 	private Column<Usuario, Date> columnDataNascimento;
-//	private Column<Usuario, String> columnTelefoneCelular;
-//	private Column<Usuario, String> columnTelefoneResidencial;
-//	private Column<Usuario, String> columnTelefoneComercial;
 	private Column<Usuario, String> columnTipoUsuario;
-//	private Column<Usuario, String> columnTipoStatusUsuario;
-//	private SingleSelectionModel<Usuario> selectionModel;
+
 	
 	private TextBox txtSearch;
 	private ListBox selectCampoFiltrar;
@@ -260,6 +256,7 @@ public class EditarUsuario extends VerticalPanel {
 	    cellTable.setAutoHeaderRefreshDisabled(true);
 	    cellTable.setAutoFooterRefreshDisabled(true);
 //	    cellTable.setPageSize(10);
+//	    cellTable.setRowCount(15);
 		
 		
 		// Add a selection model so we can select cells.
@@ -271,7 +268,7 @@ public class EditarUsuario extends VerticalPanel {
 		
 		mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
-//		mpPager.setPageSize(15);
+
 		
 		/******** Begin Populate ********/
 		cleanCellTable();
