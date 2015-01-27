@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.jornada.client.MainView;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
 
@@ -19,12 +20,14 @@ public class TelaInicialConteudoProgramatico extends Composite{
 	private EditarConteudoProgramatico editarConteudoProgramatico;
 	
 	TextConstants txtConstants;
+	
+	private MainView mainView;
 
 	
 	private static TelaInicialConteudoProgramatico uniqueInstance;
-	public static TelaInicialConteudoProgramatico getInstance(){		
+	public static TelaInicialConteudoProgramatico getInstance(MainView mainView){		
 		if(uniqueInstance==null){
-			uniqueInstance = new TelaInicialConteudoProgramatico();
+			uniqueInstance = new TelaInicialConteudoProgramatico(mainView);
 		}else{
 			uniqueInstance.adicionarConteudoProgramatico.updateClientData();
 			uniqueInstance.editarConteudoProgramatico.updateClientData();
@@ -33,9 +36,11 @@ public class TelaInicialConteudoProgramatico extends Composite{
 		return uniqueInstance;
 	}		
 
-	private TelaInicialConteudoProgramatico() {
+	private TelaInicialConteudoProgramatico(MainView mainView) {
 		
 		txtConstants = GWT.create(TextConstants.class);
+		
+		this.mainView = mainView;
 		
 		 adicionarConteudoProgramatico =  new AdicionarConteudoProgramatico(this);
 		 editarConteudoProgramatico = new EditarConteudoProgramatico(this);
@@ -80,10 +85,9 @@ public class TelaInicialConteudoProgramatico extends Composite{
 		return editarConteudoProgramatico;
 	}
 	
-//	protected void populateGrid(){
-//		editarConteudoProgramatico.populateGridConteudoProgramatico();
-//	}
-//	
+    public MainView getMainView() {
+        return mainView;
+    }
 	
 	
 	

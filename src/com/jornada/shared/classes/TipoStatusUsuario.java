@@ -72,6 +72,22 @@ public class TipoStatusUsuario implements Serializable{
 
 
  
+    public static boolean statusAtivo(int idStatus) {
+
+        if (TipoStatusUsuario.ADMINISTRADOR_ATIVO == idStatus) {
+            return true;
+        } else if (TipoStatusUsuario.COORDENADOR_ATIVO == idStatus) {
+            return true;
+        } else if (TipoStatusUsuario.ALUNO_ATIVO == idStatus) {
+            return true;
+        } else if (TipoStatusUsuario.PROFESSOR_ATIVO == idStatus) {
+            return true;
+        } else if (TipoStatusUsuario.PAIS_ATIVO == idStatus) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     
     

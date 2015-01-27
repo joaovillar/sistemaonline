@@ -43,6 +43,7 @@ public interface TextConstants extends Messages {
 	String menuTokenFerramentaProfessor();
 	String menuTokenFerramentaProfessorAvaliacao();
 	String menuTokenFerramentaProfessorNota();
+    String menuTokenFerramentaProfessorConteudoProgramatico();
 	String menuTokenFerramentaProfessorTopico();
 	String menuTokenFerramentaProfessorComunicado();	
 	String menuTokenFerramentaProfessorOcorrencia();
@@ -121,6 +122,8 @@ public interface TextConstants extends Messages {
     String professorAmbienteOcorrencia();
     String professorAmbienteOcorrenciaCompText1();
     String professorAmbienteOcorrenciaCompText2();
+    
+    String professorAmbienteConteudoProgramatico();
     
     String professorAmbienteComunicado();
     String professorAmbienteComunicadoCompText1();

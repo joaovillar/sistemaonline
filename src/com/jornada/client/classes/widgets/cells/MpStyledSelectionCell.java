@@ -31,6 +31,8 @@ public class MpStyledSelectionCell extends AbstractInputCell<String, String> {
     private final LinkedHashMap<String, String> options;
 
     private String style;
+    
+//    private String nameObject="";
 
     public MpStyledSelectionCell(LinkedHashMap<String, String> options) {
         super("change");
@@ -53,12 +55,25 @@ public class MpStyledSelectionCell extends AbstractInputCell<String, String> {
         }
         this.options = new LinkedHashMap<String, String>(options);
 
-//        int index = 0;
         for (String key : options.keySet()){
-//          for (HashMap<String, String> option : options) {
               indexForOption.put(options.get(key), key);
           }
     }
+    
+//    public MpStyledSelectionCell(LinkedHashMap<String, String> options, String style, String nameObject) {
+//        super("change");
+//        this.style = style;
+//        this.nameObject  = nameObject;
+//        if (template == null) {
+//            template = GWT.create(Template.class);
+//        }
+//        this.options = new LinkedHashMap<String, String>(options);
+//
+//        for (String key : options.keySet()){
+//              indexForOption.put(options.get(key), key);
+//          }
+//    }
+
 
     @Override
     public void onBrowserEvent(Context context, Element parent, String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
@@ -94,13 +109,18 @@ public class MpStyledSelectionCell extends AbstractInputCell<String, String> {
             clearViewData(key);
             viewData = null;
         }
+        
+//        String strId = "";
+//        if(!nameObject.isEmpty()){
+//            strId = "id=\"" + nameObject + "\"";
+//        }
 
         String selectedIndex = getSelectedIndex(viewData == null ? value : viewData);
         if (style != null && !"".equals(style)) {
-            String html = "<select tabindex=\"-1\" class=\"" + style + "\">";
+            String html = "<select tabindex=\"-1\"  class=\"" + style + "\">";
             sb.appendHtmlConstant(html);
         } else {
-            sb.appendHtmlConstant("<select tabindex=\"-1\">");
+            sb.appendHtmlConstant("<select tabindex=\"-1\"  >");
         }
 
 //        for (String option : options) {
@@ -131,5 +151,6 @@ public class MpStyledSelectionCell extends AbstractInputCell<String, String> {
 //        }
 //        return index;
     }
+    
 
 }

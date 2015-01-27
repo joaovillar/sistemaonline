@@ -23,6 +23,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Grid;
@@ -63,6 +64,8 @@ public class EditarAvaliacao extends VerticalPanel {
 	private AsyncCallback<Boolean> callbackDelete;
 
 	private VerticalPanel vPanelBody = new VerticalPanel();	
+	
+	 MpStyledSelectionCell pesoNotaCell;
 	
 	private CellTable<Avaliacao> cellTable;
 	private Column<Avaliacao, String> assuntoColumn;
@@ -130,10 +133,7 @@ public class EditarAvaliacao extends VerticalPanel {
 			gridComboBox.setWidget(row, 1, listBoxDisciplina);
 			gridComboBox.setWidget(row, 2, new InlineHTML("&nbsp;"));
 			gridComboBox.setWidget(row++, 3, mpPanelLoading);
-//			gridComboBox.setWidget(row, 0, lblConteudoProgramatico);
-//			gridComboBox.setWidget(row, 1, listBoxConteudoProgramatico);
-//			gridComboBox.setWidget(row, 2, new InlineHTML("&nbsp;"));
-//			gridComboBox.setWidget(row++, 3, mpPanelLoading);			
+
 		}
 
 			
@@ -312,7 +312,6 @@ public class EditarAvaliacao extends VerticalPanel {
 			int index = listBoxPeriodo.getSelectedIndex();
 			if(index==-1){
 				listBoxDisciplina.clear();
-//				listBoxConteudoProgramatico.clear();
 				dataProvider.getList().clear();
 			}
 			else{
@@ -324,26 +323,9 @@ public class EditarAvaliacao extends VerticalPanel {
 	
 	private class MpDisciplinaSelectionChangeHandler implements ChangeHandler {
 		public void onChange(ChangeEvent event) {
-//			int index = listBoxDisciplina.getSelectedIndex();
-//			if(index==-1){
-//				listBoxConteudoProgramatico.clear();
-//				dataProvider.getList().clear();
-//			}
-//			else{
-//				int idDisciplina= Integer.parseInt(listBoxDisciplina.getValue(index));
-//				listBoxConteudoProgramatico.populateComboBox(idDisciplina);				
-//			}
 		    populateGridAvaliacao();
 		}  
 	}
-	
-//	private class MpConteudoProgramaticoSelectionChangeHandler implements ChangeHandler{
-//		
-//		public void onChange(ChangeEvent event){
-//			populateGridAvaliacao();
-////			populateComboBoxTipoAvaliacao();
-//		}
-//	}	
 	
 
 	/**************** End Event Handlers *****************/
@@ -387,7 +369,15 @@ public class EditarAvaliacao extends VerticalPanel {
 								dataProvider.getList().add(list.get(i));
 							}
 							addCellTableData(dataProvider);
-							cellTable.redraw();	
+							
+							cellTable.redraw();
+
+							
+							disableListBoxCells();
+							 
+
+
+							
 						}
 					});
 			
@@ -437,7 +427,9 @@ public class EditarAvaliacao extends VerticalPanel {
 		 cellTable.addColumnSortHandler(sortHandler);	
 
 		 initSortHandler(sortHandler);
-	
+		 
+//		 disableListBoxCells();
+		 
 	}
 
 
@@ -479,7 +471,6 @@ public class EditarAvaliacao extends VerticalPanel {
 			public void update(int index, Avaliacao object, String value) {
 				// Called when the user changes the value.
 				object.setDescricao(value);
-				//getServicePeriodoAsync().updatePeriodoRow(object,callbackUpdateRow);
 				GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
 			}
 		});
@@ -496,7 +487,25 @@ public class EditarAvaliacao extends VerticalPanel {
 			@Override
 			public void update(int index, Avaliacao object, String value) {
 				// Called when the user changes the value.
-				object.setIdTipoAvaliacao(Integer.parseInt(value));
+			    int idTipoAvaliacao = Integer.parseInt(value);
+			    
+//			    Element el = DOM.getElementById("pesoNota");
+
+			    String strClean = cellTable.getRowElement(index).getCells().getItem(3).getFirstChildElement().getInnerHTML();
+                strClean = strClean.replace("<select disabled", "<select");
+                strClean = strClean.replace("select=\"\"", "select");
+                cellTable.getRowElement(index).getCells().getItem(3).getFirstChildElement().setInnerHTML(strClean);
+                
+                if (idTipoAvaliacao == TipoAvaliacao.INT_RECUPERACAO || 
+                    idTipoAvaliacao == TipoAvaliacao.INT_RECUPERACAO_FINAL || 
+                    idTipoAvaliacao == TipoAvaliacao.INT_ADICIONAL_NOTA) {
+
+                    String strDisable = cellTable.getRowElement(index).getCells().getItem(3).getFirstChildElement().getInnerHTML();
+                    strDisable = strDisable.replace("<select", "<select disabled");
+                    cellTable.getRowElement(index).getCells().getItem(3).getFirstChildElement().setInnerHTML(strDisable);
+                }
+
+				object.setIdTipoAvaliacao(idTipoAvaliacao);
 				GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
 			}
 		});
@@ -507,35 +516,43 @@ public class EditarAvaliacao extends VerticalPanel {
             listaPesoNota.put(mpListBoxPesoNota.getValue(i), mpListBoxPesoNota.getItemText(i));
         }
 
-        MpStyledSelectionCell pesoNotaCell = new MpStyledSelectionCell(listaPesoNota,"design_text_boxes");
+        pesoNotaCell = new MpStyledSelectionCell(listaPesoNota,"design_text_boxes");
         columnPesoNota = new Column<Avaliacao, String>(pesoNotaCell) {
           @Override
           public String getValue(Avaliacao object) {
+
+//              Element el = DOM.getElementById("pesoNota");
+//              if(el!=null){
+//                  el.removeAttribute("disabled");              
+//                  if (object.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO || 
+//                      object.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO_FINAL || 
+//                      object.getIdTipoAvaliacao() == TipoAvaliacao.INT_ADICIONAL_NOTA) {
+//                      el.setAttribute("disabled", "");
+//                  }
+//              }
+              
+              
             return object.getPesoNota();
           }
         };
+
         columnPesoNota.setFieldUpdater(new FieldUpdater<Avaliacao, String>() {
             @Override
             public void update(int index, Avaliacao object, String value) {
-                // Called when the user changes the value.
                 object.setPesoNota(value);
                 GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
             }
         });	    
-	    
+        	    
 		dataColumn = new Column<Avaliacao, Date>(new MpDatePickerCell()) {
 			@Override
 			public Date getValue(Avaliacao object) {
-//				Date date = MpUtilClient.convertStringToDate(object.getData());
-//				return date;
 				return object.getData();
 			}
 		};
 		dataColumn.setFieldUpdater(new FieldUpdater<Avaliacao, Date>() {
 			@Override
 			public void update(int index, Avaliacao object, Date value) {
-				// Called when the user changes the value.
-//				object.setData(MpUtilClient.convertDateToString(value));
 				object.setData(value);
 				GWTServiceAvaliacao.Util.getInstance().updateRow(object,callbackUpdateRow);
 			}
@@ -587,6 +604,44 @@ public class EditarAvaliacao extends VerticalPanel {
 		cellTable.getColumn(cellTable.getColumnIndex(columnPesoNota)).setCellStyleNames("edit-cell");
 		cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");		
 		
+
+		
+	}
+	
+    public void disableListBoxCells() {
+        
+
+        for (int i = 0; i < dataProvider.getList().size(); i++) {
+
+            int idTipoAvaliacao = dataProvider.getList().get(i).getIdTipoAvaliacao();
+            String strClean="";
+            
+            
+            //Código necessário devido a condição de corrida
+            try{
+                strClean = cellTable.getRowElement(i).getCells().getItem(3).getFirstChildElement().getInnerHTML();    
+            }catch(Exception ex){
+                Timer timer = new Timer() {
+                    @Override
+                    public void run() {
+                        disableListBoxCells();
+                    }
+                };
+                timer.schedule(100);                
+            }
+            
+            strClean = strClean.replace("<select disabled", "<select");
+            strClean = strClean.replace("select=\"\"", "select");
+            cellTable.getRowElement(i).getCells().getItem(3).getFirstChildElement().setInnerHTML(strClean);
+
+            if (idTipoAvaliacao == TipoAvaliacao.INT_RECUPERACAO || idTipoAvaliacao == TipoAvaliacao.INT_RECUPERACAO_FINAL || idTipoAvaliacao == TipoAvaliacao.INT_ADICIONAL_NOTA) {
+
+                String strDisable = cellTable.getRowElement(i).getCells().getItem(3).getFirstChildElement().getInnerHTML();
+                strDisable = strDisable.replace("<select", "<select disabled");
+                cellTable.getRowElement(i).getCells().getItem(3).getFirstChildElement().setInnerHTML(strDisable);
+            }
+        }  
+
 	}
 
 	public void initSortHandler(ListHandler<Avaliacao> sortHandler) {

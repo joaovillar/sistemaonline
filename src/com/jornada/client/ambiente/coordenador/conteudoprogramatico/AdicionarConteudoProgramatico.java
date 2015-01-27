@@ -16,9 +16,9 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
-import com.jornada.client.classes.listBoxes.MpSelectionCurso;
-import com.jornada.client.classes.listBoxes.MpSelectionDisciplina;
-import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -29,6 +29,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceConteudoProgramatico;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.ConteudoProgramatico;
+import com.jornada.shared.classes.Usuario;
 
 public class AdicionarConteudoProgramatico extends VerticalPanel {
 
@@ -40,9 +41,9 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 	
 	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
-	private MpSelectionCurso listBoxCurso;
-	private MpSelectionPeriodo listBoxPeriodo;
-	private MpSelectionDisciplina listBoxDisciplina;	
+	private MpSelectionCursoAmbienteProfessor listBoxCurso;
+	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
+	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;	
 	
 	private TextBox txtNome;
 	private TextBox txtNumeracao;	
@@ -55,7 +56,9 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 
 	TextConstants txtConstants;
 	
-	@SuppressWarnings("unused")
+	private Usuario usuarioLogado;
+	
+
 	private TelaInicialConteudoProgramatico telaInicialConteudoProgramatico;
 
 	public AdicionarConteudoProgramatico(final TelaInicialConteudoProgramatico telaInicialConteudoProgramatico) {
@@ -63,6 +66,8 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 		txtConstants = GWT.create(TextConstants.class);
 		
 		this.telaInicialConteudoProgramatico=telaInicialConteudoProgramatico;
+		
+		usuarioLogado = this.telaInicialConteudoProgramatico.getMainView().getUsuarioLogado();
 
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -126,9 +131,9 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 
 		
 		
-		listBoxCurso = new MpSelectionCurso(true);		
-		listBoxPeriodo = new MpSelectionPeriodo();		
-		listBoxDisciplina = new MpSelectionDisciplina();
+		listBoxCurso = new MpSelectionCursoAmbienteProfessor(usuarioLogado);		
+		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(usuarioLogado);		
+		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(usuarioLogado);
 		
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());
@@ -316,7 +321,7 @@ public class AdicionarConteudoProgramatico extends VerticalPanel {
 	}	
 	
 	public void updateClientData(){
-		listBoxCurso.populateComboBox();
+		listBoxCurso.populateComboBox(usuarioLogado);
 	}
 	
 	

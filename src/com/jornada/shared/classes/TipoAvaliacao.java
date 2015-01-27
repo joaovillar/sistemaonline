@@ -15,6 +15,8 @@ public class TipoAvaliacao implements Serializable{
 	public static final int INT_PROVA_GRUPO=4;
 	public static final int INT_EXERCICIO_FIXACAO=5;
     public static final int INT_RECUPERACAO=6;	
+    public static final int INT_RECUPERACAO_FINAL=7;  
+    public static final int INT_ADICIONAL_NOTA=8;  
 	
 	private int idTipoAvaliacao;
 	private String nomeTipoAvaliacao;

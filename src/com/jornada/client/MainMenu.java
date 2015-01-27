@@ -88,7 +88,11 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     
     public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR_NOTA = txtConstants.menuTokenFerramentaProfessorNota();
     private Hyperlink linkFerramentaProfessorNota;
-    private Image imgFerramentaProfessorNota;       
+    private Image imgFerramentaProfessorNota;  
+    
+    public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR_CONTEUDO_PROGRAMATICO = txtConstants.menuTokenFerramentaProfessorConteudoProgramatico();
+    private Hyperlink linkFerramentaProfessorConteudoProgramatico;
+    private Image imgFerramentaProfessorConteudoProgramatico;
     
     public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR_TOPICO = txtConstants.menuTokenFerramentaProfessorTopico();
     private Hyperlink linkProfessorTopico;
@@ -365,6 +369,17 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			}				
 			
 		}
+		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_CONTEUDO_PROGRAMATICO)) {
+             this.linkPaginaPrincipal(true);
+             this.linkFerramentaProfessor(true);
+             this.linkFerramentaProfessorConteudoProgramatico();
+
+             if (isFirstEventFire == true) {
+                 isFirstEventFire = false;
+                 mainView.openCadastroProfessorConteudoProgramatico();
+             }               
+         
+        }   
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_TOPICO)) {
 			this.linkPaginaPrincipal(true);			
 			this.linkFerramentaProfessor(true);
@@ -795,6 +810,19 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(new InlineHTML("&nbsp"));
         hPanel.add(linkFerramentaProfessorNota);
 	}
+	
+	
+	   public void linkFerramentaProfessorConteudoProgramatico(){
+
+	        imgFerramentaProfessorConteudoProgramatico = new Image("images/conteudoprogramatico.png");
+	        linkFerramentaProfessorConteudoProgramatico = new Hyperlink(txtConstants.professorAmbienteConteudoProgramatico(), MENU_TOKEN_FERRAMENTA_PROFESSOR_CONTEUDO_PROGRAMATICO);
+	        linkFerramentaProfessorConteudoProgramatico.setStyleName("a");
+	        
+	        hPanel.add(imgFerramentaProfessorConteudoProgramatico);
+	        hPanel.add(new InlineHTML("&nbsp"));
+	        hPanel.add(linkFerramentaProfessorConteudoProgramatico);
+
+	    }   
 	
 	public void linkProfessorTopico(){
 

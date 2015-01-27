@@ -32,7 +32,7 @@ public class ComponenteDiarioProfessor extends Composite{
 		
 		String strText = txtConstants.presencaAmbienteDiarioAcompanhamento();
 		strText+=txtConstants.presencaAmbienteDiarioPresenca();
-		strText+=txtConstants.presencaAmbienteDiarioConteudo();
+//		strText+=txtConstants.presencaAmbienteDiarioConteudo();
 		
 		MainViewComponent mainViewComp = new MainViewComponent(strTitle,strImageAddress,strText);
 		mainViewComp.flexTable.addClickHandler(new addClickHandler());		
@@ -47,8 +47,7 @@ public class ComponenteDiarioProfessor extends Composite{
 		@Override
 		public void onClick(ClickEvent event) {
 			MainMenu.isFirstEventFire=true;
-			History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO);
-			
+			History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO);			
 		}
 		
 	}	

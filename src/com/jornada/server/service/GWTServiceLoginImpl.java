@@ -42,8 +42,10 @@ public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServ
 		Usuario user = UsuarioServer.getUsuarioPeloLogin(login);
 		
 		boolean valid = BCrypt.checkpw(password, user.getSenha());
+		
+		boolean statusAtivo = TipoStatusUsuario.statusAtivo(user.getIdTipoStatusUsuario());
 
-		if(valid){
+		if( valid && statusAtivo ){
 			user.setLoggedIn(true);
 			user.setSessionId(this.getThreadLocalRequest().getSession().getId());
 

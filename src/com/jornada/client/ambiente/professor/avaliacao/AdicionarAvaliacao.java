@@ -256,17 +256,25 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		}  
 	}
 	
-	   private class MpTipoAvaliacaoChangeHandler implements ChangeHandler {
-	        public void onChange(ChangeEvent event) {
-	            listBoxPesoNota.setEnabled(true);
-	            int idTipoAvaliacao = Integer.parseInt(listBoxTipoAvaliacao.getSelectedValue());
-	            if(idTipoAvaliacao == TipoAvaliacao.INT_RECUPERACAO){
-	                listBoxPesoNota.setEnabled(false);
-	            }
+    private class MpTipoAvaliacaoChangeHandler implements ChangeHandler {
+        public void onChange(ChangeEvent event) {
+            listBoxPesoNota.setEnabled(true);
+            
+            int idTipoAvaliacao = Integer.parseInt(listBoxTipoAvaliacao.getSelectedValue());
+            
+            if (idTipoAvaliacao == TipoAvaliacao.INT_RECUPERACAO) {
+                listBoxPesoNota.setEnabled(false);
+            }
+            if (idTipoAvaliacao == TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+                listBoxPesoNota.setEnabled(false);
+            }
+            if (idTipoAvaliacao == TipoAvaliacao.INT_ADICIONAL_NOTA) {
+                listBoxPesoNota.setEnabled(false);
+            }
 
-	        }  
-	    }
-	
+        }
+    }
+
 //	private class MpDisciplinaSelectionChangeHandler implements ChangeHandler {
 //		public void onChange(ChangeEvent event) {
 //			int index = listBoxDisciplina.getSelectedIndex();

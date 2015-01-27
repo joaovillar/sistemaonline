@@ -285,7 +285,7 @@ public class NotaServer {
                 if (notaDisciplinaPeriodo.isEmpty() || notaDisciplinaPeriodo.equals("-")) {
                     notaDisciplinaPeriodo = "-";
                 } else {
-                    notaDisciplinaPeriodo = MpUtilServer.getDecimalFormatedOneDecimal(Double.parseDouble(notaDisciplinaPeriodo));
+                    notaDisciplinaPeriodo = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(Double.parseDouble(notaDisciplinaPeriodo));
                 }               
                 
                 if (!notaDisciplinaPeriodo.equals("-")) {
@@ -494,7 +494,7 @@ public class NotaServer {
                                         strMedia = "-";
                                     } else {
                                         double doubleMediaAluno = Double.parseDouble(strMedia);
-                                        strMedia = MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno);
+                                        strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
                                     }
 
                                 }
@@ -621,7 +621,7 @@ public class NotaServer {
        
         if (countMedia != 0) {
             doubleMediaAluno = doubleMediaAluno / countMedia;
-            strMedia = MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno);           
+            strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);           
         }
         
         return strMedia;
@@ -686,8 +686,10 @@ public class NotaServer {
                     list.get(i).add(strMedia);
                 } else {
                     double doubleMediaAluno = Double.parseDouble(strMedia);
+//                    list.get(i).add(MpUtilServer.getDecimalFormatedTwoDecimal(doubleMediaAluno));
+//                    list.get(i).add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
                     list.get(i).add(MpUtilServer.getDecimalFormatedTwoDecimal(doubleMediaAluno));
-                    list.get(i).add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+                    list.get(i).add(MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno));
                 }
             }
             
@@ -720,7 +722,7 @@ public class NotaServer {
                         item.add(strMedia);
                     } else {
                         double doubleMediaAluno = Double.parseDouble(strMedia);
-                        item.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+                        item.add(MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno));
                     }
                 }
             }

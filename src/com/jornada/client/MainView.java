@@ -397,7 +397,7 @@ public class MainView extends Composite implements HistoryListener{
 				mpPopupLoading.hide();
 				vPanelBody.clear();
 				vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-				TelaInicialConteudoProgramatico telaInicialConteudoProgramatico = TelaInicialConteudoProgramatico.getInstance();
+				TelaInicialConteudoProgramatico telaInicialConteudoProgramatico = TelaInicialConteudoProgramatico.getInstance(MainView.this);
 				vPanelBody.add(telaInicialConteudoProgramatico);
 				vPanelMenu.setVisible(true);
 			}
@@ -677,6 +677,33 @@ public class MainView extends Composite implements HistoryListener{
 		});		
 		
 	}	
+	
+	
+    public void openCadastroProfessorConteudoProgramatico(){
+        
+        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_CONTEUDO_PROGRAMATICO);
+        
+        mpPopupLoading.show();
+        GWT.runAsync(new RunAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                mpPopupLoading.hide();
+                Window.alert("Code download failed");
+            }
+
+            public void onSuccess() {
+                mpPopupLoading.hide();
+                vPanelBody.clear();
+                vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+                TelaInicialConteudoProgramatico telaInicialConteudoProgramatico = TelaInicialConteudoProgramatico.getInstance(MainView.this);
+                vPanelBody.add(telaInicialConteudoProgramatico);
+                vPanelMenu.setVisible(true);
+            }
+        });
+    
+        
+    }   
+	
+	
 	
 	public void openCadastroProfessorTopico() {
 
