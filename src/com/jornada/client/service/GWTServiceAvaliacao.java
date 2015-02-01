@@ -28,13 +28,14 @@ import com.jornada.shared.classes.boletim.AvaliacaoNota;
 public interface GWTServiceAvaliacao extends RemoteService {
 
 
-	public String AdicionarAvaliacao(Avaliacao object);	
+	public String AdicionarAvaliacao(int idCurso, Avaliacao object);	
 	public String updateRow(Avaliacao object);
+	public String updateRow(int idCurso, Avaliacao object);
 	public boolean deleteRow(int id_avaliacao); 	
 	public ArrayList<Avaliacao> getAvaliacaoPelaDisciplina(int idDisciplina);	
 	public ArrayList<CursoAvaliacao> getAvaliacaoPeloCurso(int idCurso);
 	public ArrayList<TipoAvaliacao> getTipoAvaliacao();
-	public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina);
+	public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplinaSemRecuperacaoFinal(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina);
 	public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao);
 	public ArrayList<String> getHeaderRelatorioBoletimDisciplina(int idCurso,int idPeriodo,  int idDisciplina);
 	public ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomeDisciplina);

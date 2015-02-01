@@ -143,35 +143,38 @@ public class Disciplina implements Serializable {
         double countPesoNota=0;
         double somaMediaPonderada=0;
         double notaRecuperacao=0;
+        double notaAdicional=0;
 
         for (Avaliacao avaliacao : getListAvaliacao()) {
-            
-            if (avaliacao.getIdDisciplina() == this.getIdDisciplina()) {
-                
-                for (Nota nota : avaliacao.getListNota()) {
-                    
-                    if (nota.getIdUsuario() == idUsuario) {
-                        
-//                        countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
-                        if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
-//                            countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
-                            notaRecuperacao = Double.parseDouble(nota.getNota());
+           
+            if (avaliacao.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+                if (avaliacao.getIdDisciplina() == this.getIdDisciplina()) {
 
-                        }else{
-                            countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
-                            somaMediaPonderada = somaMediaPonderada + (Double.parseDouble(nota.getNota()) * Double.parseDouble(avaliacao.getPesoNota()));
+                    for (Nota nota : avaliacao.getListNota()) {
+
+                        if (nota.getIdUsuario() == idUsuario) {
+
+                            if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
+                                notaRecuperacao = Double.parseDouble(nota.getNota());
+                            } else if(avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_ADICIONAL_NOTA){
+                                notaAdicional = notaAdicional + Double.parseDouble(nota.getNota());
+                            }
+                            else {
+                                countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
+                                somaMediaPonderada = somaMediaPonderada + (Double.parseDouble(nota.getNota()) * Double.parseDouble(avaliacao.getPesoNota()));
+                            }
                         }
-//                        countNota++;
-//                        somaMedia = (somaMedia + Double.parseDouble(nota.getNota()));
+
                     }
-                    
+
                 }
-                
             }
-            
+
         }
         
         if (countPesoNota != 0) {
+            
+            //Calcula Média Ponderada
             somaMediaPonderada = somaMediaPonderada / countPesoNota;
             
             //Media com Recuperação
@@ -180,11 +183,34 @@ public class Disciplina implements Serializable {
                 somaMediaPonderada = (somaMediaPonderada+notaRecuperacao)/2;    
             }
             
+            //Adicionar Nota Adicional
+            somaMediaPonderada = somaMediaPonderada + notaAdicional;
+            
             media = Double.toString(somaMediaPonderada);
         }
         
         return media;
         
+    }
+    
+    
+    
+    public String getNotaRecuperaçãoFinal(int idUsuario){
+        String strNotaRecuperacaoFinal="";
+        //Pegar Nota Recuperação
+        for(int i=0;i<this.getListAvaliacao().size();i++){
+            Avaliacao avaliacao = this.getListAvaliacao().get(i);
+            if(avaliacao.getIdTipoAvaliacao()==TipoAvaliacao.INT_RECUPERACAO_FINAL){
+                for(Nota nota : avaliacao.getListNota()){
+                    if(nota.getIdUsuario()==idUsuario){
+                        if(nota.getNota()!=null && !nota.getNota().isEmpty()){
+                            strNotaRecuperacaoFinal=nota.getNota();
+                        }
+                    }
+                }
+            }
+        }
+        return strNotaRecuperacaoFinal;
     }
 
 

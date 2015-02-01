@@ -155,6 +155,10 @@ public class EditarAvaliacao extends VerticalPanel {
                     mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
                     mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacao());
                     mpDialogBoxWarning.showDialog();
+                }else if (success.equals(TipoAvaliacao.EXISTE_RECUPERACAO_FINAL)) {
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacaoFinal());
+                    mpDialogBoxWarning.showDialog();
                 }else{
                     mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
                     mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroAtualizar());
@@ -489,6 +493,8 @@ public class EditarAvaliacao extends VerticalPanel {
 				// Called when the user changes the value.
 			    int idTipoAvaliacao = Integer.parseInt(value);
 			    
+			    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+			    
 //			    Element el = DOM.getElementById("pesoNota");
 
 			    String strClean = cellTable.getRowElement(index).getCells().getItem(3).getFirstChildElement().getInnerHTML();
@@ -506,7 +512,7 @@ public class EditarAvaliacao extends VerticalPanel {
                 }
 
 				object.setIdTipoAvaliacao(idTipoAvaliacao);
-				GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
+				GWTServiceAvaliacao.Util.getInstance().updateRow(idCurso, object, callbackUpdateRow);
 			}
 		});
 	    

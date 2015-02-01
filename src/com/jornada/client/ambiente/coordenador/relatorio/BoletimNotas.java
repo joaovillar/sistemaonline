@@ -35,6 +35,7 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.Curso;
+import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class BoletimNotas extends VerticalPanel {
@@ -184,7 +185,7 @@ public class BoletimNotas extends VerticalPanel {
         mpPager.setDisplay(cellTable);
         
         /////////////////////////ColumnName//////////////////////////////////
-        IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME);
+        IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME, false);
         
         ListHandler<ArrayList<String>> sortHandler = new ListHandler<ArrayList<String>>(dataProvider.getList());
         
@@ -210,7 +211,13 @@ public class BoletimNotas extends VerticalPanel {
             final String strDisciplina = (column==0)?arrayDisciplinaColumns.get(column):Curso.getAbreviarNomeCurso(arrayDisciplinaColumns.get(column)); 
 //            final String strDisciplina = Curso.getAbreviarNomeCurso(arrayDisciplinaColumns.get(column)); 
             
-            final IndexedColumn indexedColumn = new IndexedColumn(column+INT_POSITION_NAME+1);
+            
+            boolean booAdicionarNota=false;
+            if(strDisciplina.equals(TipoAvaliacao.STR_ADICIONAL_NOTA)){
+                booAdicionarNota=true;
+            }
+            
+            final IndexedColumn indexedColumn = new IndexedColumn(column+INT_POSITION_NAME+1, booAdicionarNota);
             
             final Header<String> header = new Header<String>(new ClickableTextCell()) {
                 @Override
@@ -292,13 +299,17 @@ public class BoletimNotas extends VerticalPanel {
         flexTableNota.setWidget(0,0,flexTableMenu);
         flexTableNota.setWidget(1,0,cellTable);
         
+        
     }
     
+   
     class IndexedColumn extends Column<ArrayList<String>, String> {
         private int index;
-        public IndexedColumn(int index) {
+        boolean booAdicionarNota;
+        public IndexedColumn(int index, boolean booAdicionarNota) {
             super(new ClickableTextCell());
             this.index = index;
+            this.booAdicionarNota = booAdicionarNota;
         }
         
       
@@ -323,7 +334,9 @@ public class BoletimNotas extends VerticalPanel {
             Double doubleMediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
             try {
                 double doubleNumber = Double.parseDouble(object.get(this.index));
-                if (doubleNumber >= doubleMediaNotaCurso) {
+                if(booAdicionarNota){
+                    return "table-boletim-cell-green-media";
+                }else if (doubleNumber >= doubleMediaNotaCurso) {
                     return "table-boletim-cell-green-media";
                 } else if (doubleNumber < doubleMediaNotaCurso) {
                     return "table-boletim-cell-red-media";

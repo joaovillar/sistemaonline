@@ -6,6 +6,8 @@ public class Nota implements Serializable {
 
 	private static final long serialVersionUID = 9221572507882503398L;
 	
+	public static final String STR_MEDIA_FINAL = "Média Final";
+	
 	private int idNota;	
 	private int idUsuario;
 	private String nomeUsuario;

@@ -38,6 +38,7 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.client.service.GWTServiceNota;
+import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
@@ -223,7 +224,7 @@ public class BoletimDisciplina extends VerticalPanel {
         mpPager.setDisplay(cellTable);
 
         // ///////////////////////ColumnName//////////////////////////////////
-        IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME);
+        IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME, false);
 
         ListHandler<ArrayList<String>> sortHandler = new ListHandler<ArrayList<String>>(dataProvider.getList());
 
@@ -252,8 +253,13 @@ public class BoletimDisciplina extends VerticalPanel {
                 strAvaliacaoText = strAvaliacaoText.substring(indexIdAvaliacao + 1);
             }
             final String strAvaliacao = strAvaliacaoText;
+            
+            boolean booAdicionarNota=false;
+            if(strAvaliacao.equals(TipoAvaliacao.STR_ADICIONAL_NOTA)){
+                booAdicionarNota=true;
+            }
 
-            final IndexedColumn indexedColumn = new IndexedColumn(column + INT_POSITION_NAME + 1);
+            final IndexedColumn indexedColumn = new IndexedColumn(column + INT_POSITION_NAME + 1, booAdicionarNota);
 
             final Header<String> header = new Header<String>(new ClickableTextCell()) {
                 @Override
@@ -338,10 +344,12 @@ public class BoletimDisciplina extends VerticalPanel {
 
     class IndexedColumn extends Column<ArrayList<String>, String> {
         private int index;
+        private boolean booAdicionaNota;
 
-        public IndexedColumn(int index) {
+        public IndexedColumn(int index, boolean booAdicionaNota) {
             super(new ClickableTextCell());
             this.index = index;
+            this.booAdicionaNota = booAdicionaNota;
         }
 
         public int getIndex() {
@@ -363,20 +371,25 @@ public class BoletimDisciplina extends VerticalPanel {
 
         @Override
         public String getCellStyleNames(Context context, ArrayList<String> object) {
+            String strStyle="";
             Double doubleMediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
             try {
                 double doubleNumber = Double.parseDouble(object.get(this.index));
-                if (doubleNumber >= doubleMediaNotaCurso) {
-                    return "table-boletim-cell-green";
+                
+                if(booAdicionaNota==true){
+                    strStyle = "table-boletim-cell-green";                    
+                }else if (doubleNumber >= doubleMediaNotaCurso) {
+                    strStyle =  "table-boletim-cell-green";
                 } else if (doubleNumber < doubleMediaNotaCurso) {
-                    return "table-boletim-cell-red";
+                    strStyle =  "table-boletim-cell-red";
                 } else {
-                    return "";
+                    strStyle =  "";
                 }
             } catch (Exception ex) {
-                return "";
+                strStyle =  "";
             }
 
+            return strStyle;
         }
 
     }

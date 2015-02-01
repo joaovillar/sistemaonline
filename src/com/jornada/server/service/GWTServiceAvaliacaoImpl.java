@@ -15,12 +15,17 @@
 package com.jornada.server.service;
 
 import java.util.ArrayList;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.server.classes.AvaliacaoServer;
+import com.jornada.server.classes.CursoServer;
+import com.jornada.server.classes.DisciplinaServer;
+import com.jornada.server.classes.PeriodoServer;
 import com.jornada.shared.classes.Avaliacao;
+import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.CursoAvaliacao;
+import com.jornada.shared.classes.Disciplina;
+import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.boletim.AvaliacaoNota;
 
@@ -30,13 +35,15 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 	private static final long serialVersionUID = 2704141295428049564L;
 	
 	
-	public String AdicionarAvaliacao(Avaliacao object) {	
+	public String AdicionarAvaliacao(int idCurso, Avaliacao object) {	
 	    
 	    String strIsSuccess="";	   
         
-        if (getJaExisteRecupeacao(object)) {
+        if (jaExisteRecuperacao(object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
-        } else {
+        } else if(jaExisteRecuperacaoFinal(idCurso, object)){
+            strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO_FINAL;
+        }else {
             if(AvaliacaoServer.Adicionar(object)){
                 strIsSuccess="true";
             }else{
@@ -44,30 +51,44 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
             }
         }
         
-        return strIsSuccess;
-	    
+        return strIsSuccess;	    
 
 	}	
 	
-	public String updateRow(Avaliacao object) {
-	    String strIsSuccess="";       
-	    
-	    if (getJaExisteRecupeacao(object)) {
+    public String updateRow(int idCurso, Avaliacao object) {
+        String strIsSuccess = "";
+
+        if (jaExisteRecuperacao(object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
+        } else if (jaExisteRecuperacaoFinal(idCurso, object)) {
+            strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO_FINAL;
         } else {
-            if(AvaliacaoServer.updateRow(object)){
-                strIsSuccess="true";
-            }else{
-                strIsSuccess="false";
+            if (AvaliacaoServer.updateRow(object)) {
+                strIsSuccess = "true";
+            } else {
+                strIsSuccess = "false";
             }
         }
-        
         return strIsSuccess;
-        
-	}	
+    }
+    
+    public String updateRow(Avaliacao object) {
+        String strIsSuccess = "";
+
+        if (jaExisteRecuperacao(object)) {
+            strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
+        } else {
+            if (AvaliacaoServer.updateRow(object)) {
+                strIsSuccess = "true";
+            } else {
+                strIsSuccess = "false";
+            }
+        }
+        return strIsSuccess;
+    }
 	
 	
-	public boolean getJaExisteRecupeacao(Avaliacao object){
+	public boolean jaExisteRecuperacao(Avaliacao object){
 	    boolean existeRecuperacao=false;
         if (object.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
             ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(object.getIdDisciplina(), true);
@@ -79,6 +100,28 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
         } 
         return existeRecuperacao;
 	}
+	
+	
+    public boolean jaExisteRecuperacaoFinal(int idCurso, Avaliacao object) {
+        boolean existeRecuperacaoFinal = false;
+        
+        if (object.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+            Curso curso = CursoServer.getCurso(idCurso);
+
+            ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(curso.getIdCurso());
+
+            for (int i = 0; i < listPeriodo.size(); i++) {
+                Disciplina disciplina = DisciplinaServer.getDisciplina(object.getIdDisciplina());
+                disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacao(object.getIdDisciplina()));
+                for (Avaliacao avaliacao : disciplina.getListAvaliacao()) {
+                    if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+                        existeRecuperacaoFinal = true;
+                    }
+                }
+            }
+        }
+        return existeRecuperacaoFinal;
+    }
 	
 	public boolean deleteRow(int id_avaliacao) {
 		return AvaliacaoServer.deleteRow(id_avaliacao);
@@ -97,8 +140,8 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 	    return  AvaliacaoServer.getAvaliacaoNota(idUsuario, idCurso, strNomeDisciplina);
 	}
 	
-    public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
-        return AvaliacaoServer.getAvaliacaoNotaPeriodoDisciplina(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina);         
+    public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplinaSemRecuperacaoFinal(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
+        return AvaliacaoServer.getAvaliacaoNotaPeriodoDisciplinaSemRecuperacaoFinal(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina);         
     }
     
     public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao) {

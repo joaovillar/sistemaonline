@@ -37,6 +37,7 @@ import com.jornada.client.classes.widgets.label.MpLabelLeft;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAvaliacao;
+import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.boletim.AvaliacaoNota;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
@@ -302,7 +303,9 @@ public class DialogBoxNotasAno extends DecoratedPopupPanel {
             @Override
             public String getCellStyleNames(Context context, AvaliacaoNota  object) {
                 
-                if(object.getNota()<mediaNotaCurso){
+                if(object.getIdTipoAvaliacao()==TipoAvaliacao.INT_ADICIONAL_NOTA){
+                    return "table-boletim-cell-green-media";
+                }else if(object.getNota()<mediaNotaCurso){
                     return "table-boletim-cell-red-media";                    
                 }else{
                     return "table-boletim-cell-green-media";

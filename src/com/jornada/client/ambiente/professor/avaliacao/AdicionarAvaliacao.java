@@ -191,7 +191,11 @@ public class AdicionarAvaliacao extends VerticalPanel {
 	                  mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 	                  mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacao());
 	                  mpDialogBoxWarning.showDialog();  
-				}
+				}else if(result.equals(TipoAvaliacao.EXISTE_RECUPERACAO_FINAL)){
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacaoFinal());
+                    mpDialogBoxWarning.showDialog();  
+              }
 			}
 		};
 
@@ -211,6 +215,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 			if(checkFieldsValidator()){
 				hPanelLoading.setVisible(true);
 
+				int intIdCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
 				int intIdDisciplina = Integer.parseInt(listBoxDisciplina.getValue(listBoxDisciplina.getSelectedIndex()));
 				int intIdTipoAvaliacao = Integer.parseInt(listBoxTipoAvaliacao.getValue(listBoxTipoAvaliacao.getSelectedIndex()));
 				String strHora = mpTimePicker.getValue(mpTimePicker.getSelectedIndex());
@@ -226,7 +231,7 @@ public class AdicionarAvaliacao extends VerticalPanel {
 				object.setHora(strHora);				
 
 				
-				GWTServiceAvaliacao.Util.getInstance().AdicionarAvaliacao(object,callbackAddAvaliacao);
+				GWTServiceAvaliacao.Util.getInstance().AdicionarAvaliacao(intIdCurso, object,callbackAddAvaliacao);
 
 			}
 

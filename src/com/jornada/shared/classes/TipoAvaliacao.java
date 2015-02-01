@@ -7,7 +7,10 @@ public class TipoAvaliacao implements Serializable{
 	private static final long serialVersionUID = 3807262093299630070L;
 	
 	public static final String EXISTE_RECUPERACAO = "false:existe.recuperacao";
+	public static final String EXISTE_RECUPERACAO_FINAL = "false:existe.recuperacao.final";
 	public static final String STR_RECUPERACAO = "Recuperação";
+	public static final String STR_RECUPERACAO_FINAL = "Recuperação Final";
+	public static final String STR_ADICIONAL_NOTA = "Adicional Nota";
 	
 	public static final int INT_TRABALHO_INDIVIDUAL=1;
 	public static final int INT_TRABALHO_GRUPO=2;

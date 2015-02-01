@@ -28,7 +28,7 @@ public class AvaliacaoServer {
     public static final String DB_SELECT_TIPO_AVALIACAO_NOME = "SELECT * FROM tipo_avaliacao where nome_tipo_avaliacao=? order by nome_tipo_avaliacao asc;";
     public static final String DB_SELECT_AVALIACAO_PELO_CURSO = "select  c.nome_curso, p.nome_periodo, d.nome_disciplina, " + "a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, a.peso_nota, " + "ta.nome_tipo_avaliacao  " + "from curso c " + "inner join periodo p on c.id_curso = p.id_curso " + "inner join disciplina d on p.id_periodo = d.id_periodo " + "inner join avaliacao a on d.id_disciplina = a.id_disciplina " + "inner join tipo_avaliacao ta on a.id_tipo_avaliacao = ta.id_tipo_avaliacao " + "where  " + "c.id_curso=? " + "group by " + "c.nome_curso, p.nome_periodo, d.nome_disciplina, " + "a.id_avaliacao, a.assunto, a.descricao, a.data, a.hora, a.id_tipo_avaliacao, ta.nome_tipo_avaliacao  " + "order by a.data, a.hora asc ";
 
-    public static final String DB_SELECT_AVALIACAO_NOTA = "select * from " + "( " + "    select c.nome_curso, p.nome_periodo, d.nome_disciplina, a.* " + "    from curso c, periodo p, disciplina d, avaliacao a " + "    where " + "    c.id_curso = ? " + "    and c.id_curso = p.id_curso " + "    and p.nome_periodo = ? " + "    and p.id_periodo = d.id_periodo " + "    and d.nome_disciplina = ? " + "    and d.id_disciplina = a.id_disciplina " + ") as ava " + "left join " + "nota n " + "on ava.id_avaliacao = n.id_avaliacao " + "where  " + "n.id_usuario=? ";
+    public static final String DB_SELECT_AVALIACAO_NOTA = "select * from " + "( " + "    select c.nome_curso, p.nome_periodo, d.nome_disciplina, a.* " + "    from curso c, periodo p, disciplina d, avaliacao a " + "    where " + "    c.id_curso = ? " + "    and c.id_curso = p.id_curso " + "    and p.nome_periodo = ? " + "    and p.id_periodo = d.id_periodo " + "    and d.nome_disciplina = ? " + "    and d.id_disciplina = a.id_disciplina " + ") as ava " + "left join " + "nota n " + "on ava.id_avaliacao = n.id_avaliacao " + "where  " + "n.id_usuario=? order by data, hora asc;";
 
     public static final String DB_SELECT_AVALIACAO_NOTA_ID = "select * from " + "( " + "    select c.nome_curso, p.nome_periodo, d.nome_disciplina, a.* " + "    from curso c, periodo p, disciplina d, avaliacao a " + "    where " + "    c.id_curso = ? " + "    and c.id_curso = p.id_curso " + "    and p.nome_periodo = ? " + "    and p.id_periodo = d.id_periodo " + "    and d.nome_disciplina = ? " + "    and d.id_disciplina = a.id_disciplina " + ") as ava " + "left join " + "nota n " + "on ava.id_avaliacao = n.id_avaliacao " + "where  " + "n.id_usuario=? and ava.id_avaliacao=?;";
 
@@ -351,6 +351,58 @@ public class AvaliacaoServer {
 
     }
 
+    public static ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplinaSemRecuperacaoFinal(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
+
+        ArrayList<AvaliacaoNota> data = new ArrayList<AvaliacaoNota>();
+        // JornadaDataBase dataBase = new JornadaDataBase();
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            // dataBase.createConnection();
+
+            PreparedStatement ps = conn.prepareStatement(DB_SELECT_AVALIACAO_NOTA);
+
+            int count = 0;
+            ps.setInt(++count, idCurso);
+            ps.setString(++count, strNomePeriodo);
+            ps.setString(++count, strNomeDisciplina);
+            ps.setInt(++count, idUsuario);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                AvaliacaoNota current = new AvaliacaoNota();
+
+                current.setNomeCurso(rs.getString("nome_curso"));
+                current.setNomePeriodo(rs.getString("nome_periodo"));
+                current.setNomeDisciplina(rs.getString("nome_disciplina"));
+                current.setIdAvaliacao(rs.getInt("id_avaliacao"));
+                current.setAssunto(rs.getString("assunto"));
+                current.setDescricao(rs.getString("descricao"));
+                current.setData(rs.getDate("data"));
+                current.setHora(MpUtilServer.convertTimeToString(rs.getTime("hora")));
+                current.setIdTipoAvaliacao(rs.getInt("id_tipo_avaliacao"));
+                current.setNota(rs.getDouble("nota"));
+                current.setPesoNota(rs.getString("peso_nota"));
+
+                TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao());
+                current.setTipoAvaliacao(tipoAvaliacao);
+                if(tipoAvaliacao.getIdTipoAvaliacao()!=TipoAvaliacao.INT_RECUPERACAO_FINAL){
+                data.add(current);
+                }
+            }
+
+        } catch (SQLException sqlex) {
+            data = null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+            // dataBase.close();
+            ConnectionManager.closeConnection(conn);
+        }
+
+        return data;
+
+    }
+
     public static ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina) {
 
         ArrayList<AvaliacaoNota> data = new ArrayList<AvaliacaoNota>();
@@ -388,6 +440,7 @@ public class AvaliacaoServer {
                 current.setTipoAvaliacao(tipoAvaliacao);
 
                 data.add(current);
+
             }
 
         } catch (SQLException sqlex) {
@@ -440,6 +493,7 @@ public class AvaliacaoServer {
                 current.setTipoAvaliacao(tipoAvaliacao);
 
                 data.add(current);
+
             }
 
         } catch (SQLException sqlex) {
@@ -567,8 +621,10 @@ public class AvaliacaoServer {
         ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(idDisciplina, true);
 
         for (Avaliacao avaliacao : listAvaliacao) {
-            TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(avaliacao.getIdTipoAvaliacao());
-            list.add(avaliacao.getIdAvaliacao() + "|" + tipoAvaliacao.getNomeTipoAvaliacao());
+            if (avaliacao.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+                TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(avaliacao.getIdTipoAvaliacao());
+                list.add(avaliacao.getIdAvaliacao() + "|" + tipoAvaliacao.getNomeTipoAvaliacao());
+            }
         }
 
         list.add("Média");
