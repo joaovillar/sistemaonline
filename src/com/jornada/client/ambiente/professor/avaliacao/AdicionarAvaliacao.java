@@ -191,11 +191,15 @@ public class AdicionarAvaliacao extends VerticalPanel {
 	                  mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 	                  mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacao());
 	                  mpDialogBoxWarning.showDialog();  
-				}else if(result.equals(TipoAvaliacao.EXISTE_RECUPERACAO_FINAL)){
+                } else if (result.equals(TipoAvaliacao.EXISTE_RECUPERACAO_FINAL)) {
                     mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
                     mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacaoFinal());
-                    mpDialogBoxWarning.showDialog();  
-              }
+                    mpDialogBoxWarning.showDialog();
+                } else if (result.equals(TipoAvaliacao.EXISTE_ASSUNTO)) {
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroAssunto());
+                    mpDialogBoxWarning.showDialog();
+                }
 			}
 		};
 

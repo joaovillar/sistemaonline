@@ -37,20 +37,21 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 	
 	public String AdicionarAvaliacao(int idCurso, Avaliacao object) {	
 	    
-	    String strIsSuccess="";	   
-        
-        if (jaExisteRecuperacao(object)) {
+        String strIsSuccess = "";
+        if (jaExisteAssunto(object)) {
+            strIsSuccess = TipoAvaliacao.EXISTE_ASSUNTO;
+        } else if (jaExisteRecuperacao(object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
-        } else if(jaExisteRecuperacaoFinal(idCurso, object)){
+        } else if (jaExisteRecuperacaoFinal(idCurso, object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO_FINAL;
-        }else {
-            if(AvaliacaoServer.Adicionar(object)){
-                strIsSuccess="true";
-            }else{
-                strIsSuccess="false";
+        } else {
+            if (AvaliacaoServer.Adicionar(object)) {
+                strIsSuccess = "true";
+            } else {
+                strIsSuccess = "false";
             }
         }
-        
+
         return strIsSuccess;	    
 
 	}	
@@ -62,6 +63,8 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
         } else if (jaExisteRecuperacaoFinal(idCurso, object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO_FINAL;
+        } else if (jaExisteAssunto(object)) {
+            strIsSuccess = TipoAvaliacao.EXISTE_ASSUNTO;
         } else {
             if (AvaliacaoServer.updateRow(object)) {
                 strIsSuccess = "true";
@@ -77,6 +80,8 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 
         if (jaExisteRecuperacao(object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
+        }else if (jaExisteAssunto(object)) {
+            strIsSuccess = TipoAvaliacao.EXISTE_ASSUNTO;
         } else {
             if (AvaliacaoServer.updateRow(object)) {
                 strIsSuccess = "true";
@@ -87,14 +92,30 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
         return strIsSuccess;
     }
 	
+    
+    public boolean jaExisteAssunto(Avaliacao object) {
+        
+        boolean existeAssunto = false;
+
+        ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(object.getIdDisciplina(), true);
+        for (Avaliacao avaliacao : listAvaliacao) {
+            if (avaliacao.getAssunto().equals(object.getAssunto())) {
+                existeAssunto = true;
+            }
+        }
+
+        return existeAssunto;
+    }
 	
 	public boolean jaExisteRecuperacao(Avaliacao object){
 	    boolean existeRecuperacao=false;
         if (object.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
             ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(object.getIdDisciplina(), true);
             for (Avaliacao avaliacao : listAvaliacao) {
-                if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
-                    existeRecuperacao = true;
+                if (avaliacao.getIdAvaliacao() != object.getIdAvaliacao()) {
+                    if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
+                        existeRecuperacao = true;
+                    }
                 }
             }
         } 
@@ -114,8 +135,10 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
                 Disciplina disciplina = DisciplinaServer.getDisciplina(object.getIdDisciplina());
                 disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacao(object.getIdDisciplina()));
                 for (Avaliacao avaliacao : disciplina.getListAvaliacao()) {
-                    if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO_FINAL) {
-                        existeRecuperacaoFinal = true;
+                    if (avaliacao.getIdAvaliacao() != object.getIdAvaliacao()) {
+                        if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+                            existeRecuperacaoFinal = true;
+                        }
                     }
                 }
             }

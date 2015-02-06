@@ -159,6 +159,10 @@ public class EditarAvaliacao extends VerticalPanel {
                     mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
                     mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroRecuperacaoFinal());
                     mpDialogBoxWarning.showDialog();
+                }else if (success.equals(TipoAvaliacao.EXISTE_ASSUNTO)) {
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroAssunto());
+                    mpDialogBoxWarning.showDialog();
                 }else{
                     mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
                     mpDialogBoxWarning.setBodyText(txtConstants.avaliacaoErroAtualizar());
