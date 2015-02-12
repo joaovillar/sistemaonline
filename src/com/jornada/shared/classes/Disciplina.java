@@ -138,7 +138,7 @@ public class Disciplina implements Serializable {
         this.listAvaliacao = listAvaliacao;
     }
     
-    public String getMediaAlunoDisciplina(Curso curso, int idUsuario){
+    public String getMediaAlunoDisciplina(Curso curso, int idUsuario, boolean calcularRecuperacao){
         String media = "";
         double countPesoNota=0;
         double somaMediaPonderada=0;
@@ -177,10 +177,13 @@ public class Disciplina implements Serializable {
             //Calcula Média Ponderada
             somaMediaPonderada = somaMediaPonderada / countPesoNota;
             
-            //Media com Recuperação
-            if(notaRecuperacao>0)
-            if(somaMediaPonderada<Double.parseDouble(curso.getMediaNota())){
-                somaMediaPonderada = (somaMediaPonderada+notaRecuperacao)/2;    
+            
+            if (calcularRecuperacao==true) {
+                // Media com Recuperação
+                if (notaRecuperacao > 0)
+                    if (somaMediaPonderada < Double.parseDouble(curso.getMediaNota())) {
+                        somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
+                    }
             }
             
             //Adicionar Nota Adicional
@@ -213,6 +216,24 @@ public class Disciplina implements Serializable {
         return strNotaRecuperacaoFinal;
     }
 
+    
+    public String getNotaRecuperação(int idUsuario){
+        String strNotaRecuperacaoFinal="";
+        //Pegar Nota Recuperação
+        for(int i=0;i<this.getListAvaliacao().size();i++){
+            Avaliacao avaliacao = this.getListAvaliacao().get(i);
+            if(avaliacao.getIdTipoAvaliacao()==TipoAvaliacao.INT_RECUPERACAO){
+                for(Nota nota : avaliacao.getListNota()){
+                    if(nota.getIdUsuario()==idUsuario){
+                        if(nota.getNota()!=null && !nota.getNota().isEmpty()){
+                            strNotaRecuperacaoFinal=nota.getNota();
+                        }
+                    }
+                }
+            }
+        }
+        return strNotaRecuperacaoFinal;
+    }
 
 
     public static long getSerialversionuid() {

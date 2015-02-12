@@ -579,7 +579,7 @@ public class DisciplinaServer {
     }	
 		
 	
-	public static ArrayList<Disciplina> getDisciplinaParameters(ResultSet rs){
+	private static ArrayList<Disciplina> getDisciplinaParameters(ResultSet rs){
 
 		ArrayList<Disciplina> data = new ArrayList<Disciplina>();
 		

@@ -39,6 +39,7 @@ public interface GWTServiceAvaliacao extends RemoteService {
 	public ArrayList<AvaliacaoNota> getAvaliacaoNotaPeriodoDisciplina(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, int idAvaliacao);
 	public ArrayList<String> getHeaderRelatorioBoletimDisciplina(int idCurso,int idPeriodo,  int idDisciplina);
 	public ArrayList<AvaliacaoNota> getAvaliacaoNota(int idUsuario, int idCurso, String strNomeDisciplina);
+	public ArrayList<AvaliacaoNota> getAvaliacaoBoletimNota(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, String strNomeAval);
 	
 	public static class Util {
 		private static GWTServiceAvaliacaoAsync instance;

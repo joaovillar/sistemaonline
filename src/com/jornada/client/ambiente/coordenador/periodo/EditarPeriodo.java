@@ -377,8 +377,14 @@ public class EditarPeriodo extends VerticalPanel {
 			public void update(int index, Periodo periodo, String value) {
 				// Called when the user changes the value.
 				if (FieldVerifier.isValidName(value)) {
-					periodo.setNomePeriodo(value);
-					GWTServicePeriodo.Util.getInstance().updatePeriodoRow(periodo, callbackUpdateRow);
+				    if (!value.contains("[") && !value.contains("]")) {
+	                    periodo.setNomePeriodo(value);
+	                    GWTServicePeriodo.Util.getInstance().updatePeriodoRow(periodo, callbackUpdateRow);
+		            } else {
+                        mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                        mpDialogBoxWarning.setBodyText(txtConstants.geralErroCaracterColchete());
+                        mpDialogBoxWarning.showDialog();
+		            }
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.periodoNome()));

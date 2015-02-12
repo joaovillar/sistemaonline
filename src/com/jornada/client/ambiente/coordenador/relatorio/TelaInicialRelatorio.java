@@ -21,6 +21,7 @@ public class TelaInicialRelatorio extends Composite {
 	private BoletimDisciplina boletimDisciplina;
 	private BoletimAnual boletimAnual;
 	private BoletimNotas boletimNotas;
+	private BoletimAluno boletimAluno;
 
 	
 	TextConstants txtConstants;
@@ -37,6 +38,7 @@ public class TelaInicialRelatorio extends Composite {
                 uniqueInstance.boletimPeriodo.updateClientData();
                 uniqueInstance.boletimDisciplina.updateClientData();
                 uniqueInstance.boletimAnual.updateClientData();
+                uniqueInstance.boletimAluno.updateClientData();
             }else  if(mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.PROFESSOR){
                 uniqueInstance.boletimDisciplina.updateClientData();
             }
@@ -61,12 +63,14 @@ public class TelaInicialRelatorio extends Composite {
             boletimPeriodo = BoletimPeriodo.getInstance(this);  
             boletimDisciplina = BoletimDisciplina.getInstance(this);  
             boletimAnual = BoletimAnual.getInstance(this); 
-            boletimNotas = BoletimNotas.getInstance(this);      
+            boletimNotas = BoletimNotas.getInstance(this);   
+            boletimAluno = BoletimAluno.getInstance(this);   
             
             tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget("Boletim Disciplina", ""));
             tabLayoutPanel.add(boletimPeriodo, new MpHeaderWidget(txtConstants.relatorioBoletimPorPeriodo(), ""));
             tabLayoutPanel.add(boletimAnual, new MpHeaderWidget("Boletim Anual", ""));
             tabLayoutPanel.add(boletimNotas, new MpHeaderWidget("Boletim Notas", ""));
+            tabLayoutPanel.add(boletimAluno, new MpHeaderWidget("Boletim Aluno", ""));
         }else if(this.mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.PROFESSOR){
             boletimDisciplina = BoletimDisciplina.getInstance(this);  
             tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget("Boletim Disciplina", ""));

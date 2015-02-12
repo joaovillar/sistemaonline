@@ -67,7 +67,9 @@ public class DialogBoxNotasAno extends DecoratedPopupPanel {
 	private int idUsuario;
 	private int idCurso;
 	private String strNomeCurso;
+	private String strNomePeriodo;
 	private String strNomeDisciplina;
+	private String strNomeAval;
 	private Double mediaNotaCurso;
 	
 	
@@ -85,6 +87,20 @@ public class DialogBoxNotasAno extends DecoratedPopupPanel {
 		}
 		return uniqueInstance;
 	}
+	
+	
+	   public static DialogBoxNotasAno getInstance(int idUsuario, int idCurso, String strNomeCurso, String strNomePeriodo, String strNomeDisciplina, String strNomeAval, Double mediaNotaCurso){
+	        if(uniqueInstance==null){
+	            uniqueInstance = new DialogBoxNotasAno();
+	            uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomePeriodo, strNomeDisciplina, strNomeAval, mediaNotaCurso);
+	            uniqueInstance.populateGridBoletimNotas();
+	        }else{
+	            uniqueInstance.vBody.clear();
+	            uniqueInstance.showDialog(idUsuario, idCurso, strNomeCurso, strNomePeriodo, strNomeDisciplina, strNomeAval, mediaNotaCurso);
+	            uniqueInstance.populateGridBoletimNotas();
+	        }
+	        return uniqueInstance;
+	    }
 	
 	
 	protected DialogBoxNotasAno(){
@@ -165,6 +181,69 @@ public class DialogBoxNotasAno extends DecoratedPopupPanel {
 
     }	
     
+    protected void showDialog(int idUsuario, int idCurso, String strNomeCurso, String strNomePeriodo, String strNomeDisciplina, String strNomeAval, Double mediaNotaCurso) {
+        
+        this.idUsuario = idUsuario;
+        this.idCurso = idCurso;
+        this.strNomeCurso = strNomeCurso;
+        this.strNomePeriodo = strNomePeriodo;
+        this.strNomeDisciplina = strNomeDisciplina;
+        this.strNomeAval = strNomeAval;
+        this.mediaNotaCurso = mediaNotaCurso;
+        
+        MpImageButton btnFechar = new MpImageButton(txtConstants.geralFecharJanela(), "");
+        btnFechar.addClickHandler(new ClickHandlerFechar());
+        btnFechar.addKeyUpHandler(new EnterKeyUpHandler());
+        btnFechar.setFocus(true);
+        
+        
+        
+        MpLabelLeft lblCurso = new MpLabelLeft(txtConstants.curso());
+        MpLabelLeft lblDisciplina = new MpLabelLeft(txtConstants.disciplina());
+//        MpLabelLeft lblPeriodo = new MpLabelLeft(txtConstants.periodo());
+        
+        lblCurso.setStyleName("label_comum_bold_12px");
+        lblDisciplina.setStyleName("label_comum_bold_12px");
+//        lblPeriodo.setStyleName("label_comum_bold_12px");
+        
+        MpLabelLeft lblNomeCurso = new MpLabelLeft(this.strNomeCurso);
+        MpLabelLeft lblNomeDisciplina = new MpLabelLeft(this.strNomeDisciplina);
+//        MpLabelLeft lblNomePeriodo = new MpLabelLeft(this.strNomePeriodo);
+        
+        Grid gridListBox = new Grid(2,3);
+        gridListBox.setCellPadding(2);
+        gridListBox.setCellSpacing(2);
+
+        int row=0;
+        gridListBox.setWidget(row, 0, lblCurso);
+        gridListBox.setWidget(row++, 1, lblNomeCurso);
+//        gridListBox.setWidget(row, 0, lblPeriodo);
+//        gridListBox.setWidget(row++, 1, lblNomePeriodo);
+        gridListBox.setWidget(row, 0, lblDisciplina);
+        gridListBox.setWidget(row, 1, lblNomeDisciplina);
+        gridListBox.setWidget(row++, 2, mpLoading);
+        
+        Grid gridBotoes = new Grid(1,1);
+        row=0;
+        gridBotoes.getCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+        gridBotoes.setWidth("100%");
+        gridBotoes.setWidget(row, 0, btnFechar);
+        
+        
+        vBody.add(gridListBox);
+        vBody.add(renderCellTable());
+        vBody.add(gridBotoes);  
+        
+        
+        this.setWidth("800px");
+        vBody.setWidth("100%");
+        
+        center();
+        show();
+        
+
+    }   
+    
     private VerticalPanel renderCellTable(){
         
         Label lblEmpty = new Label(txtConstants.avaliacaoNenhumaDisciplina());
@@ -221,10 +300,18 @@ public class DialogBoxNotasAno extends DecoratedPopupPanel {
     protected void populateGridAvaliacoes() {
 
         mpLoading.setVisible(true);
-        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNota(idUsuario, idCurso, strNomeDisciplina, new CallbackAvaliacaoNota());
+        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNota(idUsuario, idCurso, strNomeDisciplina, new CallbackAvaliacao());
 //        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNota(idUsuario, idCurso new CallbackAvaliacaoNota());
 
-    }        
+    }   
+    
+    protected void populateGridBoletimNotas() {
+
+        mpLoading.setVisible(true);
+        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoBoletimNota(idUsuario, idCurso, strNomePeriodo, strNomeDisciplina, strNomeAval, new CallbackAvaliacao());
+//        GWTServiceAvaliacao.Util.getInstance().getAvaliacaoNota(idUsuario, idCurso new CallbackAvaliacaoNota());
+
+    }  
     
     
 
@@ -421,7 +508,7 @@ public class DialogBoxNotasAno extends DecoratedPopupPanel {
         }
     }
 
-    private class CallbackAvaliacaoNota implements AsyncCallback<ArrayList<AvaliacaoNota>>{
+    private class CallbackAvaliacao implements AsyncCallback<ArrayList<AvaliacaoNota>>{
         @Override
         public void onFailure(Throwable caught) {
             mpLoading.setVisible(false);
@@ -444,6 +531,9 @@ public class DialogBoxNotasAno extends DecoratedPopupPanel {
         }
         
     }
+    
+    
+
     
     
 

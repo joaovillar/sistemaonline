@@ -12,6 +12,7 @@ import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
 import com.jornada.shared.classes.Disciplina;
+import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.boletim.AvaliacaoNota;
@@ -348,6 +349,46 @@ public class AvaliacaoServer {
         }
 
         return listAvaliacaoNota;
+
+    }
+    
+    public static ArrayList<AvaliacaoNota> getAvaliacaoBoletimNota(int idUsuario, int idCurso, String strNomePeriodo, String strNomeDisciplina, String strNomeAval) {
+        ArrayList<AvaliacaoNota> listAvaliacaoNota = new ArrayList<AvaliacaoNota>();
+        ArrayList<AvaliacaoNota> listAvaliacaoNotaSelected = new ArrayList<AvaliacaoNota>();
+
+        ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
+
+        for (Periodo periodo : listPeriodo) {
+            
+            if (periodo.getNomePeriodo().equals(strNomePeriodo)) {
+
+                ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+
+                for (Disciplina disciplina : listDisciplina) {
+                    if (strNomeDisciplina.equals(disciplina.getNome())) {
+                        listAvaliacaoNota.addAll(getAvaliacaoNotaPeriodoDisciplina(idUsuario, idCurso, periodo.getNomePeriodo(), disciplina.getNome()));
+                    }
+                }
+            }
+
+        }
+        
+        for (AvaliacaoNota avalNota : listAvaliacaoNota) {
+            if (strNomeAval.equals(TipoAvaliacao.STR_RECUPERACAO) || strNomeAval.equals(TipoAvaliacao.STR_RECUPERACAO_FINAL)) {
+
+                if (avalNota.getTipoAvaliacao().getNomeTipoAvaliacao().equals(strNomeAval)) {
+                    listAvaliacaoNotaSelected.add(avalNota);
+                }
+            } else if (strNomeAval.equals(Nota.STR_MEDIA_FINAL)) {
+                listAvaliacaoNotaSelected.add(avalNota);
+            } else {
+                if (avalNota.getAssunto().equals(strNomeAval)) {
+                    listAvaliacaoNotaSelected.add(avalNota);
+                }
+            }
+        }
+
+        return listAvaliacaoNotaSelected;
 
     }
 

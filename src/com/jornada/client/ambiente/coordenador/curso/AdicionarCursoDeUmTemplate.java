@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
@@ -24,6 +23,7 @@ import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.FieldVerifier;
@@ -40,9 +40,9 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 	
 	private static AdicionarCursoDeUmTemplate uniqueInstance;	
 	
-	private TextBox txtFiltroCursoEstrutura;	
-	private TextBox txtNomeCursoEstrutura;
-	private TextBox txtFiltroCursoImportar;	
+	private MpTextBox txtFiltroCursoEstrutura;	
+	private MpTextBox txtNomeCursoEstrutura;
+	private MpTextBox txtFiltroCursoImportar;	
 	
 	private MpImageButton btnFiltrarEstrutura;
 	private MpImageButton btnFiltrarImportarAluno;
@@ -90,16 +90,16 @@ public class AdicionarCursoDeUmTemplate extends VerticalPanel{
 		lblErroNomeCurso = new MpLabelTextBoxError();
 		
 		listBoxCursoEstrutura = new MpSelectionCurso(true);				
-		txtFiltroCursoEstrutura = new TextBox();
+		txtFiltroCursoEstrutura = new MpTextBox();
 		btnFiltrarEstrutura = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
 		
 		
-		txtNomeCursoEstrutura = new TextBox();
+		txtNomeCursoEstrutura = new MpTextBox();
 		mpDateBoxInicial = new MpDateBoxWithImage();		
 		mpDateBoxFinal = new MpDateBoxWithImage();		
 
 		listBoxCursoImportarAluno = new MpSelectionCurso(true);
-		txtFiltroCursoImportar = new TextBox();
+		txtFiltroCursoImportar = new MpTextBox();
 		btnFiltrarImportarAluno = new MpImageButton(txtConstants.cursoFiltrar(), "images/magnifier.png");
 		
 		listBoxCursoImportarAluno.setMultipleSelect(true);

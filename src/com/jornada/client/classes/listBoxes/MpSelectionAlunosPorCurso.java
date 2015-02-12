@@ -62,15 +62,9 @@ public class MpSelectionAlunosPorCurso extends MpSelection {
 		
 	}	
 	
-	public void populateComboBox(Usuario usuario, int idCurso) {
+	public void populateComboBox(int idCurso) {
 		startLoadingListBox();
-//		if(usuario.getIdTipoUsuario()==TipoUsuario.ALUNO){
 		GWTServiceUsuario.Util.getInstance().getAlunosPorCurso(idCurso, callBackPopulateComboBox);
-//		}else if(usuario.getIdTipoUsuario()==TipoUsuario.PAIS){
-//		    GWTServiceUsuario.Util.getInstance().getUsuariosPorCursoAmbientePai(usuario, idCurso, callBackPopulateComboBox);
-//		}
-		
-		
 	}
 	
 	private void startLoadingListBox(){

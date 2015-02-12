@@ -627,6 +627,7 @@ public interface TextConstants extends Messages {
 	String geralBreakLine();
 	String geralImprimir();
 	String geralExcel();
+	String geralErroCaracterColchete();
 	/*******USO GERAL END*******/
 	
 	/*******CONFIGURACOES BEGIN*******/

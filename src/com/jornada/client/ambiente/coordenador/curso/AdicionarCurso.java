@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.classes.listBoxes.MpSelection;
@@ -28,6 +27,7 @@ import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.classes.widgets.textbox.MpTextArea;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceCursoAsync;
@@ -45,7 +45,7 @@ public class AdicionarCurso extends VerticalPanel {
 	MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
 
 
-	private TextBox txtNomeCurso;
+	private MpTextBox txtNomeCurso;
 	private MpTextArea txtDescricaoCurso;
 	private MpTextArea txtEmentaCurso;
 	private MpSelection mpListBoxStatus;
@@ -139,7 +139,7 @@ public class AdicionarCurso extends VerticalPanel {
 		// layout.setHTML(0, 0, "");
 		//cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
-		txtNomeCurso = new TextBox();
+		txtNomeCurso = new MpTextBox();
 		txtDescricaoCurso = new MpTextArea();
 		txtEmentaCurso = new MpTextArea();
 		

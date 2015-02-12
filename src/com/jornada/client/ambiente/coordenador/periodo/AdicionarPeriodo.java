@@ -279,11 +279,20 @@ public class AdicionarPeriodo extends VerticalPanel {
 		if(FieldVerifier.isValidName(txtNomePeriodo.getText())){
 			isFieldsOk=true;	
 			lblErroNomePeriodo.hideErroMessage();
+			
+            if (!txtNomePeriodo.getText().contains("[") && !txtNomePeriodo.getText().contains("]")) {
+                isFieldsOk = true;
+                lblErroNomePeriodo.hideErroMessage();
+            } else {
+                isFieldsOk = false;
+                lblErroNomePeriodo.showErrorMessage(txtConstants.geralErroCaracterColchete());
+            }
 		}
 		else{
 			isFieldsOk=false;
 			lblErroNomePeriodo.showErrorMessage(txtConstants.geralCampoObrigatorio(txtConstants.periodoNome()));
 		}
+
 		
 		return isFieldsOk;
 	}

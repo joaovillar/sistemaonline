@@ -248,7 +248,7 @@ public class VisualizarNotasAluno extends VerticalPanel {
             if (telaInicialAlunoVisualizarNotas.getMainView().getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.ALUNO) {
                 populateBoletimAluno();
             } else {
-                listBoxAlunosPorCursoAluno.populateComboBox(usuarioLogado, idCurso);
+                listBoxAlunosPorCursoAluno.populateComboBox(idCurso);
             }
 
         }

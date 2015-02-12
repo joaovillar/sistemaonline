@@ -252,7 +252,7 @@ public class NotaServer {
 
                     if (disciplina.getNome().equals(nomeDisciplina)) {
                         disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
-                        notaDisciplinaPeriodo = disciplina.getMediaAlunoDisciplina(curso, idUsuario);
+                        notaDisciplinaPeriodo = disciplina.getMediaAlunoDisciplina(curso, idUsuario, true);
                     }
 
                     // Pegar Nota Recuperação
@@ -444,7 +444,7 @@ public class NotaServer {
                     for (Avaliacao aval : disciplina.getListAvaliacao()) {
                         // listNomeAvaliacao.add(aval.getIdAvaliacao()+":"+aval.getTipoAvaliacao().getNomeTipoAvaliacao());
                         // listNomeAvaliacao.add(aval.getIdAvaliacao()+":"+aval.getAssunto());
-                        if (aval.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+                        if (aval.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO_FINAL && aval.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO) {
                             hashSetAval.add(aval.getAssunto());
                         }
                     }
@@ -465,7 +465,7 @@ public class NotaServer {
                     listRow.add(usuario.getPrimeiroNome() + " " + usuario.getSobreNome());
                     // listRow.add("[" + periodo.getNomePeriodo() + "] " +
                     // strNomeAvaliacao.substring(strNomeAvaliacao.indexOf(":")+1));
-                    listRow.add("[" + periodo.getNomePeriodo() + "] " + strNomeAvaliacao);
+                    listRow.add("[" + periodo.getNomePeriodo() + "] "+strNomeAvaliacao);
 
                     for (String strNomeDisc : listDisciplinasAno) {
 
@@ -477,7 +477,7 @@ public class NotaServer {
                                 strMedia = "-";
                             } else {
 
-                                strMedia = disciplina.getMediaAlunoDisciplina(curso, idUser);
+                                strMedia = disciplina.getMediaAlunoDisciplina(curso, idUser, true);
                                 if (strMedia == null || strMedia.isEmpty()) {
                                     strMedia = "-";
                                 } else {
@@ -538,10 +538,109 @@ public class NotaServer {
         return listNotas;
     }
 
-    // private static String getNota(ArrayList<Disciplina> listDisciplina, int
-    // idUsuario, int idDisciplina, String strNomeTipoAvaliacao){
-    // private static String getNota(ArrayList<Disciplina> listDisciplina, int
-    // idUsuario, int idDisciplina, int idAvaliacao){
+    public static ArrayList<ArrayList<String>> getBoletimAluno(int idCurso, int idAluno) {
+        
+        Curso curso = CursoServer.getCurso(idCurso);
+        
+        ArrayList<ArrayList<String>> listBoletimAluno = new ArrayList<ArrayList<String>>();
+        
+        ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
+        
+        ArrayList<String> siglasPeriodo = new ArrayList<String>();
+        siglasPeriodo.add("MP");
+        siglasPeriodo.add("REC");
+        siglasPeriodo.add("MF");
+        
+
+        ArrayList<String> rowPeriodos = new ArrayList<String>();
+       
+        HashSet<String> hashSetDisciplinas = new HashSet<String>();
+        rowPeriodos.add("Períodos");
+        
+//        int cvPeriodos=0;
+        for(Periodo periodo : listPeriodo){            
+            
+            rowPeriodos.add(periodo.getIdPeriodo()+":"+periodo.getNomePeriodo());
+            
+//            siglasPeriodo.set(cvPeriodos, siglasPeriodo.get(cvPeriodos));
+            
+            ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+            
+            for(Disciplina disciplina : listDisciplinas){  
+                hashSetDisciplinas.add(disciplina.getNome());
+            }                
+//            cvPeriodos++;
+        }
+        
+        ArrayList<String> rowDisciplinas = new ArrayList<String>(hashSetDisciplinas);
+        Collections.sort(rowDisciplinas);
+        ArrayList<String> rowDisciplinasOrdered = new ArrayList<String>();
+        rowDisciplinasOrdered.add("Disciplina");
+        for (String string : rowDisciplinas) {
+            rowDisciplinasOrdered.add(string);
+        }
+        
+//        ArrayList<ArrayList<String>> listBoletimAluno = new  ArrayList<ArrayList<String>> ();
+        
+        int cvFirstLine=0;
+        for(String nomeDisciplina : rowDisciplinasOrdered){
+            ArrayList<String> row = new ArrayList<String>();
+            row.add(nomeDisciplina);
+            int intSiglas=0;
+            for(Periodo periodo : listPeriodo){ 
+                
+                Disciplina disciplina=null;
+                if (cvFirstLine > 0) {
+                    disciplina = DisciplinaServer.getDisciplinaPeloPeriodo(periodo.getIdPeriodo(), nomeDisciplina);
+                    disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
+                }
+                for(String strSiglas : siglasPeriodo){
+                    if (cvFirstLine == 0) {
+                        row.add("["+periodo.getNomePeriodo().substring(0,7).toUpperCase() + "] " + strSiglas+(intSiglas+1));
+                    } else {
+                        
+                        if(strSiglas.equals("MP")){
+                            String strMedia = disciplina.getMediaAlunoDisciplina(curso, idAluno, false);
+                            if (strMedia == null || strMedia.isEmpty()) {
+                                strMedia = "-";
+                            } else {
+                                double doubleMediaAluno = Double.parseDouble(strMedia);
+                                strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
+                            }
+                            row.add(strMedia);
+                        }else if(strSiglas.equals("REC")){
+                            String strMedia = disciplina.getNotaRecuperação(idAluno);
+                            if (strMedia == null || strMedia.isEmpty()) {
+                                strMedia = "-";
+                            } else {
+                                double doubleMediaAluno = Double.parseDouble(strMedia);
+                                strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
+                            }
+                            row.add(strMedia);
+                        }else if(strSiglas.equals("MF")){
+                            String strMedia = disciplina.getMediaAlunoDisciplina(curso, idAluno, true);
+                            if (strMedia == null || strMedia.isEmpty()) {
+                                strMedia = "-";
+                            } else {
+                                double doubleMediaAluno = Double.parseDouble(strMedia);
+                                strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
+                            }
+                            row.add(strMedia);
+                        }
+                    }
+                }
+                intSiglas++;
+            }
+            cvFirstLine++;
+            listBoletimAluno.add(row);
+        }
+        
+        
+        
+        
+        return listBoletimAluno;
+                
+    }
     private static String getNota(ArrayList<Disciplina> listDisciplina, int idUsuario, int idDisciplina, String strAssuntoAvaliacao) {
         String strNota = "";
 
@@ -610,7 +709,7 @@ public class NotaServer {
                 if (disciplina.getNome().equals(strDisciplina)) {
 
                     disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
-                    strMedia = disciplina.getMediaAlunoDisciplina(curso, idUsuario);
+                    strMedia = disciplina.getMediaAlunoDisciplina(curso, idUsuario, true);
 
                     // Pegar Nota Recuperação
                     for (int i = 0; i < disciplina.getListAvaliacao().size(); i++) {
@@ -708,7 +807,7 @@ public class NotaServer {
                 list.get(i).add("-");
 
             } else {
-                String strMedia = disciplina.getMediaAlunoDisciplina(curso, idUsuario);
+                String strMedia = disciplina.getMediaAlunoDisciplina(curso, idUsuario, true);
                 if (strMedia == null || strMedia.isEmpty()) {
                     strMedia = "-";
                     list.get(i).add(strMedia);
@@ -745,7 +844,7 @@ public class NotaServer {
                 if (usuario.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
                     item.add("-");
                 } else {
-                    String strMedia = disciplina.getMediaAlunoDisciplina(curso, usuario.getIdUsuario());
+                    String strMedia = disciplina.getMediaAlunoDisciplina(curso, usuario.getIdUsuario(), true);
                     if (strMedia == null || strMedia.isEmpty()) {
                         strMedia = "-";
                         item.add(strMedia);

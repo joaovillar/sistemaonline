@@ -11,6 +11,9 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -23,16 +26,19 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
+import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
+import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.Curso;
@@ -53,6 +59,9 @@ public class BoletimAnual extends VerticalPanel {
 	private CellTable<ArrayList<String>> cellTable;
     private ListDataProvider<ArrayList<String>> dataProvider;    
     ArrayList<String> arrayDisciplinaColumns = new ArrayList<String>();
+    
+    ArrayList<ArrayList<String>> arrayListBackup = new ArrayList<ArrayList<String>>();    
+    private TextBox txtSearch;
 
 	private MpSelectionCurso listBoxCurso;	
 
@@ -158,13 +167,16 @@ public class BoletimAnual extends VerticalPanel {
             dataProvider.getList().clear();
             
             arrayDisciplinaColumns.clear();
+            arrayListBackup.clear();
+            
             ArrayList<String> listColumns = list.get(0);
             for (int i = 2; i < listColumns.size(); i++) {
                 arrayDisciplinaColumns.add(listColumns.get(i));
             }    
 
             for (int i = 1; i < list.size(); i++) {
-                dataProvider.getList().add(list.get(i));               
+                dataProvider.getList().add(list.get(i));  
+                arrayListBackup.add(list.get(i));
             }
             
             initializeCellTable();
@@ -270,12 +282,32 @@ public class BoletimAnual extends VerticalPanel {
         flexTableImg.setWidget(0, columnImg++, imgExcel);
         flexTableImg.setBorderWidth(0);
         
+        
+        MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
+        
+        if (txtSearch == null) {
+            txtSearch = new TextBox();
+            txtSearch.setStyleName("design_text_boxes");
+        }
+        
+        txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
+        btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
+
+        
+        FlexTable flexTableSearch = new FlexTable();
+        flexTableSearch.setWidth("450px");
+        flexTableSearch.setWidget(0, 0, mpPager);
+        flexTableSearch.setWidget(0, 1, new MpSpaceVerticalPanel());
+        flexTableSearch.setWidget(0, 2, txtSearch);
+        flexTableSearch.setWidget(0, 3, btnFiltrar);   
+        
         FlexTable flexTableMenu = new FlexTable();
         flexTableMenu.setCellPadding(0);
         flexTableMenu.setCellSpacing(0);
         flexTableMenu.setBorderWidth(0);
         flexTableMenu.setWidth("100%");     
-        flexTableMenu.setWidget(0, 0, mpPager);
+//        flexTableMenu.setWidget(0, 0, mpPager);
+        flexTableMenu.setWidget(0, 0, flexTableSearch);
         flexTableMenu.setWidget(0, 1, flexTableImg);
         flexTableMenu.getCellFormatter().setWidth(0, 0, "70%");
         flexTableMenu.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
@@ -351,6 +383,63 @@ public class BoletimAnual extends VerticalPanel {
             MpDialogBoxExcelRelatorioBoletim.getInstance(idCurso);                 
         }
     }
+    
+    public void filtrarCellTable(String strFiltro) {
+
+        removeCellTableFilter();
+
+        strFiltro = strFiltro.toUpperCase();
+
+        if (!strFiltro.isEmpty()) {
+
+            int i = 0;
+            while (i < dataProvider.getList().size()) {
+
+                ArrayList<String> row = dataProvider.getList().get(i);
+
+                String strJuntaTexto = "";
+                for (int j=1;j<row.size();j++) {
+                    String strText  = row.get(j);
+                    strJuntaTexto += strText.toUpperCase();
+                }
+
+                if (!strJuntaTexto.contains(strFiltro)) {
+                    dataProvider.getList().remove(i);
+                    i = 0;
+                    continue;
+                }
+
+                i++;
+            }
+
+        }
+
+    }
+
+    public void removeCellTableFilter() {
+
+        dataProvider.getList().clear();
+
+        for (int i = 0; i < arrayListBackup.size(); i++) {
+            dataProvider.getList().add(arrayListBackup.get(i));
+        }
+        cellTable.setPageStart(0);
+    }
+    
+    private class EnterKeyUpHandler implements KeyUpHandler {
+        public void onKeyUp(KeyUpEvent event) {
+           if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+               filtrarCellTable(txtSearch.getText());
+           }
+       }
+   }
+
+   
+   private class ClickHandlerFiltrar implements ClickHandler {
+       public void onClick(ClickEvent event) {
+           filtrarCellTable(txtSearch.getText());
+       }
+   }  
     
 	
 }
