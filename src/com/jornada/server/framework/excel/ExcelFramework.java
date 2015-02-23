@@ -80,6 +80,28 @@ public class ExcelFramework {
         return styleHeader;
     }
     
+    
+    public static XSSFCellStyle getStyleCellFontBold(XSSFWorkbook wb){
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+        styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+        styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
+        styleHeader.setBorderRight(CellStyle.BORDER_THIN);
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER); 
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+        styleHeader.setFont(getStyleFontBold11(wb));      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        return styleHeader;
+    }
+    
+    public static XSSFCellStyle getStyleCellFontBoletimAluno(XSSFWorkbook wb){
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setAlignment(CellStyle.ALIGN_LEFT);
+        styleHeader.setFont(getStyleFontBoletimAluno(wb));      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        return styleHeader;
+    }
+    
     public static XSSFCellStyle getStyleCellFontBoletim(XSSFWorkbook wb){
         XSSFCellStyle styleHeader = wb.createCellStyle();
         styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
@@ -111,6 +133,23 @@ public class ExcelFramework {
         return styleHeader;
     }
     
+    public static XSSFCellStyle getStyleCellFontAtencao(XSSFWorkbook wb){
+        
+        Font font = wb.createFont();
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        font.setFontName("Calibri");  
+        font.setFontHeightInPoints((short)8);
+        
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        
+        styleHeader.setAlignment(CellStyle.ALIGN_LEFT);
+        styleHeader.setFont(font);      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        styleHeader.setWrapText(true);
+        return styleHeader;
+    }
+    
     
     public static Font getStyleFontBoletim(XSSFWorkbook wb){
         Font font = wb.createFont();
@@ -128,7 +167,16 @@ public class ExcelFramework {
         font.setFontName("Calibri");  
         font.setFontHeightInPoints((short)8);
         return font;
-    }   
+    } 
+    
+    public static Font getStyleFontBoletimAluno(XSSFWorkbook wb){
+        Font font = wb.createFont();
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        font.setFontName("Calibri");  
+        font.setFontHeightInPoints((short)10);
+        return font;
+    }  
     
     
     public static Font getStyleFontBoldBoletim(XSSFWorkbook wb){
@@ -137,6 +185,16 @@ public class ExcelFramework {
         font.setBoldweight(Font.BOLDWEIGHT_BOLD);
         font.setFontName("Calibri"); 
         font.setFontHeightInPoints((short)12);
+        return font;
+    }  
+    
+    
+    public static Font getStyleFontBold11(XSSFWorkbook wb){
+        Font font = wb.createFont();
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        font.setFontName("Calibri"); 
+        font.setFontHeightInPoints((short)11);
         return font;
     }  
     
@@ -183,8 +241,10 @@ public class ExcelFramework {
 
         try {
 
+            String strFisicalAddress = ConfigJornada.getProperty("config.download");;
             // FileInputStream obtains input bytes from the image file
-            InputStream inputStream = new FileInputStream("images/logo/logoescola.png");
+            InputStream inputStream = new FileInputStream(strFisicalAddress+"/images/logo/logoescola.png");
+            System.out.println(strFisicalAddress+"/images/logo/logoescola.png");
             // Get the contents of an InputStream as a byte[].
             byte[] bytes = IOUtils.toByteArray(inputStream);
             // Adds a picture to the workbook

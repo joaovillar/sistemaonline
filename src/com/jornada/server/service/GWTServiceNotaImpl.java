@@ -116,6 +116,10 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
         return NotaServer.gerarExcelBoletimPeriodo(idCurso, idPeriodo);
     }
     
+    public String getExcelBoletimAluno(int idCurso, int idAluno) {
+        return NotaServer.getExcelBoletimAluno(idCurso, idAluno);
+    }
+    
     public String getExcelBoletimAnual(int idCurso){
         return NotaServer.getExcelBoletimAnual(idCurso);
     }

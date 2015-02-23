@@ -235,6 +235,49 @@ public class Disciplina implements Serializable {
         return strNotaRecuperacaoFinal;
     }
 
+    
+    
+    private int getQuantidadeTipoPresenca(int tipoPresenca){
+        int quantidadeTipoPresenca=0;
+        
+        for(int cvAula=0;cvAula<getListAula().size();cvAula++){
+            Aula aula = getListAula().get(cvAula);
+            
+            for(int cvPre=0;cvPre<aula.getArrayPresenca().size();cvPre++){
+                Presenca presenca = aula.getArrayPresenca().get(cvPre);
+                if(presenca.getIdTipoPresenca()==tipoPresenca){
+                    quantidadeTipoPresenca++;
+                }
+            }           
+        }
+        return quantidadeTipoPresenca;      
+    }
+    
+    public int getQuantidadePresenca(){  
+        return getQuantidadeTipoPresenca(Presenca.PRESENCA);
+    }
+    
+    public int getQuantidadeFalta(){  
+        return getQuantidadeTipoPresenca(Presenca.FALTA);
+    }
+    
+    public int getQuantidadeFaltaJustificada(){  
+        return getQuantidadeTipoPresenca(Presenca.FALTA_JUSTIFICADA);
+    }
+    
+    public Avaliacao getRecuperacaoFinal(){
+        Avaliacao aval = null;
+        
+        
+        for(int i=0;i<getListAvaliacao().size();i++){
+            Avaliacao avaliacaoCurrent = getListAvaliacao().get(i);
+            if(avaliacaoCurrent.getIdTipoAvaliacao()==TipoAvaliacao.INT_RECUPERACAO_FINAL){
+                aval = avaliacaoCurrent;
+            }
+        }
+        
+        return aval;
+    }
 
     public static long getSerialversionuid() {
 		return serialVersionUID;

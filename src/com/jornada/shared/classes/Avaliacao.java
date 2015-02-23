@@ -120,5 +120,18 @@ public class Avaliacao implements Serializable{
 	public void setTipoAvaliacao(TipoAvaliacao tipoAvaliacao) {
 		this.tipoAvaliacao = tipoAvaliacao;
 	}
+	
+	public String getNotaRecuperacaoFinal(){
+	    String strNota="";
+	    
+	    for(int i=0;i<getListNota().size();i++){
+	        Nota nota = getListNota().get(i);
+	        if(nota.getNota()!=null && !nota.getNota().isEmpty()){
+	            strNota = nota.getNota();
+	        }
+	    }
+	    
+	    return strNota;
+	}
 
 }

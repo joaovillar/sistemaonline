@@ -72,6 +72,20 @@ public class MpDialogBoxExcelRelatorioBoletim extends DecoratedPopupPanel implem
 	}
 	
 	
+	   public static MpDialogBoxExcelRelatorioBoletim getInstanceBoletimAluno(int idCurso, int idAluno){
+	        
+	        if(uniqueInstance==null){
+	            uniqueInstance = new MpDialogBoxExcelRelatorioBoletim();
+	            uniqueInstance.showDialog();
+	            uniqueInstance.generateExcelBoletimAluno(idCurso, idAluno);
+	        }else{
+	            uniqueInstance.showDialog();
+	            uniqueInstance.generateExcelBoletimAluno(idCurso, idAluno);
+	        }       
+	        return uniqueInstance;      
+	    }
+	
+	
 	   public static MpDialogBoxExcelRelatorioBoletim getInstance(int idCurso, int idPeriodo, int idDisciplina){
 	        if(uniqueInstance==null){
 	            uniqueInstance = new MpDialogBoxExcelRelatorioBoletim();
@@ -172,14 +186,18 @@ public class MpDialogBoxExcelRelatorioBoletim extends DecoratedPopupPanel implem
         GWTServiceNota.Util.getInstance().getExcelBoletimNotas(idCurso,  new CallBackBoletim());
     }
 	
-	private void generateExcelBoletimPeriodo(int idCurso , int idPeriodo){
-	    GWTServiceNota.Util.getInstance().getExcelBoletimPeriodo(idCurso, idPeriodo, new CallBackBoletim());
+	private void generateExcelBoletimPeriodo(int idCurso , int idAluno){
+	    GWTServiceNota.Util.getInstance().getExcelBoletimPeriodo(idCurso, idAluno, new CallBackBoletim());
 	}
 	
 	
-	   private void generateExcelBoletimDisciplina(int idCurso , int idPeriodo, int idDisciplina){
-	        GWTServiceNota.Util.getInstance().getExcelBoletimDisciplina(idCurso, idPeriodo, idDisciplina, new CallBackBoletim());
-	    }
+    private void generateExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
+        GWTServiceNota.Util.getInstance().getExcelBoletimDisciplina(idCurso, idPeriodo, idDisciplina, new CallBackBoletim());
+    }
+
+    private void generateExcelBoletimAluno(int idCurso, int idPeriodo) {
+        GWTServiceNota.Util.getInstance().getExcelBoletimAluno(idCurso, idPeriodo, new CallBackBoletim());
+    }
 	
 	
 	private class CallBackBoletim implements AsyncCallback<String> {

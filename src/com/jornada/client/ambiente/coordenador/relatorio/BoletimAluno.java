@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
+import com.jornada.client.ambiente.general.nota.DialogBoxNotaBoletimAluno;
+import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
@@ -41,6 +43,7 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
+import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.utility.MpUtilClient;
@@ -64,7 +67,8 @@ public class BoletimAluno extends VerticalPanel {
     ArrayList<ArrayList<String>> arrayListBackup = new ArrayList<ArrayList<String>>();    
     private TextBox txtSearch;
 
-    ArrayList<String> arrayAvaliacaoColumns = new ArrayList<String>();
+    ArrayList<String> arrayHeadersText = new ArrayList<String>();
+    ArrayList<String> arrayHeadersTextBackup = new ArrayList<String>();
 
     private MpSelectionCursoAmbienteProfessor listBoxCurso;
     private MpSelectionAlunosPorCurso listBoxAlunosPorCurso;
@@ -197,11 +201,13 @@ public class BoletimAluno extends VerticalPanel {
 
             dataProvider.getList().clear();
             arrayListBackup.clear();
-            arrayAvaliacaoColumns.clear();
+            arrayHeadersText.clear();
+            arrayHeadersTextBackup.clear();
             
             ArrayList<String> listColumns = list.get(0);
             for (int i = 1; i < listColumns.size(); i++) {
-                arrayAvaliacaoColumns.add(listColumns.get(i));
+                arrayHeadersText.add(listColumns.get(i));
+                arrayHeadersTextBackup.add(listColumns.get(i));
             }   
 
             for (int i = 1; i < list.size(); i++) {
@@ -248,19 +254,26 @@ public class BoletimAluno extends VerticalPanel {
         SafeHtml safeHtml = builder.toSafeHtml();
         cellTable.addColumn(indexColumnName, safeHtml);
         
-       
 
-        for (int column = 0; column < arrayAvaliacaoColumns.size(); column++) { 
-            
-            String strAvaliacaoText = arrayAvaliacaoColumns.get(column);
-            int indexIdAvaliacao = strAvaliacaoText.indexOf("|");
-            if (indexIdAvaliacao != -1) {
-                strAvaliacaoText = strAvaliacaoText.substring(indexIdAvaliacao + 1);
+
+        for (int column = 0; column < arrayHeadersText.size(); column++) {
+
+            String strHeaderText = arrayHeadersText.get(column);
+ 
+            String strPeriodo = strHeaderText.substring(strHeaderText.indexOf("[") + 1, strHeaderText.indexOf("]") - 1);
+            String strNomeAval = strHeaderText.substring(strHeaderText.indexOf("]") + 1, strHeaderText.length());
+
+            if (column == (arrayHeadersText.size() - 1) || column == (arrayHeadersText.size() - 2) || column == (arrayHeadersText.size() - 3)) {
+                strPeriodo = strPeriodo.substring(0, 7).toUpperCase() + strNomeAval;
+            } else {
+                strPeriodo = "[" + strPeriodo.substring(0, 7).toUpperCase() + "]<br>" + strNomeAval;
             }
-            final String strAvaliacao = strAvaliacaoText;
+
+ 
+            final String strHeader = strPeriodo;
 
             boolean booAdicionarNota = false;
-            if (strAvaliacao.equals(TipoAvaliacao.STR_ADICIONAL_NOTA)) {
+            if (strHeader.equals(TipoAvaliacao.STR_ADICIONAL_NOTA)) {
                 booAdicionarNota = true;
             }
 
@@ -269,53 +282,75 @@ public class BoletimAluno extends VerticalPanel {
             final Header<String> header = new Header<String>(new ClickableTextCell()) {
                 @Override
                 public String getValue() {
-                    return strAvaliacao;
+                    return strHeader;
+           
+                }       
+                @Override
+                public void render(Context context,SafeHtmlBuilder sb){
+                    
+                    String strTitle=getValue();
+                    if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_EX)){
+                        strTitle = "Exame Nota";
+                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_MFP)){
+                        strTitle = "Média Final Provisória";
+                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_MFA)){
+                        strTitle = Nota.STR_MEDIA_FINAL_ANUAL;
+                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_REC)){
+                        strTitle = txtConstants.avaliacaoRecuperacao();
+                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_MP)){
+                        strTitle = "Média Trimestral Provisória";
+                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_MF)){
+                        strTitle = "Média Final do Trimestre";
+                    }   
+                    sb.appendHtmlConstant("<div align=\"center\"><span title=\""+strTitle+"\">"+getValue()+"</span></div>"); 
                 }
 
+
             };
+            
 
             final int intColumn = column;
 
             indexedColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
             indexedColumn.setSortable(true);
-
             indexedColumn.setFieldUpdater(new FieldUpdater<ArrayList<String>, String>() {
                 @Override
                 public void update(int index, ArrayList<String> object, final String value) {
 
-//                    if (!value.equals("-")) {
-//                        String strIdUsuario = dataProvider.getList().get(index).get(0);
-//                        int idUsuario = Integer.parseInt(strIdUsuario);
-//                        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-//                        String strNomeCurso = listBoxCurso.getSelectedItemText();
-//                        String strNomePeriodo = listBoxAlunosPorCurso.getSelectedItemText();
-//                        Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
-//
-//                        String strAvaliacaoColumn = arrayAvaliacaoColumns.get(indexedColumn.getIndex() - INT_POSITION_NAME - 1);
-//                        int indexIdAvaliacao = strAvaliacaoColumn.indexOf("|");
-//                        if (indexIdAvaliacao == -1) {
-//                            DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso);
-//                        } else {
-//                            String strIdAvaliacao = strAvaliacaoColumn.substring(0, indexIdAvaliacao);
-//                            int idAvaliacao = Integer.parseInt(strIdAvaliacao);
-//                            DialogBoxNota.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, idAvaliacao, mediaNotaCurso);
-//                        }
-//
-//                    }
+                    int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
+                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+                    String strNomeCurso = listBoxCurso.getSelectedItemText();
+                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+                    String strHeader = arrayHeadersTextBackup.get(indexedColumn.getIndex() - 1);
+                    String strNomePeriodo = strHeader.substring(1, strHeader.indexOf("]"));
+                    String strNomeProva = strHeader.substring(strHeader.indexOf("]") + 1);
+
+                    String strNomeDisciplina = object.get(0);
+                    if (intColumn == (arrayHeadersText.size() - 1) || intColumn == (arrayHeadersText.size() - 2) || intColumn == (arrayHeadersText.size() - 3)) {
+//                        DialogBoxNotaBoletimAluno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso, strNomeProva);
+                        DialogBoxNotasAno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
+                    } else {
+                        DialogBoxNotaBoletimAluno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso, strNomeProva);
+                    }
+
                 }
             });
 
             sortHandler.setComparator(indexedColumn, new Comparator<ArrayList<String>>() {
                 @Override
                 public int compare(ArrayList<String> o1, ArrayList<String> o2) {
-                    System.out.println(o1.get(intColumn + INT_POSITION_NAME + 1));
                     return o1.get(intColumn + INT_POSITION_NAME + 1).compareTo(o2.get(intColumn + INT_POSITION_NAME + 1));
                 }
             });
 
-            cellTable.addColumn(indexedColumn, header);
-        }
 
+            cellTable.addColumn(indexedColumn, header);
+           
+            
+        }
+        
+        cellTable.setHeaderBuilder(new CustomHeaderBuilderBoletimAluno(cellTable, arrayHeadersTextBackup));
+        
         Image imgExcel = new Image("images/excel.24.png");
         imgExcel.addClickHandler(new ClickHandlerExcel());
         imgExcel.setStyleName("hand-over");
@@ -365,6 +400,8 @@ public class BoletimAluno extends VerticalPanel {
         flexTableNota.setWidget(1, 0, cellTable);
 
     }
+
+
 
     class IndexedColumn extends Column<ArrayList<String>, String> {
         private int index;
@@ -437,9 +474,9 @@ public class BoletimAluno extends VerticalPanel {
         @Override
         public void onClick(ClickEvent event) {
             int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-            int idPeriodo = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
+            int idAluno = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
 
-//            MpDialogBoxExcelRelatorioBoletim.getInstance(idCurso, idPeriodo, idDisciplina);
+            MpDialogBoxExcelRelatorioBoletim.getInstanceBoletimAluno(idCurso, idAluno);
         }
     }
 

@@ -38,10 +38,8 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServicePresenca;
-import com.jornada.shared.classes.Aula;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
-import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.presenca.TabelaPresencaAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
@@ -275,9 +273,9 @@ public class VisualizarDiarioPais extends VerticalPanel {
 				TabelaPresencaAluno tpa = new TabelaPresencaAluno();
 				Disciplina disciplina = periodo.getListDisciplinas().get(cvDis);				
 				int quantidateAula = disciplina.getListAula().size();
-				int quantidatePresencas = getNumeroTipoPresenca(disciplina.getListAula(), Presenca.PRESENCA);
-				int quantidateFaltas = getNumeroTipoPresenca(disciplina.getListAula(), Presenca.FALTA);
-				int quantidateJustificadas = getNumeroTipoPresenca(disciplina.getListAula(), Presenca.FALTA_JUSTIFICADA);
+				int quantidatePresencas = disciplina.getQuantidadePresenca();
+				int quantidateFaltas = disciplina.getQuantidadeFalta();
+				int quantidateJustificadas = disciplina.getQuantidadeFaltaJustificada();
 				int quantidadePresencaSalaDeAula;
 				
 				if(quantidateAula==0 || (quantidatePresencas==0&&quantidateJustificadas==0)){
@@ -313,21 +311,21 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		return listTpa;
 	}
 	
-	private int getNumeroTipoPresenca(ArrayList<Aula> listAula, int tipoPresenca){
-		int quantidadeTipoPresenca=0;
-		
-		for(int cvAula=0;cvAula<listAula.size();cvAula++){
-			Aula aula = listAula.get(cvAula);
-			
-			for(int cvPre=0;cvPre<aula.getArrayPresenca().size();cvPre++){
-				Presenca presenca = aula.getArrayPresenca().get(cvPre);
-				if(presenca.getIdTipoPresenca()==tipoPresenca){
-					quantidadeTipoPresenca++;
-				}
-			}			
-		}
-		return quantidadeTipoPresenca;		
-	}
+//	private int getNumeroTipoPresenca(ArrayList<Aula> listAula, int tipoPresenca){
+//		int quantidadeTipoPresenca=0;
+//		
+//		for(int cvAula=0;cvAula<listAula.size();cvAula++){
+//			Aula aula = listAula.get(cvAula);
+//			
+//			for(int cvPre=0;cvPre<aula.getArrayPresenca().size();cvPre++){
+//				Presenca presenca = aula.getArrayPresenca().get(cvPre);
+//				if(presenca.getIdTipoPresenca()==tipoPresenca){
+//					quantidadeTipoPresenca++;
+//				}
+//			}			
+//		}
+//		return quantidadeTipoPresenca;		
+//	}
 
 	public void updateClientData(){
 		listBoxCurso.populateComboBox(this.telaInicialDiarioPais.getMainView().getUsuarioLogado());

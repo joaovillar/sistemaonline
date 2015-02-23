@@ -164,5 +164,34 @@ public class Periodo implements Serializable, Comparable<Periodo>  {
           return item == null ? null : Integer.toString(item.getIdPeriodo());
         }
       };  
+      
+      
+     public int getQuantidadeFalta(){  
+          int intCountFaltas = 0;
+          for (int cvDisciplina = 0; cvDisciplina < this.getListDisciplinas().size(); cvDisciplina++) {
+              Disciplina disciplina = this.getListDisciplinas().get(cvDisciplina);              
+              intCountFaltas= intCountFaltas + disciplina.getQuantidadeFalta();
+          }
+          return intCountFaltas;
+      }
+     
+     public int getQuantidadePresenca(){  
+         int intCountFaltas = 0;
+         for (int cvDisciplina = 0; cvDisciplina < this.getListDisciplinas().size(); cvDisciplina++) {
+             Disciplina disciplina = this.getListDisciplinas().get(cvDisciplina);              
+             intCountFaltas= intCountFaltas + disciplina.getQuantidadePresenca();
+         }
+         return intCountFaltas;
+     }
+     
+     public int getQuantidadeFaltaJustificada(){  
+         int intCountFaltas = 0;
+         for (int cvDisciplina = 0; cvDisciplina < this.getListDisciplinas().size(); cvDisciplina++) {
+             Disciplina disciplina = this.getListDisciplinas().get(cvDisciplina);              
+             intCountFaltas= intCountFaltas + disciplina.getQuantidadeFaltaJustificada();
+         }
+         return intCountFaltas;
+     }
+
 
 }

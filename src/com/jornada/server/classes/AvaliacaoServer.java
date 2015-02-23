@@ -427,8 +427,8 @@ public class AvaliacaoServer {
 
                 TipoAvaliacao tipoAvaliacao = AvaliacaoServer.getTipoAvaliacao(current.getIdTipoAvaliacao());
                 current.setTipoAvaliacao(tipoAvaliacao);
-                if(tipoAvaliacao.getIdTipoAvaliacao()!=TipoAvaliacao.INT_RECUPERACAO_FINAL){
-                data.add(current);
+                if (tipoAvaliacao.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+                    data.add(current);
                 }
             }
 

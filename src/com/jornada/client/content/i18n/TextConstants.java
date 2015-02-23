@@ -506,6 +506,7 @@ public interface TextConstants extends Messages {
 	String avaliacaoErroRecuperacao();
 	String avaliacaoErroRecuperacaoFinal();
 	String avaliacaoErroAssunto();
+	String avaliacaoRecuperacao();
 	/*******AVALIAÇÔES End*******/
 	
 	

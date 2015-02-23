@@ -893,6 +893,19 @@ public class UsuarioServer{
 		int intColumn=0;
 		row.createCell((short) intColumn++).setCellValue("Aluno");
 		row.createCell((short) intColumn++).setCellValue("Pais");
+		row.createCell((short) intColumn++).setCellValue("Email Pais");
+		row.createCell((short) intColumn++).setCellValue("Endereço");
+		row.createCell((short) intColumn++).setCellValue("Num Res");
+		row.createCell((short) intColumn++).setCellValue("Bairro");
+		row.createCell((short) intColumn++).setCellValue("Cidade");
+		row.createCell((short) intColumn++).setCellValue("UF");
+		row.createCell((short) intColumn++).setCellValue("CEP");
+		row.createCell((short) intColumn++).setCellValue("Tel Celular");
+		row.createCell((short) intColumn++).setCellValue("Tel Res");
+		row.createCell((short) intColumn++).setCellValue("Tel Com");
+		row.createCell((short) intColumn++).setCellValue("CPF");
+		row.createCell((short) intColumn++).setCellValue("RG");
+		row.createCell((short) intColumn++).setCellValue("Curso");
         
 		for (int i = 0; i < intColumn; i++) {
 			row.getCell((short) i).setCellStyle(style);
@@ -900,7 +913,17 @@ public class UsuarioServer{
         
 		int countRow=1;
         for(int i=0;i<listAlunos.size();i++){
-        	Usuario aluno = listAlunos.get(i);        	        	       	
+        	Usuario aluno = listAlunos.get(i);        	 
+        	
+        	 ArrayList<Curso> listCurso = CursoServer.getCursosPorAlunoAmbienteAluno(aluno, true);
+             String strCursos="";
+             for (int j = 0; j < listCurso.size(); j++) {
+                 if(j==0){
+                     strCursos=listCurso.get(j).getNome();
+                 }else{
+                     strCursos = strCursos+", "+listCurso.get(j).getNome();
+                 }
+             }
         	
         	ArrayList<Usuario> arrayPais = UsuarioServer.getTodosOsPaisDoAluno(aluno.getIdUsuario());
         	for(int cv=0;cv<arrayPais.size();cv++){
@@ -909,6 +932,20 @@ public class UsuarioServer{
         		row = sheet.createRow((short) countRow++);        		
         		row.createCell((short) intColumn++).setCellValue(aluno.getPrimeiroNome() + " "+ aluno.getSobreNome());
         		row.createCell((short) intColumn++).setCellValue(pai.getPrimeiroNome() + " "+ pai.getSobreNome());
+        		row.createCell((short) intColumn++).setCellValue(pai.getEmail());
+        		row.createCell((short) intColumn++).setCellValue(pai.getEndereco());
+        		row.createCell((short) intColumn++).setCellValue(pai.getNumeroResidencia());
+        		row.createCell((short) intColumn++).setCellValue(pai.getBairro());
+        		row.createCell((short) intColumn++).setCellValue(pai.getCidade());
+        		row.createCell((short) intColumn++).setCellValue(pai.getUnidadeFederativa());
+        		row.createCell((short) intColumn++).setCellValue(pai.getCep());
+        		row.createCell((short) intColumn++).setCellValue(pai.getTelefoneCelular());
+        		row.createCell((short) intColumn++).setCellValue(pai.getTelefoneResidencial());
+        		row.createCell((short) intColumn++).setCellValue(pai.getTelefoneComercial());
+        		row.createCell((short) intColumn++).setCellValue(pai.getCpf());
+        		row.createCell((short) intColumn++).setCellValue(pai.getRg());
+        		row.createCell((short) intColumn++).setCellValue(strCursos);
+//        		row.createCell((short) intColumn++).setCellValue(pai.getPrimeiroNome());
         		
         	}
        	

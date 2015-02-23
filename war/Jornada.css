@@ -1179,3 +1179,8 @@ li.multiValueSuggestBox-input-token {
 	background-color: white;
 }
 
+.labelBoletimAluno {
+  color: gray;
+  font-size: 11px;
+  font-family: Arial, Helvetica, sans-serif;
+}

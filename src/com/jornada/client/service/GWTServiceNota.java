@@ -39,6 +39,7 @@ public interface GWTServiceNota extends RemoteService {
 	public String getExcelBoletimAnual(int idCurso);
 	public ArrayList<ArrayList<String>> getNotasAluno(int idCurso, int idTipoUsuario, int idUsuario);
 	public ArrayList<ArrayList<String>> getBoletimAluno(int idCurso, int idAluno);
+	public String getExcelBoletimAluno(int idCurso, int idAluno);
 	
 	public static class Util {
 		private static GWTServiceNotaAsync instance;

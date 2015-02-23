@@ -9,6 +9,15 @@ public class Nota implements Serializable {
 	public static final String STR_MEDIA_FINAL = "Média Final";
 	public static final String STR_MEDIA_FINAL_ANUAL = "Média Final Anual";
 	
+	public static final String STR_BOLETIM_ALUNO_MP = "MP";
+	public static final String STR_BOLETIM_ALUNO_REC = "REC";
+	public static final String STR_BOLETIM_ALUNO_MF = "MF";
+	
+	
+	public static final String STR_BOLETIM_ALUNO_MFP = "MFP";
+	public static final String STR_BOLETIM_ALUNO_EX = "EX";
+	public static final String STR_BOLETIM_ALUNO_MFA = "MFA";
+	
 	private int idNota;	
 	private int idUsuario;
 	private String nomeUsuario;
