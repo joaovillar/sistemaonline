@@ -894,6 +894,7 @@ public class UsuarioServer{
 		row.createCell((short) intColumn++).setCellValue("Aluno");
 		row.createCell((short) intColumn++).setCellValue("Pais");
 		row.createCell((short) intColumn++).setCellValue("Email Pais");
+		row.createCell((short) intColumn++).setCellValue("Unidade");
 		row.createCell((short) intColumn++).setCellValue("Endereço");
 		row.createCell((short) intColumn++).setCellValue("Num Res");
 		row.createCell((short) intColumn++).setCellValue("Bairro");
@@ -933,6 +934,7 @@ public class UsuarioServer{
         		row.createCell((short) intColumn++).setCellValue(aluno.getPrimeiroNome() + " "+ aluno.getSobreNome());
         		row.createCell((short) intColumn++).setCellValue(pai.getPrimeiroNome() + " "+ pai.getSobreNome());
         		row.createCell((short) intColumn++).setCellValue(pai.getEmail());
+        		row.createCell((short) intColumn++).setCellValue(pai.getUnidadeEscola().getNomeUnidadeEscola());
         		row.createCell((short) intColumn++).setCellValue(pai.getEndereco());
         		row.createCell((short) intColumn++).setCellValue(pai.getNumeroResidencia());
         		row.createCell((short) intColumn++).setCellValue(pai.getBairro());

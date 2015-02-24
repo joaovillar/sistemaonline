@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.jornada.client.classes.widgets.label.MpLabelError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
@@ -77,9 +78,13 @@ public class MpDialogBoxExcel extends DecoratedPopupPanel implements ClickListen
 		dock.setCellHorizontalAlignment(closeButton, DockPanel.ALIGN_CENTER);
 		dock.setWidth("100%");
 		
+		VerticalPanel vBody = new VerticalPanel();
+        vBody.setStyleName("dialogVPanelWhite");
+		
 		
 
-		setWidget(dock);
+        vBody.add(dock);
+        setWidget(vBody);
 		
 		
 		grid = new Grid(4,1);		

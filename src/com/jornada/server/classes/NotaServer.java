@@ -1232,8 +1232,19 @@ public class NotaServer {
                     row.getCell((short) c).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb));
                 } else {
                     if (FieldVerifier.isNumeric(strText)) {
-                        row.getCell((short) c).setCellValue(Double.parseDouble(strText));
-                        row.getCell((short) c).setCellType(Cell.CELL_TYPE_NUMERIC);
+//                        row.getCell((short) c).setCellValue(Double.parseDouble(strText));
+//                        row.getCell((short) c).setCellType(Cell.CELL_TYPE_NUMERIC);
+                        double nota = Double.parseDouble(strText);
+                        double mediaCurso = Double.parseDouble(curso.getMediaNota());
+                        String strSinal = "";
+                        if (nota < mediaCurso) {
+                            strSinal = "*";
+                            row.getCell((short) c).setCellValue(strSinal + strText);
+                            row.getCell((short) c).setCellType(Cell.CELL_TYPE_STRING);
+                        } else {
+                            row.getCell((short) c).setCellValue(nota);
+                            row.getCell((short) c).setCellType(Cell.CELL_TYPE_NUMERIC);
+                        }
                     } else {
                         row.getCell((short) c).setCellValue(strText);
                         row.getCell((short) c).setCellType(Cell.CELL_TYPE_STRING);
