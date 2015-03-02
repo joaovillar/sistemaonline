@@ -12,20 +12,21 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
+import com.jornada.client.classes.listBoxes.ambiente.general.MpSelectionSimNao;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
+import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.label.MpLabelTextBoxError;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextArea;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceDisciplina;
 import com.jornada.shared.FieldVerifier;
@@ -48,10 +49,12 @@ public class AdicionarDisciplina extends VerticalPanel {
 	
 	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
-	private TextBox txtNome;
-	private TextBox txtCargaHoraria;	
-	private TextArea txtDescricao;
-	private TextArea txtObjetivo;
+	private MpTextBox txtNome;
+	private MpTextBox txtCargaHoraria;	
+	private MpTextArea txtDescricao;
+	private MpTextArea txtObjetivo;
+	
+	private MpSelectionSimNao listBoxSimNao;
 	
 
 	TextConstants txtConstants;
@@ -81,55 +84,53 @@ public class AdicionarDisciplina extends VerticalPanel {
 		// Add a title to the form
 //		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
-		txtNome = new TextBox();
-		txtCargaHoraria = new TextBox();
-		txtDescricao = new TextArea();
-		txtObjetivo = new TextArea();
+		txtNome = new MpTextBox();
+		txtCargaHoraria = new MpTextBox();
+		txtDescricao = new MpTextArea();
+		txtObjetivo = new MpTextArea();
 //		final ListBox multiBox = new ListBox(true);
+		
+		listBoxSimNao = new MpSelectionSimNao();
 	    
-//	    multiBox.setVisibleItemCount(10);
-		
-		txtNome.setStyleName("design_text_boxes");
-		txtCargaHoraria.setStyleName("design_text_boxes");
-		txtDescricao.setStyleName("design_text_boxes");
-		txtObjetivo.setStyleName("design_text_boxes");
-//		multiBox.setStyleName("design_text_boxes");
+
 		
 		
-		txtNome.setWidth("350px");
-		txtCargaHoraria.setWidth("30px");		
-		txtDescricao.setSize("350px", "50px");
-		txtObjetivo.setSize("350px", "50px");
+//		txtNome.setWidth("350px");
+		listBoxSimNao.setWidth("50px");       
+		txtCargaHoraria.setWidth("50px");		
+//		txtDescricao.setSize("350px", "50px");
+//		txtObjetivo.setSize("350px", "50px");
 //		multiBox.setWidth("350px");
 		
 
-		Label lblCurso = new Label(txtConstants.curso());		
-		Label lblPeriodo = new Label(txtConstants.periodo());		
-		Label lblNome = new Label(txtConstants.disciplinaNome());			
-		Label lblCargaHoraria = new Label(txtConstants.disciplinaCarga());		
-		Label lblDescricao = new Label(txtConstants.disciplinaDescricao());		
-		Label lblObjetivo = new Label(txtConstants.disciplinaObjetivo());
+		MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());		
+		MpLabelRight lblPeriodo = new MpLabelRight(txtConstants.periodo());		
+		MpLabelRight lblNome = new MpLabelRight(txtConstants.disciplinaNome());		
+		MpLabelRight lblObrigatorio = new MpLabelRight(txtConstants.disciplinaObrigatoria());         
+		MpLabelRight lblCargaHoraria = new MpLabelRight(txtConstants.disciplinaCarga());		
+		MpLabelRight lblDescricao = new MpLabelRight(txtConstants.disciplinaDescricao());		
+		MpLabelRight lblObjetivo = new MpLabelRight(txtConstants.disciplinaObjetivo());
 //		Label lblSelecionaPeriodo = new Label("Selecionar Periodos");
 		
 		lblErroNomeDisciplina = new MpLabelTextBoxError();
 		lblErroPeriodo = new MpLabelTextBoxError();
 		lblErroCargaHoraria = new MpLabelTextBoxError();
 		
-		lblCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblPeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
-		lblNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblCargaHoraria.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
-		lblDescricao.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		lblObjetivo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//		lblCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//		lblPeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
+//		lblNome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//		lblCargaHoraria.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
+//		lblDescricao.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//		lblObjetivo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 //		lblSelecionaPeriodo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
-		lblCurso.setStyleName("design_label");
-		lblPeriodo.setStyleName("design_label");
-		lblNome.setStyleName("design_label");
-		lblCargaHoraria.setStyleName("design_label");		
-		lblDescricao.setStyleName("design_label");
-		lblObjetivo.setStyleName("design_label");
-		lblCargaHoraria.setStyleName("design_label");
+//		lblCurso.setStyleName("design_label");
+//		lblPeriodo.setStyleName("design_label");
+//		lblNome.setStyleName("design_label");
+//		lblCargaHoraria.setStyleName("design_label");		
+//		lblDescricao.setStyleName("design_label");
+//		lblObjetivo.setStyleName("design_label");
+//		lblCargaHoraria.setStyleName("design_label");
 //		lblSelecionaPeriodo.setStyleName("design_label");
 
 
@@ -153,6 +154,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		flexTable.setWidget(row, 0, lblCurso);flexTable.setWidget(row, 1, listBoxCurso);flexTable.setWidget(row++, 2, mpHelperCurso);
 		flexTable.setWidget(row, 0, lblPeriodo);flexTable.setWidget(row, 1, listBoxPeriodo);flexTable.setWidget(row++, 2, lblErroPeriodo);
 		flexTable.setWidget(row, 0, lblNome);flexTable.setWidget(row, 1, txtNome);flexTable.setWidget(row++, 2, lblErroNomeDisciplina);
+		flexTable.setWidget(row, 0, lblObrigatorio);flexTable.setWidget(row++, 1, listBoxSimNao);
 		flexTable.setWidget(row, 0, lblCargaHoraria);flexTable.setWidget(row, 1, txtCargaHoraria);flexTable.setWidget(row++, 2, lblErroCargaHoraria);		
 		flexTable.setWidget(row, 0, lblDescricao);flexTable.setWidget(row++, 1, txtDescricao);
 		flexTable.setWidget(row, 0, lblObjetivo);flexTable.setWidget(row++, 1, txtObjetivo);
@@ -263,6 +265,8 @@ public class AdicionarDisciplina extends VerticalPanel {
 				if(!txtCargaHoraria.getText().isEmpty()){
 					intCargaHoraria = Integer.parseInt(txtCargaHoraria.getText());
 				}
+				
+				String strIsObrigatorio = listBoxSimNao.getSelectedValue();
 
 				Disciplina disciplina = new Disciplina();
 //				disciplina.setIdPeriodo(intIdPeriodo);
@@ -270,6 +274,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 				disciplina.setCargaHoraria(intCargaHoraria);
 				disciplina.setDescricao(txtDescricao.getText());
 				disciplina.setObjetivo(txtObjetivo.getText());
+				disciplina.setObrigatoria(Boolean.parseBoolean(strIsObrigatorio));
 
 				GWTServiceDisciplina.Util.getInstance().AdicionarDisciplina(intPeriodos, disciplina, callbackAddDisciplina);
 

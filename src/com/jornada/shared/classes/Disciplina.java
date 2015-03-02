@@ -17,6 +17,8 @@ public class Disciplina implements Serializable {
 	private int cargaHoraria;	
 	private String descricao;
 	private String objetivo;
+	private boolean isObrigatoria;
+	
 	
 	private Usuario professor;
 	
@@ -124,11 +126,20 @@ public class Disciplina implements Serializable {
 		this.listAula = listAula;
 	}
 	
-	
+
+	public boolean isObrigatoria() {
+        return isObrigatoria;
+    }
 
 
 
-	public ArrayList<Avaliacao> getListAvaliacao() {
+    public void setObrigatoria(boolean isObrigatoria) {
+        this.isObrigatoria = isObrigatoria;
+    }
+
+
+
+    public ArrayList<Avaliacao> getListAvaliacao() {
         return listAvaliacao;
     }
 

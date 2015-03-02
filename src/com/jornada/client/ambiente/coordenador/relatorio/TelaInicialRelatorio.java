@@ -22,6 +22,7 @@ public class TelaInicialRelatorio extends Composite {
 	private BoletimAnual boletimAnual;
 	private BoletimNotas boletimNotas;
 	private BoletimAluno boletimAluno;
+	private HistoricoAluno historicoAluno;
 
 	
 	TextConstants txtConstants;
@@ -65,15 +66,17 @@ public class TelaInicialRelatorio extends Composite {
             boletimAnual = BoletimAnual.getInstance(this); 
             boletimNotas = BoletimNotas.getInstance(this);   
             boletimAluno = BoletimAluno.getInstance(this);   
+            historicoAluno = HistoricoAluno.getInstance(this);   
             
-            tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget("Boletim Disciplina", ""));
-            tabLayoutPanel.add(boletimPeriodo, new MpHeaderWidget(txtConstants.relatorioBoletimPorPeriodo(), ""));
-            tabLayoutPanel.add(boletimAnual, new MpHeaderWidget("Boletim Anual", ""));
-            tabLayoutPanel.add(boletimNotas, new MpHeaderWidget("Boletim Notas", ""));
-            tabLayoutPanel.add(boletimAluno, new MpHeaderWidget("Boletim Aluno", ""));
+            tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget(txtConstants.relatorioBoletimDisciplina(), "images/disciplina.png"));
+            tabLayoutPanel.add(boletimPeriodo, new MpHeaderWidget(txtConstants.relatorioBoletimPorPeriodo(), "images/my_projects_folder_16.png"));
+            tabLayoutPanel.add(boletimAnual, new MpHeaderWidget(txtConstants.relatorioBoletimAnual(), "images/application_certificate.png"));
+            tabLayoutPanel.add(boletimNotas, new MpHeaderWidget(txtConstants.relatorioBoletimNotas(), "images/chart-icon_16.png"));
+            tabLayoutPanel.add(boletimAluno, new MpHeaderWidget(txtConstants.relatorioBoletimAluno(), "images/elementary_school_16.png"));
+            tabLayoutPanel.add(historicoAluno, new MpHeaderWidget(txtConstants.relatorioHistoricoAluno(), "images/clock.png"));
         }else if(this.mainView.getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.PROFESSOR){
             boletimDisciplina = BoletimDisciplina.getInstance(this);  
-            tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget("Boletim Disciplina", ""));
+            tabLayoutPanel.add(boletimDisciplina, new MpHeaderWidget(txtConstants.relatorioBoletimDisciplina(), ""));
         }
 		
 

@@ -301,7 +301,7 @@ public class AdicionarCurso extends VerticalPanel {
 
 
                 if(isAdicionar==true){
-                    GWTServiceCurso.Util.getInstance().AdicionarCurso(curso, new CallbackAddCurso());
+                    GWTServiceCurso.Util.getInstance().AdicionarCursoString(curso, new CallbackAddCurso());
                 }else{
                     curso.setIdCurso(uniqueInstanceAtualizar.cursoParaAtualizar.getIdCurso());
                     GWTServiceCurso.Util.getInstance().updateCursoRow(curso, new CallbackAtualizarCurso());
@@ -414,7 +414,7 @@ public class AdicionarCurso extends VerticalPanel {
 	
 	
 	
-	private class CallbackAddCurso implements AsyncCallback<Integer>{
+	private class CallbackAddCurso implements AsyncCallback<String>{
         public void onFailure(Throwable caught) {
             mpLoading.setVisible(false);
             mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
@@ -423,11 +423,11 @@ public class AdicionarCurso extends VerticalPanel {
         }
 
         @Override
-        public void onSuccess(Integer result) {
+        public void onSuccess(String result) {
             // lblLoading.setVisible(false);
             mpLoading.setVisible(false);
-            int isSuccess = result;
-            if (isSuccess!=0) {
+            
+            if (result.equals("true")) {
                 cleanFields();
                 mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
                 mpDialogBoxConfirm.setBodyText(txtConstants.cursoSalvoSucesso());
@@ -437,7 +437,14 @@ public class AdicionarCurso extends VerticalPanel {
                 telaInicialCurso.updateAssociarCurso();
                 getAdicionarCursoDeUmTemplate().updateListBoxCurso();
                 
-            } else {
+            }else if(result.contains(Curso.DB_UNIQUE_KEY)){
+                String strCurso = result.substring(result.indexOf("=(")+2);
+                strCurso = strCurso.substring(strCurso.indexOf(",")+1);
+                strCurso = strCurso.substring(0,strCurso.indexOf(")"));
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar() + " "+txtConstants.cursoDuplicado((strCurso)));  
+                mpDialogBoxWarning.showDialog();  
+            }else {
                 mpLoading.setVisible(false);
                 mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
                 mpDialogBoxWarning.setBodyText(txtConstants.cursoErroSalvar()+" "+txtConstants.geralRegarregarPagina());
@@ -448,7 +455,7 @@ public class AdicionarCurso extends VerticalPanel {
 	
 	
  
-	private class CallbackAtualizarCurso implements AsyncCallback<Boolean>{
+	private class CallbackAtualizarCurso implements AsyncCallback<String>{
         public void onFailure(Throwable caught) {
             mpLoading.setVisible(false);
             mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
@@ -457,20 +464,21 @@ public class AdicionarCurso extends VerticalPanel {
         }
 
         @Override
-        public void onSuccess(Boolean result) {
+        public void onSuccess(String result) {
             // lblLoading.setVisible(false);
             mpLoading.setVisible(false);
             
-            if (result==true) {
-//                cleanFields();
-//                mpDialogBoxConfirm.setTitle(txtConstants.geralConfirmacao());
-//                mpDialogBoxConfirm.setBodyText(txtConstants.cursoSalvoSucesso());
-//                mpDialogBoxConfirm.showDialog();
-//              EditarCurso.dataGrid().redraw();
+            if (result.equals("true")) {
                 telaInicialCurso.updatePopulateGrid();
                 telaInicialCurso.updateAssociarCurso();
                 getAdicionarCursoDeUmTemplate().updateListBoxCurso();
-                
+            }else if(result.contains(Curso.DB_UNIQUE_KEY)){
+                String strCurso = result.substring(result.indexOf("=(")+2);
+                strCurso = strCurso.substring(strCurso.indexOf(",")+1);
+                strCurso = strCurso.substring(0,strCurso.indexOf(")"));
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar() + " "+txtConstants.cursoDuplicado((strCurso)));  
+                mpDialogBoxWarning.showDialog(); 
             } else {
                 mpLoading.setVisible(false);
                 mpDialogBoxWarning.setTitle(txtConstants.geralAviso());

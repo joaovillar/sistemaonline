@@ -14,6 +14,8 @@ public class Curso implements Serializable, Comparable<Curso> {
 	 */
 	private static final long serialVersionUID = -8273266710711270812L;
 	
+	public static final String DB_UNIQUE_KEY = "unique_nome_curso";
+	
 	private int idCurso;
 	private String nome;
 	private String descricao;

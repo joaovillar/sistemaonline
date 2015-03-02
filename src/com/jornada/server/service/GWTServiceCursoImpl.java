@@ -34,6 +34,10 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 	}
 	
 	
+    public String AdicionarCursoString(Curso curso) {
+        return CursoServer.AdicionarCursoString(curso);
+    }
+	
 	public boolean AdicionarCursoTemplate(int idCursoEstrutura, Integer[] idCursosImportarAluno, Curso curso) {
 		boolean insertedOk = false;
 		Curso template = HierarquiaCursoServer.getHierarquiaCurso(idCursoEstrutura);
@@ -60,7 +64,7 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 	}	
 	
 	
-	public boolean updateCursoRow(Curso curso){		
+	public String updateCursoRow(Curso curso){		
 		return CursoServer.updateCursoRow(curso);
 	}	
 	public boolean deleteCursoRow(int id_curso){		

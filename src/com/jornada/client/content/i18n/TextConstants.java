@@ -252,6 +252,7 @@ public interface TextConstants extends Messages {
 	String cursoStatus();
 	String cursoAtivo();
 	String cursoDesativado();
+	String cursoDuplicado(String nomeCurso);
 	
 	/*******Curso End*******/
 	
@@ -306,6 +307,7 @@ public interface TextConstants extends Messages {
 	String disciplinaCompText2();
 	String disciplinaCompText3();
 	String disciplinaDuplicada(String nomeDisciplina);
+	String disciplinaObrigatoria();
 	/*******Disciplina End*******/	
 	
 	/*******ConteudoProgramatico Begin*******/
@@ -738,6 +740,11 @@ public interface TextConstants extends Messages {
     String relatorioHistoricosEscolar();
     String relatorioBoletimSalas();
     String relatorioFechamentoAno();
+    String relatorioBoletimDisciplina();
+    String relatorioBoletimAnual();
+    String relatorioBoletimNotas();
+    String relatorioBoletimAluno();
+    String relatorioHistoricoAluno();
     /*******EMAIL END*******/
 
 }

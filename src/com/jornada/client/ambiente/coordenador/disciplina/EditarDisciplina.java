@@ -3,6 +3,7 @@ package com.jornada.client.ambiente.coordenador.disciplina;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import com.google.gwt.cell.client.EditTextCell;
@@ -46,6 +47,7 @@ import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
+import com.jornada.client.classes.widgets.cells.MpStyledSelectionCell;
 import com.jornada.client.classes.widgets.cells.MpTextAreaEditCell;
 import com.jornada.client.classes.widgets.dialog.MpConfirmDialogBox;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -64,6 +66,7 @@ public class EditarDisciplina extends VerticalPanel {
 
 	private CellTable<Disciplina> cellTable;
 	private Column<Disciplina, String> nomeDisciplinaColumn;
+	private Column<Disciplina, String> isObrigatoriaColumn;
 	private Column<Disciplina, String> cargaHorariaDisciplinaColumn;
 	private Column<Disciplina, String> descricaoColumn;
 	private Column<Disciplina, String> objetivoColumn;
@@ -71,6 +74,8 @@ public class EditarDisciplina extends VerticalPanel {
 	
 	private TextBox txtSearch;
 	ArrayList<Disciplina> arrayListBackup = new ArrayList<Disciplina>();
+	
+	private LinkedHashMap<String, String> listSimNao = new LinkedHashMap<String, String>();
 	
 	private MpSelectionCurso listBoxCurso;
 	private MpSelectionPeriodo listBoxPeriodo;
@@ -406,6 +411,31 @@ public class EditarDisciplina extends VerticalPanel {
 			}
 		});
 		
+		
+//        MpSelectionSimNao listBoxSimNao = new MpSelectionSimNao();
+//        for (int i = 0; i <= listBoxSimNao.getItemCount(); i++) {
+//            listSimNao.put(listBoxSimNao.getItemText(i), listBoxSimNao.getValue(i));
+//        }
+	    listSimNao.put("true",txtConstants.geralSim());
+	    listSimNao.put("false",txtConstants.geralNao());
+
+        isObrigatoriaColumn = new Column<Disciplina, String>(new MpStyledSelectionCell(listSimNao, "design_text_boxes")) {
+            @Override
+            public String getValue(Disciplina object) {
+                String strIsObrigatorio = Boolean.toString(object.isObrigatoria());
+                return strIsObrigatorio;
+            }
+
+        };
+        isObrigatoriaColumn.setFieldUpdater(new FieldUpdater<Disciplina, String>() {
+            @Override
+            public void update(int index, Disciplina object, String value) {
+                // Called when the user changes the value.
+                object.setObrigatoria(Boolean.parseBoolean(value));
+                GWTServiceDisciplina.Util.getInstance().updateDisciplinaRow(object, callbackUpdateRow);
+            }
+        });
+		
 		cargaHorariaDisciplinaColumn = new Column<Disciplina, String>(new EditTextCell()) {
 			@Override
 			public String getValue(Disciplina object) {
@@ -430,10 +460,6 @@ public class EditarDisciplina extends VerticalPanel {
 
 			}
 		});
-
-		
-
-
 
 		descricaoColumn = new Column<Disciplina, String>(new MpTextAreaEditCell(5,150)) {
 //		descricaoColumn = new Column<Disciplina, String>(new ClickableTextCell()) {
@@ -468,7 +494,6 @@ public class EditarDisciplina extends VerticalPanel {
 		});
 
 
-
 		Column<Disciplina, String> removeColumn = new Column<Disciplina, String>(new MyImageCell()) {
 			@Override
 			public String getValue(Disciplina object) {
@@ -477,6 +502,7 @@ public class EditarDisciplina extends VerticalPanel {
 		};
 
 		cellTable.addColumn(nomeDisciplinaColumn, txtConstants.disciplinaNome());
+		cellTable.addColumn(isObrigatoriaColumn, txtConstants.disciplinaObrigatoria());
 		cellTable.addColumn(cargaHorariaDisciplinaColumn, txtConstants.disciplinaCarga());
 		cellTable.addColumn(descricaoColumn, txtConstants.disciplinaDescricao());
 		cellTable.addColumn(objetivoColumn, txtConstants.disciplinaObjetivo());
@@ -500,6 +526,18 @@ public class EditarDisciplina extends VerticalPanel {
 	        return o1.getNome().compareTo(o2.getNome());
 	      }
 	    });		
+	    
+	    
+        isObrigatoriaColumn.setSortable(true);
+        sortHandler.setComparator(isObrigatoriaColumn, new Comparator<Disciplina>() {
+          @Override
+          public int compare(Disciplina o1, Disciplina o2) {
+              String strO1 = Boolean.toString(o1.isObrigatoria());
+              String strO2 = Boolean.toString(o2.isObrigatoria());
+              
+            return strO1.compareTo(strO2);
+          }
+        }); 
 	    
 		cargaHorariaDisciplinaColumn.setSortable(true);
 	    sortHandler.setComparator(cargaHorariaDisciplinaColumn, new Comparator<Disciplina>() {

@@ -45,7 +45,7 @@ public class CursoServer{
 			")  and status=? ; ";
 	
 	public static String DB_SELECT_CURSO_ID_ALUNO =  
-			"select * from curso where status=true and id_curso in " +
+			"select * from curso where id_curso in " +
 			"( select id_curso from rel_curso_usuario where id_usuario = ? group by id_curso ) and status=?;";
 	
 	public static String DB_SELECT_CURSO_ID_PROFESSOR = 
@@ -108,6 +108,53 @@ public class CursoServer{
 
 //		return isOperationDone;
 	}
+	
+	public static String AdicionarCursoString(Curso curso) {
+
+	    String success = "false";
+
+        Connection conn = ConnectionManager.getConnection();
+        try {
+
+            Date date = new Date();
+
+            if (curso.getDataInicial() == null) {
+                curso.setDataInicial(date);
+            }
+            if (curso.getDataFinal() == null) {
+                curso.setDataFinal(date);
+            }
+
+            int count = 0;
+            PreparedStatement insertCurso = conn.prepareStatement(CursoServer.DB_INSERT_CURSO);
+            insertCurso.setString(++count, curso.getNome());
+            insertCurso.setString(++count, curso.getDescricao());
+            insertCurso.setString(++count, curso.getEmenta());          
+            insertCurso.setString(++count, curso.getMediaNota());
+            insertCurso.setString(++count, curso.getPorcentagemPresenca());
+            insertCurso.setDate(++count, new java.sql.Date(curso.getDataInicial().getTime()));
+            insertCurso.setDate(++count, new java.sql.Date(curso.getDataFinal().getTime()));
+            insertCurso.setBoolean(++count, curso.isStatus());
+            
+            ResultSet rs = insertCurso.executeQuery();          
+            rs.next();
+            
+            success = "true";      
+
+
+
+        } catch (SQLException sqlex) {
+            success = sqlex.getMessage();
+            System.err.println(sqlex.getMessage());
+        } finally {
+            // dataBase.close();
+            ConnectionManager.closeConnection(conn);
+        }
+        
+        return success;
+
+//      return isOperationDone;
+    }
 	
 	public static boolean AdicionarCursoTemplate(Curso curso, Integer[] idCursosImportarAluno) {
 
@@ -203,8 +250,8 @@ public class CursoServer{
 	}	
 
 	
-	public static boolean updateCursoRow(Curso curso){
-		boolean success=false;
+	public static String updateCursoRow(Curso curso){
+	    String success="false";
 
 //		JornadaDataBase dataBase = new JornadaDataBase();
 		Connection conn = ConnectionManager.getConnection();
@@ -228,12 +275,12 @@ public class CursoServer{
 
 
 			if (numberUpdate == 1) {
-				success = true;
+			    success = "true";
 			}
 
 
 		} catch (SQLException sqlex) {
-			success=false;
+		    success=sqlex.getMessage();
 			System.err.println(sqlex.getMessage());			
 		} finally {
 //			dataBase.close();

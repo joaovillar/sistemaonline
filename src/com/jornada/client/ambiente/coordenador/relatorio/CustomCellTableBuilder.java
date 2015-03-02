@@ -20,7 +20,7 @@ public class CustomCellTableBuilder extends AbstractCellTableBuilder<ArrayList<S
     }
 
 //ids of elements which details we are going to show 
-  private Set elements;
+  private Set<Integer> elements;
 
 
   private void buildExtraRow(int index, Object rowValue){

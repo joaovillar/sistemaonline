@@ -15,8 +15,8 @@ import com.jornada.shared.classes.disciplina.ProfessorDisciplina;
 public class DisciplinaServer {
 	
 	
-	public static String DB_INSERT_DISCIPLINA = "INSERT INTO disciplina (nome_disciplina, carga_horaria, descricao, objetivo, id_periodo) VALUES (?,?,?,?,?) returning id_disciplina;";
-	public static String DB_UPDATE_DISCIPLINA = "UPDATE disciplina set nome_disciplina=?, carga_horaria=?, descricao=?, objetivo=?, id_periodo=? where id_disciplina=?;";
+	public static String DB_INSERT_DISCIPLINA = "INSERT INTO disciplina (nome_disciplina, carga_horaria, descricao, objetivo, id_periodo, is_obrigatoria) VALUES (?,?,?,?,?,?) returning id_disciplina;";
+	public static String DB_UPDATE_DISCIPLINA = "UPDATE disciplina set nome_disciplina=?, carga_horaria=?, descricao=?, objetivo=?, id_periodo=?, is_obrigatoria=? where id_disciplina=?;";
 	public static String DB_UPDATE_PROFESSOR_DISCIPLINA = "UPDATE disciplina set id_usuario=? where id_disciplina=?;";	
 	public static String DB_SELECT_DISCIPLINA = "SELECT * FROM disciplina where (nome_disciplina ilike ?);";
 	public static String DB_SELECT_DISCIPLINA_POR_ID = "SELECT * FROM disciplina where id_disciplina=?;";
@@ -62,7 +62,8 @@ public class DisciplinaServer {
 				pstmtInsert.setInt(++param, disciplina.getCargaHoraria());				
 				pstmtInsert.setString(++param, disciplina.getDescricao());
 				pstmtInsert.setString(++param, disciplina.getObjetivo());
-				pstmtInsert.setInt(++param, disciplina.getIdPeriodo());				
+				pstmtInsert.setInt(++param, disciplina.getIdPeriodo());			
+				pstmtInsert.setBoolean(++param, disciplina.isObrigatoria());         
 				
 //				int numberUpdate = pstmtInsertPeriodo.executeUpdate();
 				
@@ -106,9 +107,9 @@ public class DisciplinaServer {
 				pstmtInsert.setString(++param, disciplina.getNome());
 				pstmtInsert.setInt(++param, disciplina.getCargaHoraria());				
 				pstmtInsert.setString(++param, disciplina.getDescricao());
-				pstmtInsert.setString(++param, disciplina.getObjetivo());
-//				pstmtInsertPeriodo.setInt(++param, disciplina.getIdPeriodo());				
+				pstmtInsert.setString(++param, disciplina.getObjetivo());						
 				pstmtInsert.setInt(++param, intPeriodos[i]);
+				pstmtInsert.setBoolean(++param, disciplina.isObrigatoria());      
 				
 //				int numberUpdate = pstmtInsertPeriodo.executeUpdate();
 				
@@ -403,22 +404,6 @@ public class DisciplinaServer {
 			
 			data = getDisciplinaParameters(ps.executeQuery());
 			
-//	    	ResultSet rs = ps.executeQuery();
-//			while (rs.next()) 
-//			{
-//
-//				Disciplina currentDisciplina = new Disciplina();
-//				
-//				currentDisciplina.setIdPeriodo(rs.getInt("id_periodo"));
-//				currentDisciplina.setIdDisciplina(rs.getInt("id_disciplina"));
-//				currentDisciplina.setNome(rs.getString("nome_disciplina"));
-//				currentDisciplina.setCargaHoraria(rs.getInt("carga_horaria"));
-//				currentDisciplina.setDescricao(rs.getString("descricao"));
-//				currentDisciplina.setObjetivo(rs.getString("objetivo"));
-//
-//				data.add(currentDisciplina);
-//			}
-
 		} catch (SQLException sqlex) {
 			data=null;
 			System.err.println(sqlex.getMessage());
@@ -480,6 +465,7 @@ public class DisciplinaServer {
 			ps.setString(++count, disciplina.getDescricao());
 			ps.setString(++count, disciplina.getObjetivo());
 			ps.setInt(++count, disciplina.getIdPeriodo());
+			ps.setBoolean(++count, disciplina.isObrigatoria());
 			ps.setInt(++count, disciplina.getIdDisciplina());
 
 			int numberUpdate = ps.executeUpdate();
@@ -596,6 +582,7 @@ public class DisciplinaServer {
 			currentDisciplina.setDescricao(rs.getString("descricao"));
 			currentDisciplina.setObjetivo(rs.getString("objetivo"));
 			currentDisciplina.setIdUsuario(rs.getInt("id_usuario"));
+			currentDisciplina.setObrigatoria(rs.getBoolean("is_obrigatoria"));
 
 			data.add(currentDisciplina);
 		}

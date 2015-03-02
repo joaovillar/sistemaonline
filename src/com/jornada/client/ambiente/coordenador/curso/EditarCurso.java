@@ -63,7 +63,7 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class EditarCurso extends VerticalPanel {
 
-	private AsyncCallback<Boolean> callbackUpdateRow;
+	private AsyncCallback<String> callbackUpdateRow;
 	private AsyncCallback<Boolean> callbackDelete;
 	private AsyncCallback<ArrayList<Curso>> callbackGetCursosFiltro;
 	
@@ -200,13 +200,20 @@ public class EditarCurso extends VerticalPanel {
 		
 		/************************* Begin Callback's *************************/
 		
-		callbackUpdateRow = new AsyncCallback<Boolean>() {
-			public void onSuccess(Boolean success) {
+		callbackUpdateRow = new AsyncCallback<String>() {
+			public void onSuccess(String result) {
 				mpPanelLoading.setVisible(false);
-				if(success){
+				if(result.equals("true")){
 					EditarCurso.this.telaInicialCurso.updateAssociarCurso();
 					EditarCurso.this.telaInicialCurso.updateAdicionarCurso();
-				}else{
+				}else if(result.contains(Curso.DB_UNIQUE_KEY)){
+	                String strCurso = result.substring(result.indexOf("=(")+2);
+	                strCurso = strCurso.substring(strCurso.indexOf(",")+1);
+	                strCurso = strCurso.substring(0,strCurso.indexOf(")"));
+	                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+	                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar() + " "+txtConstants.cursoDuplicado((strCurso)));  
+	                mpDialogBoxWarning.showDialog(); 
+	            } else{
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
 					mpDialogBoxWarning.showDialog();					
