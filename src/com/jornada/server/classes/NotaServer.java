@@ -614,7 +614,7 @@ public class NotaServer {
                             }
                             row.add(strMedia);
                         }else if(strSiglas.equals(Nota.STR_BOLETIM_ALUNO_REC)){
-                            String strMedia = disciplina.getNotaRecuperação(idAluno);
+                            String strMedia = disciplina.getNotaRecuperacao(idAluno);
                             if (strMedia == null || strMedia.isEmpty()) {
                                 strMedia = "-";
                             } else {

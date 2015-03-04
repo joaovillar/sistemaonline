@@ -112,14 +112,14 @@ public class UsuarioServer{
 	
 	public static final String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
 	public static final String DB_UPDATE_SENHA = "UPDATE usuario set senha=?, primeiro_login=? where id_usuario=?";
-	public static final String DB_SELECT_ILIKE = "SELECT * FROM usuario where (primeiro_nome ilike ?) order by primeiro_nome asc";
-	public static final String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario, unidade_escola where usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario and unidade_escola.id_unidade_escola=usuario.id_unidade_escola and (<change> ilike ?)  order by primeiro_nome asc";
-	public static final String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome asc";
-	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome asc";
-	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO_UNIDADE = "SELECT * FROM usuario where id_tipo_usuario = ? and id_unidade_escola = ? order by primeiro_nome asc";
+	public static final String DB_SELECT_ILIKE = "SELECT * FROM usuario where (primeiro_nome ilike ?) order by primeiro_nome, sobre_nome asc";
+	public static final String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario, unidade_escola where usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario and unidade_escola.id_unidade_escola=usuario.id_unidade_escola and (<change> ilike ?)  order by primeiro_nome, sobre_nome asc";
+	public static final String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome, sobre_nome asc";
+	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome, sobre_nome asc";
+	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO_UNIDADE = "SELECT * FROM usuario where id_tipo_usuario = ? and id_unidade_escola = ? ordder by primeiro_nome, sobre_nome asc";
 	public static final String DB_SELECT_ALL = "SELECT * FROM usuario order by primeiro_nome asc;";
 //	public static final String DB_SELECT_USUARIO_ID = "SELECT * FROM usuario where id_usuario=?;";
-	public static final String DB_SELECT_USUARIO_ID = "select * from usuario, tipo_usuario where (id_usuario = ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome asc";
+	public static final String DB_SELECT_USUARIO_ID = "select * from usuario, tipo_usuario where (id_usuario = ?) and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario order by primeiro_nome, sobre_nome asc";
 	public static final String DB_SELECT_USUARIO_LOGIN = "SELECT * FROM usuario, tipo_usuario where login=? and usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario;";
 	public static final String DB_DELETE = "delete from usuario where id_usuario=?";
 	public static final String DB_SELECT_ALL_TIPO_USUARIOS = "SELECT * FROM tipo_usuario where is_visible=true order by nome_tipo_usuario asc;";
@@ -149,7 +149,7 @@ public class UsuarioServer{
 			"( "+
 			"	select id_usuario_aluno from rel_pai_aluno where id_usuario_pais=? "+
 			") "+
-			"order by primeiro_nome asc ";
+			"order by primeiro_nome, sobre_nome asc ";
 	
     public static final String DB_SELECT_ALUNO_PELO_PAI_CURSO = 
             "select * from usuario where id_usuario in( "+
@@ -208,7 +208,7 @@ public class UsuarioServer{
 			"(  "+
 			"	select id_usuario_pais from rel_pai_aluno where id_usuario_aluno=? "+ 
 			")  "+
-			"order by primeiro_nome, sobre_nome ";	
+			"order by primeiro_nome, sobre_nome asc ";	
 	
 
 	public UsuarioServer(){

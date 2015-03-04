@@ -209,7 +209,7 @@ public class Disciplina implements Serializable {
     
     
     
-    public String getNotaRecuperaçãoFinal(int idUsuario){
+    public String getNotaRecuperacaoFinal(int idUsuario){
         String strNotaRecuperacaoFinal="";
         //Pegar Nota Recuperação
         for(int i=0;i<this.getListAvaliacao().size();i++){
@@ -228,7 +228,7 @@ public class Disciplina implements Serializable {
     }
 
     
-    public String getNotaRecuperação(int idUsuario){
+    public String getNotaRecuperacao(int idUsuario){
         String strNotaRecuperacaoFinal="";
         //Pegar Nota Recuperação
         for(int i=0;i<this.getListAvaliacao().size();i++){
