@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 
 @RemoteServiceRelativePath("GWTServiceCurso")
 public interface GWTServiceCurso extends RemoteService {
@@ -39,6 +40,7 @@ public interface GWTServiceCurso extends RemoteService {
 	public ArrayList<Usuario> getTodosOsAlunosDoCurso(int id_curso);	
 	public boolean associarAlunosAoCurso(int id_curso, ArrayList<Integer> list_id_aluno);
 	public String AdicionarCursoString(Curso curso);
+	public ArrayList<TableMultipleBoletimDisciplina> getCursosRelatorio(Boolean status);
 	
 
 	public static class Util {

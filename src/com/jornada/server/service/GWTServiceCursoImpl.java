@@ -19,10 +19,15 @@ import java.util.ArrayList;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.server.classes.CursoServer;
+import com.jornada.server.classes.DisciplinaServer;
 import com.jornada.server.classes.HierarquiaCursoServer;
+import com.jornada.server.classes.PeriodoServer;
 import com.jornada.shared.classes.Curso;
+import com.jornada.shared.classes.Disciplina;
+import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 
 @SuppressWarnings("serial")
 public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServiceCurso {
@@ -106,10 +111,45 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 	        return CursoServer.getCursos(strFilter, status);
 		
 	}		
-    public ArrayList<Curso> getCursos(Boolean status) {   
+
+    public ArrayList<Curso> getCursos(Boolean status) {
         return CursoServer.getCursos(status);
+
+    }
     
-}       	
+    public ArrayList<TableMultipleBoletimDisciplina> getCursosRelatorio(Boolean status) {
+        
+        ArrayList<TableMultipleBoletimDisciplina> listTableMulti = new ArrayList<TableMultipleBoletimDisciplina>();
+        ArrayList<Curso> listCursos = CursoServer.getCursos(status);
+        
+        for (Curso curso : listCursos) {
+            
+            ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(curso.getIdCurso());
+            for (Periodo periodo : listPeriodo) {
+
+                ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+                for (Disciplina disciplina : listDisciplina) {
+                    
+                    TableMultipleBoletimDisciplina multiTable = new TableMultipleBoletimDisciplina();
+                   
+                    multiTable.setIdCurso(curso.getIdCurso());
+                    multiTable.setNomeCurso(curso.getNome());
+                    multiTable.setIdPeriodo(periodo.getIdPeriodo());
+                    multiTable.setNomePeriodo(periodo.getNomePeriodo());
+                    multiTable.setIdDisciplina(disciplina.getIdDisciplina());
+                    multiTable.setNomeDisciplina(disciplina.getNome());
+                    listTableMulti.add(multiTable);
+                    
+                }
+            }
+            
+            
+        }
+        
+        return listTableMulti;
+
+    }
+     	
 	public ArrayList<Usuario> getTodosOsAlunosDoCurso(int id_curso){		
 		return CursoServer.getTodosOsAlunosDoCurso(id_curso);	
 	}	

@@ -16,14 +16,19 @@ package com.jornada.server.service;
 
 import java.util.ArrayList;
 
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.server.classes.CursoServer;
 import com.jornada.server.classes.NotaServer;
 import com.jornada.server.classes.boletim.BoletimDisciplinaPeriodo;
+import com.jornada.server.framework.excel.ExcelFramework;
 import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.TabelaBoletim;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 
 public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServiceNota {
 
@@ -126,6 +131,23 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
     
 
     public String getExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
-        return NotaServer.gerarExcelBoletimDisciplina(idCurso, idPeriodo, idDisciplina);
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("Boletim Disciplina");
+        NotaServer.gerarExcelBoletimDisciplina(wb, sheet, idCurso, idPeriodo, idDisciplina);
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimDisciplina_");
+    }
+    
+    public String getExcelBoletimDisciplina(ArrayList<TableMultipleBoletimDisciplina> listTableMBD) {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        for (int i=0;i<listTableMBD.size();i++) {
+            TableMultipleBoletimDisciplina tableMBD = listTableMBD.get(i);
+            String strTab = tableMBD.getNomeCurso().substring(0,3)+"-";
+            strTab += tableMBD.getNomePeriodo().substring(0,3)+"-";
+            strTab += tableMBD.getNomeDisciplina().substring(0,3);
+            XSSFSheet sheet = wb.createSheet(strTab);
+            NotaServer.gerarExcelBoletimDisciplina(wb, sheet, tableMBD.getIdCurso(), tableMBD.getIdPeriodo(), tableMBD.getIdDisciplina());
+        }
+
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimDisciplina_");
     }
 }

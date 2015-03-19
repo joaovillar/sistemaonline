@@ -14,7 +14,7 @@ public class Curso implements Serializable, Comparable<Curso> {
 	 */
 	private static final long serialVersionUID = -8273266710711270812L;
 	
-	public static final String DB_UNIQUE_KEY = "unique_nome_curso";
+	public static final String DB_UNIQUE_KEY = "unique_curso";
 	
 	private int idCurso;
 	private String nome;
@@ -25,6 +25,8 @@ public class Curso implements Serializable, Comparable<Curso> {
 	private String mediaNota;
 	private String porcentagemPresenca;
 	private boolean status;
+	private String ensino;
+	private String ano;
 	
 	
 	private ArrayList<Periodo> listPeriodos;
@@ -134,10 +136,28 @@ public class Curso implements Serializable, Comparable<Curso> {
 		return serialVersionUID;
 	}
 	
-	
-	
-	
-	public boolean isStatus() {
+		
+	public String getEnsino() {
+        return ensino;
+    }
+
+
+    public void setEnsino(String ensino) {
+        this.ensino = ensino;
+    }
+
+
+    public String getAno() {
+        return ano;
+    }
+
+
+    public void setAno(String ano) {
+        this.ano = ano;
+    }
+
+
+    public boolean isStatus() {
         return status;
     }
 

@@ -1134,6 +1134,7 @@ public class NotaServer {
         sheet.setFitToPage(true);
         sheet.getPrintSetup().setLandscape(false);
         sheet.setMargin((short) 1, 1.5);
+        
 
         ArrayList<ArrayList<String>> listNotas = getBoletimAluno(idCurso, idAluno);
         ArrayList<String> listHeader = listNotas.get(0);
@@ -1253,6 +1254,12 @@ public class NotaServer {
                 }
             }
         }
+        
+        
+        sheet.setAutobreaks(false);
+        sheet.setRowBreak(intLine);
+        sheet.setColumnBreak(15);
+  
         
         int intEndNotas = intLine;
         
@@ -1467,9 +1474,9 @@ public class NotaServer {
 
     }
 
-    public static String gerarExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
-        XSSFWorkbook wb = new XSSFWorkbook();
-        XSSFSheet sheet = wb.createSheet("Boletim Disciplina");
+    public static String gerarExcelBoletimDisciplina(XSSFWorkbook wb, XSSFSheet sheet, int idCurso, int idPeriodo, int idDisciplina) {
+//        XSSFWorkbook wb = new XSSFWorkbook();
+//        XSSFSheet sheet = wb.createSheet("Boletim Disciplina");
         sheet.setFitToPage(true);
         sheet.getPrintSetup().setLandscape(true);
 
@@ -1532,15 +1539,11 @@ public class NotaServer {
         }
 
         for (int i = 0; i < intColumn; i++) {
-            // if(i==0){
             sheet.autoSizeColumn(i, true);
-            // }else{
-            // sheet.setColumnWidth(i, 6000);
-            // }
         }
 
-        // return "";
-        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimDisciplina_");
+        return "";
+//        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimDisciplina_");
     }
 
 }

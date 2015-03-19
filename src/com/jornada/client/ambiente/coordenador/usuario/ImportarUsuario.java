@@ -62,11 +62,6 @@ public class ImportarUsuario extends VerticalPanel {
 	private Column<UsuarioErroImportar, String> columnEmail;
 	private Column<UsuarioErroImportar, String> columnLogin;
 	private Column<UsuarioErroImportar, String> columnErroImport;
-//	private Column<Usuario, String> columnCPF;
-//	private Column<Usuario, Date> columnDataNascimento;
-//	private Column<Usuario, String> columnTelefoneCelular;
-//	private Column<Usuario, String> columnTelefoneResidencial;
-//	private Column<Usuario, String> columnTelefoneComercial;
 	private Column<UsuarioErroImportar, String> columnTipoUsuario;	
 
 	
@@ -370,40 +365,7 @@ public class ImportarUsuario extends VerticalPanel {
 				}
 
 			};
-			
-//			columnDataNascimento = new Column<Usuario, Date>(new DatePickerCell()) {
-//				@Override
-//				public Date getValue(Usuario object) {
-//					return object.getDataNascimento();
-//				}
-//			};
-//			
-//			columnTelefoneCelular = new Column<Usuario, String>(
-//					new EditTextCell()) {
-//				@Override
-//				public String getValue(Usuario object) {
-//					return object.getTelefoneCelular();
-//				}
-//
-//			};
-//			
-//			columnTelefoneResidencial = new Column<Usuario, String>(
-//					new EditTextCell()) {
-//				@Override
-//				public String getValue(Usuario object) {
-//					return object.getTelefoneResidencial();
-//				}
-//
-//			};
-//
-//			columnTelefoneComercial = new Column<Usuario, String>(
-//					new EditTextCell()) {
-//				@Override
-//				public String getValue(Usuario object) {
-//					return object.getTelefoneComercial();
-//				}
-//
-//			};
+
 			
 			columnLogin = new Column<UsuarioErroImportar, String>(new TextCell()) {
 				@Override
@@ -413,14 +375,7 @@ public class ImportarUsuario extends VerticalPanel {
 
 			};
 			
-//			Column<UsuarioErroImportar, String> columnSenha = new Column<UsuarioErroImportar, String>(new TextCell()) {
-//				@Override
-//				public String getValue(UsuarioErroImportar object) {
-//					return object.getSenha();
-//				}
-//
-//			};
-			
+
 			columnErroImport = new Column<UsuarioErroImportar, String>(new TextCell()) {
 				@Override
 				public String getValue(UsuarioErroImportar object) {
@@ -436,21 +391,12 @@ public class ImportarUsuario extends VerticalPanel {
 			cellTable.addColumn(columnLogin, txtConstants.usuario());
 //			cellTable.addColumn(columnSenha, txtConstants.usuarioSenha());
 			cellTable.addColumn(columnErroImport, txtConstants.geralErro());
-//			cellTable.addColumn(columnCPF, txtConstants.usuarioCPF());
-//			cellTable.addColumn(columnDataNascimento, txtConstants.usuarioDataNascimento());
-//			cellTable.addColumn(columnTelefoneCelular, txtConstants.usuarioTelCelular());
-//			cellTable.addColumn(columnTelefoneResidencial, txtConstants.usuarioTelResidencial());
-//			cellTable.addColumn(columnTelefoneComercial, txtConstants.usuarioTelComercial());
+
 
 			cellTable.getColumn(cellTable.getColumnIndex(columnTipoUsuario)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnPrimeiroNome)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnSobreNome)).setCellStyleNames("edit-cell");
-//			cellTable.getColumn(cellTable.getColumnIndex(columnCPF)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnEmail)).setCellStyleNames("edit-cell");
-//			cellTable.getColumn(cellTable.getColumnIndex(columnDataNascimento)).setCellStyleNames("edit-cell");
-//			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneCelular)).setCellStyleNames("edit-cell");
-//			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneResidencial)).setCellStyleNames("edit-cell");
-//			cellTable.getColumn(cellTable.getColumnIndex(columnTelefoneComercial)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnLogin)).setCellStyleNames("edit-cell");		
 //			cellTable.getColumn(cellTable.getColumnIndex(columnSenha)).setCellStyleNames("edit-cell");
 			cellTable.getColumn(cellTable.getColumnIndex(columnErroImport)).setCellStyleNames("edit-cell");

@@ -375,15 +375,6 @@ public class AdicionarUsuario extends VerticalPanel {
 
 		}
 
-		// flexTable.setWidget(row, 0, new InlineHTML("<b>Dados" + strLine+
-		// "</b>"));
-		// flexTable.getFlexCellFormatter().setColSpan(row++, 0, 10);
-
-		// FlexTable flexTableDados = new FlexTable();
-		// flexTableDados.setCellSpacing(2);
-		// flexTableDados.setCellPadding(2);
-		// flexTableDados.setBorderWidth(1);
-
 		HIDE_ALUNO_MATRICULA = row;
 		flexTable.setWidget(row, 0, lblMatricula);
 		flexTable.setWidget(row, 1, txtMatricula);
@@ -489,10 +480,6 @@ public class AdicionarUsuario extends VerticalPanel {
 		flexTable.getRowFormatter().setVisible(HIDE_ALUNO_SITUACAO_PAIS, false);
 		
 
-//        flexTable.setWidget(row, 2, new InlineHTML(strInLineSpace));
-//        flexTable.setWidget(row, 3, lblRG);
-//        flexTable.setWidget(row++, 4, txtRg);
-
 		String strTextoBotaoSubmeter = "";
 
 		if (isAdicionarOperation == true) {
@@ -510,8 +497,6 @@ public class AdicionarUsuario extends VerticalPanel {
 		btnPrinter.addClickHandler(new ClickHandlerPrint());
         btnContrato = new MpImageButton(txtConstants.documentoContrato(),"images/check.png");
         btnContrato.addClickHandler(new ClickHandlerContrato());		
-
-//		Image imgExcel = new Image("images/excel.24.png");
 
 
 		vFormPanel = new VerticalPanel();

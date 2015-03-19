@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jornada.shared.classes.Nota;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 
 public interface GWTServiceNotaAsync {
 
@@ -22,5 +23,7 @@ public interface GWTServiceNotaAsync {
 	public void getExcelBoletimNotas(int idCurso, AsyncCallback<String> callback);
 	public void getBoletimAluno(int idCurso, int idAluno, AsyncCallback<ArrayList<ArrayList<String>>> callback);
 	public void getExcelBoletimAluno(int idCurso, int idAluno, AsyncCallback<String> callback);
+	public void getExcelBoletimDisciplina(ArrayList<TableMultipleBoletimDisciplina> listTableMBD, AsyncCallback<String> callback);
+	
 
 }

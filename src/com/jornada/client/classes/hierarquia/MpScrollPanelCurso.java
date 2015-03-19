@@ -21,6 +21,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.view.client.ListDataProvider;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxAno;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxEnsino;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -49,6 +51,9 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		boolean showTelCelular = Boolean.parseBoolean(configClient.hierarquiaShowCursoTelCelular());
 		boolean showTelResidencial = Boolean.parseBoolean(configClient.hierarquiaShowCursoTelResidencial());
 		
+		
+		Label lblEnsino = new Label("Ensino"); 
+		Label lblAno = new Label("Ano"); 
 		Label lblNomeCurso = new Label(txtConstants.cursoNome());				
 		Label lblDescricaoCurso = new Label(txtConstants.cursoDescricao());				
 		Label lblEmentaCurso = new Label(txtConstants.cursoEmenta());			
@@ -58,6 +63,17 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		Label lblDataFinalCurso = new Label(txtConstants.cursoDataFinal());			
 		Label lblAlunosCurso = new Label(txtConstants.cursoAlunosDoCurso());		
 		
+		
+		MpListBoxEnsino listBoxEnsino = new MpListBoxEnsino();
+		listBoxEnsino.setSelectItem(object.getEnsino());
+		
+		MpListBoxAno listBoxAno = new MpListBoxAno();
+		listBoxAno.showItems(object.getEnsino());
+		listBoxAno.setSelectItem(object.getAno());
+		
+		
+        Label lblEnsinoDB = new Label(listBoxEnsino.getSelectedItemText()); 
+        Label lblAnoDB = new Label(listBoxAno.getSelectedItemText());
 		Label lblNomeCursoDB = new Label(object.getNome());
 		Label lblDescricaoCursoDB = new Label(object.getDescricao());	
 		Label lblEmentaCursoDB = new Label(object.getEmenta());		
@@ -67,7 +83,11 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		Label lblDataInicialCursoDB = new Label(MpUtilClient.convertDateToString(object.getDataInicial()));	
 		Label lblDataFinalCursoDB = new Label(MpUtilClient.convertDateToString(object.getDataFinal()));		
 		
-		lblNomeCurso.setStyleName("label_comum_bold_12px");
+        lblEnsino.setStyleName("label_comum_bold_12px");
+        lblEnsinoDB.setStyleName("design_label");
+        lblAno.setStyleName("label_comum_bold_12px");
+        lblAnoDB.setStyleName("design_label");
+        lblNomeCurso.setStyleName("label_comum_bold_12px");
 		lblNomeCursoDB.setStyleName("design_label");
 		lblDescricaoCurso.setStyleName("label_comum_bold_12px");
 		lblDescricaoCursoDB.setStyleName("label_comum");		
@@ -84,11 +104,28 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		lblAlunosCurso.setStyleName("label_comum_bold_12px");
 		
 		
+		
+		Grid gridEnsino = new Grid(1,10);       
+		gridEnsino.setCellPadding(0);
+		gridEnsino.setCellSpacing(0);
+		gridEnsino.setBorderWidth(0);     
+        int column=0;
+        gridEnsino.setWidget(0, column++, lblEnsino);
+        gridEnsino.setWidget(0, column++, new MpSpaceVerticalPanel());
+        gridEnsino.setWidget(0, column++, lblEnsinoDB);
+        gridEnsino.setWidget(0, column++, new MpSpaceVerticalPanel());
+        gridEnsino.setWidget(0, column++, new MpSpaceVerticalPanel());
+        gridEnsino.setWidget(0, column++, new MpSpaceVerticalPanel());
+        gridEnsino.setWidget(0, column++, lblAno);
+        gridEnsino.setWidget(0, column++, new MpSpaceVerticalPanel());
+        gridEnsino.setWidget(0, column++, lblAnoDB);
+		
+		
 		Grid gridData = new Grid(1,10);		
 		gridData.setCellPadding(0);
 		gridData.setCellSpacing(0);
 		gridData.setBorderWidth(0);		
-		int column=0;
+		column=0;
 		gridData.setWidget(0, column++, lblDataInicialCurso);
 		gridData.setWidget(0, column++, new MpSpaceVerticalPanel());
 		gridData.setWidget(0, column++, lblDataInicialCursoDB);
@@ -128,14 +165,15 @@ public class MpScrollPanelCurso extends ScrollPanel{
 		flexTableConteudo.setWidget(row++, 0, lblDescricaoCursoDB);
 		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, lblEmentaCurso);
-		flexTableConteudo.setWidget(row++, 0, lblEmentaCursoDB);
-		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
+        flexTableConteudo.setWidget(row++, 0, lblEmentaCursoDB);
+        flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
+        flexTableConteudo.setWidget(row++, 0, gridEnsino);
+        flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());
 		flexTableConteudo.setWidget(row++, 0, gridMediaPresenca);
-		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());		
-		
+		flexTableConteudo.setWidget(row++, 0, new MpSpaceVerticalPanel());				
 		flexTableConteudo.setWidget(row++, 0, gridData);
 		
-		flexTableConteudo.setWidget(row++, 0, new InlineHTML("&nbsp;"));
+//		flexTableConteudo.setWidget(row++, 0, new InlineHTML("&nbsp;"));
 		flexTableConteudo.setWidget(row++, 0, lblAlunosCurso);
 		
 		

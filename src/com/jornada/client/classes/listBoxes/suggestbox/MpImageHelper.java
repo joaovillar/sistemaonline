@@ -2,6 +2,8 @@ package com.jornada.client.classes.listBoxes.suggestbox;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
@@ -17,27 +19,28 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
+import com.jornada.client.classes.widgets.suggestoracle.MpSuggestOracle;
 
 public class MpImageHelper extends Image {
-
 
     SuggestBox box;
     PopupPanel myPopup;
     ListBox listBox;
     Collection<String> defaults;
-    
-    public MpImageHelper(ListBox list){
-        
+
+    public MpImageHelper(ListBox list) {
+
         this.setUrl("images/magnifier_medium.png");
-        this.listBox = list;
-        MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+        this.listBox = list;        
+       
+//        MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+        MpSuggestOracle oracle = new MpSuggestOracle(listBox);
         defaults = new ArrayList<String>();
         box = new SuggestBox(oracle);
- 
-        setStyleName("img_style");
-//        box.setLimit(5);
 
-        
+        setStyleName("img_style");
+        // box.setLimit(5);
+
         this.addDomHandler(new MouseDownHandler() {
 
             @Override
@@ -47,48 +50,45 @@ public class MpImageHelper extends Image {
                         int left = listBox.getAbsoluteLeft();
                         int top = listBox.getAbsoluteTop();
                         myPopup.setPopupPosition(left, top);
-                        
+
                     }
                 });
-                
-                myPopup.show();                
-                box.showSuggestionList();                
+
+                myPopup.show();
+                box.showSuggestionList();
                 box.setText("");
                 requestFocus();
             }
         }, MouseDownEvent.getType());
-        
-       
-        
+
         int itens = listBox.getItemCount();
         for (int i = 0; i < itens; i++) {
             oracle.add(listBox.getItemText(i));
             defaults.add(listBox.getItemText(i));
         }
-        
+
         oracle.setDefaultSuggestionsFromText(defaults);
-        
-        
+
         box.setStyleName("design_text_boxes");
-        
+
         box.setAutoSelectEnabled(true);
         box.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
-            
+
             @Override
             public void onSelection(SelectionEvent<Suggestion> event) {
-                
+
                 int itens = listBox.getItemCount();
-                for(int i=0; i<itens;i++){
-                    if(listBox.getItemText(i).equals(box.getText())){
+                for (int i = 0; i < itens; i++) {
+                    if (listBox.getItemText(i).equals(box.getText())) {
                         listBox.setSelectedIndex(i);
                         DomEvent.fireNativeEvent(Document.get().createChangeEvent(), listBox);
                         myPopup.hide();
-                        break;                        
+                        break;
                     }
-                }        
+                }
             }
         });
-        
+
         myPopup = new PopupPanel(true);
         myPopup.setWidget(box);
         myPopup.setStyleName("design_text_boxes");
@@ -97,11 +97,11 @@ public class MpImageHelper extends Image {
 
     public void requestFocus() {
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-                public void execute() {
-                    box.setWidth(Integer.toString(listBox.getElement().getOffsetWidth()-1)+"px");
-                    box.setHeight(Integer.toString(listBox.getElement().getOffsetHeight())+"px");
-                    box.setFocus(true);
-                }
+            public void execute() {
+                box.setWidth(Integer.toString(listBox.getElement().getOffsetWidth() - 1) + "px");
+                box.setHeight(Integer.toString(listBox.getElement().getOffsetHeight()) + "px");
+                box.setFocus(true);
+            }
         });
-}
+    }
 }

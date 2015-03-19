@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -26,9 +25,9 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
+import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxMultipleBoletimDisciplina;
 import com.jornada.client.ambiente.general.nota.DialogBoxNota;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
@@ -40,7 +39,7 @@ import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.client.service.GWTServiceNota;
@@ -64,7 +63,7 @@ public class BoletimDisciplina extends VerticalPanel {
     private ListDataProvider<ArrayList<String>> dataProvider;
     
     ArrayList<ArrayList<String>> arrayListBackup = new ArrayList<ArrayList<String>>();    
-    private TextBox txtSearch;
+    private MpTextBox txtSearch;
 
     ArrayList<String> arrayAvaliacaoColumns = new ArrayList<String>();
 
@@ -321,6 +320,12 @@ public class BoletimDisciplina extends VerticalPanel {
 
             cellTable.addColumn(indexedColumn, header);
         }
+        
+        
+        Image imgMultiple = new Image("images/table-multiple-icon-24.png");
+        imgMultiple.addClickHandler(new ClickHandlerMultipleExcel());
+        imgMultiple.setStyleName("hand-over");
+        imgMultiple.setTitle(txtConstants.geralMultipleExcel());
 
         Image imgExcel = new Image("images/excel.24.png");
         imgExcel.addClickHandler(new ClickHandlerExcel());
@@ -332,12 +337,14 @@ public class BoletimDisciplina extends VerticalPanel {
         flexTableImg.setCellPadding(2);
         flexTableImg.setCellSpacing(2);
         flexTableImg.setWidget(0, columnImg++, imgExcel);
+        flexTableImg.setWidget(0, columnImg++, imgMultiple);
         flexTableImg.setBorderWidth(0);
         
         MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
         
         if (txtSearch == null) {
-            txtSearch = new TextBox();
+            txtSearch = new MpTextBox();
+            txtSearch.setWidth("130px");
             txtSearch.setStyleName("design_text_boxes");
         }
         
@@ -346,11 +353,13 @@ public class BoletimDisciplina extends VerticalPanel {
 
         
         FlexTable flexTableSearch = new FlexTable();
-        flexTableSearch.setWidth("450px");
-        flexTableSearch.setWidget(0, 0, mpPager);
-        flexTableSearch.setWidget(0, 1, new MpSpaceVerticalPanel());
-        flexTableSearch.setWidget(0, 2, txtSearch);
-        flexTableSearch.setWidget(0, 3, btnFiltrar);   
+        flexTableSearch.setCellPadding(0);
+        flexTableSearch.setCellSpacing(0);
+        flexTableSearch.setWidth("350px");
+        flexTableSearch.setWidget(0, 0, txtSearch);
+//        flexTableSearch.setWidget(0, 1, new MpSpaceVerticalPanel());
+        flexTableSearch.setWidget(0, 2, mpPager);        
+//        flexTableSearch.setWidget(0, 3, new MpSpaceVerticalPanel());   
 
         FlexTable flexTableMenu = new FlexTable();
         flexTableMenu.setCellPadding(0);
@@ -470,6 +479,13 @@ public class BoletimDisciplina extends VerticalPanel {
             MpDialogBoxExcelRelatorioBoletim.getInstance(idCurso, idPeriodo, idDisciplina);
         }
     }
+    
+    private class ClickHandlerMultipleExcel implements ClickHandler {
+        @Override
+        public void onClick(ClickEvent event) {
+            MpDialogBoxMultipleBoletimDisciplina.getInstance();
+        }
+    }
 
     public void filtrarCellTable(String strFiltro) {
 
@@ -515,9 +531,9 @@ public class BoletimDisciplina extends VerticalPanel {
     
     private class EnterKeyUpHandler implements KeyUpHandler {
         public void onKeyUp(KeyUpEvent event) {
-           if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+//           if (event.getNativeKeyCode() == KeyCodes.) {
                filtrarCellTable(txtSearch.getText());
-           }
+//           }
        }
    }
 

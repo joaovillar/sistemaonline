@@ -3,7 +3,6 @@ package com.jornada.client.ambiente.coordenador.curso;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -43,9 +42,9 @@ import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxMediaNota;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPorcentagemPresenca;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxEnsino;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
-import com.jornada.client.classes.widgets.cells.MpDatePickerCell;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.cells.MpStyledSelectionCell;
 import com.jornada.client.classes.widgets.cells.MpTextAreaEditCell;
@@ -75,17 +74,20 @@ public class EditarCurso extends VerticalPanel {
 	private Column<Curso, String> objetivoColumn;
 	private Column<Curso, String> mediaNotaColumn;
 	private Column<Curso, String> porcetagemPresencaoColumn;
-	private Column<Curso, Date> dataInicialColumn;
-	private Column<Curso, Date> dataFinalColumn;
+//	private Column<Curso, Date> dataInicialColumn;
+//	private Column<Curso, Date> dataFinalColumn;
 	private Column<Curso, String> statusColumn;
+	private Column<Curso, String> ensinoColumn;
 	
 	private MpListBoxMediaNota mpListBoxMediaNota;
 	private MpListBoxPorcentagemPresenca mpListBoxPorcentagemPresenca;
 	private MpSelection mpListBoxStatus;
+	private MpListBoxEnsino listBoxEnsino;
 	
 	private LinkedHashMap<String, String> listaMediaNota = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> listaPorcentagemPresenca = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> listaStatus = new LinkedHashMap<String, String>();
+	private LinkedHashMap<String, String> listaEnsino = new LinkedHashMap<String, String>();
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
@@ -117,6 +119,8 @@ public class EditarCurso extends VerticalPanel {
 		mpListBoxMediaNota = new MpListBoxMediaNota();
 		mpListBoxPorcentagemPresenca= new MpListBoxPorcentagemPresenca();
 		
+		listBoxEnsino = new MpListBoxEnsino();
+		
         mpListBoxStatus = new MpSelection();
         mpListBoxStatus.addItem(txtConstants.cursoAtivo(), "true");
         mpListBoxStatus.addItem(txtConstants.cursoDesativado(), "false");		
@@ -132,6 +136,9 @@ public class EditarCurso extends VerticalPanel {
 			String key = mpListBoxPorcentagemPresenca.getValue(i);
 			String text = mpListBoxPorcentagemPresenca.getItemText(i);
 			listaPorcentagemPresenca.put(key, text);
+		}
+		for(int i=0;i<listBoxEnsino.getItemCount();i++){
+		    listaEnsino.put(listBoxEnsino.getValue(i), listBoxEnsino.getItemText(i));
 		}
 		
 		listaStatus.put("true", txtConstants.cursoAtivo());
@@ -473,6 +480,23 @@ public class EditarCurso extends VerticalPanel {
                 GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
             }
         });		
+        
+        MpStyledSelectionCell ensinoCell = new MpStyledSelectionCell(listaEnsino,"design_text_boxes");
+        ensinoColumn = new Column<Curso, String>(ensinoCell) {
+            @Override
+            public String getValue(Curso object) {    
+//                listBoxEnsino.setSelectItem(object.getEnsino());
+                return object.getEnsino();
+            }
+        };
+        ensinoColumn.setFieldUpdater(new FieldUpdater<Curso, String>() {
+            @Override
+            public void update(int index, Curso object, String value) {
+                // Called when the user changes the value.
+                object.setEnsino(value);
+                GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+            }
+        }); 
 		
 		
 	    MpStyledSelectionCell mediaNotaCell = new MpStyledSelectionCell(listaMediaNota,"design_text_boxes");
@@ -509,35 +533,35 @@ public class EditarCurso extends VerticalPanel {
 			}
 		});			    
 
-		dataInicialColumn = new Column<Curso, Date>(new MpDatePickerCell()) {
-			@Override
-			public Date getValue(Curso object) {
-				return object.getDataInicial();
-			}
-		};
-		dataInicialColumn.setFieldUpdater(new FieldUpdater<Curso, Date>() {
-			@Override
-			public void update(int index, Curso object, Date value) {
-				// Called when the user changes the value.
-				object.setDataInicial(value);
-				GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
-			}
-		});
+//		dataInicialColumn = new Column<Curso, Date>(new MpDatePickerCell()) {
+//			@Override
+//			public Date getValue(Curso object) {
+//				return object.getDataInicial();
+//			}
+//		};
+//		dataInicialColumn.setFieldUpdater(new FieldUpdater<Curso, Date>() {
+//			@Override
+//			public void update(int index, Curso object, Date value) {
+//				// Called when the user changes the value.
+//				object.setDataInicial(value);
+//				GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+//			}
+//		});
 
-		dataFinalColumn = new Column<Curso, Date>(new MpDatePickerCell()) {
-			@Override
-			public Date getValue(Curso object) {
-				return object.getDataFinal();
-			}
-		};
-		dataFinalColumn.setFieldUpdater(new FieldUpdater<Curso, Date>() {
-			@Override
-			public void update(int index, Curso curso, Date value) {
-				// Called when the user changes the value.
-				curso.setDataFinal(value);
-				GWTServiceCurso.Util.getInstance().updateCursoRow(curso,callbackUpdateRow);
-			}
-		});
+//		dataFinalColumn = new Column<Curso, Date>(new MpDatePickerCell()) {
+//			@Override
+//			public Date getValue(Curso object) {
+//				return object.getDataFinal();
+//			}
+//		};
+//		dataFinalColumn.setFieldUpdater(new FieldUpdater<Curso, Date>() {
+//			@Override
+//			public void update(int index, Curso curso, Date value) {
+//				// Called when the user changes the value.
+//				curso.setDataFinal(value);
+//				GWTServiceCurso.Util.getInstance().updateCursoRow(curso,callbackUpdateRow);
+//			}
+//		});
 		
 		
         Column<Curso, String> editColumn = new Column<Curso, String>(new MyImageCell()) {
@@ -558,10 +582,11 @@ public class EditarCurso extends VerticalPanel {
 //		cellTable.addColumn(descricaoColumn, txtConstants.cursoDescricao());
 //		cellTable.addColumn(objetivoColumn, txtConstants.cursoEmenta());
 		cellTable.addColumn(statusColumn, txtConstants.cursoStatus());
+		cellTable.addColumn(ensinoColumn, "Ensino");
 		cellTable.addColumn(mediaNotaColumn, txtConstants.cursoMediaNota());
 		cellTable.addColumn(porcetagemPresencaoColumn, txtConstants.cursoPorcentagemPresenca());
-		cellTable.addColumn(dataInicialColumn, txtConstants.cursoDataInicial());
-		cellTable.addColumn(dataFinalColumn, txtConstants.cursoDataFinal());
+//		cellTable.addColumn(dataInicialColumn, txtConstants.cursoDataInicial());
+//		cellTable.addColumn(dataFinalColumn, txtConstants.cursoDataFinal());
 		cellTable.addColumn(editColumn, txtConstants.geralEditar());
 		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
 		
@@ -625,21 +650,21 @@ public class EditarCurso extends VerticalPanel {
 	      }
 	    });	    
 	    
-	    dataInicialColumn.setSortable(true);
-	    sortHandler.setComparator(dataInicialColumn, new Comparator<Curso>() {
+	    ensinoColumn.setSortable(true);
+	    sortHandler.setComparator(ensinoColumn, new Comparator<Curso>() {
 	      @Override
 	      public int compare(Curso o1, Curso o2) {
-	        return o1.getDataInicial().compareTo(o2.getDataInicial());
+	        return o1.getEnsino().compareTo(o2.getEnsino());
 	      }
 	    });	  
-	    
-	    dataFinalColumn.setSortable(true);
-	    sortHandler.setComparator(dataFinalColumn, new Comparator<Curso>() {
-	      @Override
-	      public int compare(Curso o1, Curso o2) {
-	        return o1.getDataFinal().compareTo(o2.getDataFinal());
-	      }
-	    });	 	    	    
+//	    
+//	    dataFinalColumn.setSortable(true);
+//	    sortHandler.setComparator(dataFinalColumn, new Comparator<Curso>() {
+//	      @Override
+//	      public int compare(Curso o1, Curso o2) {
+//	        return o1.getDataFinal().compareTo(o2.getDataFinal());
+//	      }
+//	    });	 	    	    
 	}
 	
 	

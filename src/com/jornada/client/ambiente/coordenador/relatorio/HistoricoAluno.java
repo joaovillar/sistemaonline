@@ -32,6 +32,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.ambiente.general.nota.DialogBoxNotaBoletimAluno;
 import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunoAmbientePais;
 import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
@@ -56,7 +57,7 @@ public class HistoricoAluno extends VerticalPanel {
     MpDialogBox mpDialogBoxWarning = new MpDialogBox();
     MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
 
-    MpListBoxPanelHelper mpHelperCurso;
+//    MpListBoxPanelHelper mpHelperCurso;
     MpListBoxPanelHelper mpHelperAluno;
 
     VerticalPanel panel = new VerticalPanel();
@@ -70,8 +71,8 @@ public class HistoricoAluno extends VerticalPanel {
     ArrayList<String> arrayHeadersText = new ArrayList<String>();
     ArrayList<String> arrayHeadersTextBackup = new ArrayList<String>();
 
-    private MpSelectionCursoAmbienteProfessor listBoxCurso;
-    private MpSelectionAlunosPorCurso listBoxAlunosPorCurso;
+//    private MpSelectionCursoAmbienteProfessor listBoxCurso;
+    private MpSelectionAlunoAmbientePais listBoxAlunos;
 //    private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
 
     private TelaInicialRelatorio telaInicialRelatorio;
@@ -114,29 +115,27 @@ public class HistoricoAluno extends VerticalPanel {
         flexTable.setCellSpacing(3);
         flexTable.setCellPadding(3);
 
-        MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
+//        MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
         MpLabelRight lblAluno = new MpLabelRight(txtConstants.aluno());
 
 
-        mpHelperCurso = new MpListBoxPanelHelper();
+//        mpHelperCurso = new MpListBoxPanelHelper();
         mpHelperAluno = new MpListBoxPanelHelper();
 
-        listBoxCurso = new MpSelectionCursoAmbienteProfessor(usuarioLogado);
-        listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 
-        listBoxAlunosPorCurso = new MpSelectionAlunosPorCurso();
-        listBoxAlunosPorCurso.addChangeHandler(new MpAlunoSelectionChangeHandler());
+        listBoxAlunos = new MpSelectionAlunoAmbientePais(usuarioLogado);
+        listBoxAlunos.addChangeHandler(new MpAlunoSelectionChangeHandler());
 
 
         // Add some standard form options
         int row = 1;
 
-        flexTable.setWidget(row, 0, lblCurso);
-        flexTable.setWidget(row, 1, listBoxCurso);
-        flexTable.setWidget(row++, 2, mpHelperCurso);// flexTable.setWidget(row++,
-                                                     // 2, txtFiltroNomeCurso);
+//        flexTable.setWidget(row, 0, lblCurso);
+//        flexTable.setWidget(row, 1, listBoxCurso);
+//        flexTable.setWidget(row++, 2, mpHelperCurso);
+                                                     
         flexTable.setWidget(row, 0, lblAluno);
-        flexTable.setWidget(row, 1, listBoxAlunosPorCurso);
+        flexTable.setWidget(row, 1, listBoxAlunos);
         flexTable.setWidget(row, 2, mpHelperAluno);
         flexTable.setWidget(row++, 3, mpLoading);
 
@@ -159,25 +158,25 @@ public class HistoricoAluno extends VerticalPanel {
     }
 
     public void updateClientData() {
-        listBoxCurso.populateComboBox(usuarioLogado);
+        listBoxAlunos.populateComboBox(usuarioLogado);
     }
 
-    private class MpCursoSelectionChangeHandler implements ChangeHandler {
-        public void onChange(ChangeEvent event) {
-            mpHelperCurso.populateSuggestBox(listBoxCurso);
-            int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
-            listBoxAlunosPorCurso.populateComboBox(idCurso);
-            flexTableNota.clear();
-        }
-    }
+//    private class MpCursoSelectionChangeHandler implements ChangeHandler {
+//        public void onChange(ChangeEvent event) {
+//            mpHelperCurso.populateSuggestBox(listBoxCurso);
+//            int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
+//            listBoxAlunos.populateComboBox(idCurso);
+//            flexTableNota.clear();
+//        }
+//    }
 
     private class MpAlunoSelectionChangeHandler implements ChangeHandler {
         public void onChange(ChangeEvent event) {
-            mpHelperAluno.populateSuggestBox(listBoxAlunosPorCurso);
-            int indexIdAluno = listBoxAlunosPorCurso.getSelectedIndex();
+            mpHelperAluno.populateSuggestBox(listBoxAlunos);
+            int indexIdAluno = listBoxAlunos.getSelectedIndex();
             if (indexIdAluno != -1) {
-                mpLoading.setVisible(true);
-                populateNotas();
+//                mpLoading.setVisible(true);
+//                populateNotas();
             }
         }
     }
@@ -317,21 +316,21 @@ public class HistoricoAluno extends VerticalPanel {
                 @Override
                 public void update(int index, ArrayList<String> object, final String value) {
 
-                    int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
-                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-                    String strNomeCurso = listBoxCurso.getSelectedItemText();
-                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
-                    String strHeader = arrayHeadersTextBackup.get(indexedColumn.getIndex() - 1);
-                    String strNomePeriodo = strHeader.substring(1, strHeader.indexOf("]"));
-                    String strNomeProva = strHeader.substring(strHeader.indexOf("]") + 1);
-
-                    String strNomeDisciplina = object.get(0);
-                    if (intColumn == (arrayHeadersText.size() - 1) || intColumn == (arrayHeadersText.size() - 2) || intColumn == (arrayHeadersText.size() - 3)) {
+//                    int idUsuario = Integer.parseInt(listBoxAlunos.getSelectedValue());
+//                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+//                    String strNomeCurso = listBoxCurso.getSelectedItemText();
+//                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+//                    String strHeader = arrayHeadersTextBackup.get(indexedColumn.getIndex() - 1);
+//                    String strNomePeriodo = strHeader.substring(1, strHeader.indexOf("]"));
+//                    String strNomeProva = strHeader.substring(strHeader.indexOf("]") + 1);
+//
+//                    String strNomeDisciplina = object.get(0);
+//                    if (intColumn == (arrayHeadersText.size() - 1) || intColumn == (arrayHeadersText.size() - 2) || intColumn == (arrayHeadersText.size() - 3)) {
+////                        DialogBoxNotaBoletimAluno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso, strNomeProva);
+//                        DialogBoxNotasAno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
+//                    } else {
 //                        DialogBoxNotaBoletimAluno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso, strNomeProva);
-                        DialogBoxNotasAno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
-                    } else {
-                        DialogBoxNotaBoletimAluno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso, strNomeProva);
-                    }
+//                    }
 
                 }
             });
@@ -433,7 +432,7 @@ public class HistoricoAluno extends VerticalPanel {
         @Override
         public String getCellStyleNames(Context context, ArrayList<String> object) {
             String strStyle = "";
-            Double doubleMediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+            Double doubleMediaNotaCurso = 6.0;//Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
             try {
                 double doubleNumber = Double.parseDouble(object.get(this.index));
 
@@ -463,9 +462,9 @@ public class HistoricoAluno extends VerticalPanel {
 
     private void populateNotas() {
         mpLoading.setVisible(true);
-        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-        int idAluno = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
-        GWTServiceNota.Util.getInstance().getBoletimAluno(idCurso, idAluno, new CallBackCarregarNotas());
+//        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+        int idAluno = Integer.parseInt(listBoxAlunos.getSelectedValue());
+//        GWTServiceNota.Util.getInstance().getBoletimAluno(idCurso, idAluno, new CallBackCarregarNotas());
     }
 
    
@@ -473,10 +472,10 @@ public class HistoricoAluno extends VerticalPanel {
     private class ClickHandlerExcel implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
-            int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-            int idAluno = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
+//            int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+            int idAluno = Integer.parseInt(listBoxAlunos.getSelectedValue());
 
-            MpDialogBoxExcelRelatorioBoletim.getInstanceBoletimAluno(idCurso, idAluno);
+//            MpDialogBoxExcelRelatorioBoletim.getInstanceBoletimAluno(idCurso, idAluno);
         }
     }
 

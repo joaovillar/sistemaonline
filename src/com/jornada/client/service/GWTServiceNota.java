@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.Nota;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 
 @RemoteServiceRelativePath("GWTServiceNota")
 public interface GWTServiceNota extends RemoteService {
@@ -33,6 +34,7 @@ public interface GWTServiceNota extends RemoteService {
 	public String getExcelBoletimPeriodo(int idCurso, int idPeriodo);
 	public ArrayList<ArrayList<String>> getRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina);
 	public String getExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina);
+	public String getExcelBoletimDisciplina(ArrayList<TableMultipleBoletimDisciplina> listTableMBD);
 	public ArrayList<ArrayList<String>> getBoletimAnual(int idCurso);
 	public ArrayList<ArrayList<String>> getBoletimNotas(int idCurso);
 	public String getExcelBoletimNotas(int idCurso);
@@ -40,6 +42,7 @@ public interface GWTServiceNota extends RemoteService {
 	public ArrayList<ArrayList<String>> getNotasAluno(int idCurso, int idTipoUsuario, int idUsuario);
 	public ArrayList<ArrayList<String>> getBoletimAluno(int idCurso, int idAluno);
 	public String getExcelBoletimAluno(int idCurso, int idAluno);
+	
 	
 	public static class Util {
 		private static GWTServiceNotaAsync instance;

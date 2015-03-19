@@ -21,8 +21,8 @@ public class CursoServer{
 
 //	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa, data_inicial, data_final) VALUES (?,?,?,?,?)";
 //	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=?, data_inicial=?, data_final=? where id_curso=?";
-	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa, media_nota, porcentagem_presenca, data_inicial, data_final, status) VALUES (?,?,?,?,?,?,?,?) returning id_curso";
-	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=?, media_nota=?, porcentagem_presenca=?, data_inicial=?, data_final=?, status=? where id_curso=?";	
+	public static String DB_INSERT_CURSO = "INSERT INTO curso (nome_curso, descricao, ementa, media_nota, porcentagem_presenca, data_inicial, data_final, status, ensino, ano) VALUES (?,?,?,?,?,?,?,?,?,?) returning id_curso";
+	public static String DB_UPDATE_CURSO = "UPDATE curso set nome_curso=?, descricao=?, ementa=?, media_nota=?, porcentagem_presenca=?, data_inicial=?, data_final=?, status=?, ensino=?, ano=? where id_curso=?";	
 	public static String DB_SELECT_CURSO_ILIKE = "SELECT * FROM curso where (nome_curso ilike ?) and status=? order by nome_curso asc";
 	public static String DB_SELECT_CURSO_ALL = "SELECT * FROM curso order by nome_curso asc;";
 	public static String DB_SELECT_CURSO_ALL_STATUS = "SELECT * FROM curso where status = ? order by nome_curso asc;";
@@ -88,6 +88,8 @@ public class CursoServer{
 			insertCurso.setDate(++count, new java.sql.Date(curso.getDataInicial().getTime()));
 			insertCurso.setDate(++count, new java.sql.Date(curso.getDataFinal().getTime()));
 			insertCurso.setBoolean(++count, curso.isStatus());
+			insertCurso.setString(++count, curso.getEnsino());
+			insertCurso.setString(++count, curso.getAno());
 			
 			ResultSet rs = insertCurso.executeQuery();			
 			rs.next();
@@ -135,6 +137,8 @@ public class CursoServer{
             insertCurso.setDate(++count, new java.sql.Date(curso.getDataInicial().getTime()));
             insertCurso.setDate(++count, new java.sql.Date(curso.getDataFinal().getTime()));
             insertCurso.setBoolean(++count, curso.isStatus());
+            insertCurso.setString(++count, curso.getEnsino());
+            insertCurso.setString(++count, curso.getAno());
             
             ResultSet rs = insertCurso.executeQuery();          
             rs.next();
@@ -268,7 +272,9 @@ public class CursoServer{
 			updateCurso.setString(++count, curso.getPorcentagemPresenca());
 			updateCurso.setDate(++count, new java.sql.Date(curso.getDataInicial().getTime()));
 			updateCurso.setDate(++count, new java.sql.Date(curso.getDataFinal().getTime()));
-			updateCurso.setBoolean(++count, curso.isStatus());
+            updateCurso.setBoolean(++count, curso.isStatus());
+            updateCurso.setString(++count, curso.getEnsino());
+            updateCurso.setString(++count, curso.getAno());
 			updateCurso.setInt(++count, curso.getIdCurso());
 
 			int numberUpdate = updateCurso.executeUpdate();
@@ -671,6 +677,8 @@ public class CursoServer{
 			object.setDataFinal(rs.getDate("data_final"));
 			object.setMediaNota(rs.getString("media_nota"));
 			object.setPorcentagemPresenca(rs.getString("porcentagem_presenca"));
+			object.setEnsino(rs.getString("ensino"));
+			object.setAno(rs.getString("ano"));
 //			currentCurso.put("id_departamento", rs.getDate("id_departamento"));
 			data.add(object);
 		}

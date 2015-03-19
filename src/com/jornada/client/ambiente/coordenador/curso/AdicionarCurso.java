@@ -1,6 +1,8 @@
 package com.jornada.client.ambiente.coordenador.curso;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -8,9 +10,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -19,6 +21,8 @@ import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxMediaNota;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPorcentagemPresenca;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxAno;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxEnsino;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -33,6 +37,7 @@ import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceCursoAsync;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.Curso;
+import com.jornada.shared.classes.Ensino;
 
 
 public class AdicionarCurso extends VerticalPanel {
@@ -45,6 +50,8 @@ public class AdicionarCurso extends VerticalPanel {
 	MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
 
 
+	private MpListBoxEnsino mpListBoxEnsino;
+	private MpListBoxAno mpListBoxAno;
 	private MpTextBox txtNomeCurso;
 	private MpTextArea txtDescricaoCurso;
 	private MpTextArea txtEmentaCurso;
@@ -62,10 +69,11 @@ public class AdicionarCurso extends VerticalPanel {
 	TextConstants txtConstants;
 	
 	
-	VerticalPanel vPanelAddCursoDeTemplate;
-	VerticalPanel vPanelAddNovoCurso;
+	private VerticalPanel vPanelAddCursoDeTemplate;
+	private VerticalPanel vPanelAddNovoCurso;
 	
-//	private Hidden hiddenIdCurso;
+	private FlexTable flexTableAddNewCourseLeft;
+	private FlexTable flexTableAddNewCourseRight;
 
 	
 	private Curso cursoParaAtualizar;
@@ -129,16 +137,22 @@ public class AdicionarCurso extends VerticalPanel {
 
 
 
-		FlexTable flexTableAddNewCourse = new FlexTable();
-		flexTableAddNewCourse.setCellSpacing(2);
-		flexTableAddNewCourse.setCellPadding(2);
-		flexTableAddNewCourse.setBorderWidth(0);
-		FlexCellFormatter cellFormatter = flexTableAddNewCourse.getFlexCellFormatter();
+		flexTableAddNewCourseLeft = new FlexTable();
+		flexTableAddNewCourseLeft.setCellSpacing(2);
+		flexTableAddNewCourseLeft.setCellPadding(2);
+		flexTableAddNewCourseLeft.setBorderWidth(0);
+		
+        flexTableAddNewCourseRight = new FlexTable();
+        flexTableAddNewCourseRight.setCellSpacing(2);
+        flexTableAddNewCourseRight.setCellPadding(2);
+        flexTableAddNewCourseRight.setBorderWidth(0); 
 
-		// Add a title to the form
-		// layout.setHTML(0, 0, "");
-		//cellFormatter.setColSpan(0, 0, 0);
-		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
+
+		mpListBoxEnsino = new MpListBoxEnsino();
+		mpListBoxAno = new MpListBoxAno();
+		mpListBoxEnsino.addChangeHandler(new MpEnsinoChangeHandler());
+		showCamposDeAcordoEnsino(mpListBoxEnsino.getSelectedValue());
+        
 		txtNomeCurso = new MpTextBox();
 		txtDescricaoCurso = new MpTextArea();
 		txtEmentaCurso = new MpTextArea();
@@ -153,14 +167,10 @@ public class AdicionarCurso extends VerticalPanel {
 		mpListBoxStatus = new MpSelection();
 		mpListBoxStatus.addItem(txtConstants.cursoAtivo(), "true");
 		mpListBoxStatus.addItem(txtConstants.cursoDesativado(), "false");
-		
-		txtNomeCurso.setStyleName("design_text_boxes");
-		txtDescricaoCurso.setStyleName("design_text_boxes");
-		txtEmentaCurso.setStyleName("design_text_boxes");
-//		txtMediaNota.setStyleName("design_text_boxes");
-//		mpListBoxPorcentagemPresenca.setStyleName("design_text_boxes");
 
 
+		MpLabelRight lblEnsino = new MpLabelRight("Ensino");
+		MpLabelRight lblAno = new MpLabelRight("Ano");
 		MpLabelRight lblStatusCurso = new MpLabelRight(txtConstants.cursoStatus());
 		MpLabelRight lblNomeCurso = new MpLabelRight(txtConstants.cursoNome());		
 		MpLabelRight lblDescricaoCurso = new MpLabelRight(txtConstants.cursoDescricao());
@@ -171,9 +181,7 @@ public class AdicionarCurso extends VerticalPanel {
 		MpLabelRight lblDataFinal = new MpLabelRight(txtConstants.cursoDataFinal());
 		
 		lblErroNomeCurso = new MpLabelTextBoxError();
-		txtNomeCurso.setWidth("350px");
-		txtDescricaoCurso.setSize("350px", "50px");
-		txtEmentaCurso.setSize("350px", "50px");
+
 
 		mpListBoxStatus.setWidth("80px");
 		mpListBoxMediaNota.setWidth("80px");
@@ -184,14 +192,19 @@ public class AdicionarCurso extends VerticalPanel {
 
 		// Add some standard form options
 		int row = 1;
-		flexTableAddNewCourse.setWidget(row, 0, lblNomeCurso)     ;flexTableAddNewCourse.setWidget(row, 1, txtNomeCurso); flexTableAddNewCourse.setWidget(row++, 2, lblErroNomeCurso);
-		flexTableAddNewCourse.setWidget(row, 0, lblDescricaoCurso);flexTableAddNewCourse.setWidget(row++, 1, txtDescricaoCurso);
-		flexTableAddNewCourse.setWidget(row, 0, lblEmentaCurso)   ;flexTableAddNewCourse.setWidget(row++, 1, txtEmentaCurso);
-		flexTableAddNewCourse.setWidget(row, 0, lblStatusCurso);flexTableAddNewCourse.setWidget(row++, 1, mpListBoxStatus);
-		flexTableAddNewCourse.setWidget(row, 0, lblMediaNotaCurso);flexTableAddNewCourse.setWidget(row++, 1, mpListBoxMediaNota);
-		flexTableAddNewCourse.setWidget(row, 0, lblPorcentagemPresencaCurso)   ;flexTableAddNewCourse.setWidget(row++, 1, mpListBoxPorcentagemPresenca);
-		flexTableAddNewCourse.setWidget(row, 0, lblDataInicial)   ;flexTableAddNewCourse.setWidget(row++, 1, mpDateBoxInicial);
-		flexTableAddNewCourse.setWidget(row, 0, lblDataFinal)     ;flexTableAddNewCourse.setWidget(row++, 1, mpDateBoxFinal);
+		flexTableAddNewCourseLeft.setWidget(row, 0, lblEnsino)     ;flexTableAddNewCourseLeft.setWidget(row++, 1, mpListBoxEnsino);
+		flexTableAddNewCourseLeft.setWidget(row, 0, lblAno)     ;flexTableAddNewCourseLeft.setWidget(row++, 1, mpListBoxAno);
+		flexTableAddNewCourseLeft.setWidget(row, 0, lblNomeCurso)     ;flexTableAddNewCourseLeft.setWidget(row, 1, txtNomeCurso); flexTableAddNewCourseLeft.setWidget(row++, 2, lblErroNomeCurso);
+		flexTableAddNewCourseLeft.setWidget(row, 0, lblDescricaoCurso);flexTableAddNewCourseLeft.setWidget(row++, 1, txtDescricaoCurso);
+		flexTableAddNewCourseLeft.setWidget(row, 0, lblEmentaCurso)   ;flexTableAddNewCourseLeft.setWidget(row++, 1, txtEmentaCurso);
+		
+		row = 1;
+		flexTableAddNewCourseRight.setWidget(row, 0, lblStatusCurso);flexTableAddNewCourseRight.setWidget(row++, 1, mpListBoxStatus);
+		flexTableAddNewCourseRight.setWidget(row, 0, lblMediaNotaCurso);flexTableAddNewCourseRight.setWidget(row++, 1, mpListBoxMediaNota);
+		flexTableAddNewCourseRight.setWidget(row, 0, lblPorcentagemPresencaCurso)   ;flexTableAddNewCourseRight.setWidget(row++, 1, mpListBoxPorcentagemPresenca);
+		
+		flexTableAddNewCourseRight.setWidget(row, 0, lblDataInicial)   ;flexTableAddNewCourseRight.setWidget(row++, 1, mpDateBoxInicial);
+		flexTableAddNewCourseRight.setWidget(row, 0, lblDataFinal)     ;flexTableAddNewCourseRight.setWidget(row++, 1, mpDateBoxFinal);
 
 		
         String strTextoBotaoSubmeter = "";
@@ -227,7 +240,24 @@ public class AdicionarCurso extends VerticalPanel {
         }
 		vPanelAddCursoDeTemplate.setVisible(false);
 		
-		vPanelAddNovoCurso.add(flexTableAddNewCourse);
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.setBorderWidth(0);
+		hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		
+
+		HorizontalPanel hPanelLeft = new HorizontalPanel();
+		hPanelLeft.setWidth("500px"); 
+		hPanelLeft.add(flexTableAddNewCourseLeft);
+		
+        HorizontalPanel hPanelRight = new HorizontalPanel();
+        hPanelRight.setWidth("500px");
+        hPanelRight.add(flexTableAddNewCourseRight);
+		
+		hPanel.add(hPanelLeft);
+		hPanel.add(hPanelRight);
+		
+//		vPanelAddNovoCurso.add(flexTableAddNewCourse);
+		vPanelAddNovoCurso.add(hPanel);
 		vPanelAddNovoCurso.add(gridSave);
 		
 		
@@ -298,7 +328,14 @@ public class AdicionarCurso extends VerticalPanel {
 				curso.setDataFinal(mpDateBoxFinal.getDate().getValue());
 				curso.setMediaNota(mpListBoxMediaNota.getValue(mpListBoxMediaNota.getSelectedIndex()));
 				curso.setPorcentagemPresenca(mpListBoxPorcentagemPresenca.getValue(mpListBoxPorcentagemPresenca.getSelectedIndex()));
-
+				String strEnsino = mpListBoxEnsino.getSelectedValue();
+				curso.setEnsino(strEnsino);
+				if( (strEnsino.equals(Ensino.FUNDAMENTAL)) || (strEnsino.equals(Ensino.MEDIO)) ){
+				    curso.setAno(mpListBoxAno.getSelectedValue());
+				}else{
+				    curso.setAno("");
+				}
+				
 
                 if(isAdicionar==true){
                     GWTServiceCurso.Util.getInstance().AdicionarCursoString(curso, new CallbackAddCurso());
@@ -350,6 +387,7 @@ public class AdicionarCurso extends VerticalPanel {
 		txtEmentaCurso.setValue("");
 		mpDateBoxInicial.getDate().setValue(null);
 		mpDateBoxFinal.getDate().setValue(null);
+		mpListBoxEnsino.setSelectedIndex(0);
 	}
 	
 	
@@ -381,11 +419,18 @@ public class AdicionarCurso extends VerticalPanel {
 	
 	private void popularCurso(Curso curso) {
 	    
+	    cleanFields();
+	    
 	    txtNomeCurso.setText(curso.getNome());
 	    txtDescricaoCurso.setText(curso.getDescricao());
 	    txtEmentaCurso.setText(curso.getEmenta());
 	    mpDateBoxInicial.getDate().setValue(curso.getDataInicial());
 	    mpDateBoxFinal.getDate().setValue(curso.getDataFinal());
+	    mpListBoxEnsino.setSelectItem(curso.getEnsino());
+	    mpListBoxAno.showItems(curso.getEnsino());
+	    mpListBoxAno.setSelectItem(curso.getAno());
+	    mpListBoxMediaNota.setSelectItem(curso.getMediaNota());
+	    mpListBoxPorcentagemPresenca.setSelectItem(curso.getPorcentagemPresenca());
 	    
         for (int i = 0; i < mpListBoxStatus.getItemCount(); i++) {
             boolean booStatus = Boolean.parseBoolean(mpListBoxStatus.getValue(i));
@@ -395,21 +440,21 @@ public class AdicionarCurso extends VerticalPanel {
             }
         }
 	    
-        for (int i = 0; i < mpListBoxMediaNota.getItemCount(); i++) {
-            if (curso.getMediaNota().equals(mpListBoxMediaNota.getValue(i))) {
-                mpListBoxMediaNota.setSelectedIndex(i);
-                break;
-            }
-        }
+//        for (int i = 0; i < mpListBoxMediaNota.getItemCount(); i++) {
+//            if (curso.getMediaNota().equals(mpListBoxMediaNota.getValue(i))) {
+//                mpListBoxMediaNota.setSelectedIndex(i);
+//                break;
+//            }
+//        }
         
-        for (int i = 0; i < mpListBoxPorcentagemPresenca.getItemCount(); i++) {
-            if (curso.getPorcentagemPresenca().equals(mpListBoxPorcentagemPresenca.getValue(i))) {
-                mpListBoxPorcentagemPresenca.setSelectedIndex(i);
-                break;
-            }
-        }
+//        for (int i = 0; i < mpListBoxPorcentagemPresenca.getItemCount(); i++) {
+//            if (curso.getPorcentagemPresenca().equals(mpListBoxPorcentagemPresenca.getValue(i))) {
+//                mpListBoxPorcentagemPresenca.setSelectedIndex(i);
+//                break;
+//            }
+//        }
         
-        
+        showCamposDeAcordoEnsino(curso.getEnsino());
 	}
 	
 	
@@ -487,6 +532,28 @@ public class AdicionarCurso extends VerticalPanel {
             }
         }
     }
+	
+	private class MpEnsinoChangeHandler implements ChangeHandler {
+
+        @Override
+        public void onChange(ChangeEvent event) {
+            String strEnsino = mpListBoxEnsino.getSelectedValue();
+            showCamposDeAcordoEnsino(strEnsino);
+            mpListBoxAno.showItems(strEnsino);
+        }
+	    
+	}
+	
+	private void showCamposDeAcordoEnsino(String strEnsino) {
+	    
+	    flexTableAddNewCourseLeft.getRowFormatter().setVisible(2, false);
+	    
+	    if (strEnsino.equals(Ensino.FUNDAMENTAL)) {
+	        flexTableAddNewCourseLeft.getRowFormatter().setVisible(2, true);
+	    }else if (strEnsino.equals(Ensino.MEDIO)) {
+	        flexTableAddNewCourseLeft.getRowFormatter().setVisible(2, true);
+	    }
+	}
 	
 
 }
