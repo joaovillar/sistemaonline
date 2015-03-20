@@ -27,7 +27,10 @@ import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimPeriodo;
 
 @SuppressWarnings("serial")
 public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServiceCurso {
@@ -117,7 +120,7 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
 
     }
     
-    public ArrayList<TableMultipleBoletimDisciplina> getCursosRelatorio(Boolean status) {
+    public ArrayList<TableMultipleBoletimDisciplina> getCursosPeriodoDisciplina(Boolean status) {
         
         ArrayList<TableMultipleBoletimDisciplina> listTableMulti = new ArrayList<TableMultipleBoletimDisciplina>();
         ArrayList<Curso> listCursos = CursoServer.getCursos(status);
@@ -148,6 +151,60 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
         
         return listTableMulti;
 
+    }
+    
+    
+    public ArrayList<TableMultipleBoletimPeriodo> getCursosPeriodo(Boolean status) {
+        
+        ArrayList<TableMultipleBoletimPeriodo> listTableMulti = new ArrayList<TableMultipleBoletimPeriodo>();
+        ArrayList<Curso> listCursos = CursoServer.getCursos(status);
+        
+        for (Curso curso : listCursos) {
+            
+            ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(curso.getIdCurso());
+            for (Periodo periodo : listPeriodo) {
+
+                TableMultipleBoletimPeriodo multiTable = new TableMultipleBoletimPeriodo();                
+                multiTable.setIdCurso(curso.getIdCurso());
+                multiTable.setNomeCurso(curso.getNome());
+                multiTable.setIdPeriodo(periodo.getIdPeriodo());
+                multiTable.setNomePeriodo(periodo.getNomePeriodo());
+                listTableMulti.add(multiTable);
+            }
+        }        
+        return listTableMulti;
+    }
+    
+    public ArrayList<TableMultipleBoletimAnual> getCursosBoletimAnual(Boolean status) {
+        
+        ArrayList<TableMultipleBoletimAnual> listTableMulti = new ArrayList<TableMultipleBoletimAnual>();
+        ArrayList<Curso> listCursos = CursoServer.getCursos(status);
+        
+        for (Curso curso : listCursos) {
+            
+            TableMultipleBoletimAnual multiTable = new TableMultipleBoletimAnual();                
+            multiTable.setIdCurso(curso.getIdCurso());
+            multiTable.setNomeCurso(curso.getNome());
+            listTableMulti.add(multiTable);
+            
+        }        
+        return listTableMulti;
+    }
+    
+    public ArrayList<TableMultipleBoletimNotas> getCursosBoletimNotas(Boolean status) {
+        
+        ArrayList<TableMultipleBoletimNotas> listTableMulti = new ArrayList<TableMultipleBoletimNotas>();
+        ArrayList<Curso> listCursos = CursoServer.getCursos(status);
+        
+        for (Curso curso : listCursos) {
+            
+            TableMultipleBoletimNotas multiTable = new TableMultipleBoletimNotas();                
+            multiTable.setIdCurso(curso.getIdCurso());
+            multiTable.setNomeCurso(curso.getNome());
+            listTableMulti.add(multiTable);
+            
+        }        
+        return listTableMulti;
     }
      	
 	public ArrayList<Usuario> getTodosOsAlunosDoCurso(int id_curso){		

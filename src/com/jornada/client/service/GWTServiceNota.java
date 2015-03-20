@@ -20,7 +20,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.Nota;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimPeriodo;
 
 @RemoteServiceRelativePath("GWTServiceNota")
 public interface GWTServiceNota extends RemoteService {
@@ -32,6 +35,7 @@ public interface GWTServiceNota extends RemoteService {
 	public  String[][] getBoletimNotasPorAlunoPorCurso(int idCurso, int idTipoUsuario, int idUsuario);
 	public ArrayList<ArrayList<String>> getBoletimPeriodo(int idCurso, int idPeriodo) ;
 	public String getExcelBoletimPeriodo(int idCurso, int idPeriodo);
+	public String getExcelBoletimPeriodo(ArrayList<TableMultipleBoletimPeriodo> listTableMBD);
 	public ArrayList<ArrayList<String>> getRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina);
 	public String getExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina);
 	public String getExcelBoletimDisciplina(ArrayList<TableMultipleBoletimDisciplina> listTableMBD);
@@ -39,9 +43,11 @@ public interface GWTServiceNota extends RemoteService {
 	public ArrayList<ArrayList<String>> getBoletimNotas(int idCurso);
 	public String getExcelBoletimNotas(int idCurso);
 	public String getExcelBoletimAnual(int idCurso);
+	public String getExcelBoletimAnual(ArrayList<TableMultipleBoletimAnual> listTableMBD);
 	public ArrayList<ArrayList<String>> getNotasAluno(int idCurso, int idTipoUsuario, int idUsuario);
 	public ArrayList<ArrayList<String>> getBoletimAluno(int idCurso, int idAluno);
 	public String getExcelBoletimAluno(int idCurso, int idAluno);
+	public String getExcelBoletimNotas(ArrayList<TableMultipleBoletimNotas> listTableMBD);
 	
 	
 	public static class Util {

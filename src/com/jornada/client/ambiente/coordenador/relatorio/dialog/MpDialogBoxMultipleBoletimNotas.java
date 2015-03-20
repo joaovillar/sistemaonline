@@ -40,10 +40,10 @@ import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceNota;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
-public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
+public class MpDialogBoxMultipleBoletimNotas extends DecoratedPopupPanel {
 	
 	TextConstants txtConstants = GWT.create(TextConstants.class);
 	
@@ -55,13 +55,12 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
 	
 	private Anchor anchor;
 	
-    private CellTable<TableMultipleBoletimDisciplina> cellTable;
-    private Column<TableMultipleBoletimDisciplina, Boolean> columnParaImprimir;
-    private Column<TableMultipleBoletimDisciplina, String> columnCurso;
-    private Column<TableMultipleBoletimDisciplina, String> columnPeriodo;
-    private Column<TableMultipleBoletimDisciplina, String> columnDisciplina;
-    private ListDataProvider<TableMultipleBoletimDisciplina> dataProvider = new ListDataProvider<TableMultipleBoletimDisciplina>(); 
-    private ArrayList<TableMultipleBoletimDisciplina> arrayListBackup = new ArrayList<TableMultipleBoletimDisciplina>(); 
+    private CellTable<TableMultipleBoletimNotas> cellTable;
+    private Column<TableMultipleBoletimNotas, Boolean> columnParaImprimir;
+    private Column<TableMultipleBoletimNotas, String> columnCurso;
+//    private Column<TableMultipleBoletimNotas, String> columnPeriodo;
+    private ListDataProvider<TableMultipleBoletimNotas> dataProvider = new ListDataProvider<TableMultipleBoletimNotas>(); 
+    private ArrayList<TableMultipleBoletimNotas> arrayListBackup = new ArrayList<TableMultipleBoletimNotas>(); 
 	
     private MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
 
@@ -71,17 +70,17 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
     
 
 	
-	private static MpDialogBoxMultipleBoletimDisciplina uniqueInstance;
+	private static MpDialogBoxMultipleBoletimNotas uniqueInstance;
 	
-	public static MpDialogBoxMultipleBoletimDisciplina getInstance(){
+	public static MpDialogBoxMultipleBoletimNotas getInstance(){
 		if(uniqueInstance==null){
-			uniqueInstance = new MpDialogBoxMultipleBoletimDisciplina();
+			uniqueInstance = new MpDialogBoxMultipleBoletimNotas();
 			uniqueInstance.showDialog();
-			uniqueInstance.populateGridAvaliacoes();
+			uniqueInstance.populateGrid();
 		}else{
 		    uniqueInstance.vBody.clear();
 			uniqueInstance.showDialog();
-			uniqueInstance.populateGridAvaliacoes();
+			uniqueInstance.populateGrid();
 		}
 		return uniqueInstance;
 	}
@@ -89,7 +88,7 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
 
 
 	
-	protected MpDialogBoxMultipleBoletimDisciplina(){
+	protected MpDialogBoxMultipleBoletimNotas(){
 		
 
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -118,7 +117,7 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
         Label lblBaixarArquivo = new Label(txtConstants.usuarioBaixarPlanilhaExcel());
         anchor = new Anchor(txtConstants.usuarioCliqueAquiParaBaixar());
         
-        MpLabelLeft lblCurso = new MpLabelLeft("Gerar vários boletins de Disciplinas");        
+        MpLabelLeft lblCurso = new MpLabelLeft("Gerar vários boletins dos Períodos");        
         lblCurso.setStyleName("label_comum_bold_12px");        
         MpLabelLeft lblNomeCurso = new MpLabelLeft("Por favor selecione os boletins que deseja gerar.");
         
@@ -171,7 +170,7 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
         Label lblEmpty = new Label(txtConstants.avaliacaoNenhumaDisciplina());
 
         
-        cellTable = new CellTable<TableMultipleBoletimDisciplina>(10,GWT.<CellTableStyle> create(CellTableStyle.class),TableMultipleBoletimDisciplina.KEY_PROVIDER);
+        cellTable = new CellTable<TableMultipleBoletimNotas>(10,GWT.<CellTableStyle> create(CellTableStyle.class),TableMultipleBoletimNotas.KEY_PROVIDER);
 
         cellTable.setWidth("100%");
         cellTable.setAutoHeaderRefreshDisabled(true);
@@ -180,8 +179,8 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
 
 
         // Add a selection model so we can select cells.
-        final SelectionModel<TableMultipleBoletimDisciplina> selectionModel = new MultiSelectionModel<TableMultipleBoletimDisciplina>(TableMultipleBoletimDisciplina.KEY_PROVIDER);
-        cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<TableMultipleBoletimDisciplina> createCheckboxManager());
+        final SelectionModel<TableMultipleBoletimNotas> selectionModel = new MultiSelectionModel<TableMultipleBoletimNotas>(TableMultipleBoletimNotas.KEY_PROVIDER);
+        cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<TableMultipleBoletimNotas> createCheckboxManager());
         initTableColumns(selectionModel);
         
         dataProvider.addDataDisplay(cellTable);
@@ -233,14 +232,14 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
     }
     
     
-    protected void populateGridAvaliacoes() {
+    protected void populateGrid() {
         mpLoading.setVisible(true);        
-        GWTServiceCurso.Util.getInstance().getCursosPeriodoDisciplina(true, new CallbackAvaliacaoNota());
+        GWTServiceCurso.Util.getInstance().getCursosBoletimNotas(true, new CallbackPopulateGrid());
     }       
 
-    private void addCellTableData(ListDataProvider<TableMultipleBoletimDisciplina> dataProvider) {
+    private void addCellTableData(ListDataProvider<TableMultipleBoletimNotas> dataProvider) {
 
-        ListHandler<TableMultipleBoletimDisciplina> sortHandler = new ListHandler<TableMultipleBoletimDisciplina>(dataProvider.getList());
+        ListHandler<TableMultipleBoletimNotas> sortHandler = new ListHandler<TableMultipleBoletimNotas>(dataProvider.getList());
 
         cellTable.addColumnSortHandler(sortHandler);
 
@@ -249,53 +248,37 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
     }
     
     
-    private void initTableColumns(final SelectionModel<TableMultipleBoletimDisciplina> selectionModel) {
+    private void initTableColumns(final SelectionModel<TableMultipleBoletimNotas> selectionModel) {
         
-        columnParaImprimir = new Column<TableMultipleBoletimDisciplina, Boolean>(new CheckboxCell(true, false)) {
+        columnParaImprimir = new Column<TableMultipleBoletimNotas, Boolean>(new CheckboxCell(true, false)) {
             @Override
-            public Boolean getValue(TableMultipleBoletimDisciplina object) {
+            public Boolean getValue(TableMultipleBoletimNotas object) {
                 return selectionModel.isSelected(object);
 //                return object.isParaImprimir();
             }
         };  
 
-        columnCurso = new Column<TableMultipleBoletimDisciplina, String>(new TextCell()) {
+        columnCurso = new Column<TableMultipleBoletimNotas, String>(new TextCell()) {
             @Override
-            public String getValue(TableMultipleBoletimDisciplina object) {
+            public String getValue(TableMultipleBoletimNotas object) {
                 return object.getNomeCurso();
             }
         };   
 
-        columnPeriodo = new Column<TableMultipleBoletimDisciplina, String>(new TextCell()) {
-            @Override
-            public String getValue(TableMultipleBoletimDisciplina object) {
-                return object.getNomePeriodo();
-            }
-
-        };
-        
-        
-        columnDisciplina = new Column<TableMultipleBoletimDisciplina, String>(new TextCell()) {
-            @Override
-            public String getValue(TableMultipleBoletimDisciplina object) {
-                return object.getNomeDisciplina();
-            }
-        };     
-         
         
         cellTable.addColumn(columnParaImprimir, txtConstants.geralImprimir());
         cellTable.addColumn(columnCurso, txtConstants.curso());
-        cellTable.addColumn(columnPeriodo, txtConstants.periodo());
-        cellTable.addColumn(columnDisciplina, txtConstants.disciplina());
+//        cellTable.addColumn(columnPeriodo, txtConstants.periodo());
+
         
     }
     
-    public void initSortHandler(ListHandler<TableMultipleBoletimDisciplina> sortHandler) {
+    public void initSortHandler(ListHandler<TableMultipleBoletimNotas> sortHandler) {
         
         columnParaImprimir.setSortable(true);
-        sortHandler.setComparator(columnParaImprimir,new Comparator<TableMultipleBoletimDisciplina>() {
+        sortHandler.setComparator(columnParaImprimir,new Comparator<TableMultipleBoletimNotas>() {
             @Override
-            public int compare(TableMultipleBoletimDisciplina o1, TableMultipleBoletimDisciplina o2) {
+            public int compare(TableMultipleBoletimNotas o1, TableMultipleBoletimNotas o2) {
                 Boolean booO1 = o1.isParaImprimir();
                 Boolean booO2 = o2.isParaImprimir();
                 return booO1.compareTo(booO2);
@@ -303,28 +286,22 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
         }); 
         
         columnCurso.setSortable(true);
-        sortHandler.setComparator(columnCurso, new Comparator<TableMultipleBoletimDisciplina>() {
+        sortHandler.setComparator(columnCurso, new Comparator<TableMultipleBoletimNotas>() {
             @Override
-            public int compare(TableMultipleBoletimDisciplina o1, TableMultipleBoletimDisciplina o2) {
+            public int compare(TableMultipleBoletimNotas o1, TableMultipleBoletimNotas o2) {
                 return o1.getNomeCurso().compareTo(o2.getNomeCurso());
             }
         });
 
-        columnPeriodo.setSortable(true);
-        sortHandler.setComparator(columnPeriodo, new Comparator<TableMultipleBoletimDisciplina>() {
-            @Override
-            public int compare(TableMultipleBoletimDisciplina o1, TableMultipleBoletimDisciplina o2) {
-                return o1.getNomePeriodo().compareTo(o2.getNomePeriodo());
-            }
-        });
+//        columnPeriodo.setSortable(true);
+//        sortHandler.setComparator(columnPeriodo, new Comparator<TableMultipleBoletimNotas>() {
+//            @Override
+//            public int compare(TableMultipleBoletimNotas o1, TableMultipleBoletimNotas o2) {
+//                return o1.getNomePeriodo().compareTo(o2.getNomePeriodo());
+//            }
+//        });
 
-        columnDisciplina.setSortable(true);
-        sortHandler.setComparator(columnDisciplina, new Comparator<TableMultipleBoletimDisciplina>() {
-            @Override
-            public int compare(TableMultipleBoletimDisciplina o1, TableMultipleBoletimDisciplina o2) {
-                return o1.getNomeDisciplina().compareTo(o2.getNomeDisciplina());
-            }
-        });
+
 
     }
 
@@ -346,8 +323,6 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
    
    public void filtrarCellTable(String strFiltro) {
        
-      
-       
        removeCellTableFilter();
 
        strFiltro = strFiltro.toUpperCase();
@@ -358,23 +333,15 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
            while (i < dataProvider.getList().size()) {
 
                String strNomeCurso = dataProvider.getList().get(i).getNomeCurso();
-               String strNomePeriodo = dataProvider.getList().get(i).getNomePeriodo();
-               String strNomeDisciplina = dataProvider.getList().get(i).getNomeDisciplina();
+//               String strNomePeriodo = dataProvider.getList().get(i).getNomePeriodo();
 
-               String strJuntaTexto = strNomeCurso.toUpperCase() + " " + strNomePeriodo.toUpperCase() + " " + strNomeDisciplina.toUpperCase() ;
+               String strJuntaTexto = strNomeCurso.toUpperCase();// + " " + strNomePeriodo.toUpperCase();
 
                 if (!strJuntaTexto.contains(strFiltro)) {
                     dataProvider.getList().remove(i);
                     i = 0;
                     continue;
                 }      
-//              if(!MpUtilClient.containsMultiple(strFiltro, strJuntaTexto)){                  
-//                 dataProvider.getList().remove(i);
-//                 i = 0;
-//                 continue;
-//               }
-   
-
 
                i++;
            }
@@ -398,12 +365,12 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
     public void onClick(ClickEvent event) {
            mpLoading.setVisible(true);
            gridLinkExcel.setVisible(false);
-            Set<TableMultipleBoletimDisciplina> selectedObjects = ((MultiSelectionModel<TableMultipleBoletimDisciplina>) (cellTable.getSelectionModel())).getSelectedSet();
-            ArrayList<TableMultipleBoletimDisciplina> listTableMBD = new ArrayList<TableMultipleBoletimDisciplina>(selectedObjects);
+            Set<TableMultipleBoletimNotas> selectedObjects = ((MultiSelectionModel<TableMultipleBoletimNotas>) (cellTable.getSelectionModel())).getSelectedSet();
+            ArrayList<TableMultipleBoletimNotas> listTableMBD = new ArrayList<TableMultipleBoletimNotas>(selectedObjects);
 
-            Collections.sort(listTableMBD, new Comparator<TableMultipleBoletimDisciplina>() {
+            Collections.sort(listTableMBD, new Comparator<TableMultipleBoletimNotas>() {
                 @Override
-                public int compare(TableMultipleBoletimDisciplina o1, TableMultipleBoletimDisciplina o2) {
+                public int compare(TableMultipleBoletimNotas o1, TableMultipleBoletimNotas o2) {
                     int compareResult = 0;
 
                     String str1 = o1.getNomeCurso();
@@ -411,36 +378,22 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
                     compareResult = str1.compareTo(str2);
                     if (compareResult != 0) return compareResult;
 
-                    str1 = o1.getNomePeriodo();
-                    str2 = o2.getNomePeriodo();
-                    compareResult = str1.compareTo(str2);
-                    if (compareResult != 0) return compareResult;
-
-                    str1 = o1.getNomeDisciplina();
-                    str2 = o2.getNomeDisciplina();
-                    compareResult = str1.compareTo(str2);
-                    if (compareResult != 0) return compareResult;
 
                     return compareResult;
                 }
             });
 
-            GWTServiceNota.Util.getInstance().getExcelBoletimDisciplina(listTableMBD, new CallBackBoletim());
-            
-           
-
-           
-//           Window.alert(strTest);
+            GWTServiceNota.Util.getInstance().getExcelBoletimNotas(listTableMBD, new CallBackBoletim());
        }
    }
 
     private class ClickHandlerFechar implements ClickHandler {
         public void onClick(ClickEvent event) {
-            MpDialogBoxMultipleBoletimDisciplina.this.hide();
+            MpDialogBoxMultipleBoletimNotas.this.hide();
         }
     }
 
-    private class CallbackAvaliacaoNota implements AsyncCallback<ArrayList<TableMultipleBoletimDisciplina>>{
+    private class CallbackPopulateGrid implements AsyncCallback<ArrayList<TableMultipleBoletimNotas>>{
         @Override
         public void onFailure(Throwable caught) {
             mpLoading.setVisible(false);
@@ -449,7 +402,7 @@ public class MpDialogBoxMultipleBoletimDisciplina extends DecoratedPopupPanel {
         }
 
         @Override
-        public void onSuccess(ArrayList<TableMultipleBoletimDisciplina> list) {
+        public void onSuccess(ArrayList<TableMultipleBoletimNotas> list) {
             MpUtilClient.isRefreshRequired(list);
             mpLoading.setVisible(false);
             dataProvider.getList().clear();

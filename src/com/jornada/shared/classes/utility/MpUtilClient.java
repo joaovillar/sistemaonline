@@ -139,6 +139,22 @@ public class MpUtilClient {
         return strNotIn;
 	}
 	
+	
+	public static boolean containsMultiple(String strTextToFind, String strCompleteText){
+	    String[] strSplit = strTextToFind.toUpperCase().split(" ");
+        int count=0;
+        for (int cv = 0; cv < strSplit.length; cv++) {
+            if(strCompleteText.contains(strSplit[cv])){
+                count++;
+            }                
+        }
+        if (count == strSplit.length) {
+         return true;
+        }else{
+            return false;
+        }	    
+	}
+	
 
 
 }

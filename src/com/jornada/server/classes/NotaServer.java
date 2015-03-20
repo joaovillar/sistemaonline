@@ -892,9 +892,9 @@ public class NotaServer {
         return list;
     }
 
-    public static String getExcelBoletimNotas(int idCurso) {
-        XSSFWorkbook wb = new XSSFWorkbook();
-        XSSFSheet sheet = wb.createSheet("Boletim Notas");
+    public static String getExcelBoletimNotas(XSSFWorkbook wb, XSSFSheet sheet, int idCurso) {
+//        XSSFWorkbook wb = new XSSFWorkbook();
+//        XSSFSheet sheet = wb.createSheet("Boletim Notas");
         // sheet.setColumnBreak(15);
         sheet.getPrintSetup().setLandscape(true);
         sheet.setAutobreaks(true);
@@ -985,14 +985,13 @@ public class NotaServer {
             sheet.autoSizeColumn(i, true);
         }
 
-        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimNotas_");
+        return "";
+//        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimNotas_");
     }
 
-    public static String getExcelBoletimAnual(int idCurso) {
-        XSSFWorkbook wb = new XSSFWorkbook();
-
-        // /Creating Tabs
-        XSSFSheet sheet = wb.createSheet("Boletim Anual");
+    public static String getExcelBoletimAnual(XSSFWorkbook wb, XSSFSheet sheet, int idCurso) {
+//        XSSFWorkbook wb = new XSSFWorkbook();
+//        XSSFSheet sheet = wb.createSheet("Boletim Anual");
         sheet.setFitToPage(true);
         sheet.getPrintSetup().setLandscape(true);
         sheet.setMargin((short) 1, 1.5);
@@ -1122,7 +1121,8 @@ public class NotaServer {
         RegionUtil.setBorderLeft(BorderStyle.THICK.ordinal(), regionAll, sheet, wb);
         RegionUtil.setBorderRight(BorderStyle.THICK.ordinal(), regionAll, sheet, wb);
 
-        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnual_");
+//        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnual_");
+        return "";
     }
     
     
@@ -1405,11 +1405,10 @@ public class NotaServer {
         return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnual_");
     }
 
-    public static String gerarExcelBoletimPeriodo(int idCurso, int idPeriodo) {
+    public static String gerarExcelBoletimPeriodo(XSSFWorkbook wb, XSSFSheet sheet, int idCurso, int idPeriodo) {
 
-        XSSFWorkbook wb = new XSSFWorkbook();
-        // /Creating Tabs
-        XSSFSheet sheet = wb.createSheet("Boletim Periodo");
+//        XSSFWorkbook wb = new XSSFWorkbook();
+//        XSSFSheet sheet = wb.createSheet("Boletim Periodo");
         sheet.setFitToPage(true);
         sheet.getPrintSetup().setLandscape(true);
 
@@ -1470,7 +1469,7 @@ public class NotaServer {
             }
         }
 
-        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimPeriodo_");
+        return "";//ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimPeriodo_");
 
     }
 

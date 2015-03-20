@@ -28,7 +28,10 @@ import com.jornada.server.framework.excel.ExcelFramework;
 import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.TabelaBoletim;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimPeriodo;
 
 public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServiceNota {
 
@@ -114,11 +117,47 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
      }
     
     public String getExcelBoletimNotas(int idCurso){
-        return NotaServer.getExcelBoletimNotas(idCurso);
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("Boletim Notas");
+        NotaServer.getExcelBoletimNotas(wb, sheet, idCurso);
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimNotas_");
+     }
+    
+    public String getExcelBoletimNotas(ArrayList<TableMultipleBoletimNotas> listTableMBD){
+
+        
+        XSSFWorkbook wb = new XSSFWorkbook();
+        for (int i = 0; i < listTableMBD.size(); i++) {
+            TableMultipleBoletimNotas tableMBD = listTableMBD.get(i);
+            String strTab = Integer.toString(i+1)+") ";
+            strTab += tableMBD.getNomeCurso().substring(0, 3);
+            XSSFSheet sheet = wb.createSheet(strTab);
+            NotaServer.getExcelBoletimNotas(wb, sheet, tableMBD.getIdCurso());
+        }
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimNotas_");
+        
      }
     
     public String getExcelBoletimPeriodo(int idCurso, int idPeriodo) {
-        return NotaServer.gerarExcelBoletimPeriodo(idCurso, idPeriodo);
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("Boletim Periodo");
+        NotaServer.gerarExcelBoletimPeriodo(wb, sheet, idCurso, idPeriodo);
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimPeriodo_");
+    }
+    
+    public String getExcelBoletimPeriodo(ArrayList<TableMultipleBoletimPeriodo> listTableMBD) {
+
+        XSSFWorkbook wb = new XSSFWorkbook();
+        for (int i = 0; i < listTableMBD.size(); i++) {
+            TableMultipleBoletimPeriodo tableMBD = listTableMBD.get(i);
+            
+            String strTab = Integer.toString(i+1)+") ";
+            strTab += tableMBD.getNomeCurso().substring(0, 3) + "-";
+            strTab += tableMBD.getNomePeriodo().substring(0, 3);
+            XSSFSheet sheet = wb.createSheet(strTab);
+            NotaServer.gerarExcelBoletimPeriodo(wb, sheet, tableMBD.getIdCurso(), tableMBD.getIdPeriodo());
+        }
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimPeriodo_");
     }
     
     public String getExcelBoletimAluno(int idCurso, int idAluno) {
@@ -126,9 +165,24 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
     }
     
     public String getExcelBoletimAnual(int idCurso){
-        return NotaServer.getExcelBoletimAnual(idCurso);
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("Boletim Anual");
+        NotaServer.getExcelBoletimAnual(wb, sheet, idCurso);
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnual_");
     }
     
+    public String getExcelBoletimAnual(ArrayList<TableMultipleBoletimAnual> listTableMBD){
+        
+        XSSFWorkbook wb = new XSSFWorkbook();
+        for (int i = 0; i < listTableMBD.size(); i++) {
+            TableMultipleBoletimAnual tableMBD = listTableMBD.get(i);
+            String strTab = Integer.toString(i+1)+") ";
+            strTab += tableMBD.getNomeCurso().substring(0, 3);
+            XSSFSheet sheet = wb.createSheet(strTab);
+            NotaServer.getExcelBoletimAnual(wb, sheet, tableMBD.getIdCurso());
+        }
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnual_");
+    }
 
     public String getExcelBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -141,7 +195,8 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
         XSSFWorkbook wb = new XSSFWorkbook();
         for (int i=0;i<listTableMBD.size();i++) {
             TableMultipleBoletimDisciplina tableMBD = listTableMBD.get(i);
-            String strTab = tableMBD.getNomeCurso().substring(0,3)+"-";
+            String strTab = Integer.toString(i+1)+") ";
+            strTab += tableMBD.getNomeCurso().substring(0,3)+"-";
             strTab += tableMBD.getNomePeriodo().substring(0,3)+"-";
             strTab += tableMBD.getNomeDisciplina().substring(0,3);
             XSSFSheet sheet = wb.createSheet(strTab);
