@@ -54,18 +54,11 @@ public class PresencaUsuarioAula implements Serializable{
     public static final ProvidesKey<PresencaUsuarioAula> KEY_PROVIDER = new ProvidesKey<PresencaUsuarioAula>() {
         @Override
         public Object getKey(PresencaUsuarioAula item) {
-          return item == null ? null : item.toString();
+            return item == null ? null : 
+                Integer.toString(item.getAula().getIdAula())+
+                Integer.toString(item.getPresenca().getIdPresenca())+
+                Integer.toString(item.getUsuario().getIdUsuario());
         }
       };  
-
-//	public int getIdTipoPresenca() {
-//		return idTipoPresenca;
-//	}
-//
-//	public void setIdTipoPresenca(int idTipoPresenca) {
-//		this.idTipoPresenca = idTipoPresenca;
-//	}
-	
-	
 
 }

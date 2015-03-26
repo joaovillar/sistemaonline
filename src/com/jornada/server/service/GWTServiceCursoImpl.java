@@ -22,11 +22,13 @@ import com.jornada.server.classes.CursoServer;
 import com.jornada.server.classes.DisciplinaServer;
 import com.jornada.server.classes.HierarquiaCursoServer;
 import com.jornada.server.classes.PeriodoServer;
+import com.jornada.server.classes.UsuarioServer;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimAluno;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
@@ -202,6 +204,30 @@ public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServ
             multiTable.setIdCurso(curso.getIdCurso());
             multiTable.setNomeCurso(curso.getNome());
             listTableMulti.add(multiTable);
+            
+        }        
+        return listTableMulti;
+    }
+    
+    public ArrayList<TableMultipleBoletimAluno> getCursosBoletimAlunos(Boolean status) {
+        
+        ArrayList<TableMultipleBoletimAluno> listTableMulti = new ArrayList<TableMultipleBoletimAluno>();
+        ArrayList<Curso> listCursos = CursoServer.getCursos(status);
+        
+        for (Curso curso : listCursos) {
+            
+            ArrayList<Usuario> listAluno = UsuarioServer.getAlunosPorCurso(curso.getIdCurso());
+            
+            for (Usuario aluno : listAluno) {
+                
+                TableMultipleBoletimAluno multiTable = new TableMultipleBoletimAluno();                
+                multiTable.setIdCurso(curso.getIdCurso());
+                multiTable.setNomeCurso(curso.getNome());
+                multiTable.setIdAluno(aluno.getIdUsuario());
+                multiTable.setNomeAluno(aluno.getPrimeiroNome() + " " + aluno.getSobreNome());
+                listTableMulti.add(multiTable);                
+            }           
+
             
         }        
         return listTableMulti;

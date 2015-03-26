@@ -4,20 +4,21 @@ import java.io.Serializable;
 
 import com.google.gwt.view.client.ProvidesKey;
 
-public class TableMultipleBoletimPeriodo implements Serializable{
+public class TableMultipleBoletimAluno implements Serializable{
     
     private static final long serialVersionUID = -8936590499054963478L;
     
     private int idCurso;
-    private int idPeriodo;
+    private int idAluno;
     
     private String nomeCurso;    
-    private String nomePeriodo;    
+    private String nomeAluno;    
+
     
     private boolean paraImprimir;
 
     
-    public TableMultipleBoletimPeriodo(){
+    public TableMultipleBoletimAluno(){
         
     }
 
@@ -31,15 +32,6 @@ public class TableMultipleBoletimPeriodo implements Serializable{
     }
 
 
-    public int getIdPeriodo() {
-        return idPeriodo;
-    }
-
-
-    public void setIdPeriodo(int idPeriodo) {
-        this.idPeriodo = idPeriodo;
-    }
-
     public String getNomeCurso() {
         return nomeCurso;
     }
@@ -48,15 +40,24 @@ public class TableMultipleBoletimPeriodo implements Serializable{
     public void setNomeCurso(String nomeCurso) {
         this.nomeCurso = nomeCurso;
     }
+    
+    
 
 
-    public String getNomePeriodo() {
-        return nomePeriodo;
+    public int getIdAluno() {
+        return idAluno;
     }
 
+    public void setIdAluno(int idAluno) {
+        this.idAluno = idAluno;
+    }
 
-    public void setNomePeriodo(String nomePeriodo) {
-        this.nomePeriodo = nomePeriodo;
+    public String getNomeAluno() {
+        return nomeAluno;
+    }
+
+    public void setNomeAluno(String nomeAluno) {
+        this.nomeAluno = nomeAluno;
     }
 
     public boolean isParaImprimir() {
@@ -69,10 +70,10 @@ public class TableMultipleBoletimPeriodo implements Serializable{
 
 
 
-    public static final ProvidesKey<TableMultipleBoletimPeriodo> KEY_PROVIDER = new ProvidesKey<TableMultipleBoletimPeriodo>() {
+    public static final ProvidesKey<TableMultipleBoletimAluno> KEY_PROVIDER = new ProvidesKey<TableMultipleBoletimAluno>() {
         @Override
-        public Object getKey(TableMultipleBoletimPeriodo item) {
-          return item == null ? null : Integer.toString(item.getIdCurso())+":"+Integer.toString(item.getIdPeriodo());
+        public Object getKey(TableMultipleBoletimAluno item) {
+          return item == null ? null : Integer.toString(item.getIdCurso())+":"+Integer.toString(item.getIdAluno());
         }
       };
 

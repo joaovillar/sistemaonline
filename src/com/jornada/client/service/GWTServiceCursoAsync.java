@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimAluno;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
@@ -29,6 +30,7 @@ public interface GWTServiceCursoAsync {
 	public void getCursosPeriodo(Boolean status, AsyncCallback<ArrayList<TableMultipleBoletimPeriodo>> callback);
 	public void getCursosBoletimAnual(Boolean status, AsyncCallback<ArrayList<TableMultipleBoletimAnual>> callback);
 	public void getCursosBoletimNotas(Boolean status, AsyncCallback<ArrayList<TableMultipleBoletimNotas>> callback);
+	public void getCursosBoletimAlunos(Boolean status, AsyncCallback<ArrayList<TableMultipleBoletimAluno>> callback);
 	
 
 }

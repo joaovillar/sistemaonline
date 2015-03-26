@@ -29,11 +29,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
-import com.jornada.client.ambiente.general.nota.DialogBoxNotaBoletimAluno;
-import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
-import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
 import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunoAmbientePais;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
@@ -176,7 +172,7 @@ public class HistoricoAluno extends VerticalPanel {
             int indexIdAluno = listBoxAlunos.getSelectedIndex();
             if (indexIdAluno != -1) {
 //                mpLoading.setVisible(true);
-//                populateNotas();
+                populateNotas();
             }
         }
     }
@@ -464,7 +460,7 @@ public class HistoricoAluno extends VerticalPanel {
         mpLoading.setVisible(true);
 //        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
         int idAluno = Integer.parseInt(listBoxAlunos.getSelectedValue());
-//        GWTServiceNota.Util.getInstance().getBoletimAluno(idCurso, idAluno, new CallBackCarregarNotas());
+        GWTServiceNota.Util.getInstance().getHistoricoAluno(idAluno, new CallBackCarregarNotas());
     }
 
    

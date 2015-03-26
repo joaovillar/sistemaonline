@@ -177,7 +177,10 @@ public class TabelaPresencaAluno implements Serializable{
     public static final ProvidesKey<TabelaPresencaAluno> KEY_PROVIDER = new ProvidesKey<TabelaPresencaAluno>() {
         @Override
         public Object getKey(TabelaPresencaAluno item) {
-          return item == null ? null : item.toString();
+          return item == null ? null : 
+              item.toString()+
+              item.getNomeDisciplina()+
+              item.getNomePeriodo();
         }
       };  
 	

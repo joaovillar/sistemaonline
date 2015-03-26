@@ -70,7 +70,7 @@ public class EditarUsuario extends VerticalPanel {
 	private AsyncCallback<String> callbackUpdateRow;
 	private AsyncCallback<Boolean> callbackDeleteRow;
 //	private AsyncCallback<ArrayList<TipoUsuario>> callbackGetTipoUsuarios;	
-	private AsyncCallback<ArrayList<Usuario>> callbackGetUsuariosFiltro;	
+//	private AsyncCallback<ArrayList<Usuario>> callbackGetUsuariosFiltro;	
 
 	private CellTable<Usuario> cellTable;
 	private  SelectionModel<Usuario> selectionModel;
@@ -213,29 +213,6 @@ public class EditarUsuario extends VerticalPanel {
 		};
 		
 		
-		callbackGetUsuariosFiltro = new AsyncCallback<ArrayList<Usuario>>() {
-
-			public void onSuccess(ArrayList<Usuario> list) {
-				MpUtilClient.isRefreshRequired(list);
-				mpPanelLoading.setVisible(false);
-				
-				cleanCellTable();
-				dataProvider.getList().clear();
-				
-				for(int i=0;i<list.size();i++){
-					dataProvider.getList().add(list.get(i));
-				}
-				
-				addCellTableData(dataProvider);
-			}
-
-			public void onFailure(Throwable caught) {
-				mpPanelLoading.setVisible(false);
-				MpDialogBoxRefreshPage mpDialogBoxRefreshPage = new MpDialogBoxRefreshPage();
-				mpDialogBoxRefreshPage.showDialog();
-
-			}
-		};			
 
 		/*********************** End Callbacks **********************/		
 
@@ -380,19 +357,9 @@ public class EditarUsuario extends VerticalPanel {
 
 
 	protected void cleanCellTable() {
-		
-		
-		//cellTable.setRowCount(0);		
 		cellTable.setPageStart(0);
 		cellTable.redraw();
-		dataProvider.refresh();
-		
-
-	    
-//		mpPager.setDisplay(cellTable);
-//		mpPager.setPageSize(15);
-	
-		
+		dataProvider.refresh();	
 	}
 	
 	protected void populateComboBoxTipoUsuario() {
@@ -442,7 +409,7 @@ public class EditarUsuario extends VerticalPanel {
 	
 	private void callGetUsuarios(){
 		String strCampoDB = selectCampoFiltrar.getValue(selectCampoFiltrar.getSelectedIndex());
-		GWTServiceUsuario.Util.getInstance().getUsuarios(strCampoDB,"%" + txtSearch.getText() + "%", callbackGetUsuariosFiltro);
+		GWTServiceUsuario.Util.getInstance().getUsuarios(strCampoDB,"%" + txtSearch.getText() + "%", new CallbackGetUsuariosFiltro());
 	}
 	
 	public void updateClientData(){		
@@ -899,5 +866,30 @@ public class EditarUsuario extends VerticalPanel {
 //		}
 //	}
 	
+//    callbackGetUsuariosFiltro = new AsyncCallback<ArrayList<Usuario>>() {
+	
+    private class CallbackGetUsuariosFiltro implements AsyncCallback<ArrayList<Usuario>> {
+        public void onSuccess(ArrayList<Usuario> list) {
+            MpUtilClient.isRefreshRequired(list);
+            mpPanelLoading.setVisible(false);
+
+            cleanCellTable();
+            dataProvider.getList().clear();
+
+            for (int i = 0; i < list.size(); i++) {
+                dataProvider.getList().add(list.get(i));
+            }
+
+            addCellTableData(dataProvider);
+        }
+
+        public void onFailure(Throwable caught) {
+            mpPanelLoading.setVisible(false);
+            MpDialogBoxRefreshPage mpDialogBoxRefreshPage = new MpDialogBoxRefreshPage();
+            mpDialogBoxRefreshPage.showDialog();
+
+        }
+    } 
+
 
 }

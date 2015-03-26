@@ -535,6 +535,10 @@ public class NotaServer {
 
         return listNotas;
     }
+    
+    public static ArrayList<ArrayList<String>> getHistoricoAluno(int idAluno) {
+        return null;
+    }
 
     public static ArrayList<ArrayList<String>> getBoletimAluno(int idCurso, int idAluno) {
         
@@ -924,59 +928,60 @@ public class NotaServer {
         // row.createCell((short) intColumn).setCellValue("Aluno");
         // row.getCell((short)
         // intColumn++).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));
-
-        ArrayList<String> listHeaderAlunoNotas = listAvaliacaoNotasAlunos.get(0);
-        row = sheet.createRow((short) intLine++);
-        intColumn = listHeaderAlunoNotas.size();
-        for (int i = 0; i < listHeaderAlunoNotas.size() - 1; i++) {
-            row.createCell((short) i);
-            if (i == 0 || i == 1) {
-                String strText = listHeaderAlunoNotas.get(i + 1);
-                row.getCell((short) i).setCellValue(strText);
-                row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING);
-                row.getCell((short) i).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));
-            } else {
-                String strText = listHeaderAlunoNotas.get(i + 1);
-                strText = Curso.getAbreviarNomeCurso(strText);
-                row.getCell((short) i).setCellValue(strText);
-                row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING);
-                row.getCell((short) i).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));
-            }
-        }
-
-        for (int line = 1; line < listAvaliacaoNotasAlunos.size(); line++) {
-            ArrayList<String> listAlunoNotas = listAvaliacaoNotasAlunos.get(line);
+        if (listAvaliacaoNotasAlunos.size() > 0) {
+            ArrayList<String> listHeaderAlunoNotas = listAvaliacaoNotasAlunos.get(0);
             row = sheet.createRow((short) intLine++);
-            for (int i = 0; i < listAlunoNotas.size() - 1; i++) {
-                String strText = listAlunoNotas.get(i + 1);
+            intColumn = listHeaderAlunoNotas.size();
+            for (int i = 0; i < listHeaderAlunoNotas.size() - 1; i++) {
                 row.createCell((short) i);
-
                 if (i == 0 || i == 1) {
+                    String strText = listHeaderAlunoNotas.get(i + 1);
                     row.getCell((short) i).setCellValue(strText);
                     row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING);
-                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb));
-
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));
                 } else {
-                    if (FieldVerifier.isNumeric(strText)) {
-                        double nota = Double.parseDouble(strText);
-                        double mediaCurso = Double.parseDouble(curso.getMediaNota());
-                        String strSinal = "";
-                        if (nota < mediaCurso) {
-                            strSinal = "*";
-                            row.getCell((short) i).setCellValue(strSinal + strText);
-                            row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING);
-                        } else {
-                            row.getCell((short) i).setCellValue(nota);
-                            row.getCell((short) i).setCellType(Cell.CELL_TYPE_NUMERIC);
-                        }
+                    String strText = listHeaderAlunoNotas.get(i + 1);
+                    strText = Curso.getAbreviarNomeCurso(strText);
+                    row.getCell((short) i).setCellValue(strText);
+                    row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING);
+                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleHeaderBoletim(wb));
+                }
+            }
 
-                    } else {
+            for (int line = 1; line < listAvaliacaoNotasAlunos.size(); line++) {
+                ArrayList<String> listAlunoNotas = listAvaliacaoNotasAlunos.get(line);
+                row = sheet.createRow((short) intLine++);
+                for (int i = 0; i < listAlunoNotas.size() - 1; i++) {
+                    String strText = listAlunoNotas.get(i + 1);
+                    row.createCell((short) i);
+
+                    if (i == 0 || i == 1) {
                         row.getCell((short) i).setCellValue(strText);
                         row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING);
+                        row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb));
+
+                    } else {
+                        if (FieldVerifier.isNumeric(strText)) {
+                            double nota = Double.parseDouble(strText);
+                            double mediaCurso = Double.parseDouble(curso.getMediaNota());
+                            String strSinal = "";
+                            if (nota < mediaCurso) {
+                                strSinal = "*";
+                                row.getCell((short) i).setCellValue(strSinal + strText);
+                                row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING);
+                            } else {
+                                row.getCell((short) i).setCellValue(nota);
+                                row.getCell((short) i).setCellType(Cell.CELL_TYPE_NUMERIC);
+                            }
+
+                        } else {
+                            row.getCell((short) i).setCellValue(strText);
+                            row.getCell((short) i).setCellType(Cell.CELL_TYPE_STRING);
+                        }
+
+                        row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+
                     }
-
-                    row.getCell((short) i).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
-
                 }
             }
         }
@@ -1126,11 +1131,9 @@ public class NotaServer {
     }
     
     
-    public static String getExcelBoletimAluno(int idCurso, int idAluno) {
-        XSSFWorkbook wb = new XSSFWorkbook();
-
-        // /Creating Tabs
-        XSSFSheet sheet = wb.createSheet("Boletim Anual");
+    public static String getExcelBoletimAluno(XSSFWorkbook wb, XSSFSheet sheet, int idCurso, int idAluno) {
+//        XSSFWorkbook wb = new XSSFWorkbook();
+//        XSSFSheet sheet = wb.createSheet("Boletim Anual");
         sheet.setFitToPage(true);
         sheet.getPrintSetup().setLandscape(false);
         sheet.setMargin((short) 1, 1.5);
@@ -1402,7 +1405,8 @@ public class NotaServer {
         RegionUtil.setBorderLeft(BorderStyle.THIN.ordinal(), regionFaltas, sheet, wb);
         RegionUtil.setBorderRight(BorderStyle.THIN.ordinal(), regionFaltas, sheet, wb);
 
-        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnual_");
+        return "";
+//        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnual_");
     }
 
     public static String gerarExcelBoletimPeriodo(XSSFWorkbook wb, XSSFSheet sheet, int idCurso, int idPeriodo) {

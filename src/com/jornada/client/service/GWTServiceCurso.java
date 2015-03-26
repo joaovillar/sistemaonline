@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimAluno;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
@@ -47,6 +48,7 @@ public interface GWTServiceCurso extends RemoteService {
 	public ArrayList<TableMultipleBoletimPeriodo> getCursosPeriodo(Boolean status);
 	public ArrayList<TableMultipleBoletimAnual> getCursosBoletimAnual(Boolean status);
 	public ArrayList<TableMultipleBoletimNotas> getCursosBoletimNotas(Boolean status);
+	public ArrayList<TableMultipleBoletimAluno> getCursosBoletimAlunos(Boolean status);
 	
 
 	public static class Util {

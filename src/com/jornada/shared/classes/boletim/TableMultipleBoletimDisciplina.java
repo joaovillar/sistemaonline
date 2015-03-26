@@ -95,7 +95,10 @@ public class TableMultipleBoletimDisciplina implements Serializable{
     public static final ProvidesKey<TableMultipleBoletimDisciplina> KEY_PROVIDER = new ProvidesKey<TableMultipleBoletimDisciplina>() {
         @Override
         public Object getKey(TableMultipleBoletimDisciplina item) {
-          return item == null ? null : Integer.toString(item.getIdCurso()+item.getIdPeriodo()+item.getIdDisciplina());
+          return item == null ? null : 
+              Integer.toString(item.getIdCurso())+":"+
+              Integer.toString(item.getIdPeriodo())+":"+
+              Integer.toString(item.getIdDisciplina());
         }
       };
 

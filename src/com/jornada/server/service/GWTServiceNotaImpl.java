@@ -28,6 +28,7 @@ import com.jornada.server.framework.excel.ExcelFramework;
 import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.TabelaBoletim;
+import com.jornada.shared.classes.boletim.TableMultipleBoletimAluno;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
 import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
@@ -112,6 +113,10 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
         return NotaServer.getBoletimAluno(idCurso, idAluno);
      }
     
+    public ArrayList<ArrayList<String>> getHistoricoAluno(int idAluno){
+        return NotaServer.getHistoricoAluno(idAluno);
+     }
+    
     public ArrayList<ArrayList<String>> getRelatorioBoletimDisciplina(int idCurso, int idPeriodo, int idDisciplina) {
         return NotaServer.getRelatorioBoletimDisciplina(idCurso, idPeriodo, idDisciplina);
      }
@@ -161,7 +166,23 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
     }
     
     public String getExcelBoletimAluno(int idCurso, int idAluno) {
-        return NotaServer.getExcelBoletimAluno(idCurso, idAluno);
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("Boletim Anual Aluno");
+        NotaServer.getExcelBoletimAluno(wb, sheet, idCurso, idAluno);
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnualAluno_");
+    }
+    
+    public String getExcelBoletimAluno(ArrayList<TableMultipleBoletimAluno> listTableMBD) {        
+        XSSFWorkbook wb = new XSSFWorkbook();
+        for (int i = 0; i < listTableMBD.size(); i++) {
+            TableMultipleBoletimAluno tableMBD = listTableMBD.get(i);
+            String strTab = Integer.toString(i+1)+") ";
+            strTab += tableMBD.getNomeCurso().substring(0,3)+"-";
+            strTab += tableMBD.getNomeAluno().substring(0,3);
+            XSSFSheet sheet = wb.createSheet(strTab);
+            NotaServer.getExcelBoletimAluno(wb, sheet, tableMBD.getIdCurso(), tableMBD.getIdAluno());
+        }
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnualAluno_");        
     }
     
     public String getExcelBoletimAnual(int idCurso){

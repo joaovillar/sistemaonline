@@ -29,11 +29,8 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
@@ -53,6 +50,7 @@ import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
+import com.jornada.client.classes.widgets.textbox.MpTextBox;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.FieldVerifier;
@@ -62,8 +60,8 @@ import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class EditarCurso extends VerticalPanel {
 
-	private AsyncCallback<String> callbackUpdateRow;
-	private AsyncCallback<Boolean> callbackDelete;
+//	private AsyncCallback<String> callbackUpdateRow;
+//	private AsyncCallback<Boolean> callbackDelete;
 	private AsyncCallback<ArrayList<Curso>> callbackGetCursosFiltro;
 	
 	private ListDataProvider<Curso> dataProvider = new ListDataProvider<Curso>();
@@ -95,6 +93,10 @@ public class EditarCurso extends VerticalPanel {
 
     private static final String IMAGE_DELETE = "images/delete.png";
     private static final String IMAGE_EDIT = "images/comment_edit.png";
+    
+    MpLabelRight lblStatusCurso;
+    MpLabelRight lblNomeCurso;
+    MpImageButton btnFiltrar;
 
 	private TelaInicialCurso telaInicialCurso;
 	
@@ -102,7 +104,7 @@ public class EditarCurso extends VerticalPanel {
 	
 	private VerticalPanel vPanelEditGrid;
 	
-	private TextBox txtSearch;
+	private MpTextBox txtSearch;
 
 	public EditarCurso(TelaInicialCurso telaInicialCurso) {
 		
@@ -145,25 +147,17 @@ public class EditarCurso extends VerticalPanel {
 		listaStatus.put("false", txtConstants.cursoDesativado());
 		
 		
-		FlexTable flexTableFiltrar = new FlexTable();		
-		flexTableFiltrar.setCellSpacing(3);
-		flexTableFiltrar.setCellPadding(3);
-		flexTableFiltrar.setBorderWidth(0);
-		
-		MpLabelRight lblStatusCurso = new MpLabelRight(txtConstants.cursoStatus());
-		
-		Label lblNomeCurso = new Label(txtConstants.cursoNome());
-		lblNomeCurso.setStyleName("design_label");
-		lblNomeCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		
-		txtSearch = new TextBox();
-		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
-		
-		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
-		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
-		
-		txtSearch.setStyleName("design_text_boxes");			
-		
+        lblStatusCurso = new MpLabelRight(txtConstants.cursoStatus());
+        lblNomeCurso = new MpLabelRight(txtConstants.cursoNome());
+        
+        txtSearch = new MpTextBox();
+        btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");        
+        txtSearch.addKeyUpHandler(new EnterKeyUpHandlerFiltrar());
+        btnFiltrar.addClickHandler(new ClickHandlerFiltrar());        
+        txtSearch.setStyleName("design_text_boxes");      
+        txtSearch.setWidth("150px");
+        
+
 		vPanelEditGrid = new VerticalPanel();			
 		
 		cellTable = new CellTable<Curso>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
@@ -181,8 +175,13 @@ public class EditarCurso extends VerticalPanel {
 		MpSimplePager mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
 		mpPager.setPageSize(15);	
-		
-		
+
+
+		FlexTable flexTableFiltrar = new FlexTable();     
+        flexTableFiltrar.setCellSpacing(3);
+        flexTableFiltrar.setCellPadding(3);
+        flexTableFiltrar.setBorderWidth(0);
+        
 		flexTableFiltrar.setWidget(0, 0, mpPager);
 		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
 		flexTableFiltrar.setWidget(0, 2, lblNomeCurso);
@@ -207,69 +206,57 @@ public class EditarCurso extends VerticalPanel {
 		
 		/************************* Begin Callback's *************************/
 		
-		callbackUpdateRow = new AsyncCallback<String>() {
-			public void onSuccess(String result) {
-				mpPanelLoading.setVisible(false);
-				if(result.equals("true")){
-					EditarCurso.this.telaInicialCurso.updateAssociarCurso();
-					EditarCurso.this.telaInicialCurso.updateAdicionarCurso();
-				}else if(result.contains(Curso.DB_UNIQUE_KEY)){
-	                String strCurso = result.substring(result.indexOf("=(")+2);
-	                strCurso = strCurso.substring(strCurso.indexOf(",")+1);
-	                strCurso = strCurso.substring(0,strCurso.indexOf(")"));
-	                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-	                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar() + " "+txtConstants.cursoDuplicado((strCurso)));  
-	                mpDialogBoxWarning.showDialog(); 
-	            } else{
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
-					mpDialogBoxWarning.showDialog();					
-				}
-				
-			}
-			public void onFailure(Throwable caught) {
-				mpPanelLoading.setVisible(false);
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar());
-				mpDialogBoxWarning.showDialog();
-			}
-		};
 
-		callbackDelete = new AsyncCallback<Boolean>() {
-
-			public void onSuccess(Boolean success) {
-
-				if (success == true) {
-					populateGrid();
-					EditarCurso.this.telaInicialCurso.updateAssociarCurso();
-					EditarCurso.this.telaInicialCurso.updateAdicionarCurso();
-					// SC.say("Periodo removido com sucesso.");
-				} else {
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.cursoErroRemover());
-					mpDialogBoxWarning.showDialog();
-				}
-
-			}
-
-			public void onFailure(Throwable caught) {
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.cursoErroRemover());
-				mpDialogBoxWarning.showDialog();
-
-			}
-		};
 
 		/*********************** End Callbacks **********************/
 
 		/******** Begin Populate ********/
 		populateGrid();
 		/******** End Populate ********/
-
+//		initializeCellTable();
 
 		setWidth("100%");
 		super.add(vPanelEditGrid);
 
+	}
+	
+	
+	public void initializeCellTable(){
+	    
+      
+	        
+	    cellTable = new CellTable<Curso>(15,GWT.<CellTableStyle> create(CellTableStyle.class));
+        cellTable.setWidth("100%");
+        cellTable.setAutoHeaderRefreshDisabled(true);
+        cellTable.setAutoFooterRefreshDisabled(true);
+        
+        final SelectionModel<Curso> selectionModel = new MultiSelectionModel<Curso>(Curso.KEY_PROVIDER);
+        cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<Curso> createCheckboxManager());
+        initTableColumns(selectionModel);
+        
+        dataProvider.addDataDisplay(cellTable);             
+        
+        MpSimplePager mpPager = new MpSimplePager();
+        mpPager.setDisplay(cellTable);
+//        mpPager.setPageSize(15);    
+//        flexTableFiltrar.setWidget(0, 0, mpPager);
+        
+
+        
+        ScrollPanel scrollPanel = new ScrollPanel();
+//      scrollPanel.setSize(Integer.toString(TelaInicialCurso.intWidthTable+20)+"px",Integer.toString(TelaInicialCurso.intHeightTable-90)+"px");
+        scrollPanel.setHeight(Integer.toString(TelaInicialCurso.intHeightTable-90)+"px");
+        scrollPanel.setAlwaysShowScrollBars(false);     
+        scrollPanel.add(cellTable);
+        
+        
+        
+        vPanelEditGrid.add(scrollPanel);
+       vPanelEditGrid.add(cellTable);
+        vPanelEditGrid.setWidth("100%");
+        
+        populateGrid();
+        
 	}
 
 	private class MyImageCell extends ImageCell {
@@ -307,7 +294,7 @@ public class EditarCurso extends VerticalPanel {
 
                             if (x.primaryActionFired()) {
 
-                                GWTServiceCurso.Util.getInstance().deleteCursoRow(curso.getIdCurso(), callbackDelete);
+                                GWTServiceCurso.Util.getInstance().deleteCursoRow(curso.getIdCurso(), new CallbackDelete());
 
                             }
                         }
@@ -348,28 +335,36 @@ public class EditarCurso extends VerticalPanel {
 					public void onSuccess(ArrayList<Curso> list) {
 						MpUtilClient.isRefreshRequired(list);
 						mpPanelLoading.setVisible(false);	
+						cleanCellTable();
 						dataProvider.getList().clear();
-						cellTable.setRowCount(0);
+//						cellTable.setRowCount(0);
+						
+
 						for(int i=0;i<list.size();i++){
 							dataProvider.getList().add(list.get(i));
 						}
-							
+	                     
 //						sortHandler = new ListHandler<Curso>(dataProvider.getList());
 //						cellTable.addColumnSortHandler(sortHandler);	
 						//cellTable = createCellTable(dataProvider);
 						addCellTableData(dataProvider);
-						cellTable.redraw();		
+//						cellTable.setPageStart(0);
+//						cellTable.redraw();		
+						
 					}
 				});
 	}
 	
 	
 	
-	private class EnterKeyUpHandler implements KeyUpHandler{
+	private class EnterKeyUpHandlerFiltrar implements KeyUpHandler{
 		
 		public void onKeyUp(KeyUpEvent event){
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+			    
 				populateGrid();
+//			    initializeCellTable();
+				
 //				GWTServiceComunicado.Util.getInstance().getComunicados("%" + txtSearch.getText() + "%", callbackGetComunicadosFiltro);
 			}
 		}
@@ -377,7 +372,10 @@ public class EditarCurso extends VerticalPanel {
 	
 	private class ClickHandlerFiltrar implements ClickHandler {
 		public void onClick(ClickEvent event) {
+		    
 			populateGrid();
+//		    initializeCellTable();
+			
 				//GWTServiceUsuario.Util.getInstance().getUsuarios("%" + txtSearch.getText() + "%", callbackGetUsuariosFiltro);
 		}
 	}		
@@ -419,7 +417,7 @@ public class EditarCurso extends VerticalPanel {
 				// Called when the user changes the value.
 				if (FieldVerifier.isValidName(value)) {
 					object.setNome(value);
-					GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+					GWTServiceCurso.Util.getInstance().updateCursoRow(object, new CallbackUpdateRow());
 				} else {
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.cursoCampoNomeObrigatorio());
@@ -444,7 +442,7 @@ public class EditarCurso extends VerticalPanel {
 			public void update(int index, Curso object, String value) {
 				// Called when the user changes the value.
 				object.setDescricao(value);
-				GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+				GWTServiceCurso.Util.getInstance().updateCursoRow(object, new CallbackUpdateRow());
 			}
 		});
 
@@ -460,7 +458,7 @@ public class EditarCurso extends VerticalPanel {
 			public void update(int index, Curso object, String value) {
 				// Called when the user changes the value.
 				object.setEmenta(value);
-				GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+				GWTServiceCurso.Util.getInstance().updateCursoRow(object, new CallbackUpdateRow());
 			}
 		});
 		
@@ -477,7 +475,7 @@ public class EditarCurso extends VerticalPanel {
             public void update(int index, Curso object, String value) {
                 // Called when the user changes the value.
                 object.setStatus(Boolean.parseBoolean(value));
-                GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+                GWTServiceCurso.Util.getInstance().updateCursoRow(object, new CallbackUpdateRow());
             }
         });		
         
@@ -494,7 +492,7 @@ public class EditarCurso extends VerticalPanel {
             public void update(int index, Curso object, String value) {
                 // Called when the user changes the value.
                 object.setEnsino(value);
-                GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+                GWTServiceCurso.Util.getInstance().updateCursoRow(object, new CallbackUpdateRow());
             }
         }); 
 		
@@ -512,7 +510,7 @@ public class EditarCurso extends VerticalPanel {
 			public void update(int index, Curso object, String value) {
 				// Called when the user changes the value.
 				object.setMediaNota(value);
-				GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+				GWTServiceCurso.Util.getInstance().updateCursoRow(object, new CallbackUpdateRow());
 			}
 		});
 	    
@@ -529,7 +527,7 @@ public class EditarCurso extends VerticalPanel {
 			public void update(int index, Curso object, String value) {
 				// Called when the user changes the value.
 				object.setPorcentagemPresenca(value);
-				GWTServiceCurso.Util.getInstance().updateCursoRow(object,callbackUpdateRow);
+				GWTServiceCurso.Util.getInstance().updateCursoRow(object, new CallbackUpdateRow());
 			}
 		});			    
 
@@ -667,5 +665,65 @@ public class EditarCurso extends VerticalPanel {
 //	    });	 	    	    
 	}
 	
+	
+    private class CallbackUpdateRow implements AsyncCallback<String> {
+
+        public void onSuccess(String result) {
+            mpPanelLoading.setVisible(false);
+            if (result.equals("true")) {
+                EditarCurso.this.telaInicialCurso.updateAssociarCurso();
+                EditarCurso.this.telaInicialCurso.updateAdicionarCurso();
+            } else if (result.contains(Curso.DB_UNIQUE_KEY)) {
+                String strCurso = result.substring(result.indexOf("=(") + 2);
+                strCurso = strCurso.substring(strCurso.indexOf(",") + 1);
+                strCurso = strCurso.substring(0, strCurso.indexOf(")"));
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar() + " " + txtConstants.cursoDuplicado((strCurso)));
+                mpDialogBoxWarning.showDialog();
+            } else {
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar() + " " + txtConstants.geralRegarregarPagina());
+                mpDialogBoxWarning.showDialog();
+            }
+
+        }
+
+        public void onFailure(Throwable caught) {
+            mpPanelLoading.setVisible(false);
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.cursoErroAtualizar());
+            mpDialogBoxWarning.showDialog();
+        }
+    }
+
+    private class CallbackDelete implements AsyncCallback<Boolean> {
+        public void onSuccess(Boolean success) {
+
+            if (success == true) {
+                populateGrid();
+                EditarCurso.this.telaInicialCurso.updateAssociarCurso();
+                EditarCurso.this.telaInicialCurso.updateAdicionarCurso();
+                // SC.say("Periodo removido com sucesso.");
+            } else {
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.cursoErroRemover());
+                mpDialogBoxWarning.showDialog();
+            }
+
+        }
+
+        public void onFailure(Throwable caught) {
+            mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+            mpDialogBoxWarning.setBodyText(txtConstants.cursoErroRemover());
+            mpDialogBoxWarning.showDialog();
+
+        }
+    }
+    
+    protected void cleanCellTable() {
+        cellTable.setPageStart(0);
+        cellTable.redraw();
+        dataProvider.refresh(); 
+    }
 	
 }
