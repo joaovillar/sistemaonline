@@ -1,4 +1,4 @@
-package com.jornada.client.classes.listBoxes.ambiente.pais;
+package com.jornada.client.classes.listBoxes.ambiente.aluno;
 
 import java.util.ArrayList;
 
@@ -11,34 +11,33 @@ import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.classes.Usuario;
 
-public class MpSelectionAlunoAmbientePais extends MpSelection {	
+public class MpListBoxAlunoAmbienteAluno extends MpSelection {	
 	
 	private AsyncCallback<ArrayList<Usuario>> callBackPopulateComboBox;
 	
 	private ListBox listBoxAux;
 
 	
-	public MpSelectionAlunoAmbientePais(Usuario usuarioPai){
+	public MpListBoxAlunoAmbienteAluno(Usuario usuarioPai){
 		
 		listBoxAux = new ListBox();
 		
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Usuario>>() {
 			public void onSuccess(ArrayList<Usuario> lista) {
+				
 				try {
 					finishLoadingListBox();
 
 					for (Usuario object : lista) {
-						addItem(object.getPrimeiroNome() + " "+ object.getSobreNome(),Integer.toString(object.getIdUsuario()));
+						addItem(object.getPrimeiroNome() + " " + object.getSobreNome(),Integer.toString(object.getIdUsuario()));
 						listBoxAux.addItem(object.getPrimeiroNome() + " "+ object.getSobreNome(),Integer.toString(object.getIdUsuario()));
 					}
 
 					setVisibleItemCount(1);
 
-					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
-					// MpSelectionAlunoAmbientePais.this);
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionAlunoAmbientePais.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxAlunoAmbienteAluno.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}
@@ -66,9 +65,9 @@ public class MpSelectionAlunoAmbientePais extends MpSelection {
 		
 	}	
 	
-	public void populateComboBox(Usuario usuarioPai) {
+	public void populateComboBox(Usuario usuarioAluno) {
 		startLoadingListBox();
-		GWTServiceUsuario.Util.getInstance().getFilhoDoPaiAmbientePais(usuarioPai, callBackPopulateComboBox);
+		GWTServiceUsuario.Util.getInstance().getFilhoDoPaiAmbientePais(usuarioAluno, callBackPopulateComboBox);
 	}
 	
 	private void startLoadingListBox(){

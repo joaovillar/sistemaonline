@@ -38,8 +38,8 @@ import com.googlecode.gwt.charts.client.options.LegendPosition;
 import com.googlecode.gwt.charts.client.options.VAxis;
 import com.jornada.client.ambiente.general.nota.DialogBoxNota;
 import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunosPorCursoAmbientePais;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxAlunosPorCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxCursoAmbientePais;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -76,8 +76,8 @@ public class VisualizarNotasAlunoPais extends VerticalPanel {
 //    private MpSelection listBoxCursoAluno;
 //    private MpSelection listBoxAlunosPorCursoAluno;
 
-    private MpSelectionCursoAmbientePais listBoxCursoAluno;
-    private MpSelectionAlunosPorCursoAmbientePais listBoxAlunosPorCursoAluno;
+    private MpListBoxCursoAmbientePais listBoxCursoAluno;
+    private MpListBoxAlunosPorCursoAmbientePais listBoxAlunosPorCursoAluno;
     
     private Usuario usuarioLogado;
 
@@ -163,10 +163,10 @@ public class VisualizarNotasAlunoPais extends VerticalPanel {
         Label lblNomeCurso = new Label(txtConstants.curso());
         Label lblNomeAluno = new Label(txtConstants.alunoNome());
 
-        listBoxCursoAluno = new MpSelectionCursoAmbientePais(usuarioLogado);
+        listBoxCursoAluno = new MpListBoxCursoAmbientePais(usuarioLogado);
         listBoxCursoAluno.addChangeHandler(new MpCursoSelectionChangeHandler());
 
-        listBoxAlunosPorCursoAluno = new MpSelectionAlunosPorCursoAmbientePais();
+        listBoxAlunosPorCursoAluno = new MpListBoxAlunosPorCursoAmbientePais();
         listBoxAlunosPorCursoAluno.addChangeHandler(new MpAlunosPorCursoSelectionChangeHandler());
         
         

@@ -10,11 +10,11 @@ import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.service.GWTServiceIdioma;
 import com.jornada.shared.classes.Idioma;
 
-public class MpSelectionIdiomas extends MpSelection {	
+public class MpListBoxIdiomas extends MpSelection {	
 	
 	private AsyncCallback<ArrayList<Idioma>> callBackPopulateComboBox;
 	
-	public MpSelectionIdiomas(){
+	public MpListBoxIdiomas(){
 
 		
 		/***********************Begin Callbacks**********************/
@@ -30,7 +30,7 @@ public class MpSelectionIdiomas extends MpSelection {
 					setVisibleItemCount(1);
 
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpSelectionIdiomas.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(), MpListBoxIdiomas.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}

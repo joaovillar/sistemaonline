@@ -1,4 +1,4 @@
-package com.jornada.client.classes.listBoxes.ambiente.professor;
+package com.jornada.client.classes.listBoxes.ambiente.pais;
 
 import java.util.ArrayList;
 
@@ -11,19 +11,20 @@ import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Usuario;
 
-public class MpSelectionCursoAmbienteProfessor extends MpSelection {	
+public class MpListBoxCursoAmbientePais extends MpSelection {	
 	
 	private AsyncCallback<ArrayList<Curso>> callBackPopulateComboBox;
 	
 	private ArrayList<Curso> listCurso;
 	
-	public MpSelectionCursoAmbienteProfessor(Usuario usuario){
-
-	    listCurso = new ArrayList<Curso>();
+	public MpListBoxCursoAmbientePais(Usuario usuario){
+		
+		listCurso = new ArrayList<Curso>();
 		
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Curso>>() {
 			public void onSuccess(ArrayList<Curso> lista) {
+				
 				try {
 					finishLoadingListBox();
 
@@ -35,7 +36,7 @@ public class MpSelectionCursoAmbienteProfessor extends MpSelection {
 					setVisibleItemCount(1);
 
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionCursoAmbienteProfessor.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxCursoAmbientePais.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}
@@ -48,6 +49,7 @@ public class MpSelectionCursoAmbienteProfessor extends MpSelection {
 			public void onFailure(Throwable cautch) {
 				logoutAndRefreshPage();
 				clear();
+				listCurso.clear();
 				addItem(new Label(ERRO_POPULAR).getText());
 
 			}
@@ -65,20 +67,28 @@ public class MpSelectionCursoAmbienteProfessor extends MpSelection {
 	
 	public void populateComboBox(Usuario usuario) {
 		startLoadingListBox();
-		GWTServiceCurso.Util.getInstance().getCursosAmbienteProfessor(usuario, true, callBackPopulateComboBox);
+		GWTServiceCurso.Util.getInstance().getCursosPorPaiAmbientePais(usuario, callBackPopulateComboBox);
 	}
 	
 	private void startLoadingListBox(){
 		clear();
+		listCurso.clear();
 		addItem(CARREGANDO,Integer.toString(-1));
 	}
 	
 	private void finishLoadingListBox(){
+		listCurso.clear();
 		clear();
 	}
 
-    public ArrayList<Curso> getListCurso() {
-        return listCurso;
-    }
+	public ArrayList<Curso> getListCurso() {
+		return listCurso;
+	}
+
+	public void setListCurso(ArrayList<Curso> listCurso) {
+		this.listCurso = listCurso;
+	}
+
+
 	
 }

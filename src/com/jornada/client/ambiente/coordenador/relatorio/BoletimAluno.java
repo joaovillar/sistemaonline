@@ -28,11 +28,13 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
+import com.jornada.client.ambiente.coordenador.relatorio.customcell.CustomHeaderBuilderBoletimAluno;
+import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxExcelRelatorioBoletim;
 import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxMultipleBoletimAluno;
 import com.jornada.client.ambiente.general.nota.DialogBoxNotaBoletimAluno;
 import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxCursoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -68,7 +70,7 @@ public class BoletimAluno extends VerticalPanel {
     ArrayList<String> arrayHeadersText = new ArrayList<String>();
     ArrayList<String> arrayHeadersTextBackup = new ArrayList<String>();
 
-    private MpSelectionCursoAmbienteProfessor listBoxCurso;
+    private MpListBoxCursoAmbienteProfessor listBoxCurso;
     private MpSelectionAlunosPorCurso listBoxAlunosPorCurso;
 //    private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
 
@@ -119,7 +121,7 @@ public class BoletimAluno extends VerticalPanel {
         mpHelperCurso = new MpListBoxPanelHelper();
         mpHelperAluno = new MpListBoxPanelHelper();
 
-        listBoxCurso = new MpSelectionCursoAmbienteProfessor(usuarioLogado);
+        listBoxCurso = new MpListBoxCursoAmbienteProfessor(usuarioLogado);
         listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 
         listBoxAlunosPorCurso = new MpSelectionAlunosPorCurso();

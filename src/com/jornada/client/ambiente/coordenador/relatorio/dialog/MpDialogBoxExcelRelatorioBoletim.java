@@ -1,4 +1,4 @@
-package com.jornada.client.ambiente.coordenador.relatorio;
+package com.jornada.client.ambiente.coordenador.relatorio.dialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyCodes;

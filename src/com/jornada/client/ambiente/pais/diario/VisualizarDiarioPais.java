@@ -28,8 +28,8 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunosPorCursoAmbientePais;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxAlunosPorCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxCursoAmbientePais;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -49,8 +49,8 @@ public class VisualizarDiarioPais extends VerticalPanel {
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading mpPanelLoadingAluno = new MpPanelLoading("images/radar.gif");
 
-	private MpSelectionCursoAmbientePais listBoxCurso;
-	private MpSelectionAlunosPorCursoAmbientePais listBoxAlunosPorCurso;
+	private MpListBoxCursoAmbientePais listBoxCurso;
+	private MpListBoxAlunosPorCursoAmbientePais listBoxAlunosPorCurso;
 	
 	private TextBox txtSearch;
 	
@@ -114,7 +114,7 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		int row = 1;
 		flexTableWithListBoxes.setWidget(row, 0, lblCurso);
 
-		listBoxCurso = new MpSelectionCursoAmbientePais(telaInicialDiarioPais.getMainView().getUsuarioLogado());	
+		listBoxCurso = new MpListBoxCursoAmbientePais(telaInicialDiarioPais.getMainView().getUsuarioLogado());	
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		
 //		if(telaInicialDiarioPais.getMainView().getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.PAIS){
@@ -128,7 +128,7 @@ public class VisualizarDiarioPais extends VerticalPanel {
 			lblNomeAluno.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
 			lblNomeAluno.setStyleName("design_label");
 			
-			listBoxAlunosPorCurso = new MpSelectionAlunosPorCursoAmbientePais();
+			listBoxAlunosPorCurso = new MpListBoxAlunosPorCursoAmbientePais();
 			listBoxAlunosPorCurso.addChangeHandler(new MpAlunosPorCursoSelectionChangeHandler());
 
 			flexTableWithListBoxes.setWidget(row, 0, lblCurso);	

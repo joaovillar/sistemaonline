@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -29,20 +28,21 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunoAmbientePais;
+import com.jornada.client.ambiente.coordenador.relatorio.customcell.CustomHeaderBuilderHistoricoAluno;
+import com.jornada.client.ambiente.coordenador.relatorio.dialog.DialogBoxHistoricoAluno;
+import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxExcelRelatorioBoletim;
+import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
+import com.jornada.client.classes.listBoxes.MpSelectionCurso;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxStatusCurso;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
-import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.label.MpLabelRight;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
-import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
-import com.jornada.shared.classes.Nota;
-import com.jornada.shared.classes.TipoAvaliacao;
-import com.jornada.shared.classes.Usuario;
+import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class HistoricoAluno extends VerticalPanel {
@@ -53,7 +53,8 @@ public class HistoricoAluno extends VerticalPanel {
     MpDialogBox mpDialogBoxWarning = new MpDialogBox();
     MpPanelLoading mpLoading = new MpPanelLoading("images/radar.gif");
 
-//    MpListBoxPanelHelper mpHelperCurso;
+
+    MpListBoxPanelHelper mpHelperCurso;
     MpListBoxPanelHelper mpHelperAluno;
 
     VerticalPanel panel = new VerticalPanel();
@@ -67,10 +68,11 @@ public class HistoricoAluno extends VerticalPanel {
     ArrayList<String> arrayHeadersText = new ArrayList<String>();
     ArrayList<String> arrayHeadersTextBackup = new ArrayList<String>();
 
-//    private MpSelectionCursoAmbienteProfessor listBoxCurso;
-    private MpSelectionAlunoAmbientePais listBoxAlunos;
-//    private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
+    private MpListBoxStatusCurso listBoxStatusCurso;
+    private MpSelectionCurso listBoxCurso;
+    private MpSelectionAlunosPorCurso listBoxAlunosPorCurso;
 
+    @SuppressWarnings("unused")
     private TelaInicialRelatorio telaInicialRelatorio;
 
     TextConstants txtConstants;
@@ -79,7 +81,7 @@ public class HistoricoAluno extends VerticalPanel {
     VerticalPanel vFormPanel;
     FlexTable flexTableNota;
 
-    private Usuario usuarioLogado;
+//    private Usuario usuarioLogado;
 
     private static HistoricoAluno uniqueInstance;
 
@@ -99,7 +101,7 @@ public class HistoricoAluno extends VerticalPanel {
 
         this.telaInicialRelatorio = telaInicialRelatorio;
 
-        usuarioLogado = this.telaInicialRelatorio.getMainView().getUsuarioLogado();
+//        usuarioLogado = this.telaInicialRelatorio.getMainView().getUsuarioLogado();
 
         mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
         mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -111,27 +113,41 @@ public class HistoricoAluno extends VerticalPanel {
         flexTable.setCellSpacing(3);
         flexTable.setCellPadding(3);
 
-//        MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
+        MpLabelRight lblStatusCurso = new MpLabelRight(txtConstants.cursoStatus());
+        MpLabelRight lblCurso = new MpLabelRight(txtConstants.curso());
         MpLabelRight lblAluno = new MpLabelRight(txtConstants.aluno());
 
 
-//        mpHelperCurso = new MpListBoxPanelHelper();
+        mpHelperCurso = new MpListBoxPanelHelper();
         mpHelperAluno = new MpListBoxPanelHelper();
+        
+        listBoxStatusCurso = new MpListBoxStatusCurso();
+        listBoxStatusCurso.addChangeHandler(new MpStatusCursoChangeHandler());
 
+        listBoxCurso = new MpSelectionCurso(true);
+        listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 
-        listBoxAlunos = new MpSelectionAlunoAmbientePais(usuarioLogado);
-        listBoxAlunos.addChangeHandler(new MpAlunoSelectionChangeHandler());
+        listBoxAlunosPorCurso = new MpSelectionAlunosPorCurso();
+        listBoxAlunosPorCurso.addChangeHandler(new MpAlunoSelectionChangeHandler());
+
+//        listBoxAlunos = new MpSelectionAlunoAmbientePais(usuarioLogado);
+//        listBoxAlunos.addChangeHandler(new MpAlunoSelectionChangeHandler());
 
 
         // Add some standard form options
         int row = 1;
-
-//        flexTable.setWidget(row, 0, lblCurso);
-//        flexTable.setWidget(row, 1, listBoxCurso);
+        
+        
+        flexTable.setWidget(row, 0, lblStatusCurso);
+        flexTable.setWidget(row++, 1, listBoxStatusCurso);
 //        flexTable.setWidget(row++, 2, mpHelperCurso);
+
+        flexTable.setWidget(row, 0, lblCurso);
+        flexTable.setWidget(row, 1, listBoxCurso);
+        flexTable.setWidget(row++, 2, mpHelperCurso);
                                                      
         flexTable.setWidget(row, 0, lblAluno);
-        flexTable.setWidget(row, 1, listBoxAlunos);
+        flexTable.setWidget(row, 1, listBoxAlunosPorCurso);
         flexTable.setWidget(row, 2, mpHelperAluno);
         flexTable.setWidget(row++, 3, mpLoading);
 
@@ -154,24 +170,15 @@ public class HistoricoAluno extends VerticalPanel {
     }
 
     public void updateClientData() {
-        listBoxAlunos.populateComboBox(usuarioLogado);
+        listBoxCurso.populateComboBox();
     }
-
-//    private class MpCursoSelectionChangeHandler implements ChangeHandler {
-//        public void onChange(ChangeEvent event) {
-//            mpHelperCurso.populateSuggestBox(listBoxCurso);
-//            int idCurso = Integer.parseInt(listBoxCurso.getValue(listBoxCurso.getSelectedIndex()));
-//            listBoxAlunos.populateComboBox(idCurso);
-//            flexTableNota.clear();
-//        }
-//    }
 
     private class MpAlunoSelectionChangeHandler implements ChangeHandler {
         public void onChange(ChangeEvent event) {
-            mpHelperAluno.populateSuggestBox(listBoxAlunos);
-            int indexIdAluno = listBoxAlunos.getSelectedIndex();
+            mpHelperAluno.populateSuggestBox(listBoxAlunosPorCurso);
+            int indexIdAluno = listBoxAlunosPorCurso.getSelectedIndex();
             if (indexIdAluno != -1) {
-//                mpLoading.setVisible(true);
+                mpLoading.setVisible(true);
                 populateNotas();
             }
         }
@@ -179,42 +186,7 @@ public class HistoricoAluno extends VerticalPanel {
 
 
 
-    private class CallBackCarregarNotas implements AsyncCallback<ArrayList<ArrayList<String>>> {
-
-        @Override
-        public void onFailure(Throwable caught) {
-            mpLoading.setVisible(false);
-            MpUtilClient.isRefreshRequired();
-        }
-
-        @Override
-        public void onSuccess(ArrayList<ArrayList<String>> list) {
-            mpLoading.setVisible(false);
-            MpUtilClient.isRefreshRequired(list);
-
-            dataProvider = new ListDataProvider<ArrayList<String>>();
-
-            dataProvider.getList().clear();
-            arrayListBackup.clear();
-            arrayHeadersText.clear();
-            arrayHeadersTextBackup.clear();
-            
-            ArrayList<String> listColumns = list.get(0);
-            for (int i = 1; i < listColumns.size(); i++) {
-                arrayHeadersText.add(listColumns.get(i));
-                arrayHeadersTextBackup.add(listColumns.get(i));
-            }   
-
-            for (int i = 1; i < list.size(); i++) {
-                dataProvider.getList().add(list.get(i));
-                arrayListBackup.add(list.get(i));
-            }
-
-            initializeCellTable();
-
-        }
-
-    }
+  
 
     public void initializeCellTable() {
         cellTable = new CellTable<ArrayList<String>>(15, GWT.<CellTableStyle> create(CellTableStyle.class));
@@ -227,7 +199,7 @@ public class HistoricoAluno extends VerticalPanel {
         mpPager.setDisplay(cellTable);
 
         // ///////////////////////ColumnName//////////////////////////////////
-        IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME, false);
+        IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME);
 
         ListHandler<ArrayList<String>> sortHandler = new ListHandler<ArrayList<String>>(dataProvider.getList());
 
@@ -245,7 +217,7 @@ public class HistoricoAluno extends VerticalPanel {
 
         String strSpace = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-        builder.appendHtmlConstant(strSpace + strSpace + "Disciplina" + strSpace + strSpace);
+        builder.appendHtmlConstant(strSpace + strSpace + "Áreas de Conhecimento" + strSpace + strSpace);
         SafeHtml safeHtml = builder.toSafeHtml();
         cellTable.addColumn(indexColumnName, safeHtml);
         
@@ -254,53 +226,17 @@ public class HistoricoAluno extends VerticalPanel {
         for (int column = 0; column < arrayHeadersText.size(); column++) {
 
             String strHeaderText = arrayHeadersText.get(column);
+            strHeaderText = strHeaderText.substring(strHeaderText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
  
-            String strPeriodo = strHeaderText.substring(strHeaderText.indexOf("[") + 1, strHeaderText.indexOf("]") - 1);
-            String strNomeAval = strHeaderText.substring(strHeaderText.indexOf("]") + 1, strHeaderText.length());
-
-            if (column == (arrayHeadersText.size() - 1) || column == (arrayHeadersText.size() - 2) || column == (arrayHeadersText.size() - 3)) {
-                strPeriodo = strPeriodo.substring(0, 7).toUpperCase() + strNomeAval;
-            } else {
-                strPeriodo = "[" + strPeriodo.substring(0, 7).toUpperCase() + "]<br>" + strNomeAval;
-            }
-
- 
-            final String strHeader = strPeriodo;
-
-            boolean booAdicionarNota = false;
-            if (strHeader.equals(TipoAvaliacao.STR_ADICIONAL_NOTA)) {
-                booAdicionarNota = true;
-            }
-
-            final IndexedColumn indexedColumn = new IndexedColumn(column + INT_POSITION_NAME + 1, booAdicionarNota);
+//            final String strHeader = strHeaderText.substring(strHeaderText.indexOf(FieldVerifier.INI_SEPARATOR)+2, strHeaderText.length());
+            final String strHeader = strHeaderText;
+            final IndexedColumn indexedColumn = new IndexedColumn(column + INT_POSITION_NAME + 1);
 
             final Header<String> header = new Header<String>(new ClickableTextCell()) {
                 @Override
                 public String getValue() {
-                    return strHeader;
-           
+                    return strHeader+":::";           
                 }       
-                @Override
-                public void render(Context context,SafeHtmlBuilder sb){
-                    
-                    String strTitle=getValue();
-                    if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_EX)){
-                        strTitle = "Exame Nota";
-                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_MFP)){
-                        strTitle = "Média Final Provisória";
-                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_MFA)){
-                        strTitle = Nota.STR_MEDIA_FINAL_ANUAL;
-                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_REC)){
-                        strTitle = txtConstants.avaliacaoRecuperacao();
-                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_MP)){
-                        strTitle = "Média Trimestral Provisória";
-                    }else if(strTitle.contains(Nota.STR_BOLETIM_ALUNO_MF)){
-                        strTitle = "Média Final do Trimestre";
-                    }   
-                    sb.appendHtmlConstant("<div align=\"center\"><span title=\""+strTitle+"\">"+getValue()+"</span></div>"); 
-                }
-
-
             };
             
 
@@ -311,22 +247,21 @@ public class HistoricoAluno extends VerticalPanel {
             indexedColumn.setFieldUpdater(new FieldUpdater<ArrayList<String>, String>() {
                 @Override
                 public void update(int index, ArrayList<String> object, final String value) {
+                    
+                    if (!value.equals("-")) {
 
-//                    int idUsuario = Integer.parseInt(listBoxAlunos.getSelectedValue());
-//                    int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-//                    String strNomeCurso = listBoxCurso.getSelectedItemText();
-//                    Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
-//                    String strHeader = arrayHeadersTextBackup.get(indexedColumn.getIndex() - 1);
-//                    String strNomePeriodo = strHeader.substring(1, strHeader.indexOf("]"));
-//                    String strNomeProva = strHeader.substring(strHeader.indexOf("]") + 1);
-//
-//                    String strNomeDisciplina = object.get(0);
-//                    if (intColumn == (arrayHeadersText.size() - 1) || intColumn == (arrayHeadersText.size() - 2) || intColumn == (arrayHeadersText.size() - 3)) {
-////                        DialogBoxNotaBoletimAluno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso, strNomeProva);
-//                        DialogBoxNotasAno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
-//                    } else {
-//                        DialogBoxNotaBoletimAluno.getInstance(idUsuario, idCurso, strNomeCurso, strNomeDisciplina, strNomePeriodo, mediaNotaCurso, strNomeProva);
-//                    }
+                        
+                        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+                        String strNomeCurso = listBoxCurso.getSelectedItemText();
+                        int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
+                        String strNomeDisciplina = object.get(0);
+//                        strNomeDisciplina = strNomeDisciplina.substring(strNomeDisciplina.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+                        Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+
+                        if (indexedColumn.getIndex() != arrayListBackup.size() + INT_POSITION_NAME) {
+                            DialogBoxHistoricoAluno.getInstance(idCurso, idUsuario, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
+                        }
+                    }
 
                 }
             });
@@ -338,13 +273,11 @@ public class HistoricoAluno extends VerticalPanel {
                 }
             });
 
-
-            cellTable.addColumn(indexedColumn, header);
-           
+            cellTable.addColumn(indexedColumn, header);           
             
         }
         
-        cellTable.setHeaderBuilder(new CustomHeaderBuilderBoletimAluno(cellTable, arrayHeadersTextBackup));
+        cellTable.setHeaderBuilder(new CustomHeaderBuilderHistoricoAluno(cellTable, arrayHeadersText));
         
         Image imgExcel = new Image("images/excel.24.png");
         imgExcel.addClickHandler(new ClickHandlerExcel());
@@ -358,7 +291,7 @@ public class HistoricoAluno extends VerticalPanel {
         flexTableImg.setWidget(0, columnImg++, imgExcel);
         flexTableImg.setBorderWidth(0);
         
-        MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
+//        MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
         
         if (txtSearch == null) {
             txtSearch = new TextBox();
@@ -366,15 +299,16 @@ public class HistoricoAluno extends VerticalPanel {
         }
         
         txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
-        btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
+//        btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
 
         
         FlexTable flexTableSearch = new FlexTable();
-        flexTableSearch.setWidth("450px");
-        flexTableSearch.setWidget(0, 0, mpPager);
-        flexTableSearch.setWidget(0, 1, new MpSpaceVerticalPanel());
-        flexTableSearch.setWidget(0, 2, txtSearch);
-        flexTableSearch.setWidget(0, 3, btnFiltrar);   
+        flexTableSearch.setWidth("370px");
+        flexTableSearch.setWidget(0, 0, txtSearch);        
+//        flexTableSearch.setWidget(0, 1, new MpSpaceVerticalPanel());
+        flexTableSearch.setWidget(0, 1, mpPager);
+
+//        flexTableSearch.setWidget(0, 3, btnFiltrar);   
 
         FlexTable flexTableMenu = new FlexTable();
         flexTableMenu.setCellPadding(0);
@@ -400,12 +334,12 @@ public class HistoricoAluno extends VerticalPanel {
 
     class IndexedColumn extends Column<ArrayList<String>, String> {
         private int index;
-        private boolean booAdicionaNota;
+//        private boolean booAdicionaNota;
 
-        public IndexedColumn(int index, boolean booAdicionaNota) {
+        public IndexedColumn(int index) {
             super(new ClickableTextCell());
             this.index = index;
-            this.booAdicionaNota = booAdicionaNota;
+//            this.booAdicionaNota = booAdicionaNota;
         }
 
         public int getIndex() {
@@ -428,13 +362,11 @@ public class HistoricoAluno extends VerticalPanel {
         @Override
         public String getCellStyleNames(Context context, ArrayList<String> object) {
             String strStyle = "";
-            Double doubleMediaNotaCurso = 6.0;//Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+            Double doubleMediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
             try {
                 double doubleNumber = Double.parseDouble(object.get(this.index));
 
-                if (booAdicionaNota == true) {
-                    strStyle = "table-boletim-cell-green";
-                } else if (doubleNumber >= doubleMediaNotaCurso) {
+               if (doubleNumber >= doubleMediaNotaCurso) {
                     strStyle = "table-boletim-cell-green";
                 } else if (doubleNumber < doubleMediaNotaCurso) {
                     strStyle = "table-boletim-cell-red";
@@ -450,17 +382,11 @@ public class HistoricoAluno extends VerticalPanel {
 
     }
 
-//    private void populateColunasAvaliacoes() {
-//        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-//        int idAluno = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
-////        GWTServiceAvaliacao.Util.getInstance().getHeaderRelatorioBoletimDisciplina(idCurso, idAluno, idDisciplina, new CallBackCarregarAvaliacao());
-//    }
-
     private void populateNotas() {
         mpLoading.setVisible(true);
-//        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-        int idAluno = Integer.parseInt(listBoxAlunos.getSelectedValue());
-        GWTServiceNota.Util.getInstance().getHistoricoAluno(idAluno, new CallBackCarregarNotas());
+        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+        int idAluno = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
+        GWTServiceNota.Util.getInstance().getHistoricoAluno(idCurso, idAluno, new CallBackCarregarHistorico());
     }
 
    
@@ -469,7 +395,7 @@ public class HistoricoAluno extends VerticalPanel {
         @Override
         public void onClick(ClickEvent event) {
 //            int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
-            int idAluno = Integer.parseInt(listBoxAlunos.getSelectedValue());
+            int idAluno = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
 
 //            MpDialogBoxExcelRelatorioBoletim.getInstanceBoletimAluno(idCurso, idAluno);
         }
@@ -519,18 +445,79 @@ public class HistoricoAluno extends VerticalPanel {
     
     private class EnterKeyUpHandler implements KeyUpHandler {
         public void onKeyUp(KeyUpEvent event) {
-           if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+//           if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                filtrarCellTable(txtSearch.getText());
-           }
+//           }
        }
    }
 
    
-   private class ClickHandlerFiltrar implements ClickHandler {
-       public void onClick(ClickEvent event) {
-           filtrarCellTable(txtSearch.getText());
+//   private class ClickHandlerFiltrar implements ClickHandler {
+//       public void onClick(ClickEvent event) {
+//           filtrarCellTable(txtSearch.getText());
+//       }
+//   }   
+   
+   private class CallBackCarregarHistorico implements AsyncCallback<ArrayList<ArrayList<String>>> {
+
+       @Override
+       public void onFailure(Throwable caught) {
+           mpLoading.setVisible(false);
+           MpUtilClient.isRefreshRequired();
        }
-   }       
+
+       @Override
+       public void onSuccess(ArrayList<ArrayList<String>> list) {
+           mpLoading.setVisible(false);
+           MpUtilClient.isRefreshRequired(list);
+
+           dataProvider = new ListDataProvider<ArrayList<String>>();
+
+           dataProvider.getList().clear();
+           arrayListBackup.clear();
+           arrayHeadersText.clear();
+           arrayHeadersTextBackup.clear();
+           
+           ArrayList<String> listColumns = list.get(0);
+           for (int i = 1; i < listColumns.size(); i++) {
+               String header = listColumns.get(i);
+               arrayHeadersText.add(header);
+               arrayHeadersTextBackup.add(listColumns.get(i));
+           }   
+
+           for (int i = 1; i < list.size(); i++) {
+               ArrayList<String> listRow = list.get(i);
+               String strText = listRow.get(0);
+               strText = strText.substring(strText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+               listRow.set(0, strText);
+               dataProvider.getList().add(list.get(i));
+               arrayListBackup.add(list.get(i));
+           }
+
+           initializeCellTable();
+
+       }
+
+   }
+   
+   
+   private class MpStatusCursoChangeHandler implements ChangeHandler {
+       public void onChange(ChangeEvent event) {
+           mpHelperCurso.populateSuggestBox(listBoxCurso);
+           boolean booStatusCurso = Boolean.parseBoolean(listBoxStatusCurso.getSelectedValue());
+           listBoxCurso.populateComboBox(booStatusCurso);
+
+       }
+   }
+   
+   private class MpCursoSelectionChangeHandler implements ChangeHandler {
+       public void onChange(ChangeEvent event) {
+           mpHelperCurso.populateSuggestBox(listBoxCurso);
+           int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+           listBoxAlunosPorCurso.populateComboBox(idCurso);
+           flexTableNota.clear();
+       }
+   }
 
 
 }

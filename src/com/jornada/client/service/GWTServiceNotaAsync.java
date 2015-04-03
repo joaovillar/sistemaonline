@@ -32,7 +32,7 @@ public interface GWTServiceNotaAsync {
 	public void getExcelBoletimPeriodo(ArrayList<TableMultipleBoletimPeriodo> listTableMBD, AsyncCallback<String> callback);
 	public void getExcelBoletimAnual(ArrayList<TableMultipleBoletimAnual> listTableMBD, AsyncCallback<String> callback);
 	public void getExcelBoletimNotas(ArrayList<TableMultipleBoletimNotas> listTableMBD, AsyncCallback<String> callback);
-	public void getHistoricoAluno(int idAluno, AsyncCallback<ArrayList<ArrayList<String>>> callback);
+	public void getHistoricoAluno(int idCurso, int idAluno, AsyncCallback<ArrayList<ArrayList<String>>> callback);
 
 	
 

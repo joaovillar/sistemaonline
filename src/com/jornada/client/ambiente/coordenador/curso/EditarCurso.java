@@ -36,10 +36,10 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxMediaNota;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPorcentagemPresenca;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxEnsino;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxStatusCurso;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -79,7 +79,7 @@ public class EditarCurso extends VerticalPanel {
 	
 	private MpListBoxMediaNota mpListBoxMediaNota;
 	private MpListBoxPorcentagemPresenca mpListBoxPorcentagemPresenca;
-	private MpSelection mpListBoxStatus;
+	private MpListBoxStatusCurso mpListBoxStatus;
 	private MpListBoxEnsino listBoxEnsino;
 	
 	private LinkedHashMap<String, String> listaMediaNota = new LinkedHashMap<String, String>();
@@ -123,9 +123,9 @@ public class EditarCurso extends VerticalPanel {
 		
 		listBoxEnsino = new MpListBoxEnsino();
 		
-        mpListBoxStatus = new MpSelection();
-        mpListBoxStatus.addItem(txtConstants.cursoAtivo(), "true");
-        mpListBoxStatus.addItem(txtConstants.cursoDesativado(), "false");		
+        mpListBoxStatus = new MpListBoxStatusCurso();
+//        mpListBoxStatus.addItem(txtConstants.cursoAtivo(), "true");
+//        mpListBoxStatus.addItem(txtConstants.cursoDesativado(), "false");		
         mpListBoxStatus.setSelectItem("true");
         mpListBoxStatus.setWidth("80px");
 		

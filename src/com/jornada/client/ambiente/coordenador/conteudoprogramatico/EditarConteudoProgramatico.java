@@ -40,9 +40,9 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxCursoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxDisciplinaAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxPeriodoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
@@ -71,9 +71,9 @@ public class EditarConteudoProgramatico extends VerticalPanel {
 	private Column<ConteudoProgramatico, String> objetivoColumn;
 	private ListDataProvider<ConteudoProgramatico> dataProvider = new ListDataProvider<ConteudoProgramatico>();	
 
-	private MpSelectionCursoAmbienteProfessor listBoxCurso;
-	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;	
-	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
+	private MpListBoxCursoAmbienteProfessor listBoxCurso;
+	private MpListBoxPeriodoAmbienteProfessor listBoxPeriodo;	
+	private MpListBoxDisciplinaAmbienteProfessor listBoxDisciplina;
 	
 	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
 	
@@ -110,9 +110,9 @@ public class EditarConteudoProgramatico extends VerticalPanel {
 		Label lblPeriodo = new Label(txtConstants.periodo());
 		Label lblDisciplina = new Label(txtConstants.disciplina());
 
-		listBoxCurso = new MpSelectionCursoAmbienteProfessor(usuarioLogado);
-		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(usuarioLogado);
-		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(usuarioLogado);
+		listBoxCurso = new MpListBoxCursoAmbienteProfessor(usuarioLogado);
+		listBoxPeriodo = new MpListBoxPeriodoAmbienteProfessor(usuarioLogado);
+		listBoxDisciplina = new MpListBoxDisciplinaAmbienteProfessor(usuarioLogado);
 		
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());		
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());		

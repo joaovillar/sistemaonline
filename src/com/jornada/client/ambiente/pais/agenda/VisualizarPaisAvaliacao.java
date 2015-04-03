@@ -30,7 +30,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.ambiente.coordenador.periodo.TelaInicialPeriodo;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxCursoAmbientePais;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -59,7 +59,7 @@ public class VisualizarPaisAvaliacao extends VerticalPanel {
 	private TextBox txtSearch;
 	ArrayList<CursoAvaliacao> arrayListBackup = new ArrayList<CursoAvaliacao>();
 
-	private MpSelectionCursoAmbientePais listBoxCurso;
+	private MpListBoxCursoAmbientePais listBoxCurso;
 
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
@@ -93,7 +93,7 @@ public class VisualizarPaisAvaliacao extends VerticalPanel {
 
 		Label lblCursoEdit = new Label(txtConstants.curso());
 
-		listBoxCurso = new MpSelectionCursoAmbientePais(telaInicialPaisAgenda.getMainView().getUsuarioLogado());
+		listBoxCurso = new MpListBoxCursoAmbientePais(telaInicialPaisAgenda.getMainView().getUsuarioLogado());
 		listBoxCurso.setWidth("250px");
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 

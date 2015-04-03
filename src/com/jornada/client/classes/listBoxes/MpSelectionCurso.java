@@ -82,6 +82,11 @@ public class MpSelectionCurso extends MpSelection {
 		GWTServiceCurso.Util.getInstance().getCursos(true, callBackPopulateComboBox);
 	}
 	
+    public void populateComboBox(boolean statusCurso) {
+        startLoadingListBox();
+        GWTServiceCurso.Util.getInstance().getCursos(statusCurso, callBackPopulateComboBox);
+    }
+	
 	private void startLoadingListBox(){
 		clear();
 		listBoxAux.clear();

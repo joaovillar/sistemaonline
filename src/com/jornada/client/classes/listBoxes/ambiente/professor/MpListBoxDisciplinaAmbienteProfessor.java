@@ -11,13 +11,13 @@ import com.jornada.client.service.GWTServiceDisciplina;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Usuario;
 
-public class MpSelectionDisciplinaAmbienteProfessor extends MpSelection {	
+public class MpListBoxDisciplinaAmbienteProfessor extends MpSelection {	
 	
 	private AsyncCallback<ArrayList<Disciplina>> callBackPopulateComboBox;
 	
 	private Usuario usuario;
 	
-	public MpSelectionDisciplinaAmbienteProfessor(Usuario usuario){
+	public MpListBoxDisciplinaAmbienteProfessor(Usuario usuario){
 
 		this.usuario = usuario;
 
@@ -37,7 +37,7 @@ public class MpSelectionDisciplinaAmbienteProfessor extends MpSelection {
 					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),
 					// MpSelectionDisciplinaAmbienteProfessor.this);
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionDisciplinaAmbienteProfessor.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxDisciplinaAmbienteProfessor.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}

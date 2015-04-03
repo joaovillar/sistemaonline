@@ -1,4 +1,4 @@
-package com.jornada.client.ambiente.coordenador.relatorio;
+package com.jornada.client.ambiente.coordenador.relatorio.customcell;
 
 import java.util.ArrayList;
 import java.util.Set;

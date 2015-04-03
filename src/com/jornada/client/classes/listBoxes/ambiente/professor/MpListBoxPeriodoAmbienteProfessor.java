@@ -11,13 +11,13 @@ import com.jornada.client.service.GWTServicePeriodo;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Usuario;
 
-public class MpSelectionPeriodoAmbienteProfessor extends MpSelection {
+public class MpListBoxPeriodoAmbienteProfessor extends MpSelection {
 
 	private AsyncCallback<ArrayList<Periodo>> callBackPopulateComboBox;
 	
 	private Usuario usuario;
 
-	public MpSelectionPeriodoAmbienteProfessor(Usuario usuario) {
+	public MpListBoxPeriodoAmbienteProfessor(Usuario usuario) {
 		
 		this.usuario = usuario;
 
@@ -36,7 +36,7 @@ public class MpSelectionPeriodoAmbienteProfessor extends MpSelection {
 
 					// DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionPeriodoAmbienteProfessor.this);
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionPeriodoAmbienteProfessor.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxPeriodoAmbienteProfessor.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}

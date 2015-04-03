@@ -29,7 +29,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
-import com.jornada.client.classes.listBoxes.ambiente.aluno.MpSelectionCursoAmbienteAluno;
+import com.jornada.client.classes.listBoxes.ambiente.aluno.MpListBoxCursoAmbienteAluno;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -50,7 +50,7 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading mpPanelLoadingAluno = new MpPanelLoading("images/radar.gif");
 
-	private MpSelectionCursoAmbienteAluno listBoxCurso;
+	private MpListBoxCursoAmbienteAluno listBoxCurso;
 	private MpSelectionAlunosPorCurso listBoxAlunosPorCurso;
 	
 	private TextBox txtSearch;
@@ -119,7 +119,7 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 		int row = 1;
 		flexTableWithListBoxes.setWidget(row, 0, lblCurso);
 
-		listBoxCurso = new MpSelectionCursoAmbienteAluno(telaInicialDiarioAluno.getMainView().getUsuarioLogado());	
+		listBoxCurso = new MpListBoxCursoAmbienteAluno(telaInicialDiarioAluno.getMainView().getUsuarioLogado());	
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		
 

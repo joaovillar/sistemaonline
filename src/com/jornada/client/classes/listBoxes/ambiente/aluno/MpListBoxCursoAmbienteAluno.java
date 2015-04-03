@@ -1,4 +1,4 @@
-package com.jornada.client.classes.listBoxes.ambiente.pais;
+package com.jornada.client.classes.listBoxes.ambiente.aluno;
 
 import java.util.ArrayList;
 
@@ -11,13 +11,13 @@ import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Usuario;
 
-public class MpSelectionCursoAmbientePais extends MpSelection {	
+public class MpListBoxCursoAmbienteAluno extends MpSelection {	
 	
 	private AsyncCallback<ArrayList<Curso>> callBackPopulateComboBox;
 	
 	private ArrayList<Curso> listCurso;
 	
-	public MpSelectionCursoAmbientePais(Usuario usuario){
+	public MpListBoxCursoAmbienteAluno(Usuario usuario){
 		
 		listCurso = new ArrayList<Curso>();
 		
@@ -36,7 +36,7 @@ public class MpSelectionCursoAmbientePais extends MpSelection {
 					setVisibleItemCount(1);
 
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionCursoAmbientePais.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxCursoAmbienteAluno.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}
@@ -67,7 +67,7 @@ public class MpSelectionCursoAmbientePais extends MpSelection {
 	
 	public void populateComboBox(Usuario usuario) {
 		startLoadingListBox();
-		GWTServiceCurso.Util.getInstance().getCursosPorPaiAmbientePais(usuario, callBackPopulateComboBox);
+		GWTServiceCurso.Util.getInstance().getCursosPorAlunoAmbienteAluno(usuario, callBackPopulateComboBox);
 	}
 	
 	private void startLoadingListBox(){
@@ -77,8 +77,8 @@ public class MpSelectionCursoAmbientePais extends MpSelection {
 	}
 	
 	private void finishLoadingListBox(){
-		listCurso.clear();
 		clear();
+		listCurso.clear();
 	}
 
 	public ArrayList<Curso> getListCurso() {
@@ -88,7 +88,21 @@ public class MpSelectionCursoAmbientePais extends MpSelection {
 	public void setListCurso(ArrayList<Curso> listCurso) {
 		this.listCurso = listCurso;
 	}
-
-
+	
+//	public Curso getSelectedObject(int index){
+//		
+//		Curso curso = null;
+//		int idCurso = Integer.parseInt(this.getValue(index));
+//		
+//		for(int i=0;i<this.getItemCount();i++){
+//			
+//			if(idCurso==listCurso.get(i).getIdCurso()){
+//				curso = listCurso.get(i);
+//			}
+//		}
+//		
+//		return curso;
+//	}
+	
 	
 }

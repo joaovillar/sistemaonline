@@ -31,9 +31,9 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxCursoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxDisciplinaAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxPeriodoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
@@ -63,9 +63,9 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 	MpPanelLoading mpPanelLoadingSaving = new MpPanelLoading("images/radar.gif");
 	MpPanelLoading mpPanelLoadingAluno = new MpPanelLoading("images/radar.gif");
 
-	private MpSelectionCursoAmbienteProfessor listBoxCurso;
-	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
-	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;	
+	private MpListBoxCursoAmbienteProfessor listBoxCurso;
+	private MpListBoxPeriodoAmbienteProfessor listBoxPeriodo;
+	private MpListBoxDisciplinaAmbienteProfessor listBoxDisciplina;	
 //	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;
 	
 	MpListBoxPanelHelper mpHelperCurso = new  MpListBoxPanelHelper();
@@ -148,9 +148,9 @@ public class AdicionarDiarioProfessor extends VerticalPanel {
 		int row = 1;
 		flexTableComboBoxes.setWidget(row, 0, lblCurso);
 
-		listBoxCurso = new MpSelectionCursoAmbienteProfessor(telaInicialDiarioProfessor.getMainView().getUsuarioLogado());		
-		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(telaInicialDiarioProfessor.getMainView().getUsuarioLogado());		
-		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(telaInicialDiarioProfessor.getMainView().getUsuarioLogado());		
+		listBoxCurso = new MpListBoxCursoAmbienteProfessor(telaInicialDiarioProfessor.getMainView().getUsuarioLogado());		
+		listBoxPeriodo = new MpListBoxPeriodoAmbienteProfessor(telaInicialDiarioProfessor.getMainView().getUsuarioLogado());		
+		listBoxDisciplina = new MpListBoxDisciplinaAmbienteProfessor(telaInicialDiarioProfessor.getMainView().getUsuarioLogado());		
 		mpDateBoxInicial = new MpDateBoxWithImage();
 		mpDateBoxInicial.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
 		mpDateBoxInicial.getDate().setWidth("170px");		

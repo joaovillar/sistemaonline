@@ -3,9 +3,9 @@ package com.jornada.client.classes.listBoxes.ambiente.professor;
 import com.jornada.client.classes.listBoxes.MpSelection;
 
 
-public class MpSelectionPesoNota extends MpSelection {
+public class MpListBoxPesoNota extends MpSelection {
     
-    public MpSelectionPesoNota(){
+    public MpListBoxPesoNota(){
         
         setWidth("100px");
         

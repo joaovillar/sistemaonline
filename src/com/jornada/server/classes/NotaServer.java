@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -30,6 +31,9 @@ import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.TipoStatusUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.boletim.TabelaBoletim;
+import com.jornada.shared.classes.curso.Ano;
+import com.jornada.shared.classes.curso.AnoItem;
+import com.jornada.shared.classes.curso.Ensino;
 
 public class NotaServer {
 
@@ -313,7 +317,7 @@ public class NotaServer {
         ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();
         ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
-
+//aa
         HashSet<String> hashSetDisciplinas = new HashSet<String>();
         // Pegando nome das disciplinas de todo o ano letivo
         for (Periodo periodo : listPeriodo) {
@@ -536,8 +540,112 @@ public class NotaServer {
         return listNotas;
     }
     
-    public static ArrayList<ArrayList<String>> getHistoricoAluno(int idAluno) {
-        return null;
+    public static ArrayList<ArrayList<String>> getHistoricoAluno(int idCurso, int idAluno) {
+        
+        ArrayList<ArrayList<String>> listHistorico = new ArrayList<ArrayList<String>>();
+        Usuario aluno = UsuarioServer.getUsuarioPeloId(idAluno);
+        ArrayList<Curso> listCursos = new ArrayList<Curso>();
+        Curso cursoAtual = CursoServer.getCurso(idCurso);
+        ArrayList<Curso> listCursosAtivados = new ArrayList<Curso>();
+        ArrayList<Curso> listCursosDesativados = CursoServer.getCursosPorAlunoAmbienteAluno(aluno, false);
+        
+        listCursosAtivados.add(cursoAtual);
+        
+        listCursos.addAll(listCursosAtivados);
+        listCursos.addAll(listCursosDesativados);
+        
+        Ano ano = new Ano();
+        
+
+        if (cursoAtual != null) {
+            
+            if (cursoAtual.getEnsino().equals(Ensino.FUNDAMENTAL)) {
+                ArrayList<String> listHeader = new ArrayList<String>();
+                listHeader.add("");
+                for(int i=0;i<ano.getListFundamental().size();i++){
+                    AnoItem anoItem = ano.getListFundamental().get(i);
+                    listHeader.add(anoItem.getValue()+FieldVerifier.INI_SEPARATOR+anoItem.getName());
+                }
+                listHistorico.add(listHeader);
+                
+                HashSet<String> hashDisciplinas = new HashSet<String>();
+                hashDisciplinas.add("Disciplinas");
+                for(Curso cursoRow : listCursos){
+                    ArrayList<Periodo> listPeriodos = PeriodoServer.getPeriodos(cursoRow.getIdCurso());
+                    for(Periodo periodoRow : listPeriodos){
+                        ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinas(periodoRow.getIdPeriodo());
+                        for(Disciplina disciplinaRow : listDisciplinas){
+                            hashDisciplinas.add(disciplinaRow.isObrigatoria()+FieldVerifier.INI_SEPARATOR+disciplinaRow.getNome());
+                        }
+                    }
+                }
+                
+                ArrayList<String> listDisciplinas = new ArrayList<String>(hashDisciplinas);
+                
+                Collections.sort(listDisciplinas, new Comparator<String>() {
+                    public int compare(String str1, String str2) {
+                        return str1.compareTo(str2);
+                    }
+                });
+                
+                
+                for(int row = 0; row<listDisciplinas.size();row++){
+                    ArrayList<String> listRow = new ArrayList<String>();
+                    if(row>0){                        
+                        for(int column=0;column<listHeader.size();column++){
+                            if(column==0){
+                                listRow.add(listDisciplinas.get(row));
+                            }else{
+                                listRow.add("-");
+                            }
+                        }
+                        listHistorico.add(listRow);
+                    }                    
+                }
+//                zxc
+                
+//                for(Curso cursoRow : listCursos){
+                for(int column=1; column<listHeader.size();column++){
+                    String strHeader = listHeader.get(column).substring(0,listHeader.get(column).indexOf(FieldVerifier.INI_SEPARATOR));
+                    
+                    int idCursoColumn=0;
+                    for(Curso cursoRow : listCursos){
+                        if(cursoRow.getAno().equals(strHeader)){
+                            idCursoColumn = cursoRow.getIdCurso();
+                        }
+                    }
+                    if(idCursoColumn>0){
+                        ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCursoColumn);
+                        
+                        
+//                        for(String strDisciplina : listDisciplinas){
+                        for (int row = 1;row<listDisciplinas.size();row++){
+                            String strDisciplina = listDisciplinas.get(row);
+                            strDisciplina = strDisciplina.substring(strDisciplina.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+                            String strMediaAnualDisciplina = getMediaAnualDisciplina(idAluno, idCursoColumn, listPeriodo, strDisciplina);
+                            listHistorico.get(row).set(column, strMediaAnualDisciplina);
+                        }
+                    }
+
+                }
+                
+                
+                
+                
+            } else if (cursoAtual.getEnsino().equals(Ensino.MEDIO)) {
+                ArrayList<String> header = new ArrayList<String>();
+                for(int i=0;i<ano.getListMedio().size();i++){
+                    AnoItem anoItem = ano.getListMedio().get(i);
+                    header.add(anoItem.getValue()+FieldVerifier.INI_SEPARATOR+anoItem.getName());
+                }
+                listHistorico.add(header);
+
+            }
+            
+        }
+        
+        
+        return listHistorico;
     }
 
     public static ArrayList<ArrayList<String>> getBoletimAluno(int idCurso, int idAluno) {

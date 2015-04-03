@@ -1,4 +1,4 @@
-package com.jornada.client.classes.listBoxes.ambiente.aluno;
+package com.jornada.client.classes.listBoxes.ambiente.pais;
 
 import java.util.ArrayList;
 
@@ -11,33 +11,31 @@ import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.service.GWTServiceUsuario;
 import com.jornada.shared.classes.Usuario;
 
-public class MpSelectionAlunoAmbienteAluno extends MpSelection {	
+public class MpListBoxAlunosPorCursoAmbientePais extends MpSelection {	
 	
 	private AsyncCallback<ArrayList<Usuario>> callBackPopulateComboBox;
 	
 	private ListBox listBoxAux;
 
-	
-	public MpSelectionAlunoAmbienteAluno(Usuario usuarioPai){
+	public MpListBoxAlunosPorCursoAmbientePais(){
 		
 		listBoxAux = new ListBox();
-		
+
 		/***********************Begin Callbacks**********************/
 		callBackPopulateComboBox = new AsyncCallback<ArrayList<Usuario>>() {
 			public void onSuccess(ArrayList<Usuario> lista) {
-				
 				try {
 					finishLoadingListBox();
 
 					for (Usuario object : lista) {
-						addItem(object.getPrimeiroNome() + " " + object.getSobreNome(),Integer.toString(object.getIdUsuario()));
+						addItem(object.getPrimeiroNome() + " "+ object.getSobreNome(),Integer.toString(object.getIdUsuario()));
 						listBoxAux.addItem(object.getPrimeiroNome() + " "+ object.getSobreNome(),Integer.toString(object.getIdUsuario()));
 					}
 
 					setVisibleItemCount(1);
 
 					try {
-						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpSelectionAlunoAmbienteAluno.this);
+						DomEvent.fireNativeEvent(Document.get().createChangeEvent(),MpListBoxAlunosPorCursoAmbientePais.this);
 					} catch (Exception ex) {
 						logoutAndRefreshPage();
 					}
@@ -57,17 +55,14 @@ public class MpSelectionAlunoAmbienteAluno extends MpSelection {
 
 		/***********************End Callbacks**********************/
 		
-		
-		/******** Begin Populate ********/
-		populateComboBox(usuarioPai);
-		/******** End Populate ********/				
+
 
 		
 	}	
 	
-	public void populateComboBox(Usuario usuarioAluno) {
+	public void populateComboBox(Usuario usuarioPai, int idCurso) {
 		startLoadingListBox();
-		GWTServiceUsuario.Util.getInstance().getFilhoDoPaiAmbientePais(usuarioAluno, callBackPopulateComboBox);
+		GWTServiceUsuario.Util.getInstance().getUsuariosPorCursoAmbientePai(usuarioPai, idCurso, callBackPopulateComboBox);
 	}
 	
 	private void startLoadingListBox(){
@@ -83,10 +78,11 @@ public class MpSelectionAlunoAmbienteAluno extends MpSelection {
 	public void filterComboBox(String strFilter){
 	
 		clear();
+
 		
 		for(int i=0;i<listBoxAux.getItemCount();i++){
 			addItem(listBoxAux.getItemText(i),listBoxAux.getValue(i));
-		}		
+		}
 		
 		strFilter = strFilter.toUpperCase();
 		
@@ -103,10 +99,8 @@ public class MpSelectionAlunoAmbienteAluno extends MpSelection {
 					continue;
 				}
 				i++;
-			}
-			
-		}
-		
+			}			
+		}		
 	}
 
 }

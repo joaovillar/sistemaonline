@@ -1,4 +1,4 @@
-package com.jornada.client.ambiente.coordenador.relatorio;
+package com.jornada.client.ambiente.coordenador.relatorio.customcell;
 
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class CustomHeaderBuilderBoletimAluno extends AbstractHeaderOrFooterBuild
             }
 
         }
-        hashPeriodos.add("Total");
+        hashPeriodos.add("TOTAL");
 
         listPeriodos = new ArrayList<String>(hashPeriodos);
       

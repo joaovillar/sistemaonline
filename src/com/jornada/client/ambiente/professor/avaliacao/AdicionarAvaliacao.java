@@ -14,10 +14,10 @@ import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionTipoAvaliacao;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPesoNota;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxCursoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxDisciplinaAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxPesoNota;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -44,13 +44,13 @@ public class AdicionarAvaliacao extends VerticalPanel {
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading hPanelLoading = new MpPanelLoading("images/radar.gif");
 
-	private MpSelectionCursoAmbienteProfessor listBoxCurso;
-	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
-	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;	
+	private MpListBoxCursoAmbienteProfessor listBoxCurso;
+	private MpListBoxPeriodoAmbienteProfessor listBoxPeriodo;
+	private MpListBoxDisciplinaAmbienteProfessor listBoxDisciplina;	
 //	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;	
 	private MpSelectionTipoAvaliacao listBoxTipoAvaliacao;
 	
-	private MpSelectionPesoNota listBoxPesoNota;
+	private MpListBoxPesoNota listBoxPesoNota;
 	
 	private MpTextBox txtAssunto;
 	private MpTextArea txtDescricao;	
@@ -106,11 +106,11 @@ public class AdicionarAvaliacao extends VerticalPanel {
 		
 		dateBoxData.getDate().setWidth("170px");
 
-		listBoxCurso = new MpSelectionCursoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
-		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
-		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
+		listBoxCurso = new MpListBoxCursoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
+		listBoxPeriodo = new MpListBoxPeriodoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
+		listBoxDisciplina = new MpListBoxDisciplinaAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
 		
-		listBoxPesoNota = new MpSelectionPesoNota();
+		listBoxPesoNota = new MpListBoxPesoNota();
 		
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());		

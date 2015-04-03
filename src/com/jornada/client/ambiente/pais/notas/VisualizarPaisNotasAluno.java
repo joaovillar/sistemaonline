@@ -30,8 +30,8 @@ import com.googlecode.gwt.charts.client.options.LegendPosition;
 import com.googlecode.gwt.charts.client.options.VAxis;
 import com.jornada.client.ambiente.coordenador.periodo.TelaInicialPeriodo;
 import com.jornada.client.ambiente.general.nota.DialogBoxNota;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunosPorCursoAmbientePais;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxAlunosPorCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxCursoAmbientePais;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
@@ -70,8 +70,8 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 	private MpTextBox txtFiltroAluno;    
 	
 //	private ListBox listBoxAluno;
-	private MpSelectionCursoAmbientePais listBoxCurso;
-	private MpSelectionAlunosPorCursoAmbientePais listBoxAlunosPorCurso;
+	private MpListBoxCursoAmbientePais listBoxCurso;
+	private MpListBoxAlunosPorCursoAmbientePais listBoxAlunosPorCurso;
 	
 	private VerticalPanel vPanelBoletim;
 	
@@ -127,10 +127,10 @@ public class VisualizarPaisNotasAluno extends VerticalPanel{
 		Label lblNomeCurso = new Label(txtConstants.curso());
 		Label lblNomeAluno = new Label(txtConstants.alunoNome());
 		
-		listBoxCurso = new MpSelectionCursoAmbientePais(this.telaInicialPaisVisualizarNotas.getMainView().getUsuarioLogado());
+		listBoxCurso = new MpListBoxCursoAmbientePais(this.telaInicialPaisVisualizarNotas.getMainView().getUsuarioLogado());
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		
-		listBoxAlunosPorCurso = new MpSelectionAlunosPorCursoAmbientePais();
+		listBoxAlunosPorCurso = new MpListBoxAlunosPorCursoAmbientePais();
 		listBoxAlunosPorCurso.addChangeHandler(new MpAlunosPorCursoSelectionChangeHandler());
 		
         txtFiltroAluno = new MpTextBox();  

@@ -27,11 +27,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
+import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxExcelRelatorioBoletim;
 import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxMultipleBoletimDisciplina;
 import com.jornada.client.ambiente.general.nota.DialogBoxNota;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxCursoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxDisciplinaAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxPeriodoAmbienteProfessor;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
@@ -67,9 +68,9 @@ public class BoletimDisciplina extends VerticalPanel {
 
     ArrayList<String> arrayAvaliacaoColumns = new ArrayList<String>();
 
-    private MpSelectionCursoAmbienteProfessor listBoxCurso;
-    private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;
-    private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
+    private MpListBoxCursoAmbienteProfessor listBoxCurso;
+    private MpListBoxPeriodoAmbienteProfessor listBoxPeriodo;
+    private MpListBoxDisciplinaAmbienteProfessor listBoxDisciplina;
 
     private TelaInicialRelatorio telaInicialRelatorio;
 
@@ -117,13 +118,13 @@ public class BoletimDisciplina extends VerticalPanel {
 
         mpHelperCurso = new MpListBoxPanelHelper();
 
-        listBoxCurso = new MpSelectionCursoAmbienteProfessor(usuarioLogado);
+        listBoxCurso = new MpListBoxCursoAmbienteProfessor(usuarioLogado);
         listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 
-        listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(usuarioLogado);
+        listBoxPeriodo = new MpListBoxPeriodoAmbienteProfessor(usuarioLogado);
         listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());
 
-        listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(usuarioLogado);
+        listBoxDisciplina = new MpListBoxDisciplinaAmbienteProfessor(usuarioLogado);
         listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());
 
         // Add some standard form options

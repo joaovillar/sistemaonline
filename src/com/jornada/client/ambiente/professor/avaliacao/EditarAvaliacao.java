@@ -36,10 +36,10 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionCursoAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionDisciplinaAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPeriodoAmbienteProfessor;
-import com.jornada.client.classes.listBoxes.ambiente.professor.MpSelectionPesoNota;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxCursoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxDisciplinaAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxPeriodoAmbienteProfessor;
+import com.jornada.client.classes.listBoxes.ambiente.professor.MpListBoxPesoNota;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.cells.MpDatePickerCell;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -80,9 +80,9 @@ public class EditarAvaliacao extends VerticalPanel {
 	private LinkedHashMap<String, String> listaHora = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> listaPesoNota = new LinkedHashMap<String, String>();
 	
-	private MpSelectionCursoAmbienteProfessor listBoxCurso;
-	private MpSelectionPeriodoAmbienteProfessor listBoxPeriodo;	
-	private MpSelectionDisciplinaAmbienteProfessor listBoxDisciplina;
+	private MpListBoxCursoAmbienteProfessor listBoxCurso;
+	private MpListBoxPeriodoAmbienteProfessor listBoxPeriodo;	
+	private MpListBoxDisciplinaAmbienteProfessor listBoxDisciplina;
 //	private MpSelectionConteudoProgramatico listBoxConteudoProgramatico;	
 
 	MpPanelLoading mpPanelLoading = new MpPanelLoading("images/radar.gif");
@@ -107,9 +107,9 @@ public class EditarAvaliacao extends VerticalPanel {
 		Label lblDisciplina = new Label(txtConstants.disciplina());
 //		Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());
 		
-		listBoxCurso = new MpSelectionCursoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
-		listBoxPeriodo = new MpSelectionPeriodoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
-		listBoxDisciplina = new MpSelectionDisciplinaAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
+		listBoxCurso = new MpListBoxCursoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
+		listBoxPeriodo = new MpListBoxPeriodoAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());
+		listBoxDisciplina = new MpListBoxDisciplinaAmbienteProfessor(telaInicialAvaliacao.getMainView().getUsuarioLogado());		
 //		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();		
 		
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
@@ -521,7 +521,7 @@ public class EditarAvaliacao extends VerticalPanel {
 		});
 	    
 	    
-        MpSelectionPesoNota mpListBoxPesoNota = new MpSelectionPesoNota();
+        MpListBoxPesoNota mpListBoxPesoNota = new MpListBoxPesoNota();
         for (int i = 0; i < mpListBoxPesoNota.getItemCount(); i++) {
             listaPesoNota.put(mpListBoxPesoNota.getValue(i), mpListBoxPesoNota.getItemText(i));
         }

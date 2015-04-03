@@ -30,7 +30,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import com.jornada.client.ambiente.coordenador.periodo.TelaInicialPeriodo;
-import com.jornada.client.classes.listBoxes.ambiente.aluno.MpSelectionCursoAmbienteAluno;
+import com.jornada.client.classes.listBoxes.ambiente.aluno.MpListBoxCursoAmbienteAluno;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -61,7 +61,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 
 	
 	
-	private MpSelectionCursoAmbienteAluno listBoxCurso;
+	private MpListBoxCursoAmbienteAluno listBoxCurso;
 
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
@@ -94,7 +94,7 @@ public class VisualizarAlunoAvaliacao extends VerticalPanel {
 
 		Label lblCursoEdit = new Label(txtConstants.curso());
 
-		listBoxCurso = new MpSelectionCursoAmbienteAluno(telaInicialAlunoAgenda.getMainView().getUsuarioLogado());
+		listBoxCurso = new MpListBoxCursoAmbienteAluno(telaInicialAlunoAgenda.getMainView().getUsuarioLogado());
 		listBoxCurso.setWidth("250px");
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 

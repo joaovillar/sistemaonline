@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.jornada.client.ambiente.general.agenda.MpDialogBoxAppointment;
 import com.jornada.client.classes.animation.ElementFader;
-import com.jornada.client.classes.listBoxes.ambiente.aluno.MpSelectionCursoAmbienteAluno;
+import com.jornada.client.classes.listBoxes.ambiente.aluno.MpListBoxCursoAmbienteAluno;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
@@ -60,7 +60,7 @@ public class VisualizarAlunoAgenda extends VerticalPanel {
 	
 	PopupPanel MyPopup;
 
-	private MpSelectionCursoAmbienteAluno listBoxCurso;
+	private MpListBoxCursoAmbienteAluno listBoxCurso;
 
 	private TelaInicialAlunoAgenda telaInicialAlunoAgenda;
 	
@@ -91,7 +91,7 @@ public class VisualizarAlunoAgenda extends VerticalPanel {
 
 		Label lblCursoEdit = new Label(txtConstants.curso());
 			
-		listBoxCurso = new MpSelectionCursoAmbienteAluno(this.telaInicialAlunoAgenda.getMainView().getUsuarioLogado());
+		listBoxCurso = new MpListBoxCursoAmbienteAluno(this.telaInicialAlunoAgenda.getMainView().getUsuarioLogado());
 		listBoxCurso.setWidth("250px");
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 

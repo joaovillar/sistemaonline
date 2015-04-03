@@ -39,7 +39,7 @@ import com.googlecode.gwt.charts.client.options.VAxis;
 import com.jornada.client.ambiente.general.nota.DialogBoxNota;
 import com.jornada.client.ambiente.general.nota.DialogBoxNotasAno;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
-import com.jornada.client.classes.listBoxes.ambiente.aluno.MpSelectionCursoAmbienteAluno;
+import com.jornada.client.classes.listBoxes.ambiente.aluno.MpListBoxCursoAmbienteAluno;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -76,7 +76,7 @@ public class VisualizarNotasAluno extends VerticalPanel {
 //    private MpSelection listBoxCursoAluno;
 //    private MpSelection listBoxAlunosPorCursoAluno;
 
-    private MpSelectionCursoAmbienteAluno listBoxCursoAluno;
+    private MpListBoxCursoAmbienteAluno listBoxCursoAluno;
     private MpSelectionAlunosPorCurso listBoxAlunosPorCursoAluno;
     
     private Usuario usuarioLogado;
@@ -163,7 +163,7 @@ public class VisualizarNotasAluno extends VerticalPanel {
         Label lblNomeCurso = new Label(txtConstants.curso());
         Label lblNomeAluno = new Label(txtConstants.alunoNome());
 
-        listBoxCursoAluno = new MpSelectionCursoAmbienteAluno(usuarioLogado);
+        listBoxCursoAluno = new MpListBoxCursoAmbienteAluno(usuarioLogado);
         listBoxCursoAluno.addChangeHandler(new MpCursoSelectionChangeHandler());
 
         listBoxAlunosPorCursoAluno = new MpSelectionAlunosPorCurso();

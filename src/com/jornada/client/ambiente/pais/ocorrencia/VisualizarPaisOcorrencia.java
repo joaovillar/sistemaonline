@@ -31,7 +31,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpSelectionAlunoAmbientePais;
+import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxAlunoAmbientePais;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -67,7 +67,7 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 	private TextBox txtSearch;
 	ArrayList<OcorrenciaAluno> arrayListBackup = new ArrayList<OcorrenciaAluno>();
 
-	private MpSelectionAlunoAmbientePais listBoxAluno;
+	private MpListBoxAlunoAmbientePais listBoxAluno;
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();	
@@ -100,7 +100,7 @@ public class VisualizarPaisOcorrencia extends VerticalPanel {
 
 		Label lblAluno = new Label(txtConstants.aluno());
 
-		listBoxAluno = new MpSelectionAlunoAmbientePais(this.telaInicialPaisOcorrencia.getMainView().getUsuarioLogado());
+		listBoxAluno = new MpListBoxAlunoAmbientePais(this.telaInicialPaisOcorrencia.getMainView().getUsuarioLogado());
 		listBoxAluno.setWidth("250px");
 		listBoxAluno.addChangeHandler(new MpAlunoSelectionChangeHandler());
 

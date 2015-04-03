@@ -18,11 +18,11 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
-import com.jornada.client.classes.listBoxes.MpSelection;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxMediaNota;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.MpListBoxPorcentagemPresenca;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxAno;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxEnsino;
+import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxStatusCurso;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.datebox.MpDateBoxWithImage;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -37,7 +37,7 @@ import com.jornada.client.service.GWTServiceCurso;
 import com.jornada.client.service.GWTServiceCursoAsync;
 import com.jornada.shared.FieldVerifier;
 import com.jornada.shared.classes.Curso;
-import com.jornada.shared.classes.Ensino;
+import com.jornada.shared.classes.curso.Ensino;
 
 
 public class AdicionarCurso extends VerticalPanel {
@@ -55,7 +55,7 @@ public class AdicionarCurso extends VerticalPanel {
 	private MpTextBox txtNomeCurso;
 	private MpTextArea txtDescricaoCurso;
 	private MpTextArea txtEmentaCurso;
-	private MpSelection mpListBoxStatus;
+	private MpListBoxStatusCurso mpListBoxStatus;
 	private MpListBoxMediaNota mpListBoxMediaNota;
 	private MpListBoxPorcentagemPresenca mpListBoxPorcentagemPresenca;	
 	private MpDateBoxWithImage mpDateBoxInicial;
@@ -164,9 +164,9 @@ public class AdicionarCurso extends VerticalPanel {
 		mpDateBoxFinal = new MpDateBoxWithImage();
 		mpDateBoxFinal.getDate().setFormat(new DefaultFormat(DateTimeFormat.getFullDateFormat()));
 		
-		mpListBoxStatus = new MpSelection();
-		mpListBoxStatus.addItem(txtConstants.cursoAtivo(), "true");
-		mpListBoxStatus.addItem(txtConstants.cursoDesativado(), "false");
+		mpListBoxStatus = new MpListBoxStatusCurso();
+//		mpListBoxStatus.addItem(txtConstants.cursoAtivo(), "true");
+//		mpListBoxStatus.addItem(txtConstants.cursoDesativado(), "false");
 
 
 		MpLabelRight lblEnsino = new MpLabelRight("Ensino");

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionPeriodo;
-import com.jornada.client.classes.listBoxes.ambiente.general.MpSelectionSimNao;
+import com.jornada.client.classes.listBoxes.ambiente.general.MpListBoxSimNao;
 import com.jornada.client.classes.listBoxes.suggestbox.MpListBoxPanelHelper;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.dialog.MpDialogBox;
@@ -54,7 +54,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 	private MpTextArea txtDescricao;
 	private MpTextArea txtObjetivo;
 	
-	private MpSelectionSimNao listBoxSimNao;
+	private MpListBoxSimNao listBoxSimNao;
 	
 
 	TextConstants txtConstants;
@@ -90,7 +90,7 @@ public class AdicionarDisciplina extends VerticalPanel {
 		txtObjetivo = new MpTextArea();
 //		final ListBox multiBox = new ListBox(true);
 		
-		listBoxSimNao = new MpSelectionSimNao();
+		listBoxSimNao = new MpListBoxSimNao();
 	    
 
 		
