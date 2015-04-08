@@ -192,6 +192,13 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
         return ExcelFramework.getExcelAddress(wb, "GerarExcelBoletimAnual_");
     }
     
+    public String getExcelHistoricoAluno(int idCurso, int idAluno){
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("Historico");
+        NotaServer.getExcelHistoricoAluno(wb, sheet, idCurso, idAluno);
+        return ExcelFramework.getExcelAddress(wb, "GerarExcelHistoricoAluno_");
+    }
+    
     public String getExcelBoletimAnual(ArrayList<TableMultipleBoletimAnual> listTableMBD){
         
         XSSFWorkbook wb = new XSSFWorkbook();

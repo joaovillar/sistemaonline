@@ -58,7 +58,7 @@ public class DisciplinaServer {
 			
 				int param = 0;
 				PreparedStatement pstmtInsert = conn.prepareStatement(DB_INSERT_DISCIPLINA);
-				pstmtInsert.setString(++param, disciplina.getNome());
+				pstmtInsert.setString(++param, disciplina.getNome().trim());
 				pstmtInsert.setInt(++param, disciplina.getCargaHoraria());				
 				pstmtInsert.setString(++param, disciplina.getDescricao());
 				pstmtInsert.setString(++param, disciplina.getObjetivo());
@@ -104,7 +104,7 @@ public class DisciplinaServer {
 			
 				int param = 0;
 				PreparedStatement pstmtInsert = conn.prepareStatement(DB_INSERT_DISCIPLINA);
-				pstmtInsert.setString(++param, disciplina.getNome());
+				pstmtInsert.setString(++param, disciplina.getNome().trim());
 				pstmtInsert.setInt(++param, disciplina.getCargaHoraria());				
 				pstmtInsert.setString(++param, disciplina.getDescricao());
 				pstmtInsert.setString(++param, disciplina.getObjetivo());						
@@ -460,7 +460,7 @@ public class DisciplinaServer {
 
 			int count = 0;
 			PreparedStatement ps = conn.prepareStatement(DB_UPDATE_DISCIPLINA);
-			ps.setString(++count, disciplina.getNome());
+			ps.setString(++count, disciplina.getNome().trim());
 			ps.setInt(++count, disciplina.getCargaHoraria());
 			ps.setString(++count, disciplina.getDescricao());
 			ps.setString(++count, disciplina.getObjetivo());

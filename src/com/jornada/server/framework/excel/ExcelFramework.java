@@ -41,7 +41,33 @@ public class ExcelFramework {
         return styleHeader;
     }
     
-    public static XSSFCellStyle getStyleHeaderBoletimRotation90(XSSFWorkbook wb){
+    
+    public static XSSFCellStyle getStyleHeaderBoletimRotation90Center(XSSFWorkbook wb){
+        
+        Font font = wb.createFont();
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        font.setFontName("Calibri");  
+        font.setFontHeightInPoints((short)10);
+
+        
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+        styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        styleHeader.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+        styleHeader.setFont(font);
+        styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+        styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+        styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
+        styleHeader.setBorderRight(CellStyle.BORDER_THIN);   
+        styleHeader.setRotation((short)90);
+        styleHeader.setWrapText(true);
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        
+        return styleHeader;
+    } 
+    
+    public static XSSFCellStyle getStyleHeaderBoletimRotation90Right(XSSFWorkbook wb){
         
         Font font = wb.createFont();
         font.setColor(IndexedColors.BLACK.getIndex());
@@ -81,7 +107,7 @@ public class ExcelFramework {
     }
     
     
-    public static XSSFCellStyle getStyleCellFontBold(XSSFWorkbook wb){
+    public static XSSFCellStyle getStyleCellFontBoldCenter(XSSFWorkbook wb){
         XSSFCellStyle styleHeader = wb.createCellStyle();
         styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
         styleHeader.setBorderTop(CellStyle.BORDER_THIN);
@@ -89,6 +115,18 @@ public class ExcelFramework {
         styleHeader.setBorderRight(CellStyle.BORDER_THIN);
         styleHeader.setAlignment(CellStyle.ALIGN_CENTER); 
         styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+        styleHeader.setFont(getStyleFontBold11(wb));      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        return styleHeader;
+    }
+    
+    public static XSSFCellStyle getStyleCellFontBoldLeft(XSSFWorkbook wb){
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+        styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+        styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
+        styleHeader.setBorderRight(CellStyle.BORDER_THIN);
+        styleHeader.setAlignment(CellStyle.ALIGN_LEFT); 
         styleHeader.setFont(getStyleFontBold11(wb));      
         styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
         return styleHeader;

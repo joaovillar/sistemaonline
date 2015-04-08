@@ -58,7 +58,7 @@ public class PeriodoServer {
 
             int param = 0;
             PreparedStatement pstmtInsertPeriodo = connection.prepareStatement(DB_INSERT_PERIODO);
-            pstmtInsertPeriodo.setString(++param, periodo.getNomePeriodo());
+            pstmtInsertPeriodo.setString(++param, periodo.getNomePeriodo().trim());
             pstmtInsertPeriodo.setString(++param, periodo.getDescricao());
             pstmtInsertPeriodo.setString(++param, periodo.getNumeracao());
             pstmtInsertPeriodo.setString(++param, periodo.getObjetivo());
@@ -107,7 +107,7 @@ public class PeriodoServer {
 			
 				int param = 0;
 				PreparedStatement pstmtInsertPeriodo = connection.prepareStatement(DB_INSERT_PERIODO);
-				pstmtInsertPeriodo.setString(++param, periodo.getNomePeriodo());
+				pstmtInsertPeriodo.setString(++param, periodo.getNomePeriodo().trim());
 				pstmtInsertPeriodo.setString(++param, periodo.getDescricao());
 				pstmtInsertPeriodo.setString(++param, periodo.getNumeracao());
 				pstmtInsertPeriodo.setString(++param, periodo.getObjetivo());
@@ -337,7 +337,7 @@ public class PeriodoServer {
 
 			int count = 0;
 			PreparedStatement updatePeriodo = connection.prepareStatement(DB_UPDATE_PERIODO);
-			updatePeriodo.setString(++count, periodo.getNomePeriodo());
+			updatePeriodo.setString(++count, periodo.getNomePeriodo().trim());
 			updatePeriodo.setString(++count, periodo.getDescricao());
 			updatePeriodo.setString(++count, periodo.getObjetivo());
 			updatePeriodo.setInt(++count, periodo.getIdCurso());

@@ -39,7 +39,7 @@ public class TopicoServer {
 			
 				int param = 0;
 				PreparedStatement ps = conn.prepareStatement(DB_INSERT_TOPICO);
-				ps.setString(++param, topico.getNome());
+				ps.setString(++param, topico.getNome().trim());
 				ps.setString(++param, topico.getNumeracao());				
 				ps.setString(++param, topico.getDescricao());
 				ps.setString(++param, topico.getObjetivo());
@@ -253,7 +253,7 @@ public class TopicoServer {
 
 			int count = 0;
 			PreparedStatement ps = connection.prepareStatement(DB_UPDATE_TOPICO);
-			ps.setString(++count, topico.getNome());
+			ps.setString(++count, topico.getNome().trim());
 			ps.setString(++count, topico.getNumeracao());
 			ps.setString(++count, topico.getDescricao());
 			ps.setString(++count, topico.getObjetivo());

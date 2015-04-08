@@ -37,7 +37,7 @@ public class ConteudoProgramaticoServer {
 			
 				int param = 0;
 				PreparedStatement ps = conn.prepareStatement(DB_INSERT_CONTEUDO_PROGRAMATICO);
-				ps.setString(++param, conteudoProgramatico.getNome());
+				ps.setString(++param, conteudoProgramatico.getNome().trim());
 				ps.setString(++param, conteudoProgramatico.getNumeracao());				
 				ps.setString(++param, conteudoProgramatico.getDescricao());
 				ps.setString(++param, conteudoProgramatico.getObjetivo());
@@ -306,7 +306,7 @@ public class ConteudoProgramaticoServer {
 
 			int count = 0;
 			PreparedStatement ps = conn.prepareStatement(DB_UPDATE_CONTEUDO_PROGRAMATICO);
-			ps.setString(++count, conteudoProgramatico.getNome());
+			ps.setString(++count, conteudoProgramatico.getNome().trim());
 			ps.setString(++count, conteudoProgramatico.getNumeracao());
 			ps.setString(++count, conteudoProgramatico.getDescricao());
 			ps.setString(++count, conteudoProgramatico.getObjetivo());

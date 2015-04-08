@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.ambiente.coordenador.relatorio.customcell.CustomHeaderBuilderHistoricoAluno;
 import com.jornada.client.ambiente.coordenador.relatorio.dialog.DialogBoxHistoricoAluno;
+import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxExcelHistoricoAluno;
 import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxExcelRelatorioBoletim;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
@@ -394,10 +395,10 @@ public class HistoricoAluno extends VerticalPanel {
     private class ClickHandlerExcel implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
-//            int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+            int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
             int idAluno = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
 
-//            MpDialogBoxExcelRelatorioBoletim.getInstanceBoletimAluno(idCurso, idAluno);
+            MpDialogBoxExcelHistoricoAluno.getInstance(idCurso, idAluno);
         }
     }
 

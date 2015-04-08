@@ -80,7 +80,7 @@ public class CursoServer{
 
 			int count = 0;
 			PreparedStatement insertCurso = conn.prepareStatement(CursoServer.DB_INSERT_CURSO);
-			insertCurso.setString(++count, curso.getNome());
+			insertCurso.setString(++count, curso.getNome().trim());
 			insertCurso.setString(++count, curso.getDescricao());
 			insertCurso.setString(++count, curso.getEmenta());			
 			insertCurso.setString(++count, curso.getMediaNota());
@@ -129,7 +129,7 @@ public class CursoServer{
 
             int count = 0;
             PreparedStatement insertCurso = conn.prepareStatement(CursoServer.DB_INSERT_CURSO);
-            insertCurso.setString(++count, curso.getNome());
+            insertCurso.setString(++count, curso.getNome().trim());
             insertCurso.setString(++count, curso.getDescricao());
             insertCurso.setString(++count, curso.getEmenta());          
             insertCurso.setString(++count, curso.getMediaNota());
@@ -265,7 +265,7 @@ public class CursoServer{
 			
 			int count = 0;
 			PreparedStatement updateCurso = conn.prepareStatement(CursoServer.DB_UPDATE_CURSO);
-			updateCurso.setString(++count, curso.getNome());
+			updateCurso.setString(++count, curso.getNome().trim());
 			updateCurso.setString(++count, curso.getDescricao());
 			updateCurso.setString(++count, curso.getEmenta());
 			updateCurso.setString(++count, curso.getMediaNota());			
