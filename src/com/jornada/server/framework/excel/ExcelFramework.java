@@ -5,8 +5,11 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Date;
 
+
 //import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -120,12 +123,50 @@ public class ExcelFramework {
         return styleHeader;
     }
     
+    public static XSSFCellStyle getStyleCellFontBoldCenterNoBorders(XSSFWorkbook wb){
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+//        styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderRight(CellStyle.BORDER_THIN);
+//        styleHeader.setAlignment(CellStyle.ALIGN_CENTER); 
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+        styleHeader.setFont(getStyleFontBold11(wb));      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        return styleHeader;
+    }
+    
+    public static XSSFCellStyle getStyleCellFontCenterNoBorders(XSSFWorkbook wb){
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+//        styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderRight(CellStyle.BORDER_THIN);
+//        styleHeader.setAlignment(CellStyle.ALIGN_CENTER); 
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+//        styleHeader.setFont(getStyleFontBold11(wb));      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        return styleHeader;
+    }
+    
     public static XSSFCellStyle getStyleCellFontBoldLeft(XSSFWorkbook wb){
         XSSFCellStyle styleHeader = wb.createCellStyle();
         styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
         styleHeader.setBorderTop(CellStyle.BORDER_THIN);
         styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
         styleHeader.setBorderRight(CellStyle.BORDER_THIN);
+        styleHeader.setAlignment(CellStyle.ALIGN_LEFT); 
+        styleHeader.setFont(getStyleFontBold11(wb));      
+        styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        return styleHeader;
+    }
+    
+    public static XSSFCellStyle getStyleCellFontBoldLeftNoBorders(XSSFWorkbook wb){
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+//        styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
+//        styleHeader.setBorderRight(CellStyle.BORDER_THIN);
         styleHeader.setAlignment(CellStyle.ALIGN_LEFT); 
         styleHeader.setFont(getStyleFontBold11(wb));      
         styleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -337,4 +378,16 @@ public class ExcelFramework {
 
     }
 
+    
+    public static void setRegionBorder(XSSFWorkbook wb, XSSFSheet sheet, CellRangeAddress region){
+        RegionUtil.setBorderBottom(BorderStyle.THIN.ordinal(), region, sheet, wb);
+        RegionUtil.setBorderTop(BorderStyle.THIN.ordinal(), region, sheet, wb);
+        RegionUtil.setBorderLeft(BorderStyle.THIN.ordinal(), region, sheet, wb);
+        RegionUtil.setBorderRight(BorderStyle.THIN.ordinal(), region, sheet, wb);
+    }
+    
+    public static void setMergeRegionAndSetBorders(XSSFWorkbook wb, XSSFSheet sheet, CellRangeAddress region){
+        sheet.addMergedRegion(region);     
+        setRegionBorder(wb, sheet, region);
+    }
 }

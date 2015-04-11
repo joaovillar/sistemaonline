@@ -31,7 +31,6 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.ambiente.coordenador.relatorio.customcell.CustomHeaderBuilderHistoricoAluno;
 import com.jornada.client.ambiente.coordenador.relatorio.dialog.DialogBoxHistoricoAluno;
 import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxExcelHistoricoAluno;
-import com.jornada.client.ambiente.coordenador.relatorio.dialog.MpDialogBoxExcelRelatorioBoletim;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxStatusCurso;

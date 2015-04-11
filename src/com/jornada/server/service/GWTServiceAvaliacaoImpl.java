@@ -56,14 +56,14 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
 
 	}	
 	
-    public String updateRow(int idCurso, Avaliacao object) {
+    public String updateRow(int idCurso, boolean isCampoAssunto, Avaliacao object) {
         String strIsSuccess = "";
 
         if (jaExisteRecuperacao(object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
         } else if (jaExisteRecuperacaoFinal(idCurso, object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO_FINAL;
-        } else if (jaExisteAssunto(object)) {
+        } else if (isCampoAssunto==true && jaExisteAssunto(object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_ASSUNTO;
         } else {
             if (AvaliacaoServer.updateRow(object)) {
@@ -75,12 +75,12 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
         return strIsSuccess;
     }
     
-    public String updateRow(Avaliacao object) {
+    public String updateRow(boolean isCampoAssunto, Avaliacao object) {
         String strIsSuccess = "";
 
         if (jaExisteRecuperacao(object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_RECUPERACAO;
-        }else if (jaExisteAssunto(object)) {
+        }else if (isCampoAssunto==true && jaExisteAssunto(object)) {
             strIsSuccess = TipoAvaliacao.EXISTE_ASSUNTO;
         } else {
             if (AvaliacaoServer.updateRow(object)) {
@@ -97,12 +97,15 @@ public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWT
         
         boolean existeAssunto = false;
 
-        ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(object.getIdDisciplina(), true);
-        for (Avaliacao avaliacao : listAvaliacao) {
-            if (avaliacao.getAssunto().equals(object.getAssunto())) {
-                existeAssunto = true;
-            }
+        ArrayList<Avaliacao> listAvaliacao = AvaliacaoServer.getAvaliacao(object.getIdDisciplina(), object.getAssunto(), true);        
+        if(listAvaliacao.size()>0){
+            existeAssunto = true;
         }
+//        for (Avaliacao avaliacao : listAvaliacao) {
+//            if (avaliacao.getAssunto().equals(object.getAssunto())) {
+//                existeAssunto = true;
+//            }
+//        }
 
         return existeAssunto;
     }

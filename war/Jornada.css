@@ -562,6 +562,61 @@ cursor: pointer;
 /* 	border:0px solid; */
 }
 
+
+
+.gwt-TabPanel {
+ height: 100%;
+
+}
+
+.gwt-TabPanelBottom {
+  background-color: white;
+   width : 99% !important;
+  
+}
+
+.gwt-TabBar {
+	background-color: #95B3D7 !important;
+	 width : 100% !important;
+}
+
+.gwt-TabBarItem {
+ cursor: pointer;
+ cursor: hand;
+ color: white !important;
+ min-width: 6em;
+ background-color: #95B3D7 !important;
+ font-size: 9pt !important; 
+ text-align: center;
+ float: left;
+/*  margin-right: 5px; */
+ border-width: 100% !important;
+position: relative;
+white-space: nowrap;
+}
+
+.gwt-TabBarItem-selected {
+ cursor: pointer;
+ cursor: hand;
+ color: black !important;
+ min-width: 6em;
+ background-color: #C4D0DB !important;
+ font-size: 9pt !important;
+ font-weight: normal !important; 
+ text-align: center;
+ float: left;
+/*  margin-right: 5px; */
+ border:1px solid rgb(55, 96, 145) !important;
+ border-width: 100% !important;
+ padding:1px;
+  position: relative;
+white-space: nowrap;
+}
+
+.gwt-TabBar .gwt-TabBarFirst {
+	width: 5px;
+}
+
 .cw-Button{
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;

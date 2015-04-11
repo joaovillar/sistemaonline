@@ -11,8 +11,8 @@ import com.jornada.shared.classes.boletim.AvaliacaoNota;
 public interface GWTServiceAvaliacaoAsync {
     
     public void AdicionarAvaliacao(int idCurso, Avaliacao object, AsyncCallback<String> callback);
-    public void updateRow(Avaliacao object, AsyncCallback<String> callback);
-    public void updateRow(int idCurso, Avaliacao object, AsyncCallback<String> callback);	
+    public void updateRow(boolean isCampoAssunto, Avaliacao object, AsyncCallback<String> callback);
+    public void updateRow(int idCurso,  boolean isCampoAssunto, Avaliacao object, AsyncCallback<String> callback);	
 	public void deleteRow(int id_avaliacao, AsyncCallback<Boolean> callback);	
 	public void getAvaliacaoPelaDisciplina(int idDisciplina, AsyncCallback<ArrayList<Avaliacao>> callback);	
 	public void getAvaliacaoPeloCurso(int idCurso, AsyncCallback<ArrayList<CursoAvaliacao>> callback);

@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.jornada.ConfigJornada;
 import com.jornada.server.classes.utility.MpUtilServer;
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.server.framework.excel.ExcelFramework;
@@ -705,44 +706,48 @@ public class NotaServer {
                 Disciplina disciplina=null;
                 if (cvFirstLine > 0) {
                     disciplina = DisciplinaServer.getDisciplinaPeloPeriodo(periodo.getIdPeriodo(), nomeDisciplina);
-                    disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));                    
-                    if (recuperacaoFinal == null) {
-                        recuperacaoFinal = disciplina.getRecuperacaoFinal();
+                    if (disciplina != null) {
+                        disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
+                        if (recuperacaoFinal == null) {
+                            recuperacaoFinal = disciplina.getRecuperacaoFinal();
+                        }
                     }
                 }
-                
+               
                 for(String strSiglas : siglasPeriodo){
                     if (cvFirstLine == 0) {
                         row.add("["+periodo.getNomePeriodo() + "] " + strSiglas+(intSiglas+1));
                     } else {
                         
-                        if(strSiglas.equals(Nota.STR_BOLETIM_ALUNO_MP)){
-                            String strMedia = disciplina.getMediaAlunoDisciplina(curso, idAluno, false);
-                            if (strMedia == null || strMedia.isEmpty()) {
-                                strMedia = "-";
-                            } else {
-                                double doubleMediaAluno = Double.parseDouble(strMedia);
-                                strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
+                        if(disciplina!=null){
+                            if (strSiglas.equals(Nota.STR_BOLETIM_ALUNO_MP)) {
+                                String strMedia = disciplina.getMediaAlunoDisciplina(curso, idAluno, false);
+                                if (strMedia == null || strMedia.isEmpty()) {
+                                    strMedia = "-";
+                                } else {
+                                    double doubleMediaAluno = Double.parseDouble(strMedia);
+                                    strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
+                                }
+                                row.add(strMedia);
+                            } else if (strSiglas.equals(Nota.STR_BOLETIM_ALUNO_REC)) {
+                                String strMedia = disciplina.getNotaRecuperacao(idAluno);
+                                if (strMedia == null || strMedia.isEmpty()) {
+                                    strMedia = "-";
+                                } else {
+                                    double doubleMediaAluno = Double.parseDouble(strMedia);
+                                    strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
+                                }
+                                row.add(strMedia);
+                            } else if (strSiglas.equals(Nota.STR_BOLETIM_ALUNO_MF)) {
+                                String strMedia = disciplina.getMediaAlunoDisciplina(curso, idAluno, true);
+                                if (strMedia == null || strMedia.isEmpty()) {
+                                    strMedia = "-";
+                                } else {
+                                    double doubleMediaAluno = Double.parseDouble(strMedia);
+                                    strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
+                                }
+                                row.add(strMedia);
                             }
-                            row.add(strMedia);
-                        }else if(strSiglas.equals(Nota.STR_BOLETIM_ALUNO_REC)){
-                            String strMedia = disciplina.getNotaRecuperacao(idAluno);
-                            if (strMedia == null || strMedia.isEmpty()) {
-                                strMedia = "-";
-                            } else {
-                                double doubleMediaAluno = Double.parseDouble(strMedia);
-                                strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
-                            }
-                            row.add(strMedia);
-                        }else if(strSiglas.equals(Nota.STR_BOLETIM_ALUNO_MF)){
-                            String strMedia = disciplina.getMediaAlunoDisciplina(curso, idAluno, true);
-                            if (strMedia == null || strMedia.isEmpty()) {
-                                strMedia = "-";
-                            } else {
-                                double doubleMediaAluno = Double.parseDouble(strMedia);
-                                strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
-                            }
-                            row.add(strMedia);
                         }
                     }
                 }
@@ -1244,8 +1249,7 @@ public class NotaServer {
         sheet.setMargin((short) 1, 1.5);
         ArrayList<ArrayList<String>> listHistorico = getHistoricoAluno(idCurso, idAluno);
         ArrayList<String> listHeader = listHistorico.get(0);
-        Usuario aluno = UsuarioServer.getUsuarioPeloId(idAluno);
-        
+        Usuario aluno = UsuarioServer.getUsuarioPeloId(idAluno);        
         
         
         
@@ -1296,33 +1300,37 @@ public class NotaServer {
         row = sheet.createRow(intLine);
         row.createCell(0).setCellValue(texto5);
         row.getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoldLeft(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS-2));
+//        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS-2));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet,new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS-2));
         row.createCell(listHeader.size()+MAX_COLUMNS-1).setCellValue(texto6);
         row.getCell(listHeader.size()+MAX_COLUMNS-1).setCellStyle(ExcelFramework.getStyleCellFontBoldLeft(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, listHeader.size()+MAX_COLUMNS-1, listHeader.size()+MAX_COLUMNS));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, listHeader.size()+MAX_COLUMNS-1, listHeader.size()+MAX_COLUMNS));
+
         
         intLine = intLine + 1;
         row = sheet.createRow(intLine);
         row.createCell(0).setCellValue(texto7);
         row.getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoldLeft(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine+1, 0, 1));
+//        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine+1, 0, 1));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine+1, 0, 1));
         row.createCell(2).setCellValue(texto8);
         row.getCell(2).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 2, listHeader.size()+MAX_COLUMNS));
+//        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 2, listHeader.size()+MAX_COLUMNS));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 2, listHeader.size()+MAX_COLUMNS));
         intLine = intLine + 1;
         row = sheet.createRow(intLine);
         row.createCell(2).setCellValue(texto9);
         row.getCell(2).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 2, listHeader.size()+MAX_COLUMNS));
+//        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 2, listHeader.size()+MAX_COLUMNS));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 2, listHeader.size()+MAX_COLUMNS));
         
         
         intLine = intLine + 1;
-        row = sheet.createRow(intLine);
-        row.createCell(0).setCellValue(texto10);
-        CellRangeAddress region = new CellRangeAddress(intLine, 40, 0, 0);
-        ExcelFramework.cleanBeforeMergeOnValidCells(sheet, region, ExcelFramework.getStyleHeaderBoletimRotation90Center(wb));
-        sheet.addMergedRegion(region);
         
+        for(int i=intLine;i<300;i++){
+            sheet.createRow(i).createCell(0);
+        }
+
         
         
       //Criando Linhas de disciplinas e notas
@@ -1332,29 +1340,33 @@ public class NotaServer {
 
             //Criando Colunas dos Anos
             if (i == 0) {
+                row = sheet.getRow(intLine);
                 row.createCell(1);
                 header = "ÁREAS DE CONHECIMENTO";
                 row.getCell(1).setCellValue(header);
                 row.getCell(1).setCellStyle(ExcelFramework.getStyleCellFontBoldCenter(wb));
-                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine+3, 1, 4));
+//                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine+3, 1, 4));
+                ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine+3, 1, 4));
                 
                 row.createCell(intColumn+MAX_COLUMNS);
                 row.getCell(intColumn+MAX_COLUMNS).setCellValue("ANO / PERÍODO LETIVO");
                 row.getCell(intColumn+MAX_COLUMNS).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
-                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS, listHeader.size()+MAX_COLUMNS));
-                
+//                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS, listHeader.size()+MAX_COLUMNS));
+                ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS, listHeader.size()+MAX_COLUMNS));
                 intLine++;
                 
                 row = sheet.createRow(intLine);
                 row.createCell(intColumn+MAX_COLUMNS);
                 row.getCell(intColumn+MAX_COLUMNS).setCellValue("CICLO I");
                 row.getCell(intColumn+MAX_COLUMNS).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
-                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS, intColumn+MAX_COLUMNS+4));
+//                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS, intColumn+MAX_COLUMNS+4));
+                ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS, intColumn+MAX_COLUMNS+4));
                 
                 row.createCell(intColumn+MAX_COLUMNS+5);
                 row.getCell(intColumn+MAX_COLUMNS+5).setCellValue("CICLO II");
                 row.getCell(intColumn+MAX_COLUMNS+5).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
-                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS+5, listHeader.size()+MAX_COLUMNS));
+//                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS+5, listHeader.size()+MAX_COLUMNS));
+                ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, intColumn+MAX_COLUMNS+5, listHeader.size()+MAX_COLUMNS));
                 
                 intLine++;                
                 row = sheet.createRow(intLine);
@@ -1418,7 +1430,8 @@ public class NotaServer {
                     row.getCell((short) c+intColumn).setCellValue(strText);
                     row.getCell((short) c+intColumn).setCellType(Cell.CELL_TYPE_STRING);
                     row.getCell((short) c+intColumn).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb));
-                    sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn, intColumn+2));
+//                    sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn, intColumn+2));
+                    ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, intColumn, intColumn+2));
                 } 
                 else {
                     row.createCell((short) c + intColumn + 2 );
@@ -1444,32 +1457,45 @@ public class NotaServer {
         row.createCell((short) intColumn-1);
         row.getCell((short) intColumn-1).setCellValue("Base Nacional Comum");
         row.getCell((short) intColumn-1).setCellStyle(ExcelFramework.getStyleCellFontBoldLeft(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
+//        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
         
         intLine = intLine+1;
-        row = sheet.createRow((short) intLine);
-        row.createCell((short) intColumn-1);
-        row.getCell((short) intColumn-1).setCellValue("Parte Diversificada");
-        row.getCell((short) intColumn-1).setCellStyle(ExcelFramework.getStyleCellFontBoldLeft(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
+        row = sheet.createRow(intLine);
+        row.createCell(intColumn-1);
+        row.getCell(intColumn-1).setCellValue(texto13);
+        row.getCell(intColumn-1).setCellStyle(ExcelFramework.getStyleCellFontBoldLeft(wb));
+//        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
         
         intLine = intLine+1;
         row = sheet.createRow((short) intLine);
         row.createCell((short) intColumn-1);
         row.getCell((short) intColumn-1).setCellValue("TOTAL DA CARGA HORÁRIA");
         row.getCell((short) intColumn-1).setCellStyle(ExcelFramework.getStyleCellFontBoldLeft(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
+//        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, intColumn-1, intColumn+2));
+        
+        for(int i = 1;i<listHeader.size();i++){
+            sheet.getRow(intLine-2).createCell(intColumn+2+i).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+            sheet.getRow(intLine-2).getCell(intColumn+2+i).setCellValue("-");
+            sheet.getRow(intLine-1).createCell(intColumn+2+i).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+            sheet.getRow(intLine-1).getCell(intColumn+2+i).setCellValue("-");
+            sheet.getRow(intLine).createCell(intColumn+2+i).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+            sheet.getRow(intLine).getCell(intColumn+2+i).setCellValue("-");
+        }
         
         
-        sheet.getRow(intRowMergeAno1).getCell(intColumn+3).setCellValue(texto11+"TESTINF");
+        sheet.getRow(intRowMergeAno1).getCell(intColumn+3).setCellValue(texto11);
         CellRangeAddress regionAno1 = new CellRangeAddress(intRowMergeAno1, intLine, intColumn+3, intColumn+3);
         ExcelFramework.cleanBeforeMergeOnValidCells(sheet, regionAno1, ExcelFramework.getStyleHeaderBoletimRotation90Center(wb));
-        sheet.addMergedRegion(regionAno1);
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, regionAno1);
         
         if(intBNC>0){
             sheet.getRow(intRowMergeAno1).createCell(1).setCellValue("-");    
             sheet.getRow(intRowMergeAno1).getCell(1).setCellValue(texto12);
-            sheet.addMergedRegion(new CellRangeAddress(intRowMergeAno1, intRowMergeAno1+intBNC-1, 1, 1));
+//            sheet.addMergedRegion(new CellRangeAddress(intRowMergeAno1, intRowMergeAno1+intBNC-1, 1, 1));
+            ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intRowMergeAno1, intRowMergeAno1+intBNC-1, 1, 1));
             sheet.getRow(intRowMergeAno1).getCell(1).setCellStyle(ExcelFramework.getStyleHeaderBoletimRotation90Center(wb));
         }
         
@@ -1477,56 +1503,173 @@ public class NotaServer {
         
         sheet.getRow(intLine).setHeight( (short) 150 );
         sheet.getRow(intLine).createCell(1);
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 1, listHeader.size()+MAX_COLUMNS));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 1, listHeader.size()+MAX_COLUMNS));
         
         intLine = intLine+1;
         sheet.getRow(intLine).createCell(1).setCellValue("Estudos Realizados");
         sheet.getRow(intLine).getCell(1).setCellStyle(ExcelFramework.getStyleHeaderBoletimRotation90Center(wb));
-        sheet.addMergedRegion(new CellRangeAddress(intLine, intLine+listHeader.size()-2, 1, 1));
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine+listHeader.size()-2, 1, 1));
         
         sheet.getRow(intLine).createCell(2).setCellValue("Ano");
         sheet.getRow(intLine).getCell(2).setCellStyle(ExcelFramework.getStyleCellFontBoldCenter(wb));
-        sheet.getRow(intLine).createCell(3).setCellValue("Período Letivo"); sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 3, 4));    
+        sheet.getRow(intLine).createCell(3).setCellValue("Período Letivo"); 
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 3, 4));
         sheet.getRow(intLine).getCell(3).setCellStyle(ExcelFramework.getStyleCellFontBoldCenter(wb));
-        sheet.getRow(intLine).createCell(5).setCellValue("Estabelecimento de Ensino");sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 5, 9));   
+        sheet.getRow(intLine).createCell(5).setCellValue("Estabelecimento de Ensino");
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet,new CellRangeAddress(intLine, intLine, 5, 9));
         sheet.getRow(intLine).getCell(5).setCellStyle(ExcelFramework.getStyleCellFontBoldCenter(wb));
-        sheet.getRow(intLine).createCell(10).setCellValue("Município");sheet.addMergedRegion(new CellRangeAddress(intLine, intLine, 10, 12));
+        sheet.getRow(intLine).createCell(10).setCellValue("Município");
+        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet,new CellRangeAddress(intLine, intLine, 10, 12));
         sheet.getRow(intLine).getCell(10).setCellStyle(ExcelFramework.getStyleCellFontBoldCenter(wb));
         sheet.getRow(intLine).createCell(13).setCellValue("UF");
         sheet.getRow(intLine).getCell(13).setCellStyle(ExcelFramework.getStyleCellFontBoldCenter(wb));
         
         
+        // Aidcionando Periodo Letivo em Estudos realizados
         int intLineBackup = intLine;
         intLine++;
         for(int i=0;i<listHeader.size()-2;i++){
             if(i==0){
-                sheet.getRow(intLine).createCell(3).setCellValue("1º Ano"); sheet.addMergedRegion(new CellRangeAddress(intLine, intLine++, 3, 4));  
+                sheet.getRow(intLine).createCell(3).setCellValue("1º Ano"); 
+//                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine++, 3, 4));  
+                ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine++, 3, 4));  
             }
             else{
-                sheet.getRow(intLine).createCell(3).setCellValue((i+1)+"ª Série/"+(i+2)+"º Ano"); sheet.addMergedRegion(new CellRangeAddress(intLine, intLine++, 3, 4));   
+                sheet.getRow(intLine).createCell(3).setCellValue((i+1)+"ª Série/"+(i+2)+"º Ano"); 
+//                sheet.addMergedRegion(new CellRangeAddress(intLine, intLine++, 3, 4));   
+                ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine++, 3, 4));   
             }
+            sheet.getRow(intLine-1).getCell(3).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
         }
+        
+        // Adicionando Estabelecimento de Ensino em Estudos realizados
         intLine = intLineBackup;
         intLine++;
         for (int i = 0; i < listHeader.size() - 2; i++) {
-            sheet.addMergedRegion(new CellRangeAddress(intLine, intLine++, 5, 9)); 
+//            sheet.addMergedRegion(new CellRangeAddress(intLine, intLine++, 5, 9));
+            ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine++, 5, 9));
         }
+
+        //Adicionando Municipio de Ensino em Estudos realizados
         intLine = intLineBackup;
-        intLine++;
+        intLine++;     
         for (int i = 0; i < listHeader.size() - 2; i++) {
-            sheet.addMergedRegion(new CellRangeAddress(intLine, intLine++, 10, 12));
+//            sheet.addMergedRegion(new CellRangeAddress(intLine, intLine++, 10, 12));
+            ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine++, 10, 12));
         }
         
-
         
-
-        
+        // Adicionando Texto do Ano de Ensino em Estudos realizados
+        Curso curso = CursoServer.getCurso(idCurso);
+        ArrayList<Curso> listCursosDesativados = CursoServer.getCursosPorAlunoAmbienteAluno(aluno, false);
+        ArrayList<Curso> listCursos = new  ArrayList<Curso>();
+        listCursos.add(curso);
+        listCursos.addAll(listCursosDesativados);
         intLine = intLineBackup;
+        intLine++;     
+        for (int i = 1; i < listHeader.size() - 1; i++) {
 
+            String strAno = listHeader.get(i);
+            sheet.getRow(intLine).createCell(2).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+            sheet.getRow(intLine).createCell(13).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+            if (!strAno.isEmpty()) {
+                strAno = strAno.substring(0, strAno.indexOf(FieldVerifier.INI_SEPARATOR));
+
+                for (Curso rowCurso : listCursos) {
+                    if (rowCurso.getAno().equals(strAno)) {
+                        String strYear = MpUtilServer.convertDateToString(rowCurso.getDataInicial(), "yyyy");
+                        int intYear = Integer.parseInt(strYear);         
+                        //Ano
+                        sheet.getRow(intLine-1).createCell(2).setCellType(Cell.CELL_TYPE_NUMERIC);                        
+                        sheet.getRow(intLine-1).getCell(2).setCellValue(intYear);
+                        sheet.getRow(intLine-1).getCell(2).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+                        //Estabelecimento
+                        sheet.getRow(intLine-1).createCell(5).setCellValue(ConfigJornada.getProperty("config.nome.escola"));
+                        sheet.getRow(intLine-1).getCell(5).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+                        //Municipio
+                        String strMunicipio = aluno.getUnidadeEscola().getNomeUnidadeEscola();
+                        strMunicipio = strMunicipio.substring(0,strMunicipio.indexOf("-"));
+                        sheet.getRow(intLine-1).createCell(10).setCellValue(strMunicipio);
+                        sheet.getRow(intLine-1).getCell(10).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+                        //UF
+                        String strUF = aluno.getUnidadeEscola().getNomeUnidadeEscola();
+                        strUF = strUF.substring(strUF.indexOf("-")+1,strUF.length());
+                        sheet.getRow(intLine-1).createCell(13).setCellValue(strUF);
+                        sheet.getRow(intLine-1).getCell(13).setCellStyle(ExcelFramework.getStyleCellCenterBoletim(wb));
+                    }
+                }
+            }            
+            intLine++;
+        }        
         
-
+        //Adicionando merge com texto do Fundamento Legal
+        sheet.getRow(8).getCell(0).setCellValue(texto10);
+        CellRangeAddress region = new CellRangeAddress(8, intLine-1, 0, 0);
+        ExcelFramework.cleanBeforeMergeOnValidCells(sheet, region, ExcelFramework.getStyleHeaderBoletimRotation90Center(wb));
+        sheet.addMergedRegion(region);
+//        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, region);
+        
+        
+//        intLine++;
+        
+        sheet.getRow(intLine).getCell(0).setCellValue("Observações:");
+        sheet.getRow(intLine).getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoldLeftNoBorders(wb));
+        sheet.addMergedRegion( new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+//        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+        intLine++;
+        sheet.getRow(intLine).getCell(0).setCellValue("Nº de concluinte GDAE:");
+        sheet.addMergedRegion( new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+//        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+        ExcelFramework.setRegionBorder(wb, sheet, new CellRangeAddress(intLine-1, intLine, 0, listHeader.size()+MAX_COLUMNS));
+        
+        
+        intLine++;
+        sheet.getRow(intLine).getCell(0).setCellValue("CERTIFICADO");
+        sheet.getRow(intLine).getCell(0).setCellStyle(ExcelFramework.getStyleCellFontBoldCenterNoBorders(wb));
+        sheet.addMergedRegion( new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+//        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+        intLine++;
+        
+        String strYear = MpUtilServer.convertDateToString(curso.getDataInicial(), "yyyy");
+        String strCertificado1 = "O Diretor do "+ ConfigJornada.getProperty("config.nome.escola")+ " nos termos do Inciso VII, Artigo 24 da Lei Federal 9394/96, que ";
+        String strCertificado2 = aluno.getPrimeiroNome() + " " + aluno.getSobreNome()+", RG:"+aluno.getRg()+", concluiu o "+curso.getNome() + ", no ano letivo de "+strYear+", ";
+        String strCertificado3 = "estando apta a prosseguir seus estudos no ____________________________.";
+        
+        sheet.getRow(intLine).getCell(0).setCellValue(strCertificado1);
+        sheet.getRow(intLine).getCell(0).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        sheet.addMergedRegion( new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+//        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+        
+        intLine++;
+        sheet.getRow(intLine).getCell(0).setCellValue(strCertificado2);
+        sheet.getRow(intLine).getCell(0).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        sheet.addMergedRegion( new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+//        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+        
+        intLine++;
+        sheet.getRow(intLine).getCell(0).setCellValue(strCertificado3);
+        sheet.getRow(intLine).getCell(0).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        sheet.addMergedRegion( new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+//        ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, new CellRangeAddress(intLine, intLine, 0, listHeader.size()+MAX_COLUMNS));
+        ExcelFramework.setRegionBorder(wb, sheet, new CellRangeAddress(intLine-3, intLine, 0, listHeader.size()+MAX_COLUMNS));
+        
+        
+        intLine++;
+        intLine++;
+        sheet.getRow(intLine).createCell(3).setCellValue("_____________________");sheet.getRow(intLine).getCell(3).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        sheet.getRow(intLine).createCell(6).setCellValue("_____________________");sheet.getRow(intLine).getCell(6).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        sheet.getRow(intLine).createCell(9).setCellValue("_____________________");sheet.getRow(intLine).getCell(9).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        intLine++;
+        sheet.getRow(intLine).createCell(3).setCellValue("Data");sheet.getRow(intLine).getCell(3).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        sheet.getRow(intLine).createCell(6).setCellValue("Secretária");sheet.getRow(intLine).getCell(6).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        sheet.getRow(intLine).createCell(9).setCellValue("Diretor");sheet.getRow(intLine).getCell(9).setCellStyle(ExcelFramework.getStyleCellFontCenterNoBorders(wb));
+        
+//        CellRangeAddress regionNascimento = new CellRangeAddress(6, 6, 0, listHeader.size()+MAX_COLUMNS);
+//        ExcelFramework.setRegionBorder(wb, sheet, regionNascimento);
+        
     }
     
+   
     public static String getExcelBoletimAluno(XSSFWorkbook wb, XSSFSheet sheet, int idCurso, int idAluno) {
 //        XSSFWorkbook wb = new XSSFWorkbook();
 //        XSSFSheet sheet = wb.createSheet("Boletim Anual");

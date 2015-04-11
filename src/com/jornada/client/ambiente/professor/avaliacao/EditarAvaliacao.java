@@ -457,7 +457,7 @@ public class EditarAvaliacao extends VerticalPanel {
 				
 				if (FieldVerifier.isValidName(value)) {					
 					object.setAssunto(value);
-					GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
+					GWTServiceAvaliacao.Util.getInstance().updateRow(true, object, callbackUpdateRow);
 				}else{
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
 					mpDialogBoxWarning.setBodyText(txtConstants.geralCampoObrigatorio(txtConstants.avaliacaoAssunto()));
@@ -479,7 +479,7 @@ public class EditarAvaliacao extends VerticalPanel {
 			public void update(int index, Avaliacao object, String value) {
 				// Called when the user changes the value.
 				object.setDescricao(value);
-				GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
+				GWTServiceAvaliacao.Util.getInstance().updateRow(false, object, callbackUpdateRow);
 			}
 		});
 
@@ -516,7 +516,7 @@ public class EditarAvaliacao extends VerticalPanel {
                 }
 
 				object.setIdTipoAvaliacao(idTipoAvaliacao);
-				GWTServiceAvaliacao.Util.getInstance().updateRow(idCurso, object, callbackUpdateRow);
+				GWTServiceAvaliacao.Util.getInstance().updateRow(idCurso, false, object, callbackUpdateRow);
 			}
 		});
 	    
@@ -550,7 +550,7 @@ public class EditarAvaliacao extends VerticalPanel {
             @Override
             public void update(int index, Avaliacao object, String value) {
                 object.setPesoNota(value);
-                GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
+                GWTServiceAvaliacao.Util.getInstance().updateRow(false, object, callbackUpdateRow);
             }
         });	    
         	    
@@ -564,7 +564,7 @@ public class EditarAvaliacao extends VerticalPanel {
 			@Override
 			public void update(int index, Avaliacao object, Date value) {
 				object.setData(value);
-				GWTServiceAvaliacao.Util.getInstance().updateRow(object,callbackUpdateRow);
+				GWTServiceAvaliacao.Util.getInstance().updateRow(false, object,callbackUpdateRow);
 			}
 		});	  
 		
@@ -586,7 +586,7 @@ public class EditarAvaliacao extends VerticalPanel {
 			@Override
 			public void update(int index, Avaliacao object, String value) {
 				object.setHora(value);
-				GWTServiceAvaliacao.Util.getInstance().updateRow(object, callbackUpdateRow);
+				GWTServiceAvaliacao.Util.getInstance().updateRow(false, object, callbackUpdateRow);
 			}
 		});
 

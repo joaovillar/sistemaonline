@@ -74,152 +74,154 @@ public class EditarNotaPorDisciplina extends VerticalPanel {
 	private TextBox txtSearch;
 	
 	private TelaInicialNota telaInicialNota;
-
-	public EditarNotaPorDisciplina(TelaInicialNota telaInicialNota) {
-		
-		
-		
-		this.telaInicialNota=telaInicialNota;
-		setWidth(Integer.toString(TelaInicialNota.intWidthTable)+ "px");
-
-		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
-		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
-		mpPanelLoading.setTxtLoading(txtConstants.geralCarregando());
-		mpPanelLoading.show();
-		mpPanelLoading.setVisible(false);		
-		
-
-		Label lblCurso = new Label(txtConstants.curso());
-		Label lblPeriodo = new Label(txtConstants.periodo());
-		Label lblDisciplina = new Label(txtConstants.disciplina());
-//		Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());
-		Label lblAvaliacao = new Label(txtConstants.avaliacao());
-
-		listBoxCurso = new MpListBoxCursoAmbienteProfessor(telaInicialNota.getMainView().getUsuarioLogado());
-		listBoxPeriodo = new MpListBoxPeriodoAmbienteProfessor(telaInicialNota.getMainView().getUsuarioLogado());
-		listBoxDisciplina = new MpListBoxDisciplinaAmbienteProfessor(telaInicialNota.getMainView().getUsuarioLogado());		
-//		listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();		
-		listBoxAvaliacao = new MpSelectionAvaliacao();
-		
-		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
-		listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());		
-		listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());		
-//		listBoxConteudoProgramatico.addChangeHandler(new MpConteudoProgramaticoSelectionChangeHandler());
-		listBoxAvaliacao.addChangeHandler(new MpAvaliacaoSelectionChangeHandler());
-
-		Grid gridComboBox = new Grid(5, 4);
-		gridComboBox.setCellSpacing(2);
-		gridComboBox.setCellPadding(2);
-		{
-			int row=0;
-			gridComboBox.setWidget(row, 0, lblCurso);
-			gridComboBox.setWidget(row, 1, listBoxCurso);
-			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(row, 0, lblPeriodo);
-			gridComboBox.setWidget(row, 1, listBoxPeriodo);
-			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(row, 0, lblDisciplina);
-			gridComboBox.setWidget(row, 1, listBoxDisciplina);
-			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
-//			gridComboBox.setWidget(row, 0, lblConteudoProgramatico);
-//			gridComboBox.setWidget(row, 1, listBoxConteudoProgramatico);
-//			gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
-			gridComboBox.setWidget(row, 0, lblAvaliacao);
-			gridComboBox.setWidget(row, 1, listBoxAvaliacao);
-			gridComboBox.setWidget(row, 2, new InlineHTML("&nbsp;"));			
-			gridComboBox.setWidget(row++, 3, mpPanelLoading);			
-		}
-
-		Label lblEmpty = new Label(txtConstants.notaNehumaNota());
-//		Label lblEmpty2 = new Label("Por favor, selecione um Conteúdo Programático.");
-
-		cellTable = new CellTable<Nota>(5,GWT.<CellTableStyle> create(CellTableStyle.class));
-//		cellTable.setWidth(Integer.toString(TelaInicialNota.intWidthTable-900)+ "px");
-		cellTable.setWidth("100%");
-		cellTable.setAutoHeaderRefreshDisabled(true);
-		cellTable.setAutoFooterRefreshDisabled(true);
-		cellTable.setEmptyTableWidget(lblEmpty);
+	
 
 
-		// Add a selection model so we can select cells.
-		final SelectionModel<Nota> selectionModel = new MultiSelectionModel<Nota>();
-		cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<Nota> createCheckboxManager());
-		initTableColumns(selectionModel);
+    public EditarNotaPorDisciplina(TelaInicialNota telaInicialNota) {
+        
+        
+        
+        this.telaInicialNota=telaInicialNota;
+        setWidth(Integer.toString(TelaInicialNota.intWidthTable)+ "px");
 
-		dataProvider.addDataDisplay(cellTable);	
-		
-		MpSimplePager mpPager = new MpSimplePager();
-		mpPager.setDisplay(cellTable);
-		mpPager.setPageSize(10);
-		
-		
-		Label lblFiltroUsuario = new Label(txtConstants.usuarioFiltrarUsuario());
-		txtSearch = new TextBox();
-		MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
+        mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
+        mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
+        mpPanelLoading.setTxtLoading(txtConstants.geralCarregando());
+        mpPanelLoading.show();
+        mpPanelLoading.setVisible(false);       
+        
 
-		txtSearch.addKeyUpHandler(new EnterKeyUpHandler());		
-		btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
+        Label lblCurso = new Label(txtConstants.curso());
+        Label lblPeriodo = new Label(txtConstants.periodo());
+        Label lblDisciplina = new Label(txtConstants.disciplina());
+//      Label lblConteudoProgramatico = new Label(txtConstants.conteudoProgramatico());
+        Label lblAvaliacao = new Label(txtConstants.avaliacao());
 
-		lblFiltroUsuario.setStyleName("design_label");
-		lblFiltroUsuario.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-		txtSearch.setStyleName("design_text_boxes");	
-		
-		FlexTable flexTableFiltrar = new FlexTable();
-		flexTableFiltrar.setWidget(0, 0, mpPager);
-		flexTableFiltrar.setWidget(0, 1, new InlineHTML("&nbsp"));
-		flexTableFiltrar.setWidget(0, 2, lblFiltroUsuario);
-		flexTableFiltrar.setWidget(0, 3, txtSearch);
-		flexTableFiltrar.setWidget(0, 4, btnFiltrar);
-		flexTableFiltrar.setWidget(0, 5, mpPanelLoading);
-		
-		
-		ScrollPanel scrollPanel = new ScrollPanel();
-//		scrollPanel.setSize(Integer.toString(TelaInicialNota.intWidthTable+30)+"px",Integer.toString(TelaInicialNota.intHeightTable-240)+"px");
-		scrollPanel.setHeight(Integer.toString(TelaInicialNota.intHeightTable-240)+"px");
-		scrollPanel.setWidth("100%");
-		scrollPanel.setAlwaysShowScrollBars(false);		
-		scrollPanel.add(cellTable);		
+        listBoxCurso = new MpListBoxCursoAmbienteProfessor(telaInicialNota.getMainView().getUsuarioLogado());
+        listBoxPeriodo = new MpListBoxPeriodoAmbienteProfessor(telaInicialNota.getMainView().getUsuarioLogado());
+        listBoxDisciplina = new MpListBoxDisciplinaAmbienteProfessor(telaInicialNota.getMainView().getUsuarioLogado());     
+//      listBoxConteudoProgramatico = new MpSelectionConteudoProgramatico();        
+        listBoxAvaliacao = new MpSelectionAvaliacao();
+        
+        listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
+        listBoxPeriodo.addChangeHandler(new MpPeriodoSelectionChangeHandler());     
+        listBoxDisciplina.addChangeHandler(new MpDisciplinaSelectionChangeHandler());       
+//      listBoxConteudoProgramatico.addChangeHandler(new MpConteudoProgramaticoSelectionChangeHandler());
+        listBoxAvaliacao.addChangeHandler(new MpAvaliacaoSelectionChangeHandler());
 
-		
-		
-		VerticalPanel vPanelEditGrid = new VerticalPanel();		
-		vPanelEditGrid.add(gridComboBox);
-		vPanelEditGrid.add(new InlineHTML("&nbsp;"));
-		vPanelEditGrid.add(flexTableFiltrar);
-		vPanelEditGrid.add(scrollPanel);
-		
-//		vPanelEditGrid.setWidth("100%");
+        Grid gridComboBox = new Grid(5, 4);
+        gridComboBox.setCellSpacing(2);
+        gridComboBox.setCellPadding(2);
+        {
+            int row=0;
+            gridComboBox.setWidget(row, 0, lblCurso);
+            gridComboBox.setWidget(row, 1, listBoxCurso);
+            gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
+            gridComboBox.setWidget(row, 0, lblPeriodo);
+            gridComboBox.setWidget(row, 1, listBoxPeriodo);
+            gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
+            gridComboBox.setWidget(row, 0, lblDisciplina);
+            gridComboBox.setWidget(row, 1, listBoxDisciplina);
+            gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
+//          gridComboBox.setWidget(row, 0, lblConteudoProgramatico);
+//          gridComboBox.setWidget(row, 1, listBoxConteudoProgramatico);
+//          gridComboBox.setWidget(row++, 2, new InlineHTML("&nbsp;"));
+            gridComboBox.setWidget(row, 0, lblAvaliacao);
+            gridComboBox.setWidget(row, 1, listBoxAvaliacao);
+            gridComboBox.setWidget(row, 2, new InlineHTML("&nbsp;"));           
+            gridComboBox.setWidget(row++, 3, mpPanelLoading);           
+        }
 
+        Label lblEmpty = new Label(txtConstants.notaNehumaNota());
+//      Label lblEmpty2 = new Label("Por favor, selecione um Conteúdo Programático.");
 
-		/************************* Begin Callback's *************************/
-
-		callbackUpdateRow = new AsyncCallback<Boolean>() {
-
-			public void onSuccess(Boolean success) {
-				if(success==false){
-					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.notaErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
-					mpDialogBoxWarning.showDialog();
-					
-				}
-
-			}
-
-			public void onFailure(Throwable caught) {
-				mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-				mpDialogBoxWarning.setBodyText(txtConstants.notaErroAtualizar());
-				mpDialogBoxWarning.showDialog();
-			}
-		};
-
-		/*********************** End Callbacks **********************/
-
-		this.setWidth("100%");
-		super.add(vPanelEditGrid);
-		
-	}
+        cellTable = new CellTable<Nota>(100,GWT.<CellTableStyle> create(CellTableStyle.class));
+//      cellTable.setWidth(Integer.toString(TelaInicialNota.intWidthTable-900)+ "px");
+        cellTable.setWidth("100%");
+        cellTable.setAutoHeaderRefreshDisabled(true);
+        cellTable.setAutoFooterRefreshDisabled(true);
+        cellTable.setEmptyTableWidget(lblEmpty);
 
 
+        // Add a selection model so we can select cells.
+        final SelectionModel<Nota> selectionModel = new MultiSelectionModel<Nota>();
+        cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<Nota> createCheckboxManager());
+        initTableColumns(selectionModel);
+
+        dataProvider.addDataDisplay(cellTable); 
+        
+        MpSimplePager mpPager = new MpSimplePager();
+        mpPager.setDisplay(cellTable);
+        mpPager.setPageSize(100);
+        
+        
+        Label lblFiltroUsuario = new Label(txtConstants.usuarioFiltrarUsuario());
+        txtSearch = new TextBox();
+        MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
+
+        txtSearch.addKeyUpHandler(new EnterKeyUpHandler());     
+        btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
+
+        lblFiltroUsuario.setStyleName("design_label");
+        lblFiltroUsuario.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);        
+        txtSearch.setStyleName("design_text_boxes");    
+        
+        FlexTable flexTableFiltrar = new FlexTable();
+        flexTableFiltrar.setWidget(0, 0, mpPager);
+        flexTableFiltrar.setWidget(0, 1, new InlineHTML("&nbsp"));
+        flexTableFiltrar.setWidget(0, 2, lblFiltroUsuario);
+        flexTableFiltrar.setWidget(0, 3, txtSearch);
+        flexTableFiltrar.setWidget(0, 4, btnFiltrar);
+        flexTableFiltrar.setWidget(0, 5, mpPanelLoading);
+        
+        
+        ScrollPanel scrollPanel = new ScrollPanel();
+//      scrollPanel.setSize(Integer.toString(TelaInicialNota.intWidthTable+30)+"px",Integer.toString(TelaInicialNota.intHeightTable-240)+"px");
+//        scrollPanel.setHeight(Integer.toString(TelaInicialNota.intHeightTable-240)+"px");
+//        scrollPanel.setWidth("100%");
+        scrollPanel.setAlwaysShowScrollBars(false);     
+        scrollPanel.add(cellTable);     
+
+        
+        
+        VerticalPanel vPanelEditGrid = new VerticalPanel();     
+        vPanelEditGrid.add(gridComboBox);
+//        vPanelEditGrid.add(new InlineHTML("&nbsp;"));
+        vPanelEditGrid.add(flexTableFiltrar);
+        vPanelEditGrid.add(scrollPanel);
+        
+//      vPanelEditGrid.setWidth("100%");
+
+
+        /************************* Begin Callback's *************************/
+
+        callbackUpdateRow = new AsyncCallback<Boolean>() {
+
+            public void onSuccess(Boolean success) {
+                if(success==false){
+                    mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                    mpDialogBoxWarning.setBodyText(txtConstants.notaErroAtualizar()+" "+txtConstants.geralRegarregarPagina());
+                    mpDialogBoxWarning.showDialog();
+                    
+                }
+
+            }
+
+            public void onFailure(Throwable caught) {
+                mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
+                mpDialogBoxWarning.setBodyText(txtConstants.notaErroAtualizar());
+                mpDialogBoxWarning.showDialog();
+            }
+        };
+
+        /*********************** End Callbacks **********************/
+
+        this.setWidth("100%");
+        super.add(vPanelEditGrid);
+        
+    }
+    
+    
 	/**************** Begin Event Handlers *****************/
 
 	private class MpCursoSelectionChangeHandler implements ChangeHandler {

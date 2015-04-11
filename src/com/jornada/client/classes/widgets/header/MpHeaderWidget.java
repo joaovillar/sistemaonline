@@ -22,6 +22,7 @@ public class MpHeaderWidget extends SimplePanel{
 				Label headerText = new Label(text);
 				headerText.setStyleName("gwt-TabLayoutPanel");
 				
+				hPanel.add(new InlineHTML("&nbsp;"));    
 				hPanel.add(img);	
 				hPanel.add(new InlineHTML("&nbsp;"));		
 				hPanel.add(headerText);
