@@ -34,6 +34,7 @@ public interface GWTServiceUsuarioAsync {
 	public void getTodosPais(String strFilterResp, String strFilterName, AsyncCallback<ArrayList<Usuario>> callback);
     public void getAlunosTodosOuPorCurso(int idCurso, int idUnidade, boolean showAluno, boolean showPais, boolean showProfessor, AsyncCallback<ArrayList<UsuarioNomeID>> callback);
     public void getCoordenadoresAdministradoresNomeId(int idUnidade, AsyncCallback<ArrayList<UsuarioNomeID>> callback);
+    public void getTodosUsuarios(AsyncCallback<ArrayList<Usuario>> callback);
 		
 
 }

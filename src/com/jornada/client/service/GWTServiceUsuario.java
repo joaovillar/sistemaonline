@@ -51,6 +51,7 @@ public interface GWTServiceUsuario extends RemoteService {
 	public ArrayList<Usuario> getPaisPorCurso(int idCurso, String strFilterResp, String strFilterName);
 	public ArrayList<Usuario> getTodosPais(String strFilterResp, String strFilterName);
 	public ArrayList<UsuarioNomeID> getCoordenadoresAdministradoresNomeId(int idUnidade);
+	public ArrayList<Usuario> getTodosUsuarios();
 	
 	/**
 	 * Utility class for simplifying access to the instance of async service.

@@ -229,7 +229,7 @@ public class VisualizarAlunoAgenda extends VerticalPanel {
 						calendar.clearAppointments();
 						
 						calendar.addOpenHandler(new doubleClickOpenAppointment());
-//						calendar.addSelectionHandler(new doubleClickOpenAppointment());
+//						calendar.addSelectionHandler(new simpleClickOpenAppointment());
 						
 						
 						for(CursoAvaliacao object : list){
@@ -336,8 +336,8 @@ public class VisualizarAlunoAgenda extends VerticalPanel {
 		}
 	};
 	
-	
-//		private class doubleClickOpenAppointment implements SelectionHandler<Appointment> {
+//	
+//		private class simpleClickOpenAppointment implements SelectionHandler<Appointment> {
 //		  @Override
 //		  public void onSelection(SelectionEvent<Appointment> event) {
 //			  

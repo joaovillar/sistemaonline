@@ -449,9 +449,15 @@ public class AdicionaEmailComunicado extends VerticalPanel {
             for(int i=0;i<result.size();i++){
                 UsuarioNomeID user = result.get(i);
                 multiBoxUsuariosFiltrados.addItem(user.getNomeUsuario(), Integer.toString(user.getIdUsuario()));
-                multiBoxUsuariosFiltrados.setItemSelected(i, true);
-            }            
+//                multiBoxUsuariosFiltrados.setItemSelected(i, true);
+            }    
             
+
+            for(int i=0;i<result.size();i++){
+               multiBoxUsuariosFiltrados.setItemSelected(i, true);
+            }
+
+
         }
         
         

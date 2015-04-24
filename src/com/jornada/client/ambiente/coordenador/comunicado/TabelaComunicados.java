@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.google.gwt.cell.client.DatePickerCell;
 import com.google.gwt.cell.client.ImageCell;
-import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
@@ -21,7 +20,6 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -70,7 +68,7 @@ public class TabelaComunicados extends VerticalPanel{
 	private Column<Comunicado, String> assuntoColumn;
 	private Column<Comunicado, Date> dataColumn;
 	private Column<Comunicado, String> horaColumn;
-	private Column<Comunicado, SafeHtml> descricaoColumn;
+//	private Column<Comunicado, SafeHtml> descricaoColumn;
 	private ListDataProvider<Comunicado> dataProvider = new ListDataProvider<Comunicado>();	
 	
 	private TextBox txtSearch;
@@ -383,15 +381,15 @@ public class TabelaComunicados extends VerticalPanel{
 			}
 
 		};
-		descricaoColumn = new Column<Comunicado, SafeHtml>(new SafeHtmlCell()) {
-			@Override
-			public SafeHtml  getValue(Comunicado object) {		
-				SafeHtmlBuilder sb = new SafeHtmlBuilder();
-				sb.appendHtmlConstant(object.getDescricao());
-				return sb.toSafeHtml();
-			}
-
-		};	
+//		descricaoColumn = new Column<Comunicado, SafeHtml>(new SafeHtmlCell()) {
+//			@Override
+//			public SafeHtml  getValue(Comunicado object) {		
+//				SafeHtmlBuilder sb = new SafeHtmlBuilder();
+//				sb.appendHtmlConstant(object.getDescricao());
+//				return sb.toSafeHtml();
+//			}
+//
+//		};	
 		dataColumn = new Column<Comunicado, Date>(new DatePickerCell()) {
 			@Override
 			public Date getValue(Comunicado object) {			    
@@ -430,15 +428,15 @@ public class TabelaComunicados extends VerticalPanel{
 		
 		cellTable.addColumn(imageColumn, txtConstants.comunicadoImagem());
 		cellTable.addColumn(assuntoColumn, txtConstants.comunicadoAssunto());
-		cellTable.addColumn(descricaoColumn, txtConstants.comunicadoDetalhes());
+//		cellTable.addColumn(descricaoColumn, txtConstants.comunicadoDetalhes());
 		cellTable.addColumn(dataColumn, txtConstants.comunicadoData());
 		cellTable.addColumn(horaColumn, txtConstants.comunicadoHora());
 		cellTable.addColumn(editColumn, txtConstants.geralEditar());
 		cellTable.addColumn(removeColumn, txtConstants.geralRemover());
 		
+//		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("hand-over-default");
-		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("hand-over-default");
+//		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(dataColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(horaColumn)).setCellStyleNames("hand-over-default");
 		cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");
@@ -461,13 +459,13 @@ public class TabelaComunicados extends VerticalPanel{
 	      }
 	    });	
 
-		descricaoColumn.setSortable(true);
-	    sortHandler.setComparator(descricaoColumn, new Comparator<Comunicado>() {
-	      @Override
-	      public int compare(Comunicado o1, Comunicado o2) {
-	        return o1.getDescricao().compareTo(o2.getDescricao());
-	      }
-	    });	
+//		descricaoColumn.setSortable(true);
+//	    sortHandler.setComparator(descricaoColumn, new Comparator<Comunicado>() {
+//	      @Override
+//	      public int compare(Comunicado o1, Comunicado o2) {
+//	        return o1.getDescricao().compareTo(o2.getDescricao());
+//	      }
+//	    });	
 	    
 	    
 	    dataColumn.setSortable(true);

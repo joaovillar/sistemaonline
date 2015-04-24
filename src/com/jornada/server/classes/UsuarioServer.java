@@ -113,9 +113,12 @@ public class UsuarioServer{
 	public static final String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
 	public static final String DB_UPDATE_SENHA = "UPDATE usuario set senha=?, primeiro_login=? where id_usuario=?";
 	public static final String DB_SELECT_ILIKE = "SELECT * FROM usuario where (primeiro_nome ilike ?) order by primeiro_nome, sobre_nome asc";
+	
+	@Deprecated
 	public static final String DB_SELECT_DB_FIELD_ILIKE = "select * from usuario, tipo_usuario, unidade_escola where usuario.id_tipo_usuario = tipo_usuario.id_tipo_usuario and unidade_escola.id_unidade_escola=usuario.id_unidade_escola and (<change> ilike ?)  order by primeiro_nome, sobre_nome asc";
 	public static final String DB_SELECT_ILIKE_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? and (primeiro_nome ilike ? or sobre_nome ilike ?) order by primeiro_nome, sobre_nome asc";
-	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome, sobre_nome asc";
+	@Deprecated
+	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO_OLD = "SELECT * FROM usuario where id_tipo_usuario = ? order by primeiro_nome, sobre_nome asc";
 	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO_UNIDADE = "SELECT * FROM usuario where id_tipo_usuario = ? and id_unidade_escola = ? ordder by primeiro_nome, sobre_nome asc";
 	public static final String DB_SELECT_ALL = "SELECT * FROM usuario order by primeiro_nome asc;";
 //	public static final String DB_SELECT_USUARIO_ID = "SELECT * FROM usuario where id_usuario=?;";
@@ -130,7 +133,9 @@ public class UsuarioServer{
 			"( select id_usuario from rel_curso_usuario where id_curso=? ) "+
 			"and (primeiro_nome ilike ? or sobre_nome ilike ?) "+
 			"order by primeiro_nome, sobre_nome";		
-	public static final String DB_SELECT_FILTRADO_POR_CURSO = 
+	
+	@Deprecated
+	public static final String DB_SELECT_FILTRADO_POR_CURSO_OLD = 
 			"select * from usuario where id_usuario in "+
 			"( select id_usuario from rel_curso_usuario where id_curso=? ) "+
 			"order by primeiro_nome, sobre_nome";	
@@ -176,25 +181,26 @@ public class UsuarioServer{
             "    ) and (primeiro_nome ilike ? or sobre_nome ilike ? )  <change> "+
             "    order by primeiro_nome, sobre_nome asc ";	
     
-    private static final String DB_SELECT_PAIS_POR_CURSO_TODOS = 
-            "select * from usuario where id_usuario in( "+
-            "        select id_usuario_pais from rel_pai_aluno where id_usuario_aluno in "+
-            "        ( "+
-            "            select id_usuario from rel_curso_usuario where id_curso=? group by id_usuario order by id_usuario asc "+
-            "        )  group by id_usuario_pais order by id_usuario_pais asc "+
-            "    ) "+
-            "    order by primeiro_nome, sobre_nome asc ";     
-    
-    private static final String DB_SELECT_PROFESSOR_POR_CURSO_TODOS = 
-            "select * from usuario where id_usuario in( "+
-            "        select id_usuario from disciplina where id_periodo in "+
-            "            ( "+
-            "            select id_periodo from periodo where id_curso in "+
-            "            ( "+
-            "                select id_curso from curso where id_curso=? "+
-            "            ) "+
-            "        ) "+
-            "    )";
+//    @Deprecated
+//    private static final String DB_SELECT_PAIS_POR_CURSO_TODOS_OLD = 
+//            "select * from usuario where id_usuario in( "+
+//            "        select id_usuario_pais from rel_pai_aluno where id_usuario_aluno in "+
+//            "        ( "+
+//            "            select id_usuario from rel_curso_usuario where id_curso=? group by id_usuario order by id_usuario asc "+
+//            "        )  group by id_usuario_pais order by id_usuario_pais asc "+
+//            "    ) "+
+//            "    order by primeiro_nome, sobre_nome asc ";     
+//    @Deprecated
+//    private static final String DB_SELECT_PROFESSOR_POR_CURSO_TODOS_OLD = 
+//            "select * from usuario where id_usuario in( "+
+//            "        select id_usuario from disciplina where id_periodo in "+
+//            "            ( "+
+//            "            select id_periodo from periodo where id_curso in "+
+//            "            ( "+
+//            "                select id_curso from curso where id_curso=? "+
+//            "            ) "+
+//            "        ) "+
+//            "    )";
     
     private static final String DB_SELECT_TODOS_PAIS = 
             "select * from usuario where (primeiro_nome ilike ? or sobre_nome ilike ? ) " +
@@ -211,6 +217,44 @@ public class UsuarioServer{
 			"order by primeiro_nome, sobre_nome asc ";	
 	
 
+	public static final String DB_SELECT_TODOS_USUARIOS = ""+
+	        "select * from "+
+	        "usuario as u "+
+	        "left join idioma as i on u.id_idioma = i.id_idioma "+
+	        "left join tipo_usuario as tu on u.id_tipo_usuario = tu.id_tipo_usuario "+
+	        "left join unidade_escola as ue on u.id_unidade_escola = ue.id_unidade_escola "+
+	        "left join tipo_status_usuario as tsu on u.id_tipo_status_usuario = tsu.id_tipo_status_usuario ";
+	
+	public static final String DB_SELECT_USUARIOS_NEW = DB_SELECT_TODOS_USUARIOS +
+	        " where (<change> ilike ?)  order by primeiro_nome, sobre_nome asc ";
+
+	public static final String DB_SELECT_USUARIO_PELO_TIPO_USUARIO = DB_SELECT_TODOS_USUARIOS +
+	        " where u.id_tipo_usuario = ? order by primeiro_nome, sobre_nome asc";	
+
+    public static final String DB_SELECT_FILTRADO_POR_CURSO = DB_SELECT_TODOS_USUARIOS +
+	            "where id_usuario in ( select id_usuario from rel_curso_usuario where id_curso=? ) "+
+	            "order by primeiro_nome, sobre_nome";       
+    
+    private static final String DB_SELECT_PAIS_POR_CURSO_TODOS = DB_SELECT_TODOS_USUARIOS +
+            "where id_usuario in( "+
+            "        select id_usuario_pais from rel_pai_aluno where id_usuario_aluno in "+
+            "        ( "+
+            "            select id_usuario from rel_curso_usuario where id_curso=? group by id_usuario order by id_usuario asc "+
+            "        )  group by id_usuario_pais order by id_usuario_pais asc "+
+            "    ) "+
+            "    order by primeiro_nome, sobre_nome asc ";     
+
+    private static final String DB_SELECT_PROFESSOR_POR_CURSO_TODOS = DB_SELECT_TODOS_USUARIOS +
+            "where id_usuario in( "+
+            "        select id_usuario from disciplina where id_periodo in "+
+            "            ( "+
+            "            select id_periodo from periodo where id_curso in "+
+            "            ( "+
+            "                select id_curso from curso where id_curso=? "+
+            "            ) "+
+            "        ) "+
+            "    )";
+	
 	public UsuarioServer(){
 		
 	}
@@ -1761,6 +1805,33 @@ public class UsuarioServer{
 	}
 
 	
+	public static ArrayList<Usuario> getTodosUsuarios() {
+	    ArrayList<Usuario> data = new ArrayList<Usuario>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+
+        try 
+        {
+
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+
+            PreparedStatement ps = connection.prepareStatement(UsuarioServer.DB_SELECT_TODOS_USUARIOS);
+            
+            
+            data = getUserParametersNew(ps.executeQuery());
+
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;
+	}
+	
 	public static ArrayList<Usuario> getUsuarios() {
 
 		ArrayList<Usuario> data = new ArrayList<Usuario>();
@@ -1821,6 +1892,41 @@ public class UsuarioServer{
 
 	}	
 	
+	   public static ArrayList<Usuario> getUsuariosFieldLike(String strDBField, String strFilter) {
+
+	        ArrayList<Usuario> data = new ArrayList<Usuario>();
+//	      JornadaDataBase dataBase = new JornadaDataBase();
+	        Connection connection = ConnectionManager.getConnection();
+
+	        try 
+	        {
+	            
+	            String strQuery = UsuarioServer.DB_SELECT_USUARIOS_NEW;
+	            strQuery = strQuery.replace("<change>", strDBField);
+
+//	          dataBase.createConnection();            
+//	          Connection connection = dataBase.getConnection();
+	            PreparedStatement ps = connection.prepareStatement(strQuery);
+	            
+	            int count=0;
+//	          ps.setString(++count, strDBField);
+	            ps.setString(++count, strFilter);
+	            
+	            data = getUserParametersNew(ps.executeQuery());
+
+	        } catch (SQLException sqlex) {
+	            data=null;
+	            System.err.println(sqlex.getMessage());
+	        } finally {
+//	          dataBase.close();
+	            ConnectionManager.closeConnection(connection);
+	        }
+
+	        return data;
+
+	    }
+	
+	@Deprecated
 	public static ArrayList<Usuario> getUsuarios(String strDBField, String strFilter) {
 
 		ArrayList<Usuario> data = new ArrayList<Usuario>();
@@ -1970,7 +2076,7 @@ public class UsuarioServer{
 			int count=0;
 			ps.setInt(++count, idCurso);
 			
-			data = getUserParameters(ps.executeQuery());
+			data = getUserParametersNew(ps.executeQuery());
 
 		} catch (SQLException sqlex) {
 			data=null;
@@ -2090,7 +2196,7 @@ public class UsuarioServer{
 			ps.setInt(++count, id_tipo_usuario);
 				
 			
-			data = getUserParameters(ps.executeQuery());
+			data = getUserParametersNew(ps.executeQuery());
 			
 		} catch (SQLException sqlex) {
 			data=null;
@@ -2418,6 +2524,105 @@ public class UsuarioServer{
 
 	}
 	
+	public static ArrayList<Usuario> getUserParametersNew(ResultSet rs){
+
+        ArrayList<Usuario> data = new ArrayList<Usuario>();
+        
+        try{
+        
+        while (rs.next()) 
+        {
+            Usuario usuario = new Usuario();            
+            usuario.setIdUsuario(rs.getInt("id_usuario"));
+            usuario.setIdUnidadeEscola(rs.getInt("id_unidade_escola"));
+            usuario.setPrimeiroNome(rs.getString("primeiro_nome"));
+            usuario.setSobreNome(rs.getString("sobre_nome"));
+            usuario.setCpf(rs.getString("cpf"));
+            usuario.setDataNascimento(rs.getDate("data_nascimento"));
+            usuario.setIdTipoUsuario(rs.getInt("id_tipo_usuario"));
+            usuario.setEmail(rs.getString("email"));
+            usuario.setTelefoneCelular(rs.getString("telefone_celular"));
+            usuario.setTelefoneResidencial(rs.getString("telefone_residencial"));
+            usuario.setTelefoneComercial(rs.getString("telefone_comercial"));
+            usuario.setLogin(rs.getString("login"));
+            usuario.setSenha(rs.getString("senha"));
+            usuario.setPrimeiroLogin(rs.getBoolean("primeiro_login"));
+            usuario.setEndereco(rs.getString("endereco"));
+            usuario.setNumeroResidencia(rs.getString("numero_residencia"));
+            usuario.setBairro(rs.getString("bairro"));
+            usuario.setCidade(rs.getString("cidade")); 
+            usuario.setUnidadeFederativa(rs.getString("unidade_federativa"));   
+            usuario.setCep(rs.getString("cep"));  
+            usuario.setDataMatricula(rs.getDate("data_matricula"));  
+            usuario.setRg(rs.getString("rg"));   
+            usuario.setSexo(rs.getString("sexo"));   
+            usuario.setEmpresaOndeTrabalha(rs.getString("empresa_onde_trabalha"));   
+            usuario.setCargo(rs.getString("cargo"));   
+            usuario.setRespAcademico(rs.getBoolean("resp_academico"));   
+            usuario.setRespFinanceiro(rs.getBoolean("resp_financeiro"));   
+            usuario.setRegistroMatricula(rs.getString("registro_matricula"));   
+            usuario.setTipoPais(rs.getString("tipo_pais"));   
+            usuario.setSituacaoResponsaveis(rs.getString("situacao_responsaveis"));   
+            usuario.setSituacaoResponsaveisOutros(rs.getString("situacao_responsaveis_outros"));   
+            usuario.setRegistroAluno(rs.getString("registro_aluno"));
+            usuario.setPrimeiroLogin(rs.getBoolean("primeiro_login"));
+            usuario.setObservacao(rs.getString("observacao"));
+
+            
+            
+            usuario.setIdIdioma((rs.getInt("id_idioma")==0)? 1 : rs.getInt("id_idioma"));           
+            try {
+                usuario.getTipoUsuario().setIdTipoUsuario(usuario.getIdTipoUsuario());
+                usuario.getTipoUsuario().setNomeTipoUsuario((rs.getString("nome_tipo_usuario") == null) ? null: rs.getString("nome_tipo_usuario"));
+            }catch (Exception ex1) {                
+                try{
+                    usuario.setIdTipoUsuario(rs.getInt("id_tipo_usuario"));
+                    usuario.getTipoUsuario().setIdTipoUsuario(rs.getInt("id_tipo_usuario"));
+                    usuario.getTipoUsuario().setNomeTipoUsuario(rs.getString("nome_tipo_usuario"));
+                }catch(Exception ex2){
+                    usuario.getTipoUsuario().setNomeTipoUsuario(null);  
+                }
+            }
+            
+            try{
+//                usuario.setIdioma(IdiomaServer.getIdioma(usuario.getIdIdioma()));
+                usuario.setIdIdioma(rs.getInt("id_idioma"));
+                usuario.getIdioma().setIdIdioma(rs.getInt("id_idioma"));
+                usuario.getIdioma().setNomeIdioma(rs.getString("nome_idioma"));
+                usuario.getIdioma().setLocale(rs.getString("locale"));
+            }catch (Exception ex) {
+                usuario.setIdioma(null);
+            }
+            
+            try{
+//                usuario.setUnidadeEscola(UnidadeEscolaServer.getUnidadeEscola(usuario.getIdUnidadeEscola()));
+                usuario.setIdUnidadeEscola(rs.getInt("id_unidade_escola"));
+                usuario.getUnidadeEscola().setIdUnidadeEscola(rs.getInt("id_unidade_escola"));
+                usuario.getUnidadeEscola().setNomeUnidadeEscola(rs.getString("nome_unidade_escola"));
+            }catch (Exception ex) {
+                usuario.setIdioma(null);
+            }
+            
+            try{
+                usuario.setIdTipoStatusUsuario(rs.getInt("id_tipo_status_usuario"));
+//                usuario.setTipoStatusUsuario(TipoStatusUsuarioServer.getTipoStatusAluno(usuario.getIdTipoStatusUsuario()));
+                usuario.getTipoStatusUsuario().setIdTipoStatusUsuario(rs.getInt("id_tipo_status_usuario"));
+                usuario.getTipoStatusUsuario().setNomeTipoStatusUsuario(rs.getString("nome_tipo_status_usuario"));
+                usuario.getTipoStatusUsuario().setDescricaoStatusUsuario(rs.getString("descricao_status_usuario"));
+            }catch (Exception ex) {
+                usuario.setTipoStatusUsuario(null);
+            }
+
+            data.add(usuario);
+        }
+        }catch(Exception ex){
+            System.err.println(ex.getMessage());
+        }
+        
+        return data;
+
+    }
+	
 	public static boolean associarPaisAoAluno(int id_aluno, ArrayList<String> list_id_pais){
 
 		boolean success = false;
@@ -2610,7 +2815,7 @@ public class UsuarioServer{
             ps.setInt(++count, idCurso);
 
 
-            data = getUserParameters(ps.executeQuery());
+            data = getUserParametersNew(ps.executeQuery());
 
         } catch (SQLException sqlex) {
             data=null;
@@ -2642,7 +2847,7 @@ public class UsuarioServer{
             ps.setInt(++count, idCurso);
 
 
-            data = getUserParameters(ps.executeQuery());
+            data = getUserParametersNew(ps.executeQuery());
 
         } catch (SQLException sqlex) {
             data=null;

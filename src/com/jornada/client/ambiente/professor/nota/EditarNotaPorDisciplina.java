@@ -429,7 +429,7 @@ public class EditarNotaPorDisciplina extends VerticalPanel {
 			public void update(int index, Nota object, String value) {
 				// Called when the user changes the value.
 				
-				if (FieldVerifier.isValidDouble(value)) {
+				if (FieldVerifier.isValidDoubleOrEmpty(value)) {
 				    if(FieldVerifier.isValidGrade(value)){
 	                    object.setNota(value);
 	                    GWTServiceNota.Util.getInstance().updateRow(object,callbackUpdateRow);				        

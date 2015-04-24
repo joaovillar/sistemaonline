@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.google.gwt.cell.client.DatePickerCell;
 import com.google.gwt.cell.client.ImageCell;
-import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
@@ -19,7 +18,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -66,7 +64,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 
 	private CellTable<Comunicado> cellTable;
 	private Column<Comunicado, String> assuntoColumn;
-	private Column<Comunicado, SafeHtml> descricaoColumn;
+//	private Column<Comunicado, SafeHtml> descricaoColumn;
 	private Column<Comunicado, Date> dataColumn;
 	private Column<Comunicado, String> horaColumn;
 	private ListDataProvider<Comunicado> dataProvider = new ListDataProvider<Comunicado>();
@@ -264,49 +262,49 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 
 	}
 
-	private class MpSafeHtmlCell extends SafeHtmlCell {
-
-		@Override
-        public Set<String> getConsumedEvents() {
-            Set<String> consumedEvents = new HashSet<String>();
-			consumedEvents.add("click");
-			return consumedEvents;
-		}
-
-		@Override
-		public void onBrowserEvent(Context context, Element parent,
-				SafeHtml value, NativeEvent event,
-				ValueUpdater<SafeHtml> valueUpdater) {
-
-			super.onBrowserEvent(context, parent, value, event, valueUpdater);
-			switch (DOM.eventGetType((Event) event)) {
-			case Event.ONCLICK:
-				final Comunicado object = (Comunicado) context.getKey();
-				openComunicadoDetalhe(object);
-				break;
-			default:
-				Window.alert("Test default");
-				break;
-			}
-		}
-
-		// @Override
-		// public void onBrowserEvent(Context context, Element parent,
-		// SafeHtmlCell value, NativeEvent event, ValueUpdater<SafeHtmlCell>
-		// valueUpdater) {
-		//
-		// switch (DOM.eventGetType((Event) event)) {
-		// case Event.ONCLICK:
-		// final Comunicado object = (Comunicado) context.getKey();
-		// openComunicadoDetalhe(object);
-		// break;
-		// default:
-		// Window.alert("Test default");
-		// break;
-		// }
-		// }
-
-	}
+//	private class MpSafeHtmlCell extends SafeHtmlCell {
+//
+//		@Override
+//        public Set<String> getConsumedEvents() {
+//            Set<String> consumedEvents = new HashSet<String>();
+//			consumedEvents.add("click");
+//			return consumedEvents;
+//		}
+//
+//		@Override
+//		public void onBrowserEvent(Context context, Element parent,
+//				SafeHtml value, NativeEvent event,
+//				ValueUpdater<SafeHtml> valueUpdater) {
+//
+//			super.onBrowserEvent(context, parent, value, event, valueUpdater);
+//			switch (DOM.eventGetType((Event) event)) {
+//			case Event.ONCLICK:
+//				final Comunicado object = (Comunicado) context.getKey();
+//				openComunicadoDetalhe(object);
+//				break;
+//			default:
+//				Window.alert("Test default");
+//				break;
+//			}
+//		}
+//
+//		// @Override
+//		// public void onBrowserEvent(Context context, Element parent,
+//		// SafeHtmlCell value, NativeEvent event, ValueUpdater<SafeHtmlCell>
+//		// valueUpdater) {
+//		//
+//		// switch (DOM.eventGetType((Event) event)) {
+//		// case Event.ONCLICK:
+//		// final Comunicado object = (Comunicado) context.getKey();
+//		// openComunicadoDetalhe(object);
+//		// break;
+//		// default:
+//		// Window.alert("Test default");
+//		// break;
+//		// }
+//		// }
+//
+//	}
 
 	// private class MyImageCellEdit extends ImageCell {
 	//
@@ -442,15 +440,15 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 			}
 
 		};
-		descricaoColumn = new Column<Comunicado, SafeHtml>(new MpSafeHtmlCell()) {
-			@Override
-			public SafeHtml getValue(Comunicado object) {
-				SafeHtmlBuilder sb = new SafeHtmlBuilder();
-				sb.appendHtmlConstant(object.getDescricao());
-				return sb.toSafeHtml();
-			}
-
-		};
+//		descricaoColumn = new Column<Comunicado, SafeHtml>(new MpSafeHtmlCell()) {
+//			@Override
+//			public SafeHtml getValue(Comunicado object) {
+//				SafeHtmlBuilder sb = new SafeHtmlBuilder();
+//				sb.appendHtmlConstant(object.getDescricao());
+//				return sb.toSafeHtml();
+//			}
+//
+//		};
 		dataColumn = new Column<Comunicado, Date>(new DatePickerCell()) {
 			@Override
 			public Date getValue(Comunicado object) {
@@ -483,23 +481,18 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 
 		cellTable.addColumn(imageColumn, txtConstants.comunicadoImagem());
 		cellTable.addColumn(assuntoColumn, txtConstants.comunicado());
-		cellTable.addColumn(descricaoColumn, txtConstants.comunicadoDetalhes());
+//		cellTable.addColumn(descricaoColumn, txtConstants.comunicadoDetalhes());
 		cellTable.addColumn(dataColumn, txtConstants.comunicadoData());
 		cellTable.addColumn(horaColumn, txtConstants.comunicadoHora());
 		// cellTable.addColumn(editColumn,
 		// txtConstants.comunicadoVerDetalhes());
 		// cellTable.addColumn(removeColumn, "Remover");
 
-		cellTable.getColumn(cellTable.getColumnIndex(imageColumn))
-				.setCellStyleNames("hand-over");
-		cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn))
-				.setCellStyleNames("hand-over");
-		cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn))
-				.setCellStyleNames("hand-over");
-		cellTable.getColumn(cellTable.getColumnIndex(dataColumn))
-				.setCellStyleNames("hand-over");
-		cellTable.getColumn(cellTable.getColumnIndex(horaColumn))
-				.setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(imageColumn)).setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(assuntoColumn)).setCellStyleNames("hand-over");
+//        cellTable.getColumn(cellTable.getColumnIndex(descricaoColumn)).setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(dataColumn)).setCellStyleNames("hand-over");
+        cellTable.getColumn(cellTable.getColumnIndex(horaColumn)).setCellStyleNames("hand-over");
 		// cellTable.getColumn(cellTable.getColumnIndex(editColumn)).setCellStyleNames("hand-over");
 		// cellTable.getColumn(cellTable.getColumnIndex(removeColumn)).setCellStyleNames("hand-over");
 
@@ -518,14 +511,14 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 			}
 		});
 
-		descricaoColumn.setSortable(true);
-		sortHandler.setComparator(descricaoColumn,
-				new Comparator<Comunicado>() {
-					@Override
-					public int compare(Comunicado o1, Comunicado o2) {
-						return o1.getDescricao().compareTo(o2.getDescricao());
-					}
-				});
+//		descricaoColumn.setSortable(true);
+//		sortHandler.setComparator(descricaoColumn,
+//				new Comparator<Comunicado>() {
+//					@Override
+//					public int compare(Comunicado o1, Comunicado o2) {
+//						return o1.getDescricao().compareTo(o2.getDescricao());
+//					}
+//				});
 
 		dataColumn.setSortable(true);
 		sortHandler.setComparator(dataColumn, new Comparator<Comunicado>() {

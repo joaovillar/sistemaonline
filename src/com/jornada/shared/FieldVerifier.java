@@ -73,6 +73,16 @@ public class FieldVerifier {
             }
         }
     }
+    
+    public static boolean isValidDoubleOrEmpty(String value){
+        if(value==null || value.isEmpty()){
+            return true;
+        }else if(isValidDouble(value)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     public static boolean isValidGrade(String value) {
 
@@ -85,7 +95,9 @@ public class FieldVerifier {
                 return false;
             }
 
-        } else {
+        }else if(value==null || value.isEmpty()){
+            return true;
+        }else {        
             return false;
         }
     }

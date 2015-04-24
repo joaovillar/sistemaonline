@@ -60,6 +60,10 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 		return UsuarioServer.getUsuarios();
 	}
 	
+    public ArrayList<Usuario> getTodosUsuarios() {
+        return UsuarioServer.getTodosUsuarios();
+    }
+	
 	public ArrayList<Usuario> getUsuarios(String strFilter) {				
 		return UsuarioServer.getUsuarios(strFilter);
 	}	
@@ -67,9 +71,11 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 	public ArrayList<Usuario> getUsuarios(String strDBField, String strFilter) {	
 		
 		if(strFilter.length()==2){
-			return UsuarioServer.getUsuarios();
+//			return UsuarioServer.getUsuarios();
+		    return UsuarioServer.getTodosUsuarios();
 		}else{
-			return UsuarioServer.getUsuarios(strDBField, strFilter);	
+//			return UsuarioServer.getUsuarios(strDBField, strFilter);
+		    return UsuarioServer.getUsuariosFieldLike(strDBField, strFilter);
 		}
 		
 	}		

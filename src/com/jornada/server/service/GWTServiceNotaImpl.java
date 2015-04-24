@@ -43,7 +43,13 @@ public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServi
     }
 
     public boolean updateRow(Nota object) {
-        return NotaServer.updateRow(object);
+        
+        if(object.getNota()==null || object.getNota().isEmpty()){
+            return NotaServer.deleteNotaVaziaAluno(object);            
+        }else {
+            return NotaServer.updateRow(object);    
+        }
+        
     }
 
     public ArrayList<Nota> getNotaPelaAvaliacao(int idCurso, int idAvaliacao) {

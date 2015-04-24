@@ -39,6 +39,7 @@ import com.jornada.shared.classes.curso.Ensino;
 public class NotaServer {
 
     public static final String DB_INSERT = "INSERT INTO nota (id_avaliacao, id_usuario, nota) VALUES (?,?,?);";
+    public static final String DB_DELETE_CAMPO_VAZIO = "DELETE FROM nota where id_avaliacao = ? and id_usuario = ?;";
     public static final String DB_UPDATE = "UPDATE nota set nota=? where id_avaliacao=? and id_usuario=?;";
     public static final String DB_SELECT_NOTA_PELA_AVALIACAO = "SELECT * FROM nota where id_avaliacao=?;";
     public static final String DB_SELECT_BOLETIM_NOTA_ALUNO_POR_CURSO = "		select d.*, a.*, n,* from " + "		( " + "			select " + "				c.id_curso, c.nome_curso, " + "				p.id_periodo, p.nome_periodo, " + "				d.id_disciplina, d.nome_disciplina " + "			from usuario u " + "			inner join rel_curso_usuario rcu on u.id_usuario=rcu.id_usuario " + "			inner join curso c on c.id_curso = rcu.id_curso " + "			inner join periodo p on c.id_curso = p.id_curso " + "			inner join disciplina d on p.id_periodo = d.id_periodo " + "			where  " + "			u.id_tipo_usuario=? and  rcu.id_usuario=? and c.id_curso=? " + "		) d " +
@@ -74,6 +75,36 @@ public class NotaServer {
         }
 
         return isOperationDone;
+    }
+    
+    public static boolean deleteNotaVaziaAluno(Nota object){
+
+        Boolean isOperationDone = false;
+
+        // JornadaDataBase dataBase = new JornadaDataBase();
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            // dataBase.createConnection();
+            // Connection conn = dataBase.getConnection();
+            int count = 0;
+            PreparedStatement ps = conn.prepareStatement(DB_DELETE_CAMPO_VAZIO);
+            ps.setInt(++count, object.getIdAvaliacao());
+            ps.setInt(++count, object.getIdUsuario());
+
+            ps.executeUpdate();
+
+            isOperationDone = true;
+
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            // dataBase.close();
+            ConnectionManager.closeConnection(conn);
+        }
+
+        return isOperationDone;
+        
+        
     }
 
     public static boolean updateRow(Nota object) {
