@@ -1,9 +1,8 @@
 package com.jornada.client.ambiente.professor.comunicado;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.jornada.client.MainView;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
@@ -14,13 +13,13 @@ public class TelaInicialComunicadoProfessor extends Composite{
 	
 //	private VerticalPanel verticalPanelPage;
 //	VerticalPanel vPanelBody;
-	private TabLayoutPanel tabLayoutPanel;
+//	private TabLayoutPanel tabLayoutPanel;
 
 	public  static final int intWidthTable=1500;
 	public static final int intHeightTable=500;
 	
 	private TabelaComunicadoProfessor tabelaComunicadoProfessor;
-//	private VisualizarAgenda visualizarAgenda;
+//	private TabelaComunicadoProfessor visualizarAgenda;
 	
 	private MainView mainView;
 
@@ -41,22 +40,21 @@ public class TelaInicialComunicadoProfessor extends Composite{
 		this.mainView = mainView;
 		
 		this.tabelaComunicadoProfessor = TabelaComunicadoProfessor.getInstance(this);
+//		this.visualizarAgenda = TabelaComunicadoProfessor.getInstance(this);
 	
 		
-		tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
+//		tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
+		TabPanel tabLayoutPanel = new TabPanel(); 
+		tabLayoutPanel.setWidth("99%");
 
-//		tabLayoutPanel.setPixelSize(intWidthTable+50, intHeightTable+160);
-		tabLayoutPanel.setHeight(Integer.toString(intHeightTable+160)+"px");
-		tabLayoutPanel.setAnimationDuration(500);
-		tabLayoutPanel.setAnimationVertical(true);
+//		tabLayoutPanel.setHeight(Integer.toString(intHeightTable+160)+"px");
+//		tabLayoutPanel.setAnimationDuration(500);
+//		tabLayoutPanel.setAnimationVertical(true);
 		
-//		vPanelBody = new VerticalPanel();
 		
 		tabLayoutPanel.add(tabelaComunicadoProfessor, new MpHeaderWidget(txtConstants.alunoAmbienteComunicado(), "images/notes_16.png"));
-		
-//		verticalPanelPage = new VerticalPanel();		
-//		verticalPanelPage.add(tabLayoutPanel);
-//		verticalPanelPage.add(new InlineHTML("&nbsp;"));
+//		tabLayoutPanel.add(visualizarAgenda, new MpHeaderWidget(txtConstants.alunoAmbienteComunicado(), "images/notes_16.png"));
+	    tabLayoutPanel.selectTab(0);
 				
      	initWidget(tabLayoutPanel);
 		

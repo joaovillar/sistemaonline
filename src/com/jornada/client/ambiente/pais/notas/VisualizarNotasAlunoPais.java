@@ -257,12 +257,13 @@ public class VisualizarNotasAlunoPais extends VerticalPanel {
     private class MpAlunosPorCursoSelectionChangeHandler implements ChangeHandler {
         public void onChange(ChangeEvent event) {
             mpHelperAluno.populateSuggestBox(listBoxAlunosPorCursoAluno);
-            vPanelBoletim.clear();
+//            vPanelBoletim.clear();
             populateBoletimAluno();
         }
     }
 
     protected void populateBoletimAluno() {
+        vPanelBoletim.clear();
         mpLoading.setVisible(true);
         int idCurso = Integer.parseInt(listBoxCursoAluno.getValue(listBoxCursoAluno.getSelectedIndex()));
         int idTipoUsuario = TipoUsuario.ALUNO;
@@ -300,7 +301,7 @@ public class VisualizarNotasAlunoPais extends VerticalPanel {
             MpUtilClient.isRefreshRequired(list);
 
             dataProvider = new ListDataProvider<ArrayList<String>>();
-
+            vPanelBoletim.clear();
             dataProvider.getList().clear();
             arrayPeriodoColumns.clear();
 

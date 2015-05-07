@@ -138,7 +138,7 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 
 		MpSimplePager mpPager = new MpSimplePager();
 		mpPager.setDisplay(cellTable);
-		mpPager.setPageSize(8);
+		mpPager.setPageSize(10);
 
 		flexTableFiltrar.setWidget(0, 0, mpPager);
 		flexTableFiltrar.setWidget(0, 1, new MpSpaceVerticalPanel());
@@ -396,11 +396,9 @@ public class TabelaComunicadoProfessor extends VerticalPanel {
 
 		ScrollPanel scrollPanel = new ScrollPanel();
 //		scrollPanel.setSize(Integer.toString(TelaInicialComunicadoProfessor.intWidthTable+30)+"px",Integer.toString(TelaInicialComunicadoProfessor.intHeightTable+70)+"px");
-		scrollPanel.setHeight(Integer.toString(TelaInicialComunicadoProfessor.intHeightTable+70)+"px");
-		scrollPanel.setWidth("100%");
-//								+ "px",
-//						Integer.toString(TelaInicialComunicadoProfessor.intHeightTable + 70)
-//								+ "px");
+//		scrollPanel.setHeight(Integer.toString(TelaInicialComunicadoProfessor.intHeightTable+70)+"px");
+//		scrollPanel.setWidth("100%");
+
 		scrollPanel.setAlwaysShowScrollBars(false);
 		scrollPanel.add(cellTable);
 

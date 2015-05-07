@@ -252,7 +252,7 @@ public class NotaServer {
         Curso curso = CursoServer.getCurso(idCurso);
         ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();
         ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
-        String strNotaRecuperacaoFinal = "";
+//        String strNotaRecuperacaoFinal = "";
 
         // Adicionando o Header
         ArrayList<String> itemPeriodo = new ArrayList<String>();
@@ -279,8 +279,8 @@ public class NotaServer {
 
             array.add(nomeDisciplina);
 
-            int numberPesoPeriodos = 0;
-            double somaMedia = 0;
+//            int numberPesoPeriodos = 0;
+//            double doubleSomaMedia = 0;
             for (Periodo periodo : listPeriodo) {
                 String notaDisciplinaPeriodo = "-";
                 ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
@@ -292,17 +292,17 @@ public class NotaServer {
                     }
 
                     // Pegar Nota Recuperação
-                    for (Avaliacao avaliacao : disciplina.getListAvaliacao()) {
-                        if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO_FINAL) {
-                            for (Nota nota : avaliacao.getListNota()) {
-                                if (nota.getIdUsuario() == idUsuario) {
-                                    if (nota.getNota() != null && !nota.getNota().isEmpty()) {
-                                        strNotaRecuperacaoFinal = nota.getNota();
-                                    }
-                                }
-                            }
-                        }
-                    }
+//                    for (Avaliacao avaliacao : disciplina.getListAvaliacao()) {
+//                        if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+//                            for (Nota nota : avaliacao.getListNota()) {
+//                                if (nota.getIdUsuario() == idUsuario) {
+//                                    if (nota.getNota() != null && !nota.getNota().isEmpty()) {
+//                                        strNotaRecuperacaoFinal = nota.getNota();
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
 
                 }
                 if (notaDisciplinaPeriodo.isEmpty() || notaDisciplinaPeriodo.equals("-")) {
@@ -311,31 +311,47 @@ public class NotaServer {
                     notaDisciplinaPeriodo = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(Double.parseDouble(notaDisciplinaPeriodo));
                 }
 
-                if (!notaDisciplinaPeriodo.equals("-")) {
-                    int peso = Integer.parseInt(periodo.getPeso());
-                    for (int countPesos = 0; countPesos < peso; countPesos++) {
-                        numberPesoPeriodos++;
-                        somaMedia = somaMedia + Double.parseDouble(notaDisciplinaPeriodo);
-                    }
-                }
+//                if (!notaDisciplinaPeriodo.equals("-")) {
+//                    int peso = Integer.parseInt(periodo.getPeso());
+//                    for (int countPesos = 0; countPesos < peso; countPesos++) {
+//                        numberPesoPeriodos++;
+////                        doubleSomaMedia = doubleSomaMedia + Double.parseDouble(notaDisciplinaPeriodo);
+//                    }
+//                }
 
                 array.add(notaDisciplinaPeriodo);
 
             }
-
-            if (numberPesoPeriodos > 0) {
-                double doubleMediaFinal = somaMedia / numberPesoPeriodos;
-
-                if (strNotaRecuperacaoFinal.isEmpty()) {
-                    strNotaRecuperacaoFinal = Double.toString(doubleMediaFinal);
-                }
-                Double doubleNotaRecuperacaoFinal = Double.parseDouble(strNotaRecuperacaoFinal);
-                doubleMediaFinal = (doubleMediaFinal + doubleNotaRecuperacaoFinal) / 2;
-
-                array.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaFinal));
-            } else {
+            
+            String strMediaAnualDisciplina = getMediaAnualDisciplina(idUsuario, idCurso, listPeriodo, nomeDisciplina);
+            if (strMediaAnualDisciplina == null || strMediaAnualDisciplina.isEmpty()) {
                 array.add("-");
+            } else{
+                double doubleMediaAluno = Double.parseDouble(strMediaAnualDisciplina);
+//                array.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaAluno));
+//                if(recuperacaoFinal!=null){
+//                    row.add(recuperacaoFinal.getNotaRecuperacaoFinal());
+//                }else{
+//                    row.add("-");
+//                }
+               
+                array.add(MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno));
             }
+//            else if (numberPesoPeriodos > 0) {
+//                doubleSomaMedia = Double.parseDouble(strMediaAnualDisciplina);
+//                double doubleMediaFinal = doubleSomaMedia / numberPesoPeriodos;
+//
+//                if (strNotaRecuperacaoFinal.isEmpty()) {
+//                    strNotaRecuperacaoFinal = Double.toString(doubleMediaFinal);
+//                }
+//                Double doubleNotaRecuperacaoFinal = Double.parseDouble(strNotaRecuperacaoFinal);
+//                doubleMediaFinal = (doubleMediaFinal + doubleNotaRecuperacaoFinal) / 2;
+//
+//                array.add(MpUtilServer.getDecimalFormatedOneDecimal(doubleMediaFinal));
+////                 array.add("::::");
+//            } else {
+//                array.add("=");
+//            }
 
             listNotas.add(array);
 
@@ -344,12 +360,14 @@ public class NotaServer {
         return listNotas;
     }
 
+    
+    //Andre
     public static ArrayList<ArrayList<String>> getBoletimAnual(int idCurso) {
         Curso curso = CursoServer.getCurso(idCurso);
         ArrayList<ArrayList<String>> listNotas = new ArrayList<ArrayList<String>>();
         ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(idCurso);
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
-//aa
+
         HashSet<String> hashSetDisciplinas = new HashSet<String>();
         // Pegando nome das disciplinas de todo o ano letivo
         for (Periodo periodo : listPeriodo) {
@@ -634,7 +652,6 @@ public class NotaServer {
                         listHistorico.add(listRow);
                     }                    
                 }
-//                zxc
                 
 //                for(Curso cursoRow : listCursos){
                 for(int column=1; column<listHeader.size();column++){

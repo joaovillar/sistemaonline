@@ -300,7 +300,7 @@ public class VisualizarNotasAluno extends VerticalPanel {
             MpUtilClient.isRefreshRequired(list);
 
             dataProvider = new ListDataProvider<ArrayList<String>>();
-
+            vPanelBoletim.clear();
             dataProvider.getList().clear();
             arrayPeriodoColumns.clear();
 

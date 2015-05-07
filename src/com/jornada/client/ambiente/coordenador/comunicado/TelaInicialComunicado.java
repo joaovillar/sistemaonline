@@ -1,9 +1,8 @@
 package com.jornada.client.ambiente.coordenador.comunicado;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;
 import com.jornada.client.content.i18n.TextConstants;
@@ -13,7 +12,7 @@ public class TelaInicialComunicado extends Composite{
 	
 //	private VerticalPanel verticalPanelPage;
 	VerticalPanel vPanelBody;
-	private TabLayoutPanel tabLayoutPanel;
+//	private TabLayoutPanel tabLayoutPanel;
 
 	public  static final int intWidthTable=1400;
 	public static final int intHeightTable=500;
@@ -43,13 +42,16 @@ public class TelaInicialComunicado extends Composite{
 		tabelaComunicados = TabelaComunicados.getInstance(this);
 		adicionaEmailComunicado = AdicionaEmailComunicado.getInstance(this);
 		
-		tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
-		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
+        TabPanel tabLayoutPanel = new TabPanel();
+        tabLayoutPanel.setWidth("99%");
+		
+//		tabLayoutPanel = new TabLayoutPanel(2.5, Unit.EM);	
+//		tabLayoutPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
 
-//		tabLayoutPanel.setPixelSize(intWidthTable+50, intHeightTable+250);
 		tabLayoutPanel.setHeight(Integer.toString(intHeightTable+150)+"px");
-		tabLayoutPanel.setAnimationDuration(500);
-		tabLayoutPanel.setAnimationVertical(true);
+//		tabLayoutPanel.setAnimationDuration(500);
+//		tabLayoutPanel.setAnimationVertical(true);
+		tabLayoutPanel.setAnimationEnabled(true);
 		
 		vPanelBody = new VerticalPanel();
 		vPanelBody.setWidth("100%");
@@ -60,7 +62,8 @@ public class TelaInicialComunicado extends Composite{
 		
     	tabLayoutPanel.add(vPanelBody, new MpHeaderWidget(txtConstants.comunicado(), "images/notes_16.png"));		
     	tabLayoutPanel.add(adicionaEmailComunicado, new MpHeaderWidget(txtConstants.emailEmail(), "images/letter.png"));
-		
+    	tabLayoutPanel.selectTab(0);
+    	
      	initWidget(tabLayoutPanel);
 		
 	}
