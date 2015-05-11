@@ -3,6 +3,8 @@ package com.jornada.shared.classes;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.jornada.server.classes.PeriodoServer;
+
 public class Disciplina implements Serializable {
 
 
@@ -149,12 +151,13 @@ public class Disciplina implements Serializable {
         this.listAvaliacao = listAvaliacao;
     }
     
-    public String getMediaAlunoDisciplina(Curso curso, int idUsuario, boolean calcularRecuperacao){
+    public String getMediaAlunoDisciplina(Curso curso, ArrayList<Periodo> listPeriodo, int idUsuario, boolean calcularRecuperacao){
         String media = "";
         double countPesoNota=0;
         double somaMediaPonderada=0;
         double notaRecuperacao=0;
         double notaAdicional=0;
+        
 
         for (Avaliacao avaliacao : getListAvaliacao()) {
            
@@ -191,10 +194,35 @@ public class Disciplina implements Serializable {
             
             if (calcularRecuperacao==true) {
                 // Media com Recuperação
-                if (notaRecuperacao > 0)
+                if (notaRecuperacao > 0){
                     if (somaMediaPonderada < Double.parseDouble(curso.getMediaNota())) {
                         somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
+                        
+                        //<BEGIN> Gambiarra truncar nota em 6 se a Media + recuperação for maior q 6 e não for p ultimo trimestre
+                        // Se for ultimo trimestre mantem o 6
+                        //Requisito Integrado
+                        boolean isUltimoPeriodo=false;
+                        int intRecTrimestre=1;
+                        for(int i=0;i< listPeriodo.size();i++){
+                            if(this.getIdPeriodo()==listPeriodo.get(i).getIdPeriodo()){
+                                if(intRecTrimestre==3){
+                                    isUltimoPeriodo=true;
+                                }
+                            }
+                            intRecTrimestre++;
+                        }
+                        if(isUltimoPeriodo==false){
+                            if(somaMediaPonderada>6){
+                                somaMediaPonderada=6;
+                            }
+                        }
+                      //<END>                         
+                        
+                        
                     }
+                }
+                
+
             }
             
             //Adicionar Nota Adicional

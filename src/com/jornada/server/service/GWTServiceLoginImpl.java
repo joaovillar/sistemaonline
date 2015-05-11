@@ -54,7 +54,7 @@ public class GWTServiceLoginImpl extends RemoteServiceServlet implements GWTServ
 			System.out.println("User: " + user.getPrimeiroNome() + " logged in successfully. Session id: " + user.getSessionId());
 		}
 		else {
-			ConnectionManager.shutdownConnPool();
+//			ConnectionManager.shutdownConnPool();
 			user=null;
 		}
         

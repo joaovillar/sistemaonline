@@ -44,7 +44,7 @@ public class ConnectionManager {
 
 	public static void configureConnPool() {
 
-//		if(connectionPool==null){
+		if(connectionPool==null){
 			try {
 				Class.forName(driver); // also you need the Postgre driver
 				BoneCPConfig config = new BoneCPConfig();
@@ -83,7 +83,7 @@ public class ConnectionManager {
 				e.printStackTrace(); // you should use exception wrapping on
 										// real-production code
 			}
-//		}
+		}
 
 	}
 

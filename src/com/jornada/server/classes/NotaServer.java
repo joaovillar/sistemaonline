@@ -281,6 +281,7 @@ public class NotaServer {
 
 //            int numberPesoPeriodos = 0;
 //            double doubleSomaMedia = 0;
+//            int intRecPeriodo=1;
             for (Periodo periodo : listPeriodo) {
                 String notaDisciplinaPeriodo = "-";
                 ArrayList<Disciplina> listDisciplina = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
@@ -288,7 +289,10 @@ public class NotaServer {
 
                     if (disciplina.getNome().equals(nomeDisciplina)) {
                         disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
-                        notaDisciplinaPeriodo = disciplina.getMediaAlunoDisciplina(curso, idUsuario, true);
+                        
+                        
+                        notaDisciplinaPeriodo = disciplina.getMediaAlunoDisciplina(curso, listPeriodo, idUsuario, true);
+
                     }
 
                     // Pegar Nota Recuperação
@@ -320,7 +324,7 @@ public class NotaServer {
 //                }
 
                 array.add(notaDisciplinaPeriodo);
-
+//                intRecPeriodo++;
             }
             
             String strMediaAnualDisciplina = getMediaAnualDisciplina(idUsuario, idCurso, listPeriodo, nomeDisciplina);
@@ -529,7 +533,7 @@ public class NotaServer {
                                 strMedia = "-";
                             } else {
 
-                                strMedia = disciplina.getMediaAlunoDisciplina(curso, idUser, true);
+                                strMedia = disciplina.getMediaAlunoDisciplina(curso, listPeriodo, idUser, true);
                                 if (strMedia == null || strMedia.isEmpty()) {
                                     strMedia = "-";
                                 } else {
@@ -769,7 +773,7 @@ public class NotaServer {
                         
                         if(disciplina!=null){
                             if (strSiglas.equals(Nota.STR_BOLETIM_ALUNO_MP)) {
-                                String strMedia = disciplina.getMediaAlunoDisciplina(curso, idAluno, false);
+                                String strMedia = disciplina.getMediaAlunoDisciplina(curso, listPeriodo, idAluno, false);
                                 if (strMedia == null || strMedia.isEmpty()) {
                                     strMedia = "-";
                                 } else {
@@ -787,7 +791,7 @@ public class NotaServer {
                                 }
                                 row.add(strMedia);
                             } else if (strSiglas.equals(Nota.STR_BOLETIM_ALUNO_MF)) {
-                                String strMedia = disciplina.getMediaAlunoDisciplina(curso, idAluno, true);
+                                String strMedia = disciplina.getMediaAlunoDisciplina(curso, listPeriodo, idAluno, true);
                                 if (strMedia == null || strMedia.isEmpty()) {
                                     strMedia = "-";
                                 } else {
@@ -905,7 +909,7 @@ public class NotaServer {
                 if (disciplina.getNome().equals(strDisciplina)) {
 
                     disciplina.setListAvaliacao(AvaliacaoServer.getAvaliacaoComNotas(disciplina.getIdDisciplina()));
-                    strMedia = disciplina.getMediaAlunoDisciplina(curso, idUsuario, true);
+                    strMedia = disciplina.getMediaAlunoDisciplina(curso, listPeriodo, idUsuario, true);
 
                     // Pegar Nota Recuperação
                     for (int i = 0; i < disciplina.getListAvaliacao().size(); i++) {
@@ -955,6 +959,7 @@ public class NotaServer {
 
         Curso curso = CursoServer.getCurso(idCurso);
         ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
+        ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(curso.getIdCurso());
         ArrayList<Usuario> listUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
 
         Disciplina disciplina = DisciplinaServer.getDisciplina(idDisciplina);
@@ -1003,7 +1008,7 @@ public class NotaServer {
                 list.get(i).add("-");
 
             } else {
-                String strMedia = disciplina.getMediaAlunoDisciplina(curso, idUsuario, true);
+                String strMedia = disciplina.getMediaAlunoDisciplina(curso, listPeriodo, idUsuario, true);
                 if (strMedia == null || strMedia.isEmpty()) {
                     strMedia = "-";
                     list.get(i).add(strMedia);
@@ -1026,6 +1031,7 @@ public class NotaServer {
         ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
 
         Curso curso = CursoServer.getCurso(idCurso);
+        ArrayList<Periodo> listPeriodo = PeriodoServer.getPeriodos(curso.getIdCurso());
 
         for (Usuario usuario : listUsuario) {
             ArrayList<String> item = new ArrayList<String>();
@@ -1040,7 +1046,7 @@ public class NotaServer {
                 if (usuario.getIdTipoStatusUsuario() == TipoStatusUsuario.ALUNO_TRANSFERIDO) {
                     item.add("-");
                 } else {
-                    String strMedia = disciplina.getMediaAlunoDisciplina(curso, usuario.getIdUsuario(), true);
+                    String strMedia = disciplina.getMediaAlunoDisciplina(curso, listPeriodo, usuario.getIdUsuario(), true);
                     if (strMedia == null || strMedia.isEmpty()) {
                         strMedia = "-";
                         item.add(strMedia);
