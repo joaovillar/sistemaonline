@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+import com.jornada.shared.classes.relatorio.usuario.ProfessorDisciplinaRelatorio;
 import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
 public interface GWTServiceUsuarioAsync {
@@ -35,6 +36,8 @@ public interface GWTServiceUsuarioAsync {
     public void getAlunosTodosOuPorCurso(int idCurso, int idUnidade, boolean showAluno, boolean showPais, boolean showProfessor, AsyncCallback<ArrayList<UsuarioNomeID>> callback);
     public void getCoordenadoresAdministradoresNomeId(int idUnidade, AsyncCallback<ArrayList<UsuarioNomeID>> callback);
     public void getTodosUsuarios(AsyncCallback<ArrayList<Usuario>> callback);
+    public void getProfessoresDisciplinas(AsyncCallback<ArrayList<ProfessorDisciplinaRelatorio>> callback);
+    public void getExcelProfessoresDisciplinas(AsyncCallback<String> callback);
 		
 
 }

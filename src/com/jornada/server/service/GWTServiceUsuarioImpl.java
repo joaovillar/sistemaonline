@@ -23,6 +23,7 @@ import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.UnidadeEscola;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+import com.jornada.shared.classes.relatorio.usuario.ProfessorDisciplinaRelatorio;
 import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
 
@@ -189,6 +190,17 @@ public class GWTServiceUsuarioImpl extends RemoteServiceServlet implements GWTSe
 	public ArrayList<Usuario> getTodosPais(String strFilterResp, String strFilterName){
 	    return UsuarioServer.getTodosPais(strFilterResp, strFilterName);
 	}
+	
+    public ArrayList<ProfessorDisciplinaRelatorio> getProfessoresDisciplinas() {
+        return UsuarioServer.getProfessoresDisciplinas();
+    }
+    
+    
+    public String getExcelProfessoresDisciplinas(){
+        return UsuarioServer.getExcelProfessoresDisciplinas();
+    }
+    
+    
 
 
 }

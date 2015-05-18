@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+import com.jornada.shared.classes.relatorio.usuario.ProfessorDisciplinaRelatorio;
 import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
 @RemoteServiceRelativePath("GWTServiceUsuario")
@@ -52,6 +53,8 @@ public interface GWTServiceUsuario extends RemoteService {
 	public ArrayList<Usuario> getTodosPais(String strFilterResp, String strFilterName);
 	public ArrayList<UsuarioNomeID> getCoordenadoresAdministradoresNomeId(int idUnidade);
 	public ArrayList<Usuario> getTodosUsuarios();
+	public ArrayList<ProfessorDisciplinaRelatorio> getProfessoresDisciplinas();
+	public String getExcelProfessoresDisciplinas();
 	
 	/**
 	 * Utility class for simplifying access to the instance of async service.

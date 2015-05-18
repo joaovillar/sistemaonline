@@ -39,7 +39,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.TipoAvaliacao;
-import com.jornada.shared.classes.boletim.AvaliacaoNota;
+import com.jornada.shared.classes.relatorio.boletim.AvaliacaoNota;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class DialogBoxNotaBoletimAluno extends DecoratedPopupPanel {

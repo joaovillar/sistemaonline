@@ -15,7 +15,7 @@ import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoAvaliacao;
-import com.jornada.shared.classes.boletim.AvaliacaoNota;
+import com.jornada.shared.classes.relatorio.boletim.AvaliacaoNota;
 
 public class AvaliacaoServer {
 

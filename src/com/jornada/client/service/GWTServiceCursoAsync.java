@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Usuario;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimAluno;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimPeriodo;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimAluno;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimAnual;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimDisciplina;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimNotas;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimPeriodo;
 
 public interface GWTServiceCursoAsync {
 

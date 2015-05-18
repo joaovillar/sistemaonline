@@ -31,10 +31,10 @@ import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoAvaliacao;
 import com.jornada.shared.classes.TipoStatusUsuario;
 import com.jornada.shared.classes.Usuario;
-import com.jornada.shared.classes.boletim.TabelaBoletim;
 import com.jornada.shared.classes.curso.Ano;
 import com.jornada.shared.classes.curso.AnoItem;
 import com.jornada.shared.classes.curso.Ensino;
+import com.jornada.shared.classes.relatorio.boletim.TabelaBoletim;
 
 public class NotaServer {
 

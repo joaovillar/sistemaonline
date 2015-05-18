@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import com.jornada.shared.classes.boletim.TabelaBoletim;
+import com.jornada.shared.classes.relatorio.boletim.TabelaBoletim;
 
 /**
  *

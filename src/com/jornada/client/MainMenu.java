@@ -78,6 +78,14 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     private Hyperlink linkFerramentaCoordenadorRelatorio;
     private Image imgFerramentaCoordenadorRelatorio;       
     
+    public static final String MENU_TOKEN_FERRAMENTA_COORDENADOR_BOLETIM = txtConstants.menuTokenFerramentaCoordenadorBoletim();
+    private Hyperlink linkFerramentaCoordenadorBoletim;
+    private Image imgFerramentaCoordenadorBoletim;   
+    
+    public static final String MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO_USUARIO = txtConstants.menuTokenFerramentaCoordenadorRelatorioUsuario();
+    private Hyperlink linkFerramentaCoordenadorRelatorioUsuario;
+    private Image imgFerramentaCoordenadorRelatorioUsuario;        
+    
     public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR = txtConstants.menuTokenFerramentaProfessor();
     private Hyperlink linkFerramentaProfessor;
     private Image imgFerramentaProfessor;     
@@ -336,12 +344,48 @@ public class MainMenu extends Composite implements ValueChangeHandler {
             
             this.linkPaginaPrincipal(true);         
             this.linkFerramentaCoordenador(true);
-            this.linkFerramentaCoordenadorRelatorio();
+            this.linkFerramentaCoordenadorRelatorio(false);
+//            if (isFirstEventFire == true) {
+//                isFirstEventFire = false;
+                mainView.openFerramentaCoordenadorRelatorio();
+//            }
+        }   
+		
+        else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_BOLETIM)) {
+            
+            this.linkPaginaPrincipal(true);         
+            this.linkFerramentaCoordenador(true);
+            this.linkFerramentaCoordenadorRelatorio(true);
+            this.linkFerramentaCoordenadorBoletim(false);
             if (isFirstEventFire == true) {
                 isFirstEventFire = false;
-                mainView.openFerramentaCoordenadorRelatorio();
+                mainView.openFerramentaCoordenadorBoletim();
+            }
+        } 
+		
+        else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO_USUARIO)) {
+            
+            this.linkPaginaPrincipal(true);         
+            this.linkFerramentaCoordenador(true);
+            this.linkFerramentaCoordenadorRelatorio(true);
+            this.linkFerramentaCoordenadorRelatorioUsuario(false);            
+            if (isFirstEventFire == true) {
+                isFirstEventFire = false;
+                mainView.openFerramentaCoordenadorRelatorioUsuario();
             }
         }   		
+		
+//        else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO_USUARIO)) {
+//            
+//            this.linkPaginaPrincipal(true);         
+//            this.linkFerramentaCoordenador(true);
+//            this.linkFerramentaCoordenadorRelatorio(true);
+//            this.linkFerramentaCoordenadorBoletim(false);
+//            if (isFirstEventFire == true) {
+//                isFirstEventFire = false;
+//                mainView.openFerramentaCoordenadorRelatorioUsuario();
+//            }
+//        } 		
 		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR)) {
 			this.linkPaginaPrincipal(true);
@@ -763,7 +807,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(linkFerramentaCoordenadorDiario);
 	}		
 	
-    public void linkFerramentaCoordenadorRelatorio(){
+    public void linkFerramentaCoordenadorRelatorio(boolean showConnectionLabel){
         imgFerramentaCoordenadorRelatorio = new Image("images/product_documentation-16.png");
         linkFerramentaCoordenadorRelatorio = new Hyperlink(txtConstants.relatorios(), txtConstants.menuTokenFerramentaCoordenadorRelatorio());
         linkFerramentaCoordenadorRelatorio.setStyleName("a");
@@ -771,7 +815,39 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(imgFerramentaCoordenadorRelatorio);
         hPanel.add(new InlineHTML("&nbsp"));
         hPanel.add(linkFerramentaCoordenadorRelatorio);
-    }   	
+        
+        if(showConnectionLabel==true){
+            this.connectionLabel();
+        }
+    } 
+    
+    public void linkFerramentaCoordenadorBoletim(boolean showConnectionLabel){
+        imgFerramentaCoordenadorBoletim = new Image("images/chart_search_16.png");
+        linkFerramentaCoordenadorBoletim = new Hyperlink(txtConstants.boletim(), txtConstants.menuTokenFerramentaCoordenadorBoletim());
+        linkFerramentaCoordenadorBoletim.setStyleName("a");
+        
+        hPanel.add(imgFerramentaCoordenadorBoletim);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkFerramentaCoordenadorBoletim);
+        
+        if(showConnectionLabel==true){
+            this.connectionLabel();
+        }
+    }  
+    
+    public void linkFerramentaCoordenadorRelatorioUsuario(boolean showConnectionLabel){
+        imgFerramentaCoordenadorRelatorioUsuario = new Image("images/Apps-preferences-desktop-user-icon-16.png");
+        linkFerramentaCoordenadorRelatorioUsuario = new Hyperlink(txtConstants.usuario(), txtConstants.menuTokenFerramentaCoordenadorRelatorioUsuario());
+        linkFerramentaCoordenadorRelatorioUsuario.setStyleName("a");
+        
+        hPanel.add(imgFerramentaCoordenadorRelatorioUsuario);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkFerramentaCoordenadorRelatorioUsuario);
+        
+        if(showConnectionLabel==true){
+            this.connectionLabel();
+        }
+    }      
 	
 	public void linkFerramentaProfessor(boolean showConnectionLabel){
 

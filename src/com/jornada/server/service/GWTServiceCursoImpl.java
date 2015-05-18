@@ -28,11 +28,11 @@ import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimAluno;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimPeriodo;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimAluno;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimAnual;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimDisciplina;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimNotas;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimPeriodo;
 
 @SuppressWarnings("serial")
 public class GWTServiceCursoImpl extends RemoteServiceServlet implements GWTServiceCurso {

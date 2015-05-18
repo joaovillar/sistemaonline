@@ -24,7 +24,9 @@ import com.jornada.client.ambiente.coordenador.curso.TelaInicialCurso;
 import com.jornada.client.ambiente.coordenador.disciplina.TelaInicialDisciplina;
 import com.jornada.client.ambiente.coordenador.hierarquia.HierarquiaCursoCoordenador;
 import com.jornada.client.ambiente.coordenador.periodo.TelaInicialPeriodo;
-import com.jornada.client.ambiente.coordenador.relatorio.TelaInicialRelatorio;
+import com.jornada.client.ambiente.coordenador.relatorio.TelaInicialRelatorioNew;
+import com.jornada.client.ambiente.coordenador.relatorio.boletim.TelaInicialBoletim;
+import com.jornada.client.ambiente.coordenador.relatorio.usuario.TelaInicialRelatorioUsuario;
 import com.jornada.client.ambiente.coordenador.topico.TelaInicialTopico;
 import com.jornada.client.ambiente.coordenador.usuario.TelaInicialUsuario;
 import com.jornada.client.ambiente.pais.TelaInicialPais;
@@ -46,6 +48,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.Usuario;
 //import com.jornada.client.ambiente.professor.nota.CadastroNota;
+
 
 @SuppressWarnings("deprecation")
 public class MainView extends Composite implements HistoryListener{
@@ -586,12 +589,56 @@ public class MainView extends Composite implements HistoryListener{
                 mpPopupLoading.hide();
                 vPanelBody.clear();
                 vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-                TelaInicialRelatorio telaInicialRelatorio = TelaInicialRelatorio.getInstance(MainView.this);      
+                TelaInicialRelatorioNew telaInicialRelatorio = TelaInicialRelatorioNew.getInstance(MainView.this);
                 vPanelBody.add(telaInicialRelatorio);
                 vPanelMenu.setVisible(true);
             }
         });
-    }   	
+    }   
+    
+    public void openFerramentaCoordenadorBoletim(){
+        
+        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_BOLETIM);     
+        
+        mpPopupLoading.show();
+        GWT.runAsync(new RunAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                mpPopupLoading.hide();
+                Window.alert("Code download failed");
+            }
+
+            public void onSuccess() {
+                mpPopupLoading.hide();
+                vPanelBody.clear();
+                vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+                TelaInicialBoletim telaInicialBoletim = TelaInicialBoletim.getInstance(MainView.this);
+                vPanelBody.add(telaInicialBoletim);
+                vPanelMenu.setVisible(true);
+            }
+        });
+    } 
+    
+    public void openFerramentaCoordenadorRelatorioUsuario(){
+        
+        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO_USUARIO);     
+        
+        mpPopupLoading.show();
+        GWT.runAsync(new RunAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                mpPopupLoading.hide();
+                Window.alert("Code download failed");
+            }
+
+            public void onSuccess() {
+                mpPopupLoading.hide();
+                vPanelBody.clear();
+                vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+                TelaInicialRelatorioUsuario telaInicialRelatorioUsuario = TelaInicialRelatorioUsuario.getInstance(MainView.this);
+                vPanelBody.add(telaInicialRelatorioUsuario);
+                vPanelMenu.setVisible(true);
+            }
+        });
+    }     
 	
 	
 	
@@ -842,7 +889,7 @@ public class MainView extends Composite implements HistoryListener{
 				mpPopupLoading.hide();
 				vPanelBody.clear();
 				vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-				TelaInicialRelatorio telaInicialRelatorio = TelaInicialRelatorio.getInstance(MainView.this);		
+				TelaInicialBoletim telaInicialRelatorio = TelaInicialBoletim.getInstance(MainView.this);		
 				vPanelBody.add(telaInicialRelatorio);
 				vPanelMenu.setVisible(true);	
 			}

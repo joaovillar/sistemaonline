@@ -22,7 +22,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.jornada.shared.classes.Avaliacao;
 import com.jornada.shared.classes.CursoAvaliacao;
 import com.jornada.shared.classes.TipoAvaliacao;
-import com.jornada.shared.classes.boletim.AvaliacaoNota;
+import com.jornada.shared.classes.relatorio.boletim.AvaliacaoNota;
 
 @RemoteServiceRelativePath("GWTServiceAvaliacao")
 public interface GWTServiceAvaliacao extends RemoteService {

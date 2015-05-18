@@ -15,6 +15,7 @@
 package com.jornada.server.service;
 
 import java.util.ArrayList;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jornada.client.service.GWTServiceAvaliacao;
 import com.jornada.server.classes.AvaliacaoServer;
@@ -27,7 +28,7 @@ import com.jornada.shared.classes.CursoAvaliacao;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoAvaliacao;
-import com.jornada.shared.classes.boletim.AvaliacaoNota;
+import com.jornada.shared.classes.relatorio.boletim.AvaliacaoNota;
 
 public class GWTServiceAvaliacaoImpl extends RemoteServiceServlet implements GWTServiceAvaliacao {
 	

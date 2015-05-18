@@ -30,6 +30,7 @@ import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.UnidadeEscola;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.list.UsuarioErroImportar;
+import com.jornada.shared.classes.relatorio.usuario.ProfessorDisciplinaRelatorio;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.jornada.shared.classes.usuario.UsuarioNomeID;
 
@@ -254,6 +255,18 @@ public class UsuarioServer{
             "            ) "+
             "        ) "+
             "    )";
+    
+    private static final String DB_SELECT_PROFESSOR_DISCIPLINA_TODOS = 
+            "select u.id_usuario, u.primeiro_nome, u.sobre_nome, "
+            + "c.id_curso, c.nome_curso, "
+            + "d.id_periodo, p.nome_periodo , "
+            + "d.id_disciplina, d.nome_disciplina "
+            + "from usuario u "
+            + "left join disciplina d on u.id_usuario=d.id_usuario "
+            + "left join periodo p on d.id_periodo = p.id_periodo "
+            + "left join curso c on p.id_curso = c.id_curso "
+            + "where u.id_tipo_usuario = 2 and u.id_tipo_status_usuario = 6 "
+            + "order by u.primeiro_nome, u.sobre_nome asc ";
 	
 	public UsuarioServer(){
 		
@@ -2887,6 +2900,133 @@ public class UsuarioServer{
         }
         return listUsuarioNomeId;
     }    
+    
+    public static ArrayList<ProfessorDisciplinaRelatorio> getProfessoresDisciplinas(){
+        ArrayList<ProfessorDisciplinaRelatorio> data = new ArrayList<ProfessorDisciplinaRelatorio>();
+//      JornadaDataBase dataBase = new JornadaDataBase();
+        Connection connection = ConnectionManager.getConnection();
+        try 
+        {
+//          dataBase.createConnection();            
+//          Connection connection = dataBase.getConnection();
+            
+            String strQuery = DB_SELECT_PROFESSOR_DISCIPLINA_TODOS;
+//            strQuery = strQuery.replace("<change>", strFilterResp);
+            
+            PreparedStatement ps = connection.prepareStatement(strQuery);
+            
+//            int count=0;
+//            ps.setInt(++count, idCurso);
+//            data = getUserParametersNew(ps.executeQuery());
+  
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) 
+            {
+                ProfessorDisciplinaRelatorio pdRel = new ProfessorDisciplinaRelatorio();            
+                pdRel.setIdUsuario(rs.getInt("id_usuario"));
+                pdRel.setIdCurso(rs.getInt("id_curso")); 
+                pdRel.setIdPeriodo(rs.getInt("id_periodo"));
+                pdRel.setIdDisciplina(rs.getInt("id_disciplina"));                
+                pdRel.setPrimeiroNome(rs.getString("primeiro_nome"));
+                pdRel.setSobreNome(rs.getString("sobre_nome"));
+                pdRel.setNomeCurso(rs.getString("nome_curso"));
+                pdRel.setNomePeriodo(rs.getString("nome_periodo"));
+                pdRel.setNomeDisciplina(rs.getString("nome_disciplina"));
+                data.add(pdRel);
+            }
+
+        } catch (SQLException sqlex) {
+            data=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+//          dataBase.close();
+            ConnectionManager.closeConnection(connection);
+        }
+
+        return data;        
+    }
+    
+    
+    public static String getExcelProfessoresDisciplinas(){
+        String strLong="";
+
+        XSSFWorkbook wb = new XSSFWorkbook();
+        
+        Font font = wb.createFont();
+        XSSFCellStyle style = wb.createCellStyle();
+        
+        font.setColor(IndexedColors.WHITE.getIndex());
+        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        font.setFontName("sans-serif");
+        style.setAlignment(CellStyle.ALIGN_CENTER);
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex());
+        style.setFont(font);
+        style.setBorderBottom(CellStyle.BORDER_THIN);
+        style.setBorderTop(CellStyle.BORDER_THIN);
+        style.setBorderLeft(CellStyle.BORDER_THIN);
+        style.setBorderRight(CellStyle.BORDER_THIN);
+        
+        ///Creating Tabs
+        XSSFSheet sheetAdministrador = wb.createSheet("Professor vs Disciplina");
+
+        
+        gerarExcelTabProfessorDisciplina(sheetAdministrador, font, style);
+
+        
+        try {
+            Date data = new Date();
+            strLong += "GerarExcelProfessorDisciplina_" + Long.toString(data.getTime())+ ".xlsx";
+            FileOutputStream out = new FileOutputStream(ConfigJornada.getProperty("config.download")+ ConfigJornada.getProperty("config.download.excel") + strLong);
+            wb.write(out);
+            out.close();
+            out.flush();
+        } catch (Exception ex) {
+            System.out.print("Error Excel:" + ex.getMessage());
+        }
+        
+        return ConfigJornada.getProperty("config.download.excel")+strLong;
+        
+    }
+    
+    
+    public static void gerarExcelTabProfessorDisciplina(Sheet sheet, Font font, XSSFCellStyle style ){
+        
+        ArrayList<ProfessorDisciplinaRelatorio> listPDRel = UsuarioServer.getProfessoresDisciplinas();
+        
+        Row row = sheet.createRow((short) 0);       
+        
+        int intColumn=0;
+        row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
+        row.createCell((short) intColumn++).setCellValue("Sobre Nome");
+        row.createCell((short) intColumn++).setCellValue("Curso");
+        row.createCell((short) intColumn++).setCellValue("Período");
+        row.createCell((short) intColumn++).setCellValue("Disciplina");
+
+        for (int i = 0; i < intColumn; i++) {
+            row.getCell((short) i).setCellStyle(style);
+        }
+        
+        
+        for(int i=0;i<listPDRel.size();i++){
+            ProfessorDisciplinaRelatorio pdRel = listPDRel.get(i);
+            row = sheet.createRow((short) i+1);
+            
+            intColumn=0;
+        
+            row.createCell((short) intColumn++).setCellValue(pdRel.getPrimeiroNome());
+            row.createCell((short) intColumn++).setCellValue(pdRel.getSobreNome());
+            row.createCell((short) intColumn++).setCellValue(pdRel.getNomeCurso());
+            row.createCell((short) intColumn++).setCellValue(pdRel.getNomePeriodo());
+            row.createCell((short) intColumn++).setCellValue(pdRel.getNomeDisciplina());
+        }        
+        
+        for (int i = 0; i < intColumn; i++) {
+            sheet.autoSizeColumn(i,true);
+        }
+
+    }
 	
 
 	

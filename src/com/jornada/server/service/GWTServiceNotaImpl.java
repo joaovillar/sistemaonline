@@ -27,12 +27,12 @@ import com.jornada.server.classes.boletim.BoletimDisciplinaPeriodo;
 import com.jornada.server.framework.excel.ExcelFramework;
 import com.jornada.shared.classes.Nota;
 import com.jornada.shared.classes.Usuario;
-import com.jornada.shared.classes.boletim.TabelaBoletim;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimAluno;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimAnual;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimDisciplina;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimNotas;
-import com.jornada.shared.classes.boletim.TableMultipleBoletimPeriodo;
+import com.jornada.shared.classes.relatorio.boletim.TabelaBoletim;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimAluno;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimAnual;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimDisciplina;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimNotas;
+import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimPeriodo;
 
 public class GWTServiceNotaImpl extends RemoteServiceServlet implements GWTServiceNota {
 
