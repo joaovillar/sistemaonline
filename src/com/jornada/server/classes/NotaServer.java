@@ -35,6 +35,7 @@ import com.jornada.shared.classes.curso.Ano;
 import com.jornada.shared.classes.curso.AnoItem;
 import com.jornada.shared.classes.curso.Ensino;
 import com.jornada.shared.classes.relatorio.boletim.TabelaBoletim;
+//import com.jornada.shared.utility.MpUtilShared;
 
 public class NotaServer {
 
@@ -795,6 +796,7 @@ public class NotaServer {
                                 if (strMedia == null || strMedia.isEmpty()) {
                                     strMedia = "-";
                                 } else {
+                                    System.out.println("Disciplina:"+disciplina.getNome());
                                     double doubleMediaAluno = Double.parseDouble(strMedia);
                                     strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
                                 }
@@ -1460,7 +1462,7 @@ public class NotaServer {
         intColumn = intColumnBackup;
         
         int intBNC = 0;
-        int intPD = 0;
+//        int intPD = 0;
         
         //Criando Linhas de disciplinas e notas
         
@@ -1477,9 +1479,10 @@ public class NotaServer {
                     String strDisc = strText.substring(0,strText.indexOf(FieldVerifier.INI_SEPARATOR));
                     if(strDisc.equals("true")){
                         intBNC++;
-                    }else if(strDisc.equals("false")){
-                        intPD++;
                     }
+//                    else if(strDisc.equals("false")){
+//                        intPD++;
+//                    }
                     strText = strText.substring(strText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
                     row.getCell((short) c+intColumn).setCellValue(strText);
                     row.getCell((short) c+intColumn).setCellType(Cell.CELL_TYPE_STRING);

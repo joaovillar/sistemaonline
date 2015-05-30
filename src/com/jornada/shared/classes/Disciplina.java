@@ -3,6 +3,8 @@ package com.jornada.shared.classes;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.jornada.shared.utility.MpUtilShared;
+
 public class Disciplina implements Serializable {
 
 
@@ -188,6 +190,8 @@ public class Disciplina implements Serializable {
             
             //Calcula Média Ponderada
             somaMediaPonderada = somaMediaPonderada / countPesoNota;
+            
+            somaMediaPonderada = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(somaMediaPonderada));
             
             
             if (calcularRecuperacao==true) {

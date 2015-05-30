@@ -4,13 +4,15 @@ import java.io.File;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.text.ParseException;
+
+import com.jornada.shared.utility.MpUtilShared;
 
 public class MpUtilServer {
 	
@@ -194,21 +196,23 @@ public class MpUtilServer {
     
     public static String getDecimalFormatedOneDecimalMultipleFive(double doubleNumber){
         
-        String strNumber="";
-        int parteInteira = (int)doubleNumber;
-        int parteDecimal = (int)Math.round((doubleNumber - (int)doubleNumber) * 100);
         
-        if(parteDecimal>=0 && parteDecimal<=25){
-            strNumber = Integer.toString(parteInteira);
-        }else if(parteDecimal>=25 && parteDecimal<=74){
-            double doubleTemp = ((double)parteInteira) + 0.5;
-            strNumber = Double.toString(doubleTemp);
-        }else if(parteDecimal>=75 && parteDecimal<=99){
-            parteInteira++;
-            strNumber = Integer.toString(parteInteira);
-        }
-        
-        return strNumber;
+        return MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(doubleNumber);
+//        String strNumber="";
+//        int parteInteira = (int)doubleNumber;
+//        int parteDecimal = (int)Math.round((doubleNumber - (int)doubleNumber) * 100);
+//        
+//        if(parteDecimal>=0 && parteDecimal<=25){
+//            strNumber = Integer.toString(parteInteira);
+//        }else if(parteDecimal>=25 && parteDecimal<=74){
+//            double doubleTemp = ((double)parteInteira) + 0.5;
+//            strNumber = Double.toString(doubleTemp);
+//        }else if(parteDecimal>=75 && parteDecimal<=99){
+//            parteInteira++;
+//            strNumber = Integer.toString(parteInteira);
+//        }
+//        
+//        return strNumber;
 
     }
     
