@@ -14,7 +14,8 @@ public class TelaInicialAdminEscola extends Composite {
 	ComponenteComunicados componenteComunicados;
 	ComponenteOcorrencia componenteOcorrencia;
 	ComponenteVisualizarCurso componenteVisualizarCurso;
-	ComponenteDiarioCoordenador componenteDiarioCoordenador;
+//	ComponenteDiarioCoordenador componenteDiarioCoordenador;
+	ComponentePresencaCoordenador componentePresencaCoordenador;
 	ComponenteRelatorios componenteRelatorios;
 
 
@@ -45,7 +46,8 @@ public class TelaInicialAdminEscola extends Composite {
 		componenteComunicados = ComponenteComunicados.getInstance(mainView);
 		componenteOcorrencia = ComponenteOcorrencia.getInstance(mainView);
 		componenteVisualizarCurso = new ComponenteVisualizarCurso();
-		componenteDiarioCoordenador = ComponenteDiarioCoordenador.getInstance();
+//		componenteDiarioCoordenador = ComponenteDiarioCoordenador.getInstance();
+		componentePresencaCoordenador = ComponentePresencaCoordenador.getInstance();
 		componenteRelatorios = ComponenteRelatorios.getInstance(mainView);
 
 	
@@ -65,7 +67,8 @@ public class TelaInicialAdminEscola extends Composite {
 		grid.setWidget(0, 1, componenteUsuarios);
 		grid.setWidget(0, 2, componenteComunicados);
 		grid.setWidget(1, 0, componenteOcorrencia);
-		grid.setWidget(1, 1, componenteDiarioCoordenador);
+//		grid.setWidget(1, 1, componenteDiarioCoordenador);
+		grid.setWidget(1, 1, componentePresencaCoordenador);
 		grid.setWidget(1, 2, componenteRelatorios);
 		grid.setWidget(2, 0, componenteVisualizarCurso);
 		

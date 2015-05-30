@@ -40,6 +40,7 @@ import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServicePresenca;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
+import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.TipoUsuario;
 import com.jornada.shared.classes.presenca.TabelaPresencaAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
@@ -295,9 +296,9 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 				}		
 				
 				if(quantidadePresencaSalaDeAula>=intPorcentagemPresencaCurso){
-					tpa.setSituacao(TabelaPresencaAluno.APROVADO);
+					tpa.setSituacao(Presenca.APROVADO);
 				}else{
-					tpa.setSituacao(TabelaPresencaAluno.REPROVADO);
+					tpa.setSituacao(Presenca.REPROVADO);
 				}
 				
 				

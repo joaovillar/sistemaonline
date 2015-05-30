@@ -15,7 +15,8 @@ public class TelaInicialProfessor extends Composite {
 	ComponenteComunicadoProfessor compComunicadoProfessor;
 	ComponenteOcorrencia compOcorrencia;
 	ComponenteVisualizarCursoProfessor compVisualizarCursoProfessor;
-	ComponenteDiarioProfessor compDiarioProfessor;
+//	ComponenteDiarioProfessor compDiarioProfessor;
+	ComponentePresencaProfessor compPresenca;
 	ComponenteRelatoriosProfessor compRelatoriosProfessor;
 	ComponenteConteudoProgramaticoProfessor compConteudoProgramaticoProfessor;
 	
@@ -46,7 +47,8 @@ public class TelaInicialProfessor extends Composite {
 		compComunicadoProfessor = ComponenteComunicadoProfessor.getInstance();
 		compOcorrencia = ComponenteOcorrencia.getInstance(mainView);
 		compVisualizarCursoProfessor = new ComponenteVisualizarCursoProfessor();
-		compDiarioProfessor = ComponenteDiarioProfessor.getInstance();
+//		compDiarioProfessor = ComponenteDiarioProfessor.getInstance();
+		compPresenca = ComponentePresencaProfessor.getInstance();
 		compRelatoriosProfessor = ComponenteRelatoriosProfessor.getInstance(mainView);
 		compConteudoProgramaticoProfessor = ComponenteConteudoProgramaticoProfessor.getInstance(mainView);
 	
@@ -58,9 +60,16 @@ public class TelaInicialProfessor extends Composite {
 		grid.setCellSpacing(3);
 		grid.setCellPadding(3);
 		int row=0;
-		grid.setWidget(row, 0, compComunicadoProfessor); grid.setWidget(row, 1, compDiarioProfessor);grid.setWidget(row++, 2, compOcorrencia);
-		grid.setWidget(row, 0, compAvaliacao);grid.setWidget(row, 1, compNotas);grid.setWidget(row++, 2, compRelatoriosProfessor);
-		grid.setWidget(row, 0, compConteudoProgramaticoProfessor);grid.setWidget(row, 1, compTopico);grid.setWidget(row++, 2, compVisualizarCursoProfessor);
+		grid.setWidget(row, 0, compComunicadoProfessor); 
+		grid.setWidget(row, 1, compPresenca);
+//		grid.setWidget(row, 1, compDiarioProfessor);
+		grid.setWidget(row++, 2, compOcorrencia);
+		grid.setWidget(row, 0, compAvaliacao);
+		grid.setWidget(row, 1, compNotas);
+		grid.setWidget(row++, 2, compRelatoriosProfessor);
+		grid.setWidget(row, 0, compConteudoProgramaticoProfessor);
+		grid.setWidget(row, 1, compTopico);
+		grid.setWidget(row++, 2, compVisualizarCursoProfessor);
 		
 		
 

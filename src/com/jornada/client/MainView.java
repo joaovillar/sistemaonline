@@ -16,6 +16,7 @@ import com.jornada.client.ambiente.aluno.diario.TelaInicialDiarioAluno;
 import com.jornada.client.ambiente.aluno.hierarquia.HierarquiaCursoAluno;
 import com.jornada.client.ambiente.aluno.notas.TelaInicialAlunoVisualizarNotas;
 import com.jornada.client.ambiente.aluno.ocorrencia.TelaInicialAlunoOcorrencia;
+import com.jornada.client.ambiente.aluno.presenca.TelaInicialPresencaAluno;
 import com.jornada.client.ambiente.coordenador.TelaInicialAdminEscola;
 import com.jornada.client.ambiente.coordenador.TelaInicialAdminEscolaCurso;
 import com.jornada.client.ambiente.coordenador.comunicado.TelaInicialComunicado;
@@ -35,6 +36,7 @@ import com.jornada.client.ambiente.pais.diario.TelaInicialDiarioPais;
 import com.jornada.client.ambiente.pais.hierarquia.HierarquiaCursoPais;
 import com.jornada.client.ambiente.pais.notas.TelaInicialPaisVisualizarNotas;
 import com.jornada.client.ambiente.pais.ocorrencia.TelaInicialPaisOcorrencia;
+import com.jornada.client.ambiente.pais.presenca.TelaInicialPresencaAlunoPais;
 import com.jornada.client.ambiente.professor.TelaInicialProfessor;
 import com.jornada.client.ambiente.professor.avaliacao.TelaInicialAvaliacao;
 import com.jornada.client.ambiente.professor.comunicado.TelaInicialComunicadoProfessor;
@@ -42,6 +44,7 @@ import com.jornada.client.ambiente.professor.diario.TelaInicialDiarioProfessor;
 import com.jornada.client.ambiente.professor.hierarquia.HierarquiaCursoProfessor;
 import com.jornada.client.ambiente.professor.nota.TelaInicialNota;
 import com.jornada.client.ambiente.professor.ocorrencia.TelaInicialProfessorOcorrencia;
+import com.jornada.client.ambiente.professor.presenca.TelaInicialPresenca;
 import com.jornada.client.ambiente.professor.topico.TelaInicialTopicoProfessor;
 import com.jornada.client.classes.widgets.popup.MpPopupLoading;
 import com.jornada.client.content.i18n.TextConstants;
@@ -91,6 +94,14 @@ public class MainView extends Composite implements HistoryListener{
 //        vPanelBlankTop.setBorderWidth(2);
         vPanelBlankTop.setSize("15px", "40px");
 	
+//        HorizontalPanel hP = new HorizontalPanel();
+//
+//        
+//        final MultiSelectionModel<String> selectionModel = new MultiSelectionModel<String>(ContactDatabase.ContactInfo.KEY_PROVIDER);
+//        CellTree.Resources res = GWT.create(CellTree.BasicResources.class);
+//        CellTree cellTree = new CellTree(new TreeModelSideMenu(selectionModel), null, res);
+//        cellTree.setAnimationEnabled(true);
+       
 		vPanelTitle.add(mainTitle);		
 		vPanelMenu.add(mainMenu);		
 		vPanelBody.add(mainBody);
@@ -216,7 +227,7 @@ public class MainView extends Composite implements HistoryListener{
 		
 		checkUserPermission();
 		
-		//new ElementFader().fade(vPanelBody.getElement(), 0, 1, 500);
+
 		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 
 		mainBody = MainBody.getInstance(this);
@@ -225,12 +236,11 @@ public class MainView extends Composite implements HistoryListener{
 		this.vPanelMenu.setVisible(true);
 	}	
 	
-	public void openAdminEscola(){
+	public void openAdminEscola(String strToken){
 
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR);
-		
-		
-//		new ElementFader().fade(vPanelBody.getElement(), 0, 1, 500);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR);
+	    History.newItem(strToken);
+
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
 			public void onFailure(Throwable caught) {
@@ -249,18 +259,11 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}
 	
-	public void openAdminEscolaCurso(){
+	public void openAdminEscolaCurso(String strToken){
 
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO_ADMIN);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO_ADMIN);	
+	    History.newItem(strToken);   
 	
-////	new ElementFader().fade(vPanelBody.getElement(), 0, 1, 500);
-//		this.vPanelBody.clear();
-//		
-//		TelaInicialAdminEscolaCurso telaInicialAdminEscolaCurso = TelaInicialAdminEscolaCurso.getInstance(this);
-//		
-//		this.vPanelBody.add(telaInicialAdminEscolaCurso);
-//		this.vPanelMenu.setVisible(true);
-		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
 			public void onFailure(Throwable caught) {
@@ -282,20 +285,11 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}
 	
-	public void openCadastroCurso(){
+	public void openCadastroCurso(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO);
-		
-		//new ElementFader().fade(vPanelBody.getElement(), 0, 1, 1300);
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		
-//		TelaInicialCurso telaInicialCurso = TelaInicialCurso.getInstance(this);
-//		
-//		this.vPanelBody.add(telaInicialCurso);
-//		this.vPanelMenu.setVisible(true);	
-		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO);
+	    History.newItem(strToken);
+	
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
 			public void onFailure(Throwable caught) {
@@ -319,15 +313,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}	
 		
-	public void openCadastroPeriodo(){
+	public void openCadastroPeriodo(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_PERIODO);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialPeriodo telaInicialPeriodo = TelaInicialPeriodo.getInstance();
-//		this.vPanelBody.add(telaInicialPeriodo);
-//		this.vPanelMenu.setVisible(true);	
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_PERIODO);	
+	    History.newItem(strToken);   
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -348,16 +337,11 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}
 	
-	public void openCadastroDisciplina(){
+	public void openCadastroDisciplina(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_DISCIPLINA);
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);	
-//		TelaInicialDisciplina telaInicialDisciplina = TelaInicialDisciplina.getInstance();
-//		this.vPanelBody.add(telaInicialDisciplina);
-//		this.vPanelMenu.setVisible(true);
-		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_DISCIPLINA);
+	    History.newItem(strToken);
+	    
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
 			public void onFailure(Throwable caught) {
@@ -378,16 +362,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}
 	
-	public void openCadastroConteudoProgramatico(){
+	public void openCadastroConteudoProgramatico(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_CONTEUDO_PROGRAMATICO);
-		
-	
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialConteudoProgramatico telaInicialConteudoProgramatico = TelaInicialConteudoProgramatico.getInstance();
-//		this.vPanelBody.add(telaInicialConteudoProgramatico);
-//		this.vPanelMenu.setVisible(true);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_CONTEUDO_PROGRAMATICO);
+	    History.newItem(strToken);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -409,15 +387,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}	
 	
-	public void openCadastroAdminTopico() {
+	public void openCadastroAdminTopico(String strToken) {
 
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_TOPICO);
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialTopico telaInicialTopico = TelaInicialTopico.getInstance();
-//		this.vPanelBody.add(telaInicialTopico);
-//		this.vPanelMenu.setVisible(true);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_TOPICO);
+	    History.newItem(strToken);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -438,15 +411,11 @@ public class MainView extends Composite implements HistoryListener{
 
 	}
 	
-	public void openCadastroAdminHierarquia() {
+	public void openCadastroAdminHierarquia(String strToken) {
 
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_HIERARQUIA);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_HIERARQUIA);
+	    History.newItem(strToken);
 
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		HierarquiaCursoCoordenador hierarquiaCursoCoordenador = new HierarquiaCursoCoordenador(this);
-//		this.vPanelBody.add(hierarquiaCursoCoordenador);
-//		this.vPanelMenu.setVisible(true);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -467,14 +436,10 @@ public class MainView extends Composite implements HistoryListener{
 
 	}	
 	
-	public void openCadastroUsuario(){
+	public void openCadastroUsuario(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_USUARIO);		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialUsuario telaInicialUsuario = TelaInicialUsuario.getInstance();
-//		this.vPanelBody.add(telaInicialUsuario);
-//		this.vPanelMenu.setVisible(true);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_USUARIO);	
+	    History.newItem(strToken);   
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -494,15 +459,10 @@ public class MainView extends Composite implements HistoryListener{
 		});
 	}	
 	
-	public void openCadastroComunicado(){
+	public void openCadastroComunicado(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_COMUNICADO);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialComunicado telaInicialComunicado = TelaInicialComunicado.getInstance();
-//		this.vPanelBody.add(telaInicialComunicado);
-//		this.vPanelMenu.setVisible(true);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_COMUNICADO);	
+	    History.newItem(strToken);    
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -522,16 +482,10 @@ public class MainView extends Composite implements HistoryListener{
 		});
 	}	
 	
-	public void openCadastroCoordenadorOcorrencia() {
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_OCORRENCIA);
+	public void openCadastroCoordenadorOcorrencia(String strToken) {
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_OCORRENCIA);
+	    History.newItem(strToken);
 
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);		
-//		TelaInicialProfessorOcorrencia telaInicialOcorrencia = TelaInicialProfessorOcorrencia.getInstance(this);
-//		this.vPanelBody.add(telaInicialOcorrencia);
-//		this.vPanelMenu.setVisible(true);
-		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
 			public void onFailure(Throwable caught) {
@@ -550,9 +504,10 @@ public class MainView extends Composite implements HistoryListener{
 		});		
 	}	
 	
-	public void openFerramentaCoordenadorDiario(){
+	public void openFerramentaCoordenadorDiario(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_DIARIO);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_DIARIO);		
+	    History.newItem(strToken);        
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -572,11 +527,35 @@ public class MainView extends Composite implements HistoryListener{
 		});
 	}	
 	
-	
-	
-    public void openFerramentaCoordenadorRelatorio(){
+    public void openFerramentaCoordenadorPresenca(String strToken){
         
-        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO);     
+//        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_PRESENCA);     
+        History.newItem(strToken);     
+
+        mpPopupLoading.show();
+        GWT.runAsync(new RunAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                mpPopupLoading.hide();
+                Window.alert("Code download failed");
+            }
+
+            public void onSuccess() {
+                mpPopupLoading.hide();
+                vPanelBody.clear();
+                vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+                TelaInicialPresenca telaInicialPresenca = TelaInicialPresenca.getInstance(MainView.this);      
+                vPanelBody.add(telaInicialPresenca);
+                vPanelMenu.setVisible(true);    
+            }
+        });
+    }  
+	
+	
+	
+    public void openFerramentaCoordenadorRelatorio(String strToken){
+        
+//        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO);  
+        History.newItem(strToken);  
         
         mpPopupLoading.show();
         GWT.runAsync(new RunAsyncCallback() {
@@ -596,9 +575,10 @@ public class MainView extends Composite implements HistoryListener{
         });
     }   
     
-    public void openFerramentaCoordenadorBoletim(){
+    public void openFerramentaCoordenadorBoletim(String strToken){
         
-        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_BOLETIM);     
+//        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_BOLETIM); 
+        History.newItem(strToken); 
         
         mpPopupLoading.show();
         GWT.runAsync(new RunAsyncCallback() {
@@ -618,9 +598,10 @@ public class MainView extends Composite implements HistoryListener{
         });
     } 
     
-    public void openFerramentaCoordenadorRelatorioUsuario(){
+    public void openFerramentaCoordenadorRelatorioUsuario(String strToken){
         
-        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO_USUARIO);     
+//        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO_USUARIO);
+        History.newItem(strToken);
         
         mpPopupLoading.show();
         GWT.runAsync(new RunAsyncCallback() {
@@ -643,9 +624,10 @@ public class MainView extends Composite implements HistoryListener{
 	
 	
 	
-	public void openFerramentaProfessor(){
+	public void openFerramentaProfessor(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR);	
+	    History.newItem(strToken); 
 		
 		mpPopupLoading.show();
 		 GWT.runAsync(new RunAsyncCallback() {
@@ -667,15 +649,11 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}	
 	
-	public void openFerramentaProfessorAvaliacao(){
+	public void openFerramentaProfessorAvaliacao(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_AVALIACAO);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialAvaliacao telaInicialAvaliacao = TelaInicialAvaliacao.getInstance(this);
-//		this.vPanelBody.add(telaInicialAvaliacao);
-//		this.vPanelMenu.setVisible(true);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_AVALIACAO);
+	    History.newItem(strToken);
+	
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -695,16 +673,10 @@ public class MainView extends Composite implements HistoryListener{
 		});
 	}	
 	
-	public void openFerramentaProfessorNota(){
+	public void openFerramentaProfessorNota(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_NOTA);		
-
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialNota telaInicialNota = TelaInicialNota.getInstance(this);
-//		this.vPanelBody.add(telaInicialNota);
-//		this.vPanelMenu.setVisible(true);	
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_NOTA);	
+	    History.newItem(strToken);    
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -726,9 +698,10 @@ public class MainView extends Composite implements HistoryListener{
 	}	
 	
 	
-    public void openCadastroProfessorConteudoProgramatico(){
+    public void openCadastroProfessorConteudoProgramatico(String strToken){
         
-        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_CONTEUDO_PROGRAMATICO);
+//        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_CONTEUDO_PROGRAMATICO);
+        History.newItem(strToken);
         
         mpPopupLoading.show();
         GWT.runAsync(new RunAsyncCallback() {
@@ -752,16 +725,11 @@ public class MainView extends Composite implements HistoryListener{
 	
 	
 	
-	public void openCadastroProfessorTopico() {
+	public void openCadastroProfessorTopico(String strToken) {
 
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_TOPICO);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_TOPICO);
+	    History.newItem(strToken);
 
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialTopicoProfessor telaInicialTopicoProfessor = TelaInicialTopicoProfessor.getInstance(this);
-//		this.vPanelBody.add(telaInicialTopicoProfessor);
-//		this.vPanelMenu.setVisible(true);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -782,16 +750,10 @@ public class MainView extends Composite implements HistoryListener{
 
 	}	
 	
-	public void openProfessorComunicado(){
+	public void openProfessorComunicado(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_COMUNICADO);		
-
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialComunicadoProfessor telaInicialComunicadoProfessor = TelaInicialComunicadoProfessor.getInstance(this);		
-//		this.vPanelBody.add(telaInicialComunicadoProfessor);
-//		this.vPanelMenu.setVisible(true);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_COMUNICADO);
+	    History.newItem(strToken);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -811,14 +773,9 @@ public class MainView extends Composite implements HistoryListener{
 		});
 	}
 	
-	public void openCadastroProfessorOcorrencia() {
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_OCORRENCIA);
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);		
-//		TelaInicialProfessorOcorrencia telaInicialProfessorOcorrencia = TelaInicialProfessorOcorrencia.getInstance(this);
-//		this.vPanelBody.add(telaInicialProfessorOcorrencia);
-//		this.vPanelMenu.setVisible(true);
+	public void openCadastroProfessorOcorrencia(String strToken) {
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_OCORRENCIA);
+	    History.newItem(strToken);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -839,16 +796,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}	
 	
-	public void openFerramentaProfessorHierarquia(){
+	public void openFerramentaProfessorHierarquia(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_HIERARQUIA);		
-
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		HierarquiaCursoProfessor telaInicialHierarquiaCurso = new HierarquiaCursoProfessor(this);		
-//		this.vPanelBody.add(telaInicialHierarquiaCurso);
-//		this.vPanelMenu.setVisible(true);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_HIERARQUIA);
+	    History.newItem(strToken);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -868,15 +819,10 @@ public class MainView extends Composite implements HistoryListener{
 		});
 	}		
 	
-	public void openFerramentaProfessorRelatorio(){
+	public void openFerramentaProfessorRelatorio(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_RELATORIO);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialDiarioProfessor telaInicialDiarioProfessor = TelaInicialDiarioProfessor.getInstance(this);		
-//		this.vPanelBody.add(telaInicialDiarioProfessor);
-//		this.vPanelMenu.setVisible(true);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_RELATORIO);	
+	    History.newItem(strToken);   
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -897,9 +843,10 @@ public class MainView extends Composite implements HistoryListener{
 	}		
 	
 	
-	   public void openFerramentaProfessorDiario(){
+	   public void openFerramentaProfessorDiario(String strToken){
 	        
-	        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO);       
+//	        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO);    
+	       History.newItem(strToken);    
 
 	        mpPopupLoading.show();
 	        GWT.runAsync(new RunAsyncCallback() {
@@ -919,13 +866,35 @@ public class MainView extends Composite implements HistoryListener{
 	        });
 	    }   
 	
+       public void openFerramentaProfessorPresenca(String strToken){
+           
+//           History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PROFESSOR_PRESENCA); 
+           History.newItem(strToken); 
+
+           mpPopupLoading.show();
+           GWT.runAsync(new RunAsyncCallback() {
+               public void onFailure(Throwable caught) {
+                   mpPopupLoading.hide();
+                   Window.alert("Code download failed");
+               }
+
+               public void onSuccess() {
+                   mpPopupLoading.hide();
+                   vPanelBody.clear();
+                   vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+                   TelaInicialPresenca telaInicialPresenca = TelaInicialPresenca.getInstance(MainView.this);      
+                   vPanelBody.add(telaInicialPresenca);
+                   vPanelMenu.setVisible(true);    
+               }
+           });
+       }   	
 	
 	
 	
-	
-	public void openFerramentaAluno(){
+	public void openFerramentaAluno(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO);	
+	    History.newItem(strToken); 
 
 		mpPopupLoading.show();
 		 GWT.runAsync(new RunAsyncCallback() {
@@ -947,16 +916,11 @@ public class MainView extends Composite implements HistoryListener{
 	        });
 	}		
 	
-	public void openFerramentaAlunoNota(){
+	public void openFerramentaAlunoNota(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_NOTA);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_NOTA);	
+	    History.newItem(strToken);    
 
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialAlunoVisualizarNotas telaInicialAlunoVisualizarNotas = TelaInicialAlunoVisualizarNotas.getInstance(this);
-//		this.vPanelBody.add(telaInicialAlunoVisualizarNotas);
-//		this.vPanelMenu.setVisible(true);		
-		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
 			public void onFailure(Throwable caught) {
@@ -976,15 +940,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}
 	
-	public void openFerramentaAlunoAgenda(){
+	public void openFerramentaAlunoAgenda(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_AGENDA);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialAlunoAgenda telaInicialAlunoAgenda = TelaInicialAlunoAgenda.getInstance(this);
-//		this.vPanelBody.add(telaInicialAlunoAgenda);
-//		this.vPanelMenu.setVisible(true);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_AGENDA);	
+	    History.newItem(strToken);  
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1005,15 +964,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}	
 	
-	public void openFerramentaAlunoComunicado(){
+	public void openFerramentaAlunoComunicado(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_COMUNICADO);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialAlunoComunicado telaInicialAlunoComunicado = TelaInicialAlunoComunicado.getInstance(this);		
-//		this.vPanelBody.add(telaInicialAlunoComunicado);
-//		this.vPanelMenu.setVisible(true);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_COMUNICADO);	
+	    History.newItem(strToken);  	
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1034,14 +988,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}	
 	
-	public void openCadastroAlunoOcorrencia() {
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_OCORRENCIA);
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);		
-//		TelaInicialAlunoOcorrencia telaInicialAlunoOcorrencia = TelaInicialAlunoOcorrencia.getInstance(this);
-//		this.vPanelBody.add(telaInicialAlunoOcorrencia);
-//		this.vPanelMenu.setVisible(true);
+	public void openCadastroAlunoOcorrencia(String strToken) {
+	
+//	    History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_OCORRENCIA);
+	    History.newItem(strToken);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1062,14 +1012,11 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}		
 	
-	public void openFerramentaAlunoHierarquia(){		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_HIERARQUIA);	
+	public void openFerramentaAlunoHierarquia(String strToken){		
 		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		HierarquiaCursoAluno hierarquiaCursoAluno = new HierarquiaCursoAluno(this);
-//		this.vPanelBody.add(hierarquiaCursoAluno);
-//		this.vPanelMenu.setVisible(true);
+//	    History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_HIERARQUIA);	
+	    History.newItem(strToken);  		
+
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1091,13 +1038,11 @@ public class MainView extends Composite implements HistoryListener{
 	}	
 	
 	
-	public void openFerramentaAlunoDiario(){		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_DIARIO);		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialDiarioAluno telaInicialDiarioAluno = TelaInicialDiarioAluno.getInstance(this);
-//		this.vPanelBody.add(telaInicialDiarioAluno);
-//		this.vPanelMenu.setVisible(true);	
+	public void openFerramentaAlunoDiario(String strToken){		
+		
+//	    History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_DIARIO);	
+	    History.newItem(strToken);  
+
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1116,11 +1061,36 @@ public class MainView extends Composite implements HistoryListener{
 			}
 		});
 		
-	}		
+	}	
 	
-	public void openFerramentaPais(){	
+	
+    public void openFerramentaAlunoPresenca(String strToken){
+        
+//        History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_PRESENCA);     
+        History.newItem(strToken);     
+
+        mpPopupLoading.show();
+        GWT.runAsync(new RunAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                mpPopupLoading.hide();
+                Window.alert("Code download failed");
+            }
+
+            public void onSuccess() {
+                mpPopupLoading.hide();
+                vPanelBody.clear();
+                vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+                TelaInicialPresencaAluno telaInicialPresencaAluno = TelaInicialPresencaAluno.getInstance(MainView.this);      
+                vPanelBody.add(telaInicialPresencaAluno);
+                vPanelMenu.setVisible(true);    
+            }
+        });
+    } 
+	
+	public void openFerramentaPais(String strToken){	
 	    
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS);
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS);
+	    History.newItem(strToken);
 		
 		mpPopupLoading.show();
         GWT.runAsync(new RunAsyncCallback() {
@@ -1144,15 +1114,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}		
 	
-	public void openFerramentaPaisAgenda(){
+	public void openFerramentaPaisAgenda(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_AGENDA);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialPaisAgenda telaInicialPaisAgenda = TelaInicialPaisAgenda.getInstance(this);
-//		this.vPanelBody.add(telaInicialPaisAgenda);
-//		this.vPanelMenu.setVisible(true);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_AGENDA);	
+	    History.newItem(strToken);   
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1174,15 +1139,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}	
 	
-	public void openFerramentaPaisComunicado(){
+	public void openFerramentaPaisComunicado(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_COMUNICADO);	
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialAlunoComunicado telaInicialAlunoComunicado = TelaInicialAlunoComunicado.getInstance(this);		
-//		this.vPanelBody.add(telaInicialAlunoComunicado);
-//		this.vPanelMenu.setVisible(true);	
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_COMUNICADO);	
+	    History.newItem(strToken);   
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1203,15 +1163,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}
 		
-	public void openFerramentaPaisNota(){
+	public void openFerramentaPaisNota(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_NOTA);		
-
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialPaisVisualizarNotas telaInicialAlunoVisualizarNotas = TelaInicialPaisVisualizarNotas.getInstance(this);
-//		this.vPanelBody.add(telaInicialAlunoVisualizarNotas);
-//		this.vPanelMenu.setVisible(true);	
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_NOTA);	
+	    History.newItem(strToken); 
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1232,14 +1187,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}
 	
-	public void openCadastroPaisOcorrencia() {
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_OCORRENCIA);
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);		
-//		TelaInicialPaisOcorrencia telaInicialPaisOcorrencia = TelaInicialPaisOcorrencia.getInstance(this);
-//		this.vPanelBody.add(telaInicialPaisOcorrencia);
-//		this.vPanelMenu.setVisible(true);
+	public void openCadastroPaisOcorrencia(String strToken) {
+	
+//	    History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_OCORRENCIA);
+	    History.newItem(strToken);
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1260,15 +1211,10 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}		
 	
-	public void openFerramentaPaisHierarquia(){
+	public void openFerramentaPaisHierarquia(String strToken){
 		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_HIERARQUIA);		
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		HierarquiaCursoPais hierarquiaCursoPais = new HierarquiaCursoPais(this);		
-//		this.vPanelBody.add(hierarquiaCursoPais);
-//		this.vPanelMenu.setVisible(true);		
+//		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_HIERARQUIA);
+	    History.newItem(strToken);
 		
 		
 		mpPopupLoading.show();
@@ -1290,14 +1236,8 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}		
 
-	public void openFerramentaPaisDiario(){		
-		History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_PAIS_DIARIO);	
-		
-//		this.vPanelBody.clear();
-//		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//		TelaInicialDiarioPais telaInicialDiarioPais = TelaInicialDiarioPais.getInstance(this);
-//		this.vPanelBody.add(telaInicialDiarioPais);
-//		this.vPanelMenu.setVisible(true);	
+	public void openFerramentaPaisDiario(String strToken){		
+		History.newItem(strToken);	
 		
 		mpPopupLoading.show();
 		GWT.runAsync(new RunAsyncCallback() {
@@ -1318,17 +1258,35 @@ public class MainView extends Composite implements HistoryListener{
 		
 	}	
 	
+    public void openFerramentaAlunoPaisPresenca(String strToken){
+        
+//      History.newItem(MainMenu.MENU_TOKEN_FERRAMENTA_ALUNO_PRESENCA);     
+      History.newItem(strToken);     
+
+      mpPopupLoading.show();
+      GWT.runAsync(new RunAsyncCallback() {
+          public void onFailure(Throwable caught) {
+              mpPopupLoading.hide();
+              Window.alert("Code download failed");
+          }
+
+          public void onSuccess() {
+              mpPopupLoading.hide();
+              vPanelBody.clear();
+              vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+              TelaInicialPresencaAlunoPais telaInicialPresencaPaisAluno = TelaInicialPresencaAlunoPais.getInstance(MainView.this);      
+              vPanelBody.add(telaInicialPresencaPaisAluno);
+              vPanelMenu.setVisible(true);    
+          }
+      });
+  }
+	
 	public MainMenu getMainMenu() {
 		return mainMenu;
 	}
 
 
 
-	
-
-
-	
-	
 	
 	
 	

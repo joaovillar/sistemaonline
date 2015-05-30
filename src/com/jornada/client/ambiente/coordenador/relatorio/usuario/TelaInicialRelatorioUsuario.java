@@ -1,9 +1,7 @@
 package com.jornada.client.ambiente.coordenador.relatorio.usuario;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.jornada.client.MainView;
 import com.jornada.client.classes.widgets.header.MpHeaderWidget;

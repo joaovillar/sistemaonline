@@ -6,9 +6,7 @@ import com.google.gwt.view.client.ProvidesKey;
 
 public class TabelaPresencaAluno implements Serializable{
 
-	public static final String APROVADO="Aprovado";
-	public static final String REPROVADO="Reprovado";
-	
+
 	private static final long serialVersionUID = -4471323168968291223L;
 	
 	private String nomePeriodo;

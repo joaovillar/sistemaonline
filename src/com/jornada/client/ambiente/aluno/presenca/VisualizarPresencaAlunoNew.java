@@ -1,4 +1,4 @@
-package com.jornada.client.ambiente.pais.diario;
+package com.jornada.client.ambiente.aluno.presenca;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,8 +28,8 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxAlunosPorCursoAmbientePais;
-import com.jornada.client.classes.listBoxes.ambiente.pais.MpListBoxCursoAmbientePais;
+import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
+import com.jornada.client.classes.listBoxes.ambiente.aluno.MpListBoxCursoAmbienteAluno;
 import com.jornada.client.classes.resources.CellTableStyle;
 import com.jornada.client.classes.widgets.button.MpImageButton;
 import com.jornada.client.classes.widgets.cells.MpSimplePager;
@@ -38,55 +38,57 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServicePresenca;
-import com.jornada.shared.classes.Disciplina;
-import com.jornada.shared.classes.Periodo;
-import com.jornada.shared.classes.Presenca;
-import com.jornada.shared.classes.presenca.TabelaPresencaAluno;
+import com.jornada.shared.classes.TipoUsuario;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
-public class VisualizarDiarioPais extends VerticalPanel {
+public class VisualizarPresencaAlunoNew extends VerticalPanel {
 
 	MpDialogBox mpDialogBoxConfirm = new MpDialogBox();
 	MpDialogBox mpDialogBoxWarning = new MpDialogBox();
 	MpPanelLoading mpPanelLoadingAluno = new MpPanelLoading("images/radar.gif");
 
-	private MpListBoxCursoAmbientePais listBoxCurso;
-	private MpListBoxAlunosPorCursoAmbientePais listBoxAlunosPorCurso;
+	private MpListBoxCursoAmbienteAluno listBoxCurso;
+	private MpSelectionAlunosPorCurso listBoxAlunosPorCurso;
 	
 	private TextBox txtSearch;
 	
-	private CellTable<TabelaPresencaAluno> cellTable;
-	private ListDataProvider<TabelaPresencaAluno> dataProvider  = new ListDataProvider<TabelaPresencaAluno>();
-	ArrayList<TabelaPresencaAluno> arrayListBackup = new ArrayList<TabelaPresencaAluno>(); 
-	private Column<TabelaPresencaAluno, String> nomePeriodoColumn;
-	private Column<TabelaPresencaAluno, String> nomeDisciplinaColumn;
-	private Column<TabelaPresencaAluno, String> quantAulaColumn;
-	private Column<TabelaPresencaAluno, String> quantPresencaColumn;
-	private Column<TabelaPresencaAluno, String> quantFaltaColumn;
-	private Column<TabelaPresencaAluno, String> quantJustificativaColumn;
-	private Column<TabelaPresencaAluno, String> porcentagemPresencaColumn;
-	private Column<TabelaPresencaAluno, String> situacaoColumn;
+	private CellTable<PresencaUsuarioDisciplinaAluno> cellTable;
+	private ListDataProvider<PresencaUsuarioDisciplinaAluno> dataProvider  = new ListDataProvider<PresencaUsuarioDisciplinaAluno>();
+	ArrayList<PresencaUsuarioDisciplinaAluno> arrayListBackup = new ArrayList<PresencaUsuarioDisciplinaAluno>(); 
+	private Column<PresencaUsuarioDisciplinaAluno, String> columnNomePeriodo;
+	private Column<PresencaUsuarioDisciplinaAluno, String> columnNomeDisciplina;
+	private Column<PresencaUsuarioDisciplinaAluno, String> columnQuantAula;
+	private Column<PresencaUsuarioDisciplinaAluno, String> columnNumeroPresenca;
+	private Column<PresencaUsuarioDisciplinaAluno, String> columnQuantFalta;
+//	private Column<PresencaUsuarioDisciplinaAluno, String> quantJustificativaColumn;
+	private Column<PresencaUsuarioDisciplinaAluno, String> columnPorcentagemPresenca;
+	private Column<PresencaUsuarioDisciplinaAluno, String> columnSituacao;
 	
 	private int idUsuario;
+	
+//	private Usuario usuarioLogado;
 		
 	VerticalPanel vFormPanel = new VerticalPanel();
 	ScrollPanel scrollPanel = new ScrollPanel();
 	
 	TextConstants txtConstants;
-	
-	private TelaInicialDiarioPais telaInicialDiarioPais;
 
-	public VisualizarDiarioPais(final TelaInicialDiarioPais telaInicialDiarioPais) {
+	
+	private TelaInicialPresencaAluno telaInicialDiarioAluno;
+
+	public VisualizarPresencaAlunoNew(final TelaInicialPresencaAluno telaInicialDiarioAluno) {
 		
 		scrollPanel.setAlwaysShowScrollBars(false);
 
-//		scrollPanel.setSize(Integer.toString(TelaInicialDiarioPais.intWidthTable+30)+"px",Integer.toString(TelaInicialDiarioPais.intHeightTable-120)+"px");
-		scrollPanel.setHeight(Integer.toString(TelaInicialDiarioPais.intHeightTable-120)+"px");
+//		scrollPanel.setSize(Integer.toString(TelaInicialDiarioAluno.intWidthTable+30)+"px",Integer.toString(TelaInicialDiarioAluno.intHeightTable-120)+"px");
+		scrollPanel.setHeight(Integer.toString(TelaInicialPresencaAluno.intHeightTable-120)+"px");
 		scrollPanel.setWidth("100%");
 		
 		txtConstants = GWT.create(TextConstants.class);
 		
-		this.telaInicialDiarioPais=telaInicialDiarioPais;
+		this.telaInicialDiarioAluno=telaInicialDiarioAluno;
+//		usuarioLogado = telaInicialDiarioAluno.getMainView().getUsuarioLogado();
 
 		mpDialogBoxConfirm.setTYPE_MESSAGE(MpDialogBox.TYPE_CONFIRMATION);
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -103,33 +105,34 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		// Add a title to the form
 //		cellFormatter.setColSpan(0, 0, 0);
 		cellFormatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
-		
+
 		
 		Label lblCurso = new Label(txtConstants.curso());
+		
 		lblCurso.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);		
-
-
 		lblCurso.setStyleName("design_label");
+
 
 		// Add some standard form options
 		int row = 1;
 		flexTableWithListBoxes.setWidget(row, 0, lblCurso);
 
-		listBoxCurso = new MpListBoxCursoAmbientePais(telaInicialDiarioPais.getMainView().getUsuarioLogado());	
+		listBoxCurso = new MpListBoxCursoAmbienteAluno(telaInicialDiarioAluno.getMainView().getUsuarioLogado());	
 		listBoxCurso.addChangeHandler(new MpCursoSelectionChangeHandler());
 		
-//		if(telaInicialDiarioPais.getMainView().getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.PAIS){
-//			flexTableWithListBoxes.setWidget(row, 0, lblCurso);	
-//			flexTableWithListBoxes.setWidget(row, 1, listBoxCurso);
-//			flexTableWithListBoxes.setWidget(row++, 2, mpPanelLoadingAluno);
-//			idUsuario = telaInicialDiarioPais.getMainView().getUsuarioLogado().getIdUsuario();
-//			
-//		}else{
+
+		if(telaInicialDiarioAluno.getMainView().getUsuarioLogado().getIdTipoUsuario()==TipoUsuario.ALUNO){
+			flexTableWithListBoxes.setWidget(row, 0, lblCurso);	
+			flexTableWithListBoxes.setWidget(row, 1, listBoxCurso);
+			flexTableWithListBoxes.setWidget(row++, 2, mpPanelLoadingAluno);
+			idUsuario = telaInicialDiarioAluno.getMainView().getUsuarioLogado().getIdUsuario();
+			
+		}else{
 			Label lblNomeAluno = new Label(txtConstants.alunoNome());
 			lblNomeAluno.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);	
 			lblNomeAluno.setStyleName("design_label");
 			
-			listBoxAlunosPorCurso = new MpListBoxAlunosPorCursoAmbientePais();
+			listBoxAlunosPorCurso = new MpSelectionAlunosPorCurso();
 			listBoxAlunosPorCurso.addChangeHandler(new MpAlunosPorCursoSelectionChangeHandler());
 
 			flexTableWithListBoxes.setWidget(row, 0, lblCurso);	
@@ -138,8 +141,8 @@ public class VisualizarDiarioPais extends VerticalPanel {
 			flexTableWithListBoxes.setWidget(row, 1, listBoxAlunosPorCurso);
 			flexTableWithListBoxes.setWidget(row, 2, mpPanelLoadingAluno);
 			
-//		}
-
+		}
+		
 		
 		vFormPanel.add(flexTableWithListBoxes);
 		vFormPanel.setWidth("100%");
@@ -173,12 +176,13 @@ public class VisualizarDiarioPais extends VerticalPanel {
 			}else{				
 				int idCurso = Integer.parseInt(listBoxCurso.getValue(indexCurso));
 
-//				if (telaInicialDiarioPais.getMainView().getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.PAIS) {
-//					populateGrid();
-//				} else {
-					listBoxAlunosPorCurso.populateComboBox(telaInicialDiarioPais.getMainView().getUsuarioLogado(), idCurso);
-//				}
-			}		
+				if (telaInicialDiarioAluno.getMainView().getUsuarioLogado().getIdTipoUsuario() == TipoUsuario.ALUNO) {
+					populateGrid();
+				} else {
+					listBoxAlunosPorCurso.populateComboBox(idCurso);
+				}
+			}	
+					
 		}  
 	}	
 	
@@ -230,28 +234,30 @@ public class VisualizarDiarioPais extends VerticalPanel {
 			mpPanelLoadingAluno.setVisible(true);
 			int idCurso = Integer.parseInt(listBoxCurso.getValue(indexCurso));
 			
-			GWTServicePresenca.Util.getInstance().getPresencaAluno(idUsuario, idCurso, 
-			new AsyncCallback<ArrayList<Periodo>>() 
+			GWTServicePresenca.Util.getInstance().getPresencaUsuarioDisciplinaAluno(idUsuario, idCurso, 
+			new AsyncCallback<ArrayList<PresencaUsuarioDisciplinaAluno>>() 
 			{
 				public void onFailure(Throwable caught) {
 					mpPanelLoadingAluno.setVisible(false);
 					mpDialogBoxWarning.setTitle(txtConstants.geralAviso());
-					mpDialogBoxWarning.setBodyText(txtConstants.topicoErroSalvar());
+					mpDialogBoxWarning.setBodyText(txtConstants.presencaErroSalvar());
 					mpDialogBoxWarning.showDialog();
 				}
 
 				@Override
-				public void onSuccess(ArrayList<Periodo> list) {
+				public void onSuccess(ArrayList<PresencaUsuarioDisciplinaAluno> list) {
+					
 					MpUtilClient.isRefreshRequired(list);
-					ArrayList<TabelaPresencaAluno> listTabelaPresencaAluno = convertePeriodoParaTabela(list);
+					
+					
 					
 					mpPanelLoadingAluno.setVisible(false);
 					dataProvider.getList().clear();
 					arrayListBackup.clear();
 					cellTable.setRowCount(0);
-					for(int i=0;i<listTabelaPresencaAluno.size();i++){
-						dataProvider.getList().add(listTabelaPresencaAluno.get(i));
-						arrayListBackup.add(listTabelaPresencaAluno.get(i));
+					for(int i=0;i<list.size();i++){
+						dataProvider.getList().add(list.get(i));
+						arrayListBackup.add(list.get(i));
 					}
 					addCellTableData(dataProvider);
 					cellTable.redraw();			
@@ -260,57 +266,57 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		}
 	}	
 	
-	private ArrayList<TabelaPresencaAluno> convertePeriodoParaTabela(ArrayList<Periodo> arrayPeriodo){
-		
-		int intPorcentagemPresencaCurso = Integer.parseInt(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getPorcentagemPresenca());
-		
-		ArrayList<TabelaPresencaAluno> listTpa = new ArrayList<TabelaPresencaAluno>();
-		
-		for(int cvPer=0;cvPer<arrayPeriodo.size();cvPer++){
-					
-			Periodo periodo = arrayPeriodo.get(cvPer);
-			
-			for(int cvDis=0;cvDis<periodo.getListDisciplinas().size();cvDis++){
-				TabelaPresencaAluno tpa = new TabelaPresencaAluno();
-				Disciplina disciplina = periodo.getListDisciplinas().get(cvDis);				
-				int quantidateAula = disciplina.getListAula().size();
-				int quantidatePresencas = disciplina.getQuantidadePresenca();
-				int quantidateFaltas = disciplina.getQuantidadeFalta();
-				int quantidateJustificadas = disciplina.getQuantidadeFaltaJustificada();
-				int quantidadePresencaSalaDeAula;
-				
-				if(quantidateAula==0 || (quantidatePresencas==0&&quantidateJustificadas==0)){
-					quantidadePresencaSalaDeAula=0;
-				}else{
-					Double doublePresenca = (((double)quantidatePresencas+(double)quantidateJustificadas)/(double)quantidateAula)*100;
-					quantidadePresencaSalaDeAula = 	doublePresenca.intValue();
-				}		
-				
-				if(quantidadePresencaSalaDeAula>=intPorcentagemPresencaCurso){
-					tpa.setSituacao(Presenca.APROVADO);
-				}else{
-					tpa.setSituacao(Presenca.REPROVADO);
-				}
-				
-				
-				tpa.setNomePeriodo(periodo.getNomePeriodo());
-				tpa.setNomeDisciplina(disciplina.getNome());
-				tpa.setQuantAulas(quantidateAula);
-				tpa.setQuantPresenca(quantidatePresencas);
-				tpa.setQuantFaltas(quantidateFaltas);
-				tpa.setQuantJustificadas(quantidateJustificadas);
-				tpa.setPresencaSalaAula(quantidadePresencaSalaDeAula);
-				
-				listTpa.add(tpa);
-				
-			}
-			
-			
-			
-		}
-		
-		return listTpa;
-	}
+//	private ArrayList<PresencaUsuarioDisciplinaAluno> convertePeriodoParaTabela(ArrayList<Periodo> arrayPeriodo){
+//		
+//		int intPorcentagemPresencaCurso = Integer.parseInt(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getPorcentagemPresenca());
+//		
+//		ArrayList<PresencaUsuarioDisciplinaAluno> listTpa = new ArrayList<PresencaUsuarioDisciplinaAluno>();
+//		
+//		for(int cvPer=0;cvPer<arrayPeriodo.size();cvPer++){
+//					
+//			Periodo periodo = arrayPeriodo.get(cvPer);
+//			
+//			for(int cvDis=0;cvDis<periodo.getListDisciplinas().size();cvDis++){
+//				PresencaUsuarioDisciplinaAluno tpa = new PresencaUsuarioDisciplinaAluno();
+//				Disciplina disciplina = periodo.getListDisciplinas().get(cvDis);				
+//				int quantidateAula = disciplina.getListAula().size();
+//				int quantidatePresencas = disciplina.getQuantidadePresenca();
+//				int quantidateFaltas = disciplina.getQuantidadeFalta();
+//				int quantidateJustificadas = disciplina.getQuantidadeFaltaJustificada();
+//				int quantidadePresencaSalaDeAula;
+//				
+//				if(quantidateAula==0 || (quantidatePresencas==0&&quantidateJustificadas==0)){
+//					quantidadePresencaSalaDeAula=0;
+//				}else{
+//					Double doublePresenca = (((double)quantidatePresencas+(double)quantidateJustificadas)/(double)quantidateAula)*100;
+//					quantidadePresencaSalaDeAula = 	doublePresenca.intValue();
+//				}		
+//				
+//				if(quantidadePresencaSalaDeAula>=intPorcentagemPresencaCurso){
+//					tpa.setSituacao(Presenca.APROVADO);
+//				}else{
+//					tpa.setSituacao(Presenca.REPROVADO);
+//				}
+//				
+//				
+//				tpa.setNomePeriodo(periodo.getNomePeriodo());
+//				tpa.setNomeDisciplina(disciplina.getNome());
+//				tpa.setQuantAulas(quantidateAula);
+//				tpa.setQuantPresenca(quantidatePresencas);
+//				tpa.setQuantFaltas(quantidateFaltas);
+//				tpa.setQuantJustificadas(quantidateJustificadas);
+//				tpa.setPresencaSalaAula(quantidadePresencaSalaDeAula);
+//				
+//				listTpa.add(tpa);
+//				
+//			}
+//			
+//			
+//			
+//		}
+//		
+//		return listTpa;
+//	}
 	
 //	private int getNumeroTipoPresenca(ArrayList<Aula> listAula, int tipoPresenca){
 //		int quantidadeTipoPresenca=0;
@@ -329,7 +335,7 @@ public class VisualizarDiarioPais extends VerticalPanel {
 //	}
 
 	public void updateClientData(){
-		listBoxCurso.populateComboBox(this.telaInicialDiarioPais.getMainView().getUsuarioLogado());
+		listBoxCurso.populateComboBox(this.telaInicialDiarioAluno.getMainView().getUsuarioLogado());
 	}	
 	
 /***************************************END POPULATE DATA***********************************************/		
@@ -340,9 +346,9 @@ public class VisualizarDiarioPais extends VerticalPanel {
 	
 	
 	public void initializeCellTable(){
-		cellTable = new CellTable<TabelaPresencaAluno>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
+		cellTable = new CellTable<PresencaUsuarioDisciplinaAluno>(10,GWT.<CellTableStyle> create(CellTableStyle.class));
 
-//		cellTable.setWidth(Integer.toString(TelaInicialDiarioPais.intWidthTable)+ "px");		
+//		cellTable.setWidth(Integer.toString(TelaInicialDiarioAluno.intWidthTable)+ "px");		
 		cellTable.setWidth("100%");
 		cellTable.setAutoHeaderRefreshDisabled(true);
 		cellTable.setAutoFooterRefreshDisabled(true);
@@ -350,8 +356,8 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		dataProvider.addDataDisplay(cellTable);	
 		
 		// Add a selection model so we can select cells.
-		final SelectionModel<TabelaPresencaAluno> selectionModel = new MultiSelectionModel<TabelaPresencaAluno>();
-		cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<TabelaPresencaAluno> createCheckboxManager());
+		final SelectionModel<PresencaUsuarioDisciplinaAluno> selectionModel = new MultiSelectionModel<PresencaUsuarioDisciplinaAluno>();
+		cellTable.setSelectionModel(selectionModel,DefaultSelectionEventManager.<PresencaUsuarioDisciplinaAluno> createCheckboxManager());
 
 		initTableColumns(selectionModel);		
 		
@@ -390,20 +396,29 @@ public class VisualizarDiarioPais extends VerticalPanel {
 //		flexTableFiltrarAluno.setWidget(0, 5, mpPanelLoadingAluno);
 		
 		
+//		ScrollPanel scrollPanel = new ScrollPanel();
+//		scrollPanel.setSize(Integer.toString(TelaInicialAlunoOcorrencia.intWidthTable+30)+"px",Integer.toString(TelaInicialAlunoOcorrencia.intHeightTable-110)+"px");
+//		scrollPanel.setAlwaysShowScrollBars(true);		
+//		scrollPanel.add(cellTable);	
+		
+		VerticalPanel vPanel = new VerticalPanel();
+		vPanel.setWidth("100%");
+		vPanel.setCellVerticalAlignment(cellTable, ALIGN_TOP);
+		vPanel.add(cellTable);
+		
 		MpSpaceVerticalPanel mpSpaceVerticalPanel = new MpSpaceVerticalPanel();
 		
 		VerticalPanel vPanelInScroll = new VerticalPanel();
-		vPanelInScroll.setBorderWidth(0);
 		vPanelInScroll.setWidth("100%");
+		vPanelInScroll.setBorderWidth(0);
 		vPanelInScroll.setCellVerticalAlignment(cellTable, ALIGN_TOP);
 		vPanelInScroll.add(flexTableFiltrarAluno);
-		vPanelInScroll.add(cellTable);
+		vPanelInScroll.add(vPanel);
 		vPanelInScroll.add(mpSpaceVerticalPanel);
 		scrollPanel.clear();
 		scrollPanel.add(vPanelInScroll);
 		
 		vFormPanel.add(scrollPanel);
-
 		
 		mpPanelLoadingAluno.setVisible(false);
 		
@@ -427,9 +442,9 @@ public class VisualizarDiarioPais extends VerticalPanel {
 		}
 	}	
 	
-	private void addCellTableData(ListDataProvider<TabelaPresencaAluno> dataProvider){
+	private void addCellTableData(ListDataProvider<PresencaUsuarioDisciplinaAluno> dataProvider){
 		
-		 ListHandler<TabelaPresencaAluno> sortHandler = new ListHandler<TabelaPresencaAluno>(dataProvider.getList());
+		 ListHandler<PresencaUsuarioDisciplinaAluno> sortHandler = new ListHandler<PresencaUsuarioDisciplinaAluno>(dataProvider.getList());
 		 
 		 cellTable.addColumnSortHandler(sortHandler);	
 
@@ -438,76 +453,71 @@ public class VisualizarDiarioPais extends VerticalPanel {
 	}
 		
 	private void initTableColumns(
-			final SelectionModel<TabelaPresencaAluno> selectionModel) {
+			final SelectionModel<PresencaUsuarioDisciplinaAluno> selectionModel) {
 
-		nomePeriodoColumn = new Column<TabelaPresencaAluno, String>(new TextCell()) {
+		columnNomePeriodo = new Column<PresencaUsuarioDisciplinaAluno, String>(new TextCell()) {
 			@Override
-			public String getValue(TabelaPresencaAluno object) {
+			public String getValue(PresencaUsuarioDisciplinaAluno object) {
 				return object.getNomePeriodo();
 			}
 
 		};
 
-		nomeDisciplinaColumn = new Column<TabelaPresencaAluno, String>(new TextCell()) {
+		columnNomeDisciplina = new Column<PresencaUsuarioDisciplinaAluno, String>(new TextCell()) {
 			@Override
-			public String getValue(TabelaPresencaAluno object) {
+			public String getValue(PresencaUsuarioDisciplinaAluno object) {
 				return object.getNomeDisciplina();
 			}
 
 		};
 
-		quantAulaColumn = new Column<TabelaPresencaAluno, String>(new TextCell()) {
+		columnQuantAula = new Column<PresencaUsuarioDisciplinaAluno, String>(new TextCell()) {
 			@Override
-			public String getValue(TabelaPresencaAluno object) {
-				return Integer.toString(object.getQuantAulas());
+			public String getValue(PresencaUsuarioDisciplinaAluno object) {
+				return Integer.toString(object.getNumeroAulas());
 			}
 		};
 
-		quantPresencaColumn = new Column<TabelaPresencaAluno, String>(new TextCell()) {
+		columnNumeroPresenca = new Column<PresencaUsuarioDisciplinaAluno, String>(new TextCell()) {
 			@Override
-			public String getValue(TabelaPresencaAluno object) {
-				return Integer.toString(object.getQuantPresenca());
+			public String getValue(PresencaUsuarioDisciplinaAluno object) {
+				return Integer.toString(object.getNumeroPresenca());
 			}
 		};
 
-		quantFaltaColumn = new Column<TabelaPresencaAluno, String>(new TextCell()) {
+		columnQuantFalta = new Column<PresencaUsuarioDisciplinaAluno, String>(new TextCell()) {
 			@Override
-			public String getValue(TabelaPresencaAluno object) {
-				return Integer.toString(object.getQuantFaltas());
+			public String getValue(PresencaUsuarioDisciplinaAluno object) {
+				return Integer.toString(object.getNumeroFaltas());
 			}
 		};
 
-		quantJustificativaColumn = new Column<TabelaPresencaAluno, String>(new TextCell()) {
-			@Override
-			public String getValue(TabelaPresencaAluno object) {
-				return Integer.toString(object.getQuantJustificadas());
-			}
-		};
+
 		
-		porcentagemPresencaColumn = new Column<TabelaPresencaAluno, String>(new TextCell()) {
+		columnPorcentagemPresenca = new Column<PresencaUsuarioDisciplinaAluno, String>(new TextCell()) {
 			@Override
-			public String getValue(TabelaPresencaAluno object) {
+			public String getValue(PresencaUsuarioDisciplinaAluno object) {
 			
-				return Integer.toString(object.getPresencaSalaAula())+"%";
+				return Integer.toString(object.getPorcentagemPresencaAula())+"%";
 			}
 		};		
 		
-		situacaoColumn = new Column<TabelaPresencaAluno, String>(new TextCell()) {
+		columnSituacao = new Column<PresencaUsuarioDisciplinaAluno, String>(new TextCell()) {
 			@Override
-			public String getValue(TabelaPresencaAluno object) {
+			public String getValue(PresencaUsuarioDisciplinaAluno object) {
 			
 				return object.getSituacao();
 			}
 		};		
 
-		cellTable.addColumn(nomePeriodoColumn, txtConstants.periodoNome());
-		cellTable.addColumn(nomeDisciplinaColumn, txtConstants.disciplina());
-		cellTable.addColumn(quantAulaColumn, txtConstants.presencaQuantidadeAulas());
-		cellTable.addColumn(quantPresencaColumn, txtConstants.presencaQuantidadePresenca());
-		cellTable.addColumn(quantFaltaColumn, txtConstants.presencaQuantidadeFaltas());
-		cellTable.addColumn(quantJustificativaColumn,txtConstants.presencaQuantidadeJustificativas());
-		cellTable.addColumn(porcentagemPresencaColumn,txtConstants.presencaSalaDeAula());
-		cellTable.addColumn(situacaoColumn,txtConstants.presencaSituacao());
+		cellTable.addColumn(columnNomePeriodo, txtConstants.periodoNome());
+		cellTable.addColumn(columnNomeDisciplina, txtConstants.disciplina());
+		cellTable.addColumn(columnQuantAula, txtConstants.presencaQuantidadeAulas());
+		cellTable.addColumn(columnNumeroPresenca, txtConstants.presencaQuantidadePresenca());
+		cellTable.addColumn(columnQuantFalta, txtConstants.presencaQuantidadeFaltas());
+//		cellTable.addColumn(quantJustificativaColumn,txtConstants.presencaQuantidadeJustificativas());
+		cellTable.addColumn(columnPorcentagemPresenca,txtConstants.presencaSalaDeAula());
+		cellTable.addColumn(columnSituacao,txtConstants.presencaSituacao());
 
 		// Make the name column sortable.
 		// nomePeriodoColumn.setSortable(true);
@@ -519,67 +529,58 @@ public class VisualizarDiarioPais extends VerticalPanel {
 
 	}
 
-	public void initSortHandler(ListHandler<TabelaPresencaAluno> sortHandler){
-		nomePeriodoColumn.setSortable(true);
-	    sortHandler.setComparator(nomePeriodoColumn, new Comparator<TabelaPresencaAluno>() {
+	public void initSortHandler(ListHandler<PresencaUsuarioDisciplinaAluno> sortHandler){
+		columnNomePeriodo.setSortable(true);
+	    sortHandler.setComparator(columnNomePeriodo, new Comparator<PresencaUsuarioDisciplinaAluno>() {
 	      @Override
-	      public int compare(TabelaPresencaAluno o1, TabelaPresencaAluno o2) {
+	      public int compare(PresencaUsuarioDisciplinaAluno o1, PresencaUsuarioDisciplinaAluno o2) {
 	        return o1.getNomePeriodo().compareTo(o2.getNomePeriodo());
 	      }
 	    });		
 	    
-		nomeDisciplinaColumn.setSortable(true);
-	    sortHandler.setComparator(nomeDisciplinaColumn, new Comparator<TabelaPresencaAluno>() {
+		columnNomeDisciplina.setSortable(true);
+	    sortHandler.setComparator(columnNomeDisciplina, new Comparator<PresencaUsuarioDisciplinaAluno>() {
 	      @Override
-	      public int compare(TabelaPresencaAluno o1, TabelaPresencaAluno o2) {
+	      public int compare(PresencaUsuarioDisciplinaAluno o1, PresencaUsuarioDisciplinaAluno o2) {
 	        return o1.getNomeDisciplina().compareTo(o2.getNomeDisciplina());
 	      }
 	    });	
 		
-	    quantAulaColumn.setSortable(true);
-		sortHandler.setComparator(quantAulaColumn, new Comparator<TabelaPresencaAluno>() {
+	    columnQuantAula.setSortable(true);
+		sortHandler.setComparator(columnQuantAula, new Comparator<PresencaUsuarioDisciplinaAluno>() {
 	      @Override
-	      public int compare(TabelaPresencaAluno o1, TabelaPresencaAluno o2) {
-	    	String strO1 = Integer.toString(o1.getQuantAulas());
-	    	String strO2 = Integer.toString(o2.getQuantAulas());
+	      public int compare(PresencaUsuarioDisciplinaAluno o1, PresencaUsuarioDisciplinaAluno o2) {
+	    	String strO1 = Integer.toString(o1.getNumeroAulas());
+	    	String strO2 = Integer.toString(o2.getNumeroAulas());
 	        return strO1.compareTo(strO2);
 	      }
 	    });		
 		
-	    quantPresencaColumn.setSortable(true);
-		sortHandler.setComparator(quantPresencaColumn, new Comparator<TabelaPresencaAluno>() {
+	    columnNumeroPresenca.setSortable(true);
+		sortHandler.setComparator(columnNumeroPresenca, new Comparator<PresencaUsuarioDisciplinaAluno>() {
 	      @Override
-	      public int compare(TabelaPresencaAluno o1, TabelaPresencaAluno o2) {
-	    	String strO1 = Integer.toString(o1.getQuantPresenca());
-	    	String strO2 = Integer.toString(o2.getQuantPresenca());
+	      public int compare(PresencaUsuarioDisciplinaAluno o1, PresencaUsuarioDisciplinaAluno o2) {
+	    	String strO1 = Integer.toString(o1.getNumeroPresenca());
+	    	String strO2 = Integer.toString(o2.getNumeroPresenca());
 	        return strO1.compareTo(strO2);
 	      }
 	    });		
 
-	    quantFaltaColumn.setSortable(true);
-		sortHandler.setComparator(quantFaltaColumn, new Comparator<TabelaPresencaAluno>() {
+	    columnQuantFalta.setSortable(true);
+		sortHandler.setComparator(columnQuantFalta, new Comparator<PresencaUsuarioDisciplinaAluno>() {
 	      @Override
-	      public int compare(TabelaPresencaAluno o1, TabelaPresencaAluno o2) {
-	    	String strO1 = Integer.toString(o1.getQuantFaltas());
-	    	String strO2 = Integer.toString(o2.getQuantFaltas());
+	      public int compare(PresencaUsuarioDisciplinaAluno o1, PresencaUsuarioDisciplinaAluno o2) {
+	    	String strO1 = Integer.toString(o1.getNumeroFaltas());
+	    	String strO2 = Integer.toString(o2.getNumeroFaltas());
 	        return strO1.compareTo(strO2);
 	      }
 	    });
 		
-	    quantJustificativaColumn.setSortable(true);
-		sortHandler.setComparator(quantJustificativaColumn, new Comparator<TabelaPresencaAluno>() {
-	      @Override
-	      public int compare(TabelaPresencaAluno o1, TabelaPresencaAluno o2) {
-	    	String strO1 = Integer.toString(o1.getQuantJustificadas());
-	    	String strO2 = Integer.toString(o2.getQuantJustificadas());
-	        return strO1.compareTo(strO2);
-	      }
-	    });	
 		
-		situacaoColumn.setSortable(true);
-	    sortHandler.setComparator(situacaoColumn, new Comparator<TabelaPresencaAluno>() {
+		columnSituacao.setSortable(true);
+	    sortHandler.setComparator(columnSituacao, new Comparator<PresencaUsuarioDisciplinaAluno>() {
 	      @Override
-	      public int compare(TabelaPresencaAluno o1, TabelaPresencaAluno o2) {
+	      public int compare(PresencaUsuarioDisciplinaAluno o1, PresencaUsuarioDisciplinaAluno o2) {
 	        return o1.getSituacao().compareTo(o2.getSituacao());
 	      }
 	    });			

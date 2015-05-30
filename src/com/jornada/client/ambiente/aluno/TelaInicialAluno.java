@@ -13,7 +13,8 @@ public class TelaInicialAluno extends Composite {
 	ComponenteComunicadoAluno componenteComunicadoAluno; 
 	ComponenteVisualizarCursoAluno componenteVisualizarCursoAluno;
 	ComponenteAlunoOcorrencia componenteAlunoOcorrencia;
-	ComponenteDiarioAluno componenteDiarioAluno;
+//	ComponenteDiarioAluno componenteDiarioAluno;
+	ComponentePresencaAluno componentePresencaAluno;
 
 	VerticalPanel verticalPanel;
 
@@ -42,7 +43,8 @@ public class TelaInicialAluno extends Composite {
 		componenteComunicadoAluno = ComponenteComunicadoAluno.getInstance();
 		componenteVisualizarCursoAluno = new ComponenteVisualizarCursoAluno();
 		componenteAlunoOcorrencia = ComponenteAlunoOcorrencia.getInstance();
-		componenteDiarioAluno = ComponenteDiarioAluno.getInstance();
+//		componenteDiarioAluno = ComponenteDiarioAluno.getInstance();
+		componentePresencaAluno = ComponentePresencaAluno.getInstance();
 	
 		verticalPanel = new VerticalPanel();
 		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -58,7 +60,8 @@ public class TelaInicialAluno extends Composite {
 		grid.setWidget(row++, 2, componenteNotasAluno);
 		grid.setWidget(row, 0, componenteVisualizarCursoAluno);
 		grid.setWidget(row, 1, componenteAlunoOcorrencia);
-		grid.setWidget(row++, 2, componenteDiarioAluno);
+//		grid.setWidget(row++, 2, componenteDiarioAluno);
+		grid.setWidget(row++, 2, componentePresencaAluno);
 		
 		verticalPanel.add(grid);
 		

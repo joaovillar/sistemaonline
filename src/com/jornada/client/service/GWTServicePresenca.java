@@ -23,18 +23,23 @@ import com.jornada.shared.classes.Aula;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
 
 @RemoteServiceRelativePath("GWTServicePresenca")
 public interface GWTServicePresenca extends RemoteService {
 	
 	
 	public String AdicionarNovaPresenca(Aula aula);
+	public String AdicionarFaltaDisciplina(ArrayList<PresencaUsuarioDisciplina> listPresencaUsuarioDisciplina);
 	public boolean updatePresencaRow(int idAula, int idUsuario, int idTipoPresenca);
 	public ArrayList<PresencaUsuarioAula> getAlunos(int idCurso);
+	public ArrayList<PresencaUsuarioDisciplina> getAlunosDisciplina(int idCurso, int idDisciplina);
 	public ArrayList<PresencaUsuarioAula> getAlunos(int idCurso, String strAluno);
 	public ArrayList<PresencaUsuarioAula> getListaPresencaAlunos(int idCurso, int idDisciplina);
 	public ArrayList<ArrayList<String>> getListaPresencaAlunosArrayList(int idCurso, int idDisciplina);
 	public ArrayList<Periodo> getPresencaAluno(int idUsuario, int idCurso);
+	public ArrayList<PresencaUsuarioDisciplinaAluno> getPresencaUsuarioDisciplinaAluno(int idUsuario, int idCurso);
 	
 	public ArrayList<TipoPresenca> getTipoPresencas();
 	

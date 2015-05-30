@@ -39,6 +39,7 @@ public interface TextConstants extends Messages {
     String menuTokenFerramentaCoordenadorHierarquia();
     String menuTokenFerramentaCoordenadorUsuario();
     String menuTokenFerramentaCoordenadorDiario();
+    String menuTokenFerramentaCoordenadorPresenca();
     String menuTokenFerramentaCoordenadorRelatorio();
     String menuTokenFerramentaCoordenadorBoletim();
     String menuTokenFerramentaCoordenadorRelatorioUsuario();
@@ -50,7 +51,8 @@ public interface TextConstants extends Messages {
 	String menuTokenFerramentaProfessorComunicado();	
 	String menuTokenFerramentaProfessorOcorrencia();
 	String menuTokenFerramentaProfessorHierarquia();
-	String menuTokenFerramentaProfessorDiario();
+	String menuTokenFerramentaProfessorDiario();	
+	String menuTokenFerramentaProfessorPresenca();
     String menuTokenFerramentaProfessorRelatorio();
 	String menuTokenFerramentaAluno();
 	String menuTokenFerramentaAlunoNota();
@@ -59,6 +61,7 @@ public interface TextConstants extends Messages {
 	String menuTokenFerramentaAlunoOcorrencia();
 	String menuTokenFerramentaAlunoHierarquia();
 	String menuTokenFerramentaAlunoDiario();	
+	String menuTokenFerramentaAlunoPresenca();
 	String menuTokenFerramentaPais();
 	String menuTokenFerramentaPaisAgenda();
 	String menuTokenFerramentaPaisComunicado();
@@ -66,6 +69,7 @@ public interface TextConstants extends Messages {
 	String menuTokenFerramentaPaisNota();
 	String menuTokenFerramentaPaisHierarquia();
 	String menuTokenFerramentaPaisDiario();
+	String menuTokenFerramentaAlunoPaisPresenca();
     /******MainTitle End******/
 	
     /******MainBody Begin******/

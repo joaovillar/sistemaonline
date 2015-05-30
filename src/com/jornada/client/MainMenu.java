@@ -76,7 +76,11 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     
     public static final String MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO = txtConstants.menuTokenFerramentaCoordenadorRelatorio();
     private Hyperlink linkFerramentaCoordenadorRelatorio;
-    private Image imgFerramentaCoordenadorRelatorio;       
+    private Image imgFerramentaCoordenadorRelatorio;  
+    
+    public static final String MENU_TOKEN_FERRAMENTA_COORDENADOR_PRESENCA = txtConstants.menuTokenFerramentaCoordenadorPresenca();
+    private Hyperlink linkFerramentaCoordenadorPresenca;
+    private Image imgFerramentaCoordenadorPresenca;     
     
     public static final String MENU_TOKEN_FERRAMENTA_COORDENADOR_BOLETIM = txtConstants.menuTokenFerramentaCoordenadorBoletim();
     private Hyperlink linkFerramentaCoordenadorBoletim;
@@ -122,6 +126,10 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     private Hyperlink linkFerramentaProfessorDiario;
     private Image imgFerramentaProfessorDiario;     
     
+    public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR_PRESENCA = txtConstants.menuTokenFerramentaProfessorPresenca();
+    private Hyperlink linkFerramentaProfessorPresenca;
+    private Image imgFerramentaProfessorPresenca;     
+    
     public static final String MENU_TOKEN_FERRAMENTA_PROFESSOR_RELATORIO = txtConstants.menuTokenFerramentaProfessorRelatorio();
     private Hyperlink linkFerramentaProfessorRelatorio;
     private Image imgFerramentaProfessorRelatorio;       
@@ -149,12 +157,15 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     
     public static final String MENU_TOKEN_FERRAMENTA_ALUNO_HIERARQUIA = txtConstants.menuTokenFerramentaAlunoHierarquia();
     private Hyperlink linkFerramentaAlunoHierarquia;
-    private Image imgFerramentaAlunoHierarquia;    
-    
+    private Image imgFerramentaAlunoHierarquia;        
     
     public static final String MENU_TOKEN_FERRAMENTA_ALUNO_DIARIO = txtConstants.menuTokenFerramentaAlunoDiario();
     private Hyperlink linkFerramentaAlunoDiario;
     private Image imgFerramentaAlunoDiario;        
+    
+    public static final String MENU_TOKEN_FERRAMENTA_ALUNO_PRESENCA = txtConstants.menuTokenFerramentaAlunoPresenca();
+    private Hyperlink linkFerramentaAlunoPresenca;
+    private Image imgFerramentaAlunoPresenca;   
     
     public static final String MENU_TOKEN_FERRAMENTA_PAIS = txtConstants.menuTokenFerramentaPais();
     private Hyperlink linkFerramentaPais;
@@ -182,7 +193,13 @@ public class MainMenu extends Composite implements ValueChangeHandler {
     
     public static final String MENU_TOKEN_FERRAMENTA_PAIS_DIARIO = txtConstants.menuTokenFerramentaPaisDiario();
     private Hyperlink linkFerramentaPaisDiario;
-    private Image imgFerramentaPaisDiario;  
+    private Image imgFerramentaPaisDiario;
+    
+    public static final String MENU_TOKEN_FERRAMENTA_ALUNO_PAIS_PRESENCA = txtConstants.menuTokenFerramentaAlunoPaisPresenca();
+    private Hyperlink linkFerramentaAlunoPaisPresenca;
+    private Image imgFerramentaAlunoPaisPresenca;   
+
+
     
     public static final String MENU_TOKEN_SAIR = "SAIR";
     
@@ -240,12 +257,12 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaCoordenador(false);
-			mainView.openAdminEscola();
+			mainView.openAdminEscola(MENU_TOKEN_FERRAMENTA_COORDENADOR);
 		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO_ADMIN)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaCoordenador(true);
 			this.linkFerramentaCoordenadorCursoAdmin(false);
-			mainView.openAdminEscolaCurso();		
+			mainView.openAdminEscolaCurso(MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO_ADMIN);		
 			
 		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO)) {
 				
@@ -255,7 +272,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 				this.linkFerramentaCoordenadorCurso();
 				 if(isFirstEventFire == true){
 					 isFirstEventFire = false;
-					 mainView.openCadastroCurso();
+					 mainView.openCadastroCurso(MENU_TOKEN_FERRAMENTA_COORDENADOR_CURSO);
 				 }
 				
 		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_PERIODO)) {
@@ -266,29 +283,27 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 				this.linkFerramentaCoordenadorPeriodo();
 				if (isFirstEventFire == true) {
 					isFirstEventFire = false;
-					mainView.openCadastroPeriodo();
+					mainView.openCadastroPeriodo(MENU_TOKEN_FERRAMENTA_COORDENADOR_PERIODO);
 				}
 
-		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_DISCIPLINA)) {
-				this.linkPaginaPrincipal(true);
-				this.linkFerramentaCoordenador(true);
-				this.linkFerramentaCoordenadorCursoAdmin(true);
-				this.linkFerramentaCoordenadorDisciplina();
-				if (isFirstEventFire == true) {
-					isFirstEventFire = false;
-					mainView.openCadastroDisciplina();
-				}
-
-		} else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_CONTEUDO_PROGRAMATICO)) {
+        } else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_DISCIPLINA)) {
+            this.linkPaginaPrincipal(true);
+            this.linkFerramentaCoordenador(true);
+            this.linkFerramentaCoordenadorCursoAdmin(true);
+            this.linkFerramentaCoordenadorDisciplina();
+            if (isFirstEventFire == true) {
+                isFirstEventFire = false;
+                mainView.openCadastroDisciplina(MENU_TOKEN_FERRAMENTA_COORDENADOR_DISCIPLINA);
+            }
+        } else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_CONTEUDO_PROGRAMATICO)) {
 				this.linkPaginaPrincipal(true);
 				this.linkFerramentaCoordenador(true);
 				this.linkFerramentaCoordenadorCursoAdmin(true);
 				this.linkFerramentaCoordenadorConteudoProgramatico();
 				if (isFirstEventFire == true) {
 					isFirstEventFire = false;
-					mainView.openCadastroConteudoProgramatico();
-				}				
-			
+					mainView.openCadastroConteudoProgramatico(MENU_TOKEN_FERRAMENTA_COORDENADOR_CONTEUDO_PROGRAMATICO);
+				}	
 		}	
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_TOPICO)) {
 
@@ -299,7 +314,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 	
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openCadastroAdminTopico();
+				mainView.openCadastroAdminTopico(MENU_TOKEN_FERRAMENTA_COORDENADOR_TOPICO);
 			}				
 			
 		}	
@@ -307,19 +322,19 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaCoordenador(true);
 			this.linkFerramentaCoordenadorHierarquia();
-			mainView.openCadastroAdminHierarquia();
+			mainView.openCadastroAdminHierarquia(MENU_TOKEN_FERRAMENTA_COORDENADOR_HIERARQUIA);
 		}			
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_USUARIO)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaCoordenador(true);
 			this.linkFerramentaCoordenadorUsuario();
-			mainView.openCadastroUsuario();	
+			mainView.openCadastroUsuario(MENU_TOKEN_FERRAMENTA_COORDENADOR_USUARIO);	
 		}
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_COMUNICADO)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaCoordenador(true);
 			this.linkFerramentaCoordenadorComunicados();
-			mainView.openCadastroComunicado();	
+			mainView.openCadastroComunicado(MENU_TOKEN_FERRAMENTA_COORDENADOR_COMUNICADO);	
 		}
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_OCORRENCIA)) {
 			this.linkPaginaPrincipal(true);			
@@ -327,7 +342,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			this.linkFerramentaCoordenadorOcorrencia();
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openCadastroCoordenadorOcorrencia();
+				mainView.openCadastroCoordenadorOcorrencia(MENU_TOKEN_FERRAMENTA_COORDENADOR_OCORRENCIA);
 			}	
 		}				
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_DIARIO)) {
@@ -337,9 +352,19 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			this.linkFerramentaCoordenadorDiario();
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaCoordenadorDiario();
+				mainView.openFerramentaCoordenadorDiario(MENU_TOKEN_FERRAMENTA_COORDENADOR_DIARIO);
 			}
-		}		
+		}				
+        else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_PRESENCA)) {
+            this.linkPaginaPrincipal(true);         
+            this.linkFerramentaCoordenador(true);
+            this.linkFerramentaCoordenadorPresenca();       
+            
+            if (isFirstEventFire == true) {
+                isFirstEventFire = false;
+                mainView.openFerramentaCoordenadorPresenca(MENU_TOKEN_FERRAMENTA_COORDENADOR_PRESENCA);
+            }
+        }   		
         else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO)) {
             
             this.linkPaginaPrincipal(true);         
@@ -347,7 +372,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
             this.linkFerramentaCoordenadorRelatorio(false);
 //            if (isFirstEventFire == true) {
 //                isFirstEventFire = false;
-                mainView.openFerramentaCoordenadorRelatorio();
+                mainView.openFerramentaCoordenadorRelatorio(MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO);
 //            }
         }   
 		
@@ -359,7 +384,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
             this.linkFerramentaCoordenadorBoletim(false);
             if (isFirstEventFire == true) {
                 isFirstEventFire = false;
-                mainView.openFerramentaCoordenadorBoletim();
+                mainView.openFerramentaCoordenadorBoletim(MENU_TOKEN_FERRAMENTA_COORDENADOR_BOLETIM);
             }
         } 
 		
@@ -371,7 +396,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
             this.linkFerramentaCoordenadorRelatorioUsuario(false);            
             if (isFirstEventFire == true) {
                 isFirstEventFire = false;
-                mainView.openFerramentaCoordenadorRelatorioUsuario();
+                mainView.openFerramentaCoordenadorRelatorioUsuario(MENU_TOKEN_FERRAMENTA_COORDENADOR_RELATORIO_USUARIO);
             }
         }   		
 		
@@ -390,7 +415,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaProfessor(false);
-			mainView.openFerramentaProfessor();
+			mainView.openFerramentaProfessor(MENU_TOKEN_FERRAMENTA_PROFESSOR);
 		}		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_AVALIACAO)) {
 			this.linkPaginaPrincipal(true);			
@@ -399,7 +424,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaProfessorAvaliacao();
+				mainView.openFerramentaProfessorAvaliacao(MENU_TOKEN_FERRAMENTA_PROFESSOR_AVALIACAO);
 			}		
 		}		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_NOTA)) {
@@ -409,7 +434,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaProfessorNota();
+				mainView.openFerramentaProfessorNota(MENU_TOKEN_FERRAMENTA_PROFESSOR_NOTA);
 			}				
 			
 		}
@@ -420,7 +445,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 
              if (isFirstEventFire == true) {
                  isFirstEventFire = false;
-                 mainView.openCadastroProfessorConteudoProgramatico();
+                 mainView.openCadastroProfessorConteudoProgramatico(MENU_TOKEN_FERRAMENTA_PROFESSOR_CONTEUDO_PROGRAMATICO);
              }               
          
         }   
@@ -431,7 +456,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 				
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openCadastroProfessorTopico();
+				mainView.openCadastroProfessorTopico(MENU_TOKEN_FERRAMENTA_PROFESSOR_TOPICO);
 			}	
 		}	
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_COMUNICADO)) {
@@ -440,7 +465,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			this.linkProfessorComunicado();
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openProfessorComunicado();
+				mainView.openProfessorComunicado(MENU_TOKEN_FERRAMENTA_PROFESSOR_COMUNICADO);
 			}					
 		}				
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_OCORRENCIA)) {
@@ -449,7 +474,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			this.linkProfessorOcorrencia();
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openCadastroProfessorOcorrencia();
+				mainView.openCadastroProfessorOcorrencia(MENU_TOKEN_FERRAMENTA_PROFESSOR_OCORRENCIA);
 			}	
 				
 		}		
@@ -457,7 +482,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			this.linkPaginaPrincipal(true);			
 			this.linkFerramentaProfessor(true);
 			this.linkFerramentaProfessorHierarquia();			
-			mainView.openFerramentaProfessorHierarquia();
+			mainView.openFerramentaProfessorHierarquia(MENU_TOKEN_FERRAMENTA_PROFESSOR_HIERARQUIA);
 		}	
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO)) {
 			this.linkPaginaPrincipal(true);			
@@ -466,9 +491,19 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaProfessorDiario();
+				mainView.openFerramentaProfessorDiario(MENU_TOKEN_FERRAMENTA_PROFESSOR_DIARIO);
 			}
 		}	
+        else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_PRESENCA)) {
+            this.linkPaginaPrincipal(true);         
+            this.linkFerramentaProfessor(true);
+            this.linkFerramentaProfessorPresenca();       
+            
+            if (isFirstEventFire == true) {
+                isFirstEventFire = false;
+                mainView.openFerramentaProfessorPresenca(MENU_TOKEN_FERRAMENTA_PROFESSOR_PRESENCA);
+            }
+        }   		
         else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PROFESSOR_RELATORIO)) {
             this.linkPaginaPrincipal(true);         
             this.linkFerramentaProfessor(true);
@@ -476,13 +511,13 @@ public class MainMenu extends Composite implements ValueChangeHandler {
             
             if (isFirstEventFire == true) {
                 isFirstEventFire = false;
-                mainView.openFerramentaProfessorRelatorio();
+                mainView.openFerramentaProfessorRelatorio(MENU_TOKEN_FERRAMENTA_PROFESSOR_RELATORIO);
             }
         }   		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaAluno(false);
-			mainView.openFerramentaAluno();
+			mainView.openFerramentaAluno(MENU_TOKEN_FERRAMENTA_ALUNO);
 		}
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO_NOTA)) {
 			this.linkPaginaPrincipal(true);
@@ -491,7 +526,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaAlunoNota();
+				mainView.openFerramentaAlunoNota(MENU_TOKEN_FERRAMENTA_ALUNO_NOTA);
 			}
 		}	
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO_AGENDA)) {
@@ -501,7 +536,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaAlunoAgenda();
+				mainView.openFerramentaAlunoAgenda(MENU_TOKEN_FERRAMENTA_ALUNO_AGENDA);
 			}
 
 		}		
@@ -509,7 +544,7 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaAluno(true);
 			this.linkFerramentaAlunoComunicado();			
-			mainView.openFerramentaAlunoComunicado();
+			mainView.openFerramentaAlunoComunicado(MENU_TOKEN_FERRAMENTA_ALUNO_COMUNICADO);
 		}		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO_OCORRENCIA)) {
 			this.linkPaginaPrincipal(true);
@@ -518,14 +553,14 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openCadastroAlunoOcorrencia();
+				mainView.openCadastroAlunoOcorrencia(MENU_TOKEN_FERRAMENTA_ALUNO_OCORRENCIA);
 			}
 		}			
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO_HIERARQUIA)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaAluno(true);
 			this.linkFerramentaAlunoHierarquia();			
-			mainView.openFerramentaAlunoHierarquia();
+			mainView.openFerramentaAlunoHierarquia(MENU_TOKEN_FERRAMENTA_ALUNO_HIERARQUIA);
 		}
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO_DIARIO)) {
 			this.linkPaginaPrincipal(true);			
@@ -534,14 +569,23 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaAlunoDiario();
+				mainView.openFerramentaAlunoDiario(MENU_TOKEN_FERRAMENTA_ALUNO_DIARIO);
 			}
-
 		}
+        else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO_PRESENCA)) {
+            this.linkPaginaPrincipal(true);         
+            this.linkFerramentaAluno(true);
+            this.linkFerramentaAlunoPresenca();       
+            
+            if (isFirstEventFire == true) {
+                isFirstEventFire = false;
+                mainView.openFerramentaAlunoPresenca(MENU_TOKEN_FERRAMENTA_ALUNO_PRESENCA);
+            }
+        }  
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PAIS)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaPais(false);
-			mainView.openFerramentaPais();
+			mainView.openFerramentaPais(MENU_TOKEN_FERRAMENTA_PAIS);
 		}		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PAIS_AGENDA)) {
 			this.linkPaginaPrincipal(true);
@@ -550,14 +594,14 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaPaisAgenda();
+				mainView.openFerramentaPaisAgenda(MENU_TOKEN_FERRAMENTA_PAIS_AGENDA);
 			}
 		}			
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PAIS_COMUNICADO)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaPais(true);
 			this.linkFerramentaPaisComunicado();			
-			mainView.openFerramentaPaisComunicado();
+			mainView.openFerramentaPaisComunicado(MENU_TOKEN_FERRAMENTA_PAIS_COMUNICADO);
 		}		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PAIS_NOTA)) {
 			this.linkPaginaPrincipal(true);
@@ -566,9 +610,8 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaPaisNota();
+				mainView.openFerramentaPaisNota(MENU_TOKEN_FERRAMENTA_PAIS_NOTA);
 			}
-
 		}	
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PAIS_OCORRENCIA)) {
 			this.linkPaginaPrincipal(true);
@@ -577,15 +620,14 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openCadastroPaisOcorrencia();
+				mainView.openCadastroPaisOcorrencia(MENU_TOKEN_FERRAMENTA_PAIS_OCORRENCIA);
 			}
-
 		}		
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PAIS_HIERARQUIA)) {
 			this.linkPaginaPrincipal(true);
 			this.linkFerramentaPais(true);
 			this.linkFerramentaPaisHierarquia();			
-			mainView.openFerramentaPaisHierarquia();
+			mainView.openFerramentaPaisHierarquia(MENU_TOKEN_FERRAMENTA_PAIS_HIERARQUIA);
 		}
 		else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_PAIS_DIARIO)) {
 			this.linkPaginaPrincipal(true);			
@@ -594,10 +636,19 @@ public class MainMenu extends Composite implements ValueChangeHandler {
 			
 			if (isFirstEventFire == true) {
 				isFirstEventFire = false;
-				mainView.openFerramentaPaisDiario();
+				mainView.openFerramentaPaisDiario(MENU_TOKEN_FERRAMENTA_PAIS_DIARIO);
 			}
-
-		}		
+		}	
+        else if (History.getToken().equals(MENU_TOKEN_FERRAMENTA_ALUNO_PAIS_PRESENCA)) {
+            this.linkPaginaPrincipal(true);         
+            this.linkFerramentaPais(true);
+            this.linkFerramentaAlunoPaisPresenca();
+            
+            if (isFirstEventFire == true) {
+                isFirstEventFire = false;
+                mainView.openFerramentaAlunoPaisPresenca(MENU_TOKEN_FERRAMENTA_ALUNO_PAIS_PRESENCA);
+            }
+        }  
 		else{
 
 			this.linkPaginaPrincipal(false);
@@ -807,6 +858,16 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(linkFerramentaCoordenadorDiario);
 	}		
 	
+    public void linkFerramentaCoordenadorPresenca() {
+        imgFerramentaCoordenadorPresenca = new Image("images/programs_group_ii.16.png");
+        linkFerramentaCoordenadorPresenca = new Hyperlink(txtConstants.presenca(), MENU_TOKEN_FERRAMENTA_COORDENADOR_PRESENCA);
+        linkFerramentaCoordenadorPresenca.setStyleName("a");
+
+        hPanel.add(imgFerramentaCoordenadorPresenca);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkFerramentaCoordenadorPresenca);
+    }	
+	
     public void linkFerramentaCoordenadorRelatorio(boolean showConnectionLabel){
         imgFerramentaCoordenadorRelatorio = new Image("images/product_documentation-16.png");
         linkFerramentaCoordenadorRelatorio = new Hyperlink(txtConstants.relatorios(), txtConstants.menuTokenFerramentaCoordenadorRelatorio());
@@ -955,7 +1016,17 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(new InlineHTML("&nbsp"));
         hPanel.add(linkFerramentaProfessorDiario);
 	}	
-	
+
+    public void linkFerramentaProfessorPresenca() {
+        imgFerramentaProfessorPresenca = new Image("images/programs_group_ii.16.png");
+        linkFerramentaProfessorPresenca = new Hyperlink(txtConstants.presenca(), MENU_TOKEN_FERRAMENTA_PROFESSOR_PRESENCA);
+        linkFerramentaProfessorPresenca.setStyleName("a");
+
+        hPanel.add(imgFerramentaProfessorPresenca);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkFerramentaProfessorPresenca);
+    }
+
     public void linkFerramentaProfessorRelatorio(){
         imgFerramentaProfessorRelatorio = new Image("images/product_documentation-16.png");
         linkFerramentaProfessorRelatorio = new Hyperlink(txtConstants.relatorios(), txtConstants.menuTokenFerramentaProfessorRelatorio());
@@ -1044,6 +1115,16 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(linkFerramentaAlunoDiario);
 	}		
 	
+    public void linkFerramentaAlunoPresenca() {
+        imgFerramentaAlunoPresenca = new Image("images/programs_group_ii.16.png");
+        linkFerramentaAlunoPresenca = new Hyperlink("Falta", MENU_TOKEN_FERRAMENTA_ALUNO_PRESENCA);
+        linkFerramentaAlunoPresenca.setStyleName("a");
+
+        hPanel.add(imgFerramentaAlunoPresenca);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkFerramentaAlunoPresenca);
+    }
+	
 	public void linkFerramentaPais(boolean showConnectionLabel){
 
 	    imgFerramentaPais = new Image("images/parents-16.png");
@@ -1121,6 +1202,16 @@ public class MainMenu extends Composite implements ValueChangeHandler {
         hPanel.add(new InlineHTML("&nbsp"));
         hPanel.add(linkFerramentaPaisDiario);
 	}		
+	
+    public void linkFerramentaAlunoPaisPresenca() {
+        imgFerramentaAlunoPaisPresenca = new Image("images/programs_group_ii.16.png");
+        linkFerramentaAlunoPaisPresenca = new Hyperlink("Falta", MENU_TOKEN_FERRAMENTA_ALUNO_PAIS_PRESENCA);
+        linkFerramentaAlunoPaisPresenca.setStyleName("a");
+
+        hPanel.add(imgFerramentaAlunoPaisPresenca);
+        hPanel.add(new InlineHTML("&nbsp"));
+        hPanel.add(linkFerramentaAlunoPaisPresenca);
+    }
 
 	
 }

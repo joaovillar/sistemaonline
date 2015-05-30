@@ -26,6 +26,8 @@ import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
 
 public class GWTServicePresencaImpl extends RemoteServiceServlet implements GWTServicePresenca {
 
@@ -62,11 +64,15 @@ public class GWTServicePresencaImpl extends RemoteServiceServlet implements GWTS
 	}
 	
 	public boolean updatePresencaRow(int idAula, int idUsuario, int idTipoPresenca){		
-		return PresencaServer.updatePresencaRow(idAula, idUsuario, idTipoPresenca);
+		return PresencaServer.updateDiarioRow(idAula, idUsuario, idTipoPresenca);
 	}	
 	
 	public ArrayList<PresencaUsuarioAula> getAlunos(int idCurso){				
 		return PresencaServer.getAlunos(idCurso);		
+	}
+	
+	public ArrayList<PresencaUsuarioDisciplina> getAlunosDisciplina(int idCurso, int idDisciplina){
+	    return PresencaServer.getAlunosDisciplina(idCurso, idDisciplina);
 	}
 	
 	public ArrayList<PresencaUsuarioAula> getAlunos(int idCurso, String strAluno){				
@@ -88,4 +94,20 @@ public class GWTServicePresencaImpl extends RemoteServiceServlet implements GWTS
 	public ArrayList<Periodo> getPresencaAluno(int idUsuario, int idCurso){
 		return PresencaServer.getPresencaAluno(idUsuario, idCurso); 
 	}
+	
+    public ArrayList<PresencaUsuarioDisciplinaAluno> getPresencaUsuarioDisciplinaAluno(int idUsuario, int idCurso) {
+        return PresencaServer.getPresencaUsuarioDisciplinaAluno(idUsuario, idCurso);
+    }
+	
+    public String AdicionarFaltaDisciplina(ArrayList<PresencaUsuarioDisciplina> listPresencaUsuarioDisciplina) {
+        String isAdicionarNovaFaltaOk = "";
+        if (PresencaServer.AdicionarFalta(listPresencaUsuarioDisciplina)) {
+            isAdicionarNovaFaltaOk = "OK";
+        } else if (PresencaServer.updateFalta(listPresencaUsuarioDisciplina)) {
+            isAdicionarNovaFaltaOk = "OK";
+        } else {
+            isAdicionarNovaFaltaOk = "erro:presenca";
+        }
+        return isAdicionarNovaFaltaOk;
+    }
 }

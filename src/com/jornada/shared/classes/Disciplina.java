@@ -3,8 +3,6 @@ package com.jornada.shared.classes;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.jornada.server.classes.PeriodoServer;
-
 public class Disciplina implements Serializable {
 
 
@@ -196,8 +194,13 @@ public class Disciplina implements Serializable {
                 // Media com Recuperação
                 if (notaRecuperacao > 0){
                     if (somaMediaPonderada < Double.parseDouble(curso.getMediaNota())) {
-                        somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
+                                         
+                        //Caso o aluno faça a recuperação e tire uma nota pior que ele já tinha a media dele deve ser mantida
+                        if (notaRecuperacao > somaMediaPonderada) {
+                            somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
+                        }
                         
+
                         //<BEGIN> Gambiarra truncar nota em 6 se a Media + recuperação for maior q 6 e não for p ultimo trimestre
                         // Se for ultimo trimestre mantem o 6
                         //Requisito Integrado

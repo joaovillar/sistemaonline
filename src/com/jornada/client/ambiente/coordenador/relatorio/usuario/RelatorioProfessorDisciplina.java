@@ -3,7 +3,6 @@ package com.jornada.client.ambiente.coordenador.relatorio.usuario;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,7 +31,6 @@ import com.jornada.client.classes.widgets.dialog.MpDialogBox;
 import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceUsuario;
-import com.jornada.shared.classes.Comunicado;
 import com.jornada.shared.classes.relatorio.usuario.ProfessorDisciplinaRelatorio;
 import com.jornada.shared.classes.utility.MpUtilClient;
 

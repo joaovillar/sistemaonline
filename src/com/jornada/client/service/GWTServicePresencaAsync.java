@@ -7,6 +7,8 @@ import com.jornada.shared.classes.Aula;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
 
 public interface GWTServicePresencaAsync {
 		
@@ -17,9 +19,10 @@ public interface GWTServicePresencaAsync {
 	public void getAlunos(int idCurso, String strAluno, AsyncCallback<ArrayList<PresencaUsuarioAula>> callback);
 	public void getListaPresencaAlunos(int idCurso, int idDisciplina, AsyncCallback<ArrayList<PresencaUsuarioAula>> callback);
 	public void getListaPresencaAlunosArrayList(int idCurso, int idDisciplina, AsyncCallback<ArrayList<ArrayList<String>>> callback);
-	public void getPresencaAluno(int idUsuario, int idCurso, AsyncCallback<ArrayList<Periodo>> callback);
-	
-	
+	public void getPresencaAluno(int idUsuario, int idCurso, AsyncCallback<ArrayList<Periodo>> callback);	
 	public void getTipoPresencas(AsyncCallback<ArrayList<TipoPresenca>> callback);
+    public void getAlunosDisciplina(int idCurso, int idDisciplina, AsyncCallback<ArrayList<PresencaUsuarioDisciplina>> callback);
+    public void AdicionarFaltaDisciplina(ArrayList<PresencaUsuarioDisciplina> listPresencaUsuarioDisciplina, AsyncCallback<String> callback);
+    public void getPresencaUsuarioDisciplinaAluno(int idUsuario, int idCurso, AsyncCallback<ArrayList<PresencaUsuarioDisciplinaAluno>> callback);
 
 }

@@ -8,21 +8,27 @@ import java.util.ArrayList;
 
 import com.jornada.server.database.ConnectionManager;
 import com.jornada.shared.classes.Aula;
+import com.jornada.shared.classes.Curso;
 import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
 import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
 
 public class PresencaServer {
 	
 	public static final String DB_INSERT_PRESENCA = "insert into presenca (id_aula, id_usuario, id_tipo_presenca) values (?,?,?) returning id_presenca;";
+	public static final String DB_INSERT_FALTA = "insert into presenca_disciplina (id_disciplina, id_usuario, numero_falta, numero_total_aula) values (?,?,?,?) returning id_presenca_disciplina;";
 	public static final String DB_SELECT_PRESENCA = "SELECT * FROM presenca order by id_aula asc;";
+	public static final String DB_SELECT_PRESENCA_DISCIPLINA = "SELECT * FROM presenca_disciplina where id_disciplina=? and id_usuario=? order by id_usuario asc;";
 	public static final String DB_SELECT_PRESENCA_POR_ID_PRESENCA = "SELECT * FROM presenca where id_presenca=?;";
 	public static final String DB_SELECT_PRESENCA_POR_ID_AULA = "SELECT * FROM presenca where id_aula=? order by id_aula asc;";
 	public static final String DB_SELECT_PRESENCA_POR_ID_AULA_ID_USUARIO = "SELECT * FROM presenca where id_aula=? and id_usuario=? order by id_aula asc;";
 	public static String DB_UPDATE_PRESENCA = "UPDATE presenca set id_tipo_presenca=? where id_aula=? and id_usuario=?;";
+	public static String DB_UPDATE_FALTA = "UPDATE presenca_disciplina set numero_falta=?, numero_total_aula=? where id_disciplina=? and id_usuario=?;";
 
 	
 	
@@ -64,7 +70,77 @@ public class PresencaServer {
 
 	}	
 	
-	public static boolean updatePresencaRow(int idAula, int idUsuario, int idTipoPresenca){
+	   public static boolean AdicionarFalta(ArrayList<PresencaUsuarioDisciplina> listPud){
+	        
+	        boolean isOK=false;
+
+	        Connection conn = ConnectionManager.getConnection();
+	        try {
+
+	            for(int i=0;i<listPud.size();i++){
+	                
+	                PresencaUsuarioDisciplina row = listPud.get(i);
+	                
+	                int count = 0;
+	                PreparedStatement insert = conn.prepareStatement(DB_INSERT_FALTA);
+	                insert.setInt(++count, row.getIdDisciplina());
+	                insert.setInt(++count, row.getUsuario().getIdUsuario());
+	                insert.setInt(++count, row.getNumeroFaltas());
+	                insert.setInt(++count, row.getNumeroAulas());
+	                
+	                ResultSet rs = insert.executeQuery();           
+	                rs.next();
+	                
+	            }
+
+	            
+	            isOK = true;
+
+	        } catch (SQLException sqlex) {
+	            isOK=false;
+	            System.err.println(sqlex.getMessage());
+	        } finally {
+	            // dataBase.close();
+	            ConnectionManager.closeConnection(conn);
+	        }
+	        
+	        return isOK;
+
+	    }   
+	   
+	   
+    public static boolean updateFalta(ArrayList<PresencaUsuarioDisciplina> listPud) {
+        boolean success = false;
+
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            
+            for (PresencaUsuarioDisciplina pud : listPud) {
+                int count = 0;
+                PreparedStatement ps = conn.prepareStatement(DB_UPDATE_FALTA);
+                ps.setInt(++count, pud.getNumeroFaltas());
+                ps.setInt(++count, pud.getNumeroAulas());
+                ps.setInt(++count, pud.getIdDisciplina());
+                ps.setInt(++count, pud.getUsuario().getIdUsuario());
+
+                int numberUpdate = ps.executeUpdate();
+
+                if (numberUpdate == 1) {
+                    success = true;
+                }
+            }
+
+        } catch (SQLException sqlex) {
+            success = false;
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
+
+        return success;
+    }
+	
+	public static boolean updateDiarioRow(int idAula, int idUsuario, int idTipoPresenca){
 		boolean success=false;
 
 		Connection conn = ConnectionManager.getConnection();
@@ -94,21 +170,47 @@ public class PresencaServer {
 	}	
 	
 	
+	   public static ArrayList<Presenca> getPresencas() {
+	        ArrayList<Presenca> data = new ArrayList<Presenca>();       
+	        Connection conn = ConnectionManager.getConnection();
+	        try {
+	            PreparedStatement ps = conn.prepareStatement(DB_SELECT_PRESENCA);           
+	            data = getParameters(ps.executeQuery());
+	        } catch (SQLException sqlex) {
+	            data=null;
+	            System.err.println(sqlex.getMessage());
+	        } finally {
+	            ConnectionManager.closeConnection(conn);
+	        }
+	        return data;
+	    }
 	
 	
-	public static ArrayList<Presenca> getPresencas() {
-		ArrayList<Presenca> data = new ArrayList<Presenca>();		
+	
+	public static PresencaUsuarioDisciplina getPresencaDisciplinaAluno(int idDisciplina, int idAluno) {
+	    PresencaUsuarioDisciplina object = new PresencaUsuarioDisciplina();       
+	    Disciplina disciplina = DisciplinaServer.getDisciplina(idDisciplina);
 		Connection conn = ConnectionManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement(DB_SELECT_PRESENCA);			
-			data = getParameters(ps.executeQuery());
+            PreparedStatement ps = conn.prepareStatement(DB_SELECT_PRESENCA_DISCIPLINA);
+            int count = 0;
+            ps.setInt(++count, idDisciplina);
+            ps.setInt(++count, idAluno);
+			ResultSet rs = ps.executeQuery();
+			object.setUsuario(UsuarioServer.getUsuarioPeloId(idAluno));
+			while (rs.next()){			    
+	            object.setIdDisciplina(disciplina.getIdDisciplina());	     
+	            object.setNomeDisciplina(disciplina.getNome());         
+	            object.setNumeroAulas(rs.getInt("numero_total_aula"));
+	            object.setNumeroFaltas(rs.getInt("numero_falta"));	           
+	        }
 		} catch (SQLException sqlex) {
-			data=null;
+		    object=null;
 			System.err.println(sqlex.getMessage());
 		} finally {
 			ConnectionManager.closeConnection(conn);
 		}
-		return data;
+		return object;
 	}
 	
 	public static Presenca getPresenca(int idPresenca) {
@@ -191,6 +293,21 @@ public class PresencaServer {
 		
 		return arrayPresencaUsuario;
 	}
+	
+    public static ArrayList<PresencaUsuarioDisciplina> getAlunosDisciplina(int idCurso, int idDisciplina) {
+
+        ArrayList<PresencaUsuarioDisciplina> arrayPresencaUsuario = new ArrayList<PresencaUsuarioDisciplina>();
+
+        ArrayList<Usuario> arrayUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
+
+        for (Usuario user : arrayUsuario) {
+            PresencaUsuarioDisciplina presencaUsuario = PresencaServer.getPresencaDisciplinaAluno(idDisciplina, user.getIdUsuario());
+//            presencaUsuario.setUsuario(user);
+            arrayPresencaUsuario.add(presencaUsuario);
+        }
+
+        return arrayPresencaUsuario;
+    }
 	
 	public static ArrayList<PresencaUsuarioAula> getAlunos(int idCurso, String strAluno){
 		
@@ -345,6 +462,58 @@ public class PresencaServer {
 		return periodos;
 	}    
     
+	
+    public static ArrayList<PresencaUsuarioDisciplinaAluno> getPresencaUsuarioDisciplinaAluno(int idUsuario, int idCurso) {
+        
+        Curso curso = CursoServer.getCurso(idCurso);
+        
+        int intPorcentagemPresencaCurso = Integer.parseInt(curso.getPorcentagemPresenca());
+
+        ArrayList<PresencaUsuarioDisciplinaAluno> listPuda = new ArrayList<PresencaUsuarioDisciplinaAluno>();
+        
+        ArrayList<Periodo> listPeriodos = PeriodoServer.getPeriodos(idCurso);
+
+        for (Periodo periodo : listPeriodos) {
+
+            
+            ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinasPeloPeriodo(periodo.getIdPeriodo());
+            periodo.setListDisciplinas(listDisciplinas);
+
+            for (Disciplina disciplina : listDisciplinas) {
+                
+                PresencaUsuarioDisciplina pud = getPresencaDisciplinaAluno(disciplina.getIdDisciplina(), idUsuario);
+                PresencaUsuarioDisciplinaAluno puda = new PresencaUsuarioDisciplinaAluno();
+                
+                
+                puda.setIdPeriodo(periodo.getIdPeriodo());
+                puda.setNomePeriodo(periodo.getNomePeriodo());
+                puda.setIdDisciplina(pud.getIdDisciplina());
+                puda.setNomeDisciplina(pud.getNomeDisciplina());
+                puda.setNumeroAulas(pud.getNumeroAulas());
+                puda.setNumeroFaltas(pud.getNumeroFaltas());
+                puda.setUsuario(pud.getUsuario());
+                puda.setNumeroPresenca(puda.getNumeroAulas()-puda.getNumeroFaltas());                
+
+                Double doublePresenca = (((double) puda.getNumeroPresenca() / (double) puda.getNumeroAulas())) * 100;
+                int quantidadePresencaSalaDeAula =  doublePresenca.intValue();
+                
+                puda.setPorcentagemPresencaAula(quantidadePresencaSalaDeAula);
+                 
+                
+                if(quantidadePresencaSalaDeAula>=intPorcentagemPresencaCurso){
+                    puda.setSituacao(Presenca.APROVADO);
+                }else{
+                    puda.setSituacao(Presenca.REPROVADO);
+                }
+                
+                listPuda.add(puda);
+                
+            }
+
+        }
+
+        return listPuda;
+    }
     
     
 	private static ArrayList<Presenca> getParameters(ResultSet rs){

@@ -28,6 +28,7 @@ public class MainViewComponent extends Composite {
 
 		flexTable = new MpFlexTable();
 		flexTable.setStyleName("fundo_tabela_componente");
+//		flexTable.setStyleName("fundo_tabela_componente_over");   
 		initWidget(flexTable);
 		
 		flexTable.setSize("350px", "150px");		
@@ -78,6 +79,7 @@ public class MainViewComponent extends Composite {
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
 			flexTable.setStyleName("fundo_tabela_componente");
+//		    flexTable.setStyleName("fundo_tabela_componente_over");   
 		}		
 	}	
 	private class mouseDownHandler implements MouseDownHandler {
