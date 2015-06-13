@@ -34,6 +34,9 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	private String unidadeFederativa;
 	private String cep;
 	private Date dataMatricula;
+	private String cidadeNascimento;
+	private String ufNascimento;
+	private String paisNascimento;
 	private String rg;
 	private String sexo;
 	private String empresaOndeTrabalha;
@@ -47,7 +50,8 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	private String registroAluno;
 	private int idUnidadeEscola;
 	private String observacao;
-
+	private String registroDocente;
+	
 	
 	private int idTipoUsuario;
 	private int idIdioma;
@@ -386,7 +390,15 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 	
 	
 
-	public int getIdTipoStatusUsuario() {
+	public String getPaisNascimento() {
+        return paisNascimento;
+    }
+
+    public void setPaisNascimento(String paisNascimento) {
+        this.paisNascimento = paisNascimento;
+    }
+
+    public int getIdTipoStatusUsuario() {
         return idTipoStatusUsuario;
     }
 
@@ -400,6 +412,34 @@ public class Usuario implements Serializable, Comparable<Usuario>  {
 
     public void setTipoStatusUsuario(TipoStatusUsuario tipoStatusUsuario) {
         this.tipoStatusUsuario = tipoStatusUsuario;
+    }
+    
+    
+
+    public String getCidadeNascimento() {
+        return cidadeNascimento;
+    }
+
+    public void setCidadeNascimento(String cidadeNascimento) {
+        this.cidadeNascimento = cidadeNascimento;
+    }
+
+    public String getUfNascimento() {
+        return ufNascimento;
+    }
+
+    public void setUfNascimento(String ufNascimento) {
+        this.ufNascimento = ufNascimento;
+    }
+
+
+
+    public String getRegistroDocente() {
+        return registroDocente;
+    }
+
+    public void setRegistroDocente(String registroDocente) {
+        this.registroDocente = registroDocente;
     }
 
     @Override

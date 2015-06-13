@@ -57,9 +57,10 @@ background-image: linear-gradient(top, #fafafa 0%, #d6d6d6 96%, #c9b6b6 96%, #c9
     border-top: #a6a6af 0.2px solid;
 }
 
-.cellTableCell tbody tr td{
-    height: 10px;
+.cellTableCell tbody tr td {
+    height: 10px;   
 }
+
 
 .cellTableFirstColumnFooter {
 

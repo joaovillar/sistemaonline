@@ -12,6 +12,7 @@ public class ProfessorDisciplinaRelatorio extends ProfessorDisciplina implements
 	
 	private int idCurso;
 	private String nomeCurso;
+	private String registroDocente;
 	
     public int getIdCurso() {
         return idCurso;
@@ -20,6 +21,13 @@ public class ProfessorDisciplinaRelatorio extends ProfessorDisciplina implements
         this.idCurso = idCurso;
     }
     
+       
+    public String getRegistroDocente() {
+        return registroDocente;
+    }
+    public void setRegistroDocente(String registroDocente) {
+        this.registroDocente = registroDocente;
+    }
     public String getNomeCurso() {
         return nomeCurso;
     }

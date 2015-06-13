@@ -67,6 +67,9 @@ public class AdicionarUsuario extends VerticalPanel {
 	private MpPasswordTextBox txtSenha;
 	private MpTextBox txtEmail;
 	private MpDateBoxWithImage dataNascimento;
+	private MpTextBox txtCidadeNascimento;
+	private MpListBoxEstados listBoxEstadosNascimento;
+	private MpTextBox txtPaisNascimento;
 	private MpTextBox txtTelefoneCelular;
 	private MpTextBox txtTelefoneResidencial;
 	private MpTextBox txtTelefoneComercial;
@@ -86,6 +89,7 @@ public class AdicionarUsuario extends VerticalPanel {
 	private int HIDE_ALUNO_MATRICULA;
 	private int HIDE_ALUNO_SITUACAO_PAIS;
 	private int HIDE_PAIS_RESPONSAVEIS;
+	private int HIDE_PROFESSOR_RESPONSAVEIS;
 
 	MpLabelLeft lblPrimeiroNome;
 	MpLabelLeft lblSobreNome;
@@ -94,6 +98,9 @@ public class AdicionarUsuario extends VerticalPanel {
 	MpLabelLeft lblSexo;
 	MpLabelLeft lblEmail;
 	MpLabelLeft lblDataNascimento;
+	MpLabelLeft lblCidadeNascimento;
+	MpLabelLeft lblUfNascimento;
+	MpLabelLeft lblPaisNascimento;
 	MpLabelLeft lblTelefoneCelular;
 	MpLabelLeft lblTelefoneResidencial;
 	MpLabelLeft lblTelefoneComercial;
@@ -134,6 +141,11 @@ public class AdicionarUsuario extends VerticalPanel {
 	private MpDateBoxWithImage dataMatr;
 	private MpLabelLeft lblRegistroAluno;
 	private MpTextBox txtRegistroAluno;
+	
+	// Se for Professor
+	private MpLabelLeft lblRegistroDocente;
+    private MpTextBox txtRegistroDocente;
+
 	
 	
 	MpImageButton btnContrato;
@@ -207,6 +219,9 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtMatricula = new MpTextBox();
 		txtRegistroAluno = new MpTextBox();
 		dataMatr = new MpDateBoxWithImage();
+		txtCidadeNascimento = new MpTextBox();
+		listBoxEstadosNascimento = new MpListBoxEstados();
+		txtPaisNascimento = new MpTextBox();
 		txtPrimeiroNome = new MpTextBox();
 		txtSobreNome = new MpTextBox();
 		txtCpf = new MpTextBox();
@@ -227,6 +242,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtCargo = new MpTextBox();
 		txtSituacaoPaisOutros = new MpTextBox();
 		txtObservacao = new MpTextArea();
+		txtRegistroDocente = new MpTextBox();
 
 		checkBoxRespFinanceiro = new CheckBox(txtConstants.usuarioRespFinanceiro());
 		checkBoxRespAcademico = new CheckBox(txtConstants.usuarioRespAcademico());
@@ -266,6 +282,9 @@ public class AdicionarUsuario extends VerticalPanel {
 		lblSexo = new MpLabelLeft(txtConstants.usuarioSexo());
 		lblEmail = new MpLabelLeft(txtConstants.usuarioEmail());
 		lblDataNascimento = new MpLabelLeft(txtConstants.usuarioDataNascimento());
+		lblCidadeNascimento = new MpLabelLeft("Naturalidade");
+		lblUfNascimento = new MpLabelLeft("UF Nasc");
+		lblPaisNascimento = new MpLabelLeft("Nacionalidade");
 		lblTelefoneCelular = new MpLabelLeft(txtConstants.usuarioTelCelular());
 		lblTelefoneResidencial = new MpLabelLeft(txtConstants.usuarioTelResidencial());
 		lblTelefoneComercial = new MpLabelLeft(txtConstants.usuarioTelComercial());
@@ -286,6 +305,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		lblSituacaoDosResp = new MpLabelLeft(txtConstants.usuarioSituacaoDosPais());
 		lblObservacao = new MpLabelLeft(txtConstants.usuarioObservacao());
 		lblStatus = new MpLabelLeft(txtConstants.usuarioStatus());
+		lblRegistroDocente = new MpLabelLeft("Registro Docente");
 		
 
 		radioButtonCasados = new RadioButton("useTemplate", txtConstants.usuarioCasados());
@@ -309,6 +329,8 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtCpf.setWidth(strSizeField);
 		txtRg.setWidth(strSizeField);
 		txtEmail.setWidth(strSizeField);
+		txtCidadeNascimento.setWidth(strSizeField);
+		txtPaisNascimento.setWidth(strSizeField);
 		txtTelefoneCelular.setWidth(strSizeField);
 		txtTelefoneResidencial.setWidth(strSizeField);
 		txtTelefoneComercial.setWidth(strSizeField);
@@ -319,6 +341,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtBairro.setWidth(strSizeField);
 		txtCidade.setWidth(strSizeField);
 		listBoxEstados.setWidth("150px");
+		listBoxEstadosNascimento.setWidth("150px");
 		listBoxSexo.setWidth("150px");
 		listBoxTipoPais.setWidth("150px");
 		listBoxStatus.setWidth("150px");
@@ -327,6 +350,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtCargo.setWidth(strSizeField);
 		txtSituacaoPaisOutros.setWidth("150px");
 		txtObservacao.setWidth(strSizeField);
+		txtRegistroDocente.setWidth(strSizeField);
 		
 		dataNascimento.getDate().getDatePicker().setYearAndMonthDropdownVisible(true);
 		dataNascimento.getDate().getDatePicker().setYearArrowsVisible(true);
@@ -384,7 +408,13 @@ public class AdicionarUsuario extends VerticalPanel {
 		flexTable.setWidget(row, 5, new InlineHTML(strInLineSpace));
 		flexTable.setWidget(row, 6, lblRegistroAluno);
 		flexTable.setWidget(row++, 7, txtRegistroAluno);
+		
+	      HIDE_PROFESSOR_RESPONSAVEIS = row;
+          flexTable.setWidget(row, 0, lblRegistroDocente);
+          flexTable.setWidget(row, 1, txtRegistroDocente);
+          flexTable.setWidget(row++, 2, new InlineHTML(strInLineSpace));
 
+		
 		flexTable.setWidget(row, 0, lblPrimeiroNome);
 		flexTable.setWidget(row, 1, txtPrimeiroNome);
 		flexTable.setWidget(row, 2, imgPrimeiroNome);
@@ -401,15 +431,25 @@ public class AdicionarUsuario extends VerticalPanel {
 		flexTable.setWidget(row, 6, lblEmail);
 		flexTable.setWidget(row++, 7, txtEmail);
 
+		
+        flexTable.setWidget(row, 0, lblDataNascimento);
+        flexTable.setWidget(row, 1, dataNascimento);
+        flexTable.setWidget(row, 2, new InlineHTML(strInLineSpace));
+        flexTable.setWidget(row, 3, lblCidadeNascimento);
+        flexTable.setWidget(row, 4, txtCidadeNascimento);
+        flexTable.setWidget(row, 5, new InlineHTML(strInLineSpace));
+        flexTable.setWidget(row, 6, lblPaisNascimento);
+        flexTable.setWidget(row++, 7, txtPaisNascimento);
 
-		flexTable.setWidget(row, 0, lblDataNascimento);
-		flexTable.setWidget(row, 1, dataNascimento);
+		flexTable.setWidget(row, 0, lblUfNascimento);
+		flexTable.setWidget(row, 1, listBoxEstadosNascimento);
 		flexTable.setWidget(row, 2, new InlineHTML(strInLineSpace));
 		flexTable.setWidget(row, 3, lblSexo);
 		flexTable.setWidget(row, 4, listBoxSexo);
 		flexTable.setWidget(row, 5, new InlineHTML(strInLineSpace));
 		flexTable.setWidget(row, 6, lblTipoPais);
 		flexTable.setWidget(row++, 7, listBoxTipoPais);
+		
 
 		flexTable.setWidget(row, 0, lblEndereco);
 		flexTable.setWidget(row, 1, txtEndereco);
@@ -462,8 +502,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		flexTable.setWidget(row, 5, new InlineHTML(strInLineSpace));
 		flexTable.setWidget(row, 6, lblResponsavel);
 		flexTable.setWidget(row++, 7, gridResponsavel);
-
-		// radioButtonCasados.setValue(true);
+		
 		gridSituacaoResp = new Grid(1, 5);
 		gridSituacaoResp.setWidget(0, 0, lblSituacaoDosResp);
 		gridSituacaoResp.setWidget(0, 1, radioButtonCasados);
@@ -478,6 +517,7 @@ public class AdicionarUsuario extends VerticalPanel {
 		flexTable.getRowFormatter().setVisible(HIDE_ALUNO_MATRICULA, false);
 		flexTable.getRowFormatter().setVisible(HIDE_PAIS_RESPONSAVEIS, false);
 		flexTable.getRowFormatter().setVisible(HIDE_ALUNO_SITUACAO_PAIS, false);
+		flexTable.getRowFormatter().setVisible(HIDE_PROFESSOR_RESPONSAVEIS, false);
 		
 
 		String strTextoBotaoSubmeter = "";
@@ -604,6 +644,7 @@ public class AdicionarUsuario extends VerticalPanel {
         int intIdTipoUsuario = Integer.parseInt(listBoxTipoUsuario.getSelectedValue());
         int idTipoStatusUsuario = Integer.parseInt(listBoxStatus.getSelectedValue());
         String unidadeFederativa = listBoxEstados.getValue(listBoxEstados.getSelectedIndex());
+        String strUFNascimento = listBoxEstadosNascimento.getValue(listBoxEstadosNascimento.getSelectedIndex());
         String sexo = listBoxSexo.getSelectedValue();
         String tipoPais = listBoxTipoPais.getSelectedValue();
         int intIdUnidadeEscola = Integer.parseInt(listBoxUnidadeEscola.getSelectedValue());
@@ -651,6 +692,9 @@ public class AdicionarUsuario extends VerticalPanel {
         usuario.setSexo(sexo);
         usuario.setObservacao(txtObservacao.getText());
         usuario.setIdTipoStatusUsuario(idTipoStatusUsuario);
+        usuario.setCidadeNascimento(txtCidadeNascimento.getValue());
+        usuario.setPaisNascimento(txtPaisNascimento.getValue());
+        usuario.setUfNascimento(strUFNascimento);
 
         if (intIdTipoUsuario == TipoUsuario.ALUNO) {
             usuario.setRegistroMatricula(txtMatricula.getText());
@@ -664,6 +708,8 @@ public class AdicionarUsuario extends VerticalPanel {
             usuario.setRespAcademico(respAcademico);
             usuario.setRespFinanceiro(respFinanceiro);
             usuario.setTipoPais(tipoPais);
+        } else if (intIdTipoUsuario == TipoUsuario.PROFESSOR) {
+            usuario.setRegistroDocente(txtRegistroDocente.getValue());
         }
         
         return usuario;
@@ -813,7 +859,10 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtEmail.setValue("");
 		dataNascimento.getDate().setValue(null);
 		dataMatr.getDate().setValue(null);
+		txtCidadeNascimento.setValue("");		
+		txtPaisNascimento.setValue("");
 		txtTelefoneCelular.setValue("");
+//		listBoxEstados.setSelectItem(0);
 		txtTelefoneResidencial.setValue("");
 		txtTelefoneComercial.setValue("");
 		txtLogin.setValue("");
@@ -827,11 +876,13 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtEmpresa.setValue("");
 		txtCargo.setValue("");
 		txtObservacao.setValue("");
+		txtCidadeNascimento.setValue("");
+		txtPaisNascimento.setValue("");
 		checkBoxRespAcademico.setValue(false);
 		checkBoxRespFinanceiro.setValue(false);
 		txtSituacaoPaisOutros.setValue("");
 		radioButtonCasados.setValue(true);
-		
+		txtRegistroDocente.setValue("");
 
 	}
 
@@ -903,10 +954,14 @@ public class AdicionarUsuario extends VerticalPanel {
 		txtEmpresa.setValue(usuario.getEmpresaOndeTrabalha());
 		txtCargo.setValue(usuario.getCargo());
 		txtObservacao.setValue(usuario.getObservacao());
+		txtCidadeNascimento.setValue(usuario.getCidadeNascimento());
+		txtPaisNascimento.setValue(usuario.getPaisNascimento());
+		txtRegistroDocente.setValue(usuario.getRegistroDocente());
 
 		listBoxTipoUsuario.setSelectItem(usuario.getIdTipoUsuario());
 		listBoxSexo.setSelectItem(usuario.getSexo());
 		listBoxEstados.setSelectItem(usuario.getUnidadeFederativa());
+		listBoxEstadosNascimento.setSelectItem(usuario.getUfNascimento());
 		listBoxTipoPais.setSelectItem(usuario.getTipoPais());
 		listBoxUnidadeEscola.setSelectItem(usuario.getIdUnidadeEscola());
 		listBoxStatus.showItems(usuario.getIdTipoUsuario());
@@ -938,10 +993,11 @@ public class AdicionarUsuario extends VerticalPanel {
 
 		lblTipoPais.setVisible(false);
 		listBoxTipoPais.setVisible(false);
-
+		btnContrato.setVisible(false);
 		flexTable.getRowFormatter().setVisible(HIDE_ALUNO_MATRICULA, false);
 		flexTable.getRowFormatter().setVisible(HIDE_ALUNO_SITUACAO_PAIS, false);
 		flexTable.getRowFormatter().setVisible(HIDE_PAIS_RESPONSAVEIS, false);
+		flexTable.getRowFormatter().setVisible(HIDE_PROFESSOR_RESPONSAVEIS, false);
 
 		if (idTipoUsuario == TipoUsuario.PAIS) {
 			flexTable.getRowFormatter().setVisible(HIDE_PAIS_RESPONSAVEIS, true);
@@ -952,6 +1008,8 @@ public class AdicionarUsuario extends VerticalPanel {
 		    btnContrato.setVisible(true);
 			flexTable.getRowFormatter().setVisible(HIDE_ALUNO_MATRICULA, true);
 			flexTable.getRowFormatter().setVisible(HIDE_ALUNO_SITUACAO_PAIS,true);
+		}else if (idTipoUsuario == TipoUsuario.PROFESSOR) {
+		    flexTable.getRowFormatter().setVisible(HIDE_PROFESSOR_RESPONSAVEIS,true);
 		}
 
 	}

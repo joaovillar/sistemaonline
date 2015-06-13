@@ -45,6 +45,7 @@ public class RelatorioProfessorDisciplina extends VerticalPanel {
 	
 	private CellTable<ProfessorDisciplinaRelatorio> cellTable;
     private ListDataProvider<ProfessorDisciplinaRelatorio> dataProvider;   
+    private Column<ProfessorDisciplinaRelatorio, String> rdColumn;
     private Column<ProfessorDisciplinaRelatorio, String> primeiroNomeColumn;
     private Column<ProfessorDisciplinaRelatorio, String> sobreNomeColumn;
     private Column<ProfessorDisciplinaRelatorio, String> nomeCursoColumn;
@@ -255,12 +256,14 @@ public class RelatorioProfessorDisciplina extends VerticalPanel {
             int i = 0;
             while (i < dataProvider.getList().size()) {
 
+                String strRD = dataProvider.getList().get(i).getRegistroDocente();
                 String strPrimeiroNome = dataProvider.getList().get(i).getPrimeiroNome();    
                 String strSobreNome = dataProvider.getList().get(i).getSobreNome();
                 String strNomeCurso = dataProvider.getList().get(i).getNomeCurso();
                 String strNomePeriodo = dataProvider.getList().get(i).getNomePeriodo();
                 String strNomeDisciplina = dataProvider.getList().get(i).getNomeDisciplina();
                 
+                if(strRD==null)strRD="";
                 if(strPrimeiroNome==null)strPrimeiroNome="";
                 if(strSobreNome==null)strSobreNome="";
                 if(strNomeCurso==null)strNomeCurso="";
@@ -269,7 +272,7 @@ public class RelatorioProfessorDisciplina extends VerticalPanel {
                 
 
 
-                String strJuntaTexto = strPrimeiroNome.toUpperCase() + " " + strSobreNome.toUpperCase() + " " + strNomeCurso.toUpperCase()+ " ";
+                String strJuntaTexto = strRD.toUpperCase() + " " + strPrimeiroNome.toUpperCase() + " " + strSobreNome.toUpperCase() + " " + strNomeCurso.toUpperCase()+ " ";
                 strJuntaTexto +=  strNomePeriodo.toUpperCase() + " " + " " + strNomeDisciplina.toUpperCase();
 
                 if (!strJuntaTexto.contains(strFiltro)) {
@@ -330,6 +333,15 @@ public class RelatorioProfessorDisciplina extends VerticalPanel {
     
     public void initSortHandler(ListHandler<ProfessorDisciplinaRelatorio> sortHandler){
         
+        
+        rdColumn.setSortable(true);
+        sortHandler.setComparator(rdColumn, new Comparator<ProfessorDisciplinaRelatorio>() {
+          @Override
+          public int compare(ProfessorDisciplinaRelatorio o1, ProfessorDisciplinaRelatorio o2) {
+            return o1.getRegistroDocente().compareTo(o2.getRegistroDocente());
+          }
+        });         
+        
         primeiroNomeColumn.setSortable(true);
         sortHandler.setComparator(primeiroNomeColumn, new Comparator<ProfessorDisciplinaRelatorio>() {
           @Override
@@ -379,6 +391,13 @@ private void initTableColumns(){
     
    
     
+        rdColumn = new Column<ProfessorDisciplinaRelatorio, String>(new TextCell()) {
+            @Override
+            public String getValue(ProfessorDisciplinaRelatorio object) {
+                return object.getRegistroDocente();
+            }
+        };    
+    
         primeiroNomeColumn = new Column<ProfessorDisciplinaRelatorio, String>(new TextCell()) {
             @Override
             public String getValue(ProfessorDisciplinaRelatorio object) {
@@ -414,6 +433,7 @@ private void initTableColumns(){
         };
 
 
+        cellTable.addColumn(rdColumn, "Registro Docente");
         cellTable.addColumn(primeiroNomeColumn, txtConstants.usuarioPrimeiroNome());
         cellTable.addColumn(sobreNomeColumn, txtConstants.usuarioSobreNome());
         cellTable.addColumn(nomeCursoColumn, txtConstants.cursoNome());
@@ -421,6 +441,7 @@ private void initTableColumns(){
         cellTable.addColumn(nomeDisciplinaColumn, txtConstants.disciplinaNome());
         
 
+        cellTable.getColumn(cellTable.getColumnIndex(rdColumn)).setCellStyleNames("hand-over-default");
         cellTable.getColumn(cellTable.getColumnIndex(primeiroNomeColumn)).setCellStyleNames("hand-over-default");
         cellTable.getColumn(cellTable.getColumnIndex(sobreNomeColumn)).setCellStyleNames("hand-over-default");
         cellTable.getColumn(cellTable.getColumnIndex(nomeCursoColumn)).setCellStyleNames("hand-over-default");

@@ -192,7 +192,10 @@ public class Disciplina implements Serializable {
             somaMediaPonderada = somaMediaPonderada / countPesoNota;
             
             somaMediaPonderada = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(somaMediaPonderada));
+            notaRecuperacao = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(notaRecuperacao));
             
+          //Adicionar Nota Adicional
+            somaMediaPonderada = somaMediaPonderada + notaAdicional;
             
             if (calcularRecuperacao==true) {
                 // Media com Recuperação
@@ -232,8 +235,7 @@ public class Disciplina implements Serializable {
 
             }
             
-            //Adicionar Nota Adicional
-            somaMediaPonderada = somaMediaPonderada + notaAdicional;
+            
             
             //Se o aluno tira 10 e é adicionado uma nota adicional, a gente fecha com 10.
             if(somaMediaPonderada>10){

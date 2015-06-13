@@ -71,10 +71,14 @@ public class UsuarioServer{
 			"registro_aluno, " + 
 			"primeiro_login," +
 			"observacao," +
-			"id_tipo_status_usuario " +
+			"id_tipo_status_usuario, " +
+			"cidade_nascimento, " +
+			"uf_nascimento, " +
+			"pais_nascimento, " +
+			"registro_docente " +
 			") " +
 			"VALUES " +
-			"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	
 	public static String DB_UPDATE = 
 			"UPDATE usuario set " +
@@ -108,7 +112,11 @@ public class UsuarioServer{
 			"situacao_responsaveis_outros=?, " +
 			"registro_aluno=?, " +
 			"observacao=?, " +
-			"id_tipo_status_usuario=? " +		
+			"id_tipo_status_usuario=?, " +
+            "cidade_nascimento=?, " +
+	        "uf_nascimento=?, " +
+	        "pais_nascimento=?, " +
+	        "registro_docente=? " +
 			"where id_usuario=?";
 	
 	public static final String DB_UPDATE_IDIOMA = "UPDATE usuario set id_idioma=? where id_usuario=?";
@@ -257,7 +265,7 @@ public class UsuarioServer{
             "    )";
     
     private static final String DB_SELECT_PROFESSOR_DISCIPLINA_TODOS = 
-            "select u.id_usuario, u.primeiro_nome, u.sobre_nome, "
+            "select u.id_usuario, u.primeiro_nome, u.sobre_nome, u.registro_docente, "
             + "c.id_curso, c.nome_curso, "
             + "d.id_periodo, p.nome_periodo , "
             + "d.id_disciplina, d.nome_disciplina "
@@ -329,6 +337,10 @@ public class UsuarioServer{
 			insert.setBoolean(++count, true);
 			insert.setString(++count, usuario.getObservacao());
 			insert.setInt(++count, usuario.getIdTipoStatusUsuario());
+			insert.setString(++count, usuario.getCidadeNascimento());
+			insert.setString(++count, usuario.getUfNascimento());
+			insert.setString(++count, usuario.getPaisNascimento());
+			insert.setString(++count, usuario.getRegistroDocente());
 
 			int numberUpdate = insert.executeUpdate();
 
@@ -391,6 +403,11 @@ public class UsuarioServer{
 			update.setString(++count, usuario.getRegistroAluno());
 			update.setString(++count, usuario.getObservacao());
 			update.setInt(++count, usuario.getIdTipoStatusUsuario());
+			update.setString(++count, usuario.getCidadeNascimento());
+			update.setString(++count, usuario.getUfNascimento());
+			update.setString(++count, usuario.getPaisNascimento());
+			update.setString(++count, usuario.getRegistroDocente());
+			
 
 						
 			update.setInt(++count, usuario.getIdUsuario());
@@ -2493,6 +2510,10 @@ public class UsuarioServer{
 			usuario.setRegistroAluno(rs.getString("registro_aluno"));
 			usuario.setPrimeiroLogin(rs.getBoolean("primeiro_login"));
 			usuario.setObservacao(rs.getString("observacao"));
+			usuario.setCidadeNascimento(rs.getString("cidade_nascimento"));
+			usuario.setUfNascimento(rs.getString("uf_nascimento"));
+			usuario.setPaisNascimento(rs.getString("pais_nascimento"));
+			usuario.setRegistroDocente(rs.getString("registro_docente"));
 
 			
 			
@@ -2580,6 +2601,10 @@ public class UsuarioServer{
             usuario.setRegistroAluno(rs.getString("registro_aluno"));
             usuario.setPrimeiroLogin(rs.getBoolean("primeiro_login"));
             usuario.setObservacao(rs.getString("observacao"));
+            usuario.setCidadeNascimento(rs.getString("cidade_nascimento"));
+            usuario.setUfNascimento(rs.getString("uf_nascimento"));
+            usuario.setPaisNascimento(rs.getString("pais_nascimento"));
+            usuario.setRegistroDocente(rs.getString("registro_docente"));
 
             
             
@@ -2933,6 +2958,7 @@ public class UsuarioServer{
                 pdRel.setNomeCurso(rs.getString("nome_curso"));
                 pdRel.setNomePeriodo(rs.getString("nome_periodo"));
                 pdRel.setNomeDisciplina(rs.getString("nome_disciplina"));
+                pdRel.setRegistroDocente(rs.getString("registro_docente"));
                 data.add(pdRel);
             }
 
@@ -2998,6 +3024,7 @@ public class UsuarioServer{
         Row row = sheet.createRow((short) 0);       
         
         int intColumn=0;
+        row.createCell((short) intColumn++).setCellValue("Registro Docente");
         row.createCell((short) intColumn++).setCellValue("Primeiro Nome");
         row.createCell((short) intColumn++).setCellValue("Sobre Nome");
         row.createCell((short) intColumn++).setCellValue("Curso");
@@ -3015,6 +3042,7 @@ public class UsuarioServer{
             
             intColumn=0;
         
+            row.createCell((short) intColumn++).setCellValue(pdRel.getRegistroDocente());
             row.createCell((short) intColumn++).setCellValue(pdRel.getPrimeiroNome());
             row.createCell((short) intColumn++).setCellValue(pdRel.getSobreNome());
             row.createCell((short) intColumn++).setCellValue(pdRel.getNomeCurso());

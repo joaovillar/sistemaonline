@@ -38,9 +38,7 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.classes.widgets.panel.MpSpaceVerticalPanel;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServicePresenca;
-import com.jornada.shared.classes.Disciplina;
 import com.jornada.shared.classes.Periodo;
-import com.jornada.shared.classes.Presenca;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
