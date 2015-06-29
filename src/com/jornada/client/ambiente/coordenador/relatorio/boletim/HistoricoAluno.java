@@ -43,6 +43,8 @@ import com.jornada.client.classes.widgets.panel.MpPanelLoading;
 import com.jornada.client.content.i18n.TextConstants;
 import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.FieldVerifier;
+import com.jornada.shared.classes.Curso;
+import com.jornada.shared.classes.curso.Ensino;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
 public class HistoricoAluno extends VerticalPanel {
@@ -188,7 +190,7 @@ public class HistoricoAluno extends VerticalPanel {
 
   
 
-    public void initializeCellTable() {
+    public void initializeCellTableFundamental() {
         cellTable = new CellTable<ArrayList<String>>(15, GWT.<CellTableStyle> create(CellTableStyle.class));
         cellTable.setAutoHeaderRefreshDisabled(true);
         cellTable.setAutoFooterRefreshDisabled(true);
@@ -226,7 +228,7 @@ public class HistoricoAluno extends VerticalPanel {
         for (int column = 0; column < arrayHeadersText.size(); column++) {
 
             String strHeaderText = arrayHeadersText.get(column);
-            strHeaderText = strHeaderText.substring(strHeaderText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+            strHeaderText = strHeaderText.substring(0, strHeaderText.indexOf(FieldVerifier.INI_SEPARATOR));
  
 //            final String strHeader = strHeaderText.substring(strHeaderText.indexOf(FieldVerifier.INI_SEPARATOR)+2, strHeaderText.length());
             final String strHeader = strHeaderText;
@@ -278,6 +280,150 @@ public class HistoricoAluno extends VerticalPanel {
         }
         
         cellTable.setHeaderBuilder(new CustomHeaderBuilderHistoricoAluno(cellTable, arrayHeadersText));
+        
+        Image imgExcel = new Image("images/excel.24.png");
+        imgExcel.addClickHandler(new ClickHandlerExcel());
+        imgExcel.setStyleName("hand-over");
+        imgExcel.setTitle(txtConstants.geralExcel());
+
+        int columnImg = 0;
+        FlexTable flexTableImg = new FlexTable();
+        flexTableImg.setCellPadding(2);
+        flexTableImg.setCellSpacing(2);
+        flexTableImg.setWidget(0, columnImg++, imgExcel);
+        flexTableImg.setBorderWidth(0);
+        
+//        MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
+        
+        if (txtSearch == null) {
+            txtSearch = new TextBox();
+            txtSearch.setStyleName("design_text_boxes");
+        }
+        
+        txtSearch.addKeyUpHandler(new EnterKeyUpHandler());
+//        btnFiltrar.addClickHandler(new ClickHandlerFiltrar());
+
+        
+        FlexTable flexTableSearch = new FlexTable();
+        flexTableSearch.setWidth("370px");
+        flexTableSearch.setWidget(0, 0, txtSearch);        
+//        flexTableSearch.setWidget(0, 1, new MpSpaceVerticalPanel());
+        flexTableSearch.setWidget(0, 1, mpPager);
+
+//        flexTableSearch.setWidget(0, 3, btnFiltrar);   
+
+        FlexTable flexTableMenu = new FlexTable();
+        flexTableMenu.setCellPadding(0);
+        flexTableMenu.setCellSpacing(0);
+        flexTableMenu.setBorderWidth(0);
+        flexTableMenu.setWidth("100%");
+
+//        flexTableMenu.setWidget(0, 0, mpPager);
+        flexTableMenu.setWidget(0, 0, flexTableSearch);
+        flexTableMenu.setWidget(0, 1, flexTableImg);
+        flexTableMenu.getCellFormatter().setWidth(0, 0, "70%");
+        flexTableMenu.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
+        flexTableMenu.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_BOTTOM);
+        flexTableMenu.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_BOTTOM);
+        flexTableNota.setBorderWidth(0);
+        flexTableNota.clear();
+        flexTableNota.setWidget(0, 0, flexTableMenu);
+        flexTableNota.setWidget(1, 0, cellTable);
+
+    }
+    
+    
+    public void initializeCellTableMedio() {
+        cellTable = new CellTable<ArrayList<String>>(15, GWT.<CellTableStyle> create(CellTableStyle.class));
+        cellTable.setAutoHeaderRefreshDisabled(true);
+        cellTable.setAutoFooterRefreshDisabled(true);
+
+        dataProvider.addDataDisplay(cellTable);
+
+        final MpSimplePager mpPager = new MpSimplePager();
+        mpPager.setDisplay(cellTable);
+
+        // ///////////////////////ColumnName//////////////////////////////////
+        IndexedColumn indexColumnName = new IndexedColumn(INT_POSITION_NAME);
+
+        ListHandler<ArrayList<String>> sortHandler = new ListHandler<ArrayList<String>>(dataProvider.getList());
+
+        indexColumnName.setSortable(true);
+        sortHandler.setComparator(indexColumnName, new Comparator<ArrayList<String>>() {
+            @Override
+            public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+                System.out.println(o1.get(INT_POSITION_NAME));
+                return o1.get(INT_POSITION_NAME).compareTo(o2.get(INT_POSITION_NAME));
+            }
+        });
+        cellTable.addColumnSortHandler(sortHandler);
+        // ///////////////////////ColumnName//////////////////////////////////
+        
+
+        String strSpace = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        SafeHtmlBuilder builder = new SafeHtmlBuilder();
+        builder.appendHtmlConstant(strSpace + strSpace + "Componente Curricular" + strSpace + strSpace);
+        SafeHtml safeHtml = builder.toSafeHtml();
+        cellTable.addColumn(indexColumnName, safeHtml);
+        
+
+
+        for (int column = 0; column < arrayHeadersText.size(); column++) {
+
+            String strHeaderText = arrayHeadersText.get(column);
+//            strHeaderText = strHeaderText.substring(0, strHeaderText.indexOf(FieldVerifier.INI_SEPARATOR));
+            strHeaderText = strHeaderText.substring(strHeaderText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+ 
+//            final String strHeader = strHeaderText.substring(strHeaderText.indexOf(FieldVerifier.INI_SEPARATOR)+2, strHeaderText.length());
+            final String strHeader = strHeaderText;
+            final IndexedColumn indexedColumn = new IndexedColumn(column + INT_POSITION_NAME +1);
+
+            final Header<String> header = new Header<String>(new ClickableTextCell()) {
+                @Override
+                public String getValue() {
+                    return strHeader;           
+                }       
+            };
+            
+
+            final int intColumn = column;
+
+            indexedColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            indexedColumn.setSortable(true);
+            indexedColumn.setFieldUpdater(new FieldUpdater<ArrayList<String>, String>() {
+                @Override
+                public void update(int index, ArrayList<String> object, final String value) {
+                    
+                    if (!value.equals("-")) {
+
+                        
+                        int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
+                        String strNomeCurso = listBoxCurso.getSelectedItemText();
+                        int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
+                        String strNomeDisciplina = object.get(0);
+//                        strNomeDisciplina = strNomeDisciplina.substring(strNomeDisciplina.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+                        Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
+
+                        if (indexedColumn.getIndex() != arrayListBackup.size() + INT_POSITION_NAME) {
+                            DialogBoxHistoricoAluno.getInstance(idCurso, idUsuario, strNomeCurso, strNomeDisciplina, mediaNotaCurso);
+                        }
+                    }
+
+                }
+            });
+
+            sortHandler.setComparator(indexedColumn, new Comparator<ArrayList<String>>() {
+                @Override
+                public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+                    return o1.get(intColumn + INT_POSITION_NAME + 1).compareTo(o2.get(intColumn + INT_POSITION_NAME + 1));
+                }
+            });
+
+            cellTable.addColumn(indexedColumn, header);           
+            
+        }
+        
+//        cellTable.setHeaderBuilder(new CustomHeaderBuilderHistoricoAluno(cellTable, arrayHeadersText));
         
         Image imgExcel = new Image("images/excel.24.png");
         imgExcel.addClickHandler(new ClickHandlerExcel());
@@ -476,25 +622,80 @@ public class HistoricoAluno extends VerticalPanel {
            dataProvider.getList().clear();
            arrayListBackup.clear();
            arrayHeadersText.clear();
-           arrayHeadersTextBackup.clear();
+           arrayHeadersTextBackup.clear();           
+           
+           
+           Curso curso = listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex());
+           
            
            ArrayList<String> listColumns = list.get(0);
-           for (int i = 1; i < listColumns.size(); i++) {
-               String header = listColumns.get(i);
-               arrayHeadersText.add(header);
-               arrayHeadersTextBackup.add(listColumns.get(i));
-           }   
+         for (int i = 1; i < listColumns.size(); i++) {
+             String header = listColumns.get(i);
+             arrayHeadersText.add(header);
+             arrayHeadersTextBackup.add(listColumns.get(i));
+         }   
 
-           for (int i = 1; i < list.size(); i++) {
-               ArrayList<String> listRow = list.get(i);
-               String strText = listRow.get(0);
-               strText = strText.substring(strText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
-               listRow.set(0, strText);
-               dataProvider.getList().add(list.get(i));
-               arrayListBackup.add(list.get(i));
-           }
-
-           initializeCellTable();
+         for (int i = 1; i < list.size(); i++) {
+             ArrayList<String> listRow = list.get(i);
+             String strText = listRow.get(0);
+//             strText = strText.substring(strText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+             strText = strText.substring(0,strText.indexOf(FieldVerifier.INI_SEPARATOR));
+             listRow.set(0, strText);
+             dataProvider.getList().add(list.get(i));
+             arrayListBackup.add(list.get(i));
+         }
+         
+         if (curso.getEnsino().equals(Ensino.FUNDAMENTAL)) {
+             initializeCellTableFundamental();
+         }else if (curso.getEnsino().equals(Ensino.MEDIO)) {
+             initializeCellTableMedio();
+         }
+         
+           
+//           if (curso.getEnsino().equals(Ensino.FUNDAMENTAL)) {
+//               
+//               ArrayList<String> listColumns = list.get(0);
+//               for (int i = 1; i < listColumns.size(); i++) {
+//                   String header = listColumns.get(i);
+//                   arrayHeadersText.add(header);
+//                   arrayHeadersTextBackup.add(listColumns.get(i));
+//               }   
+//
+//               for (int i = 1; i < list.size(); i++) {
+//                   ArrayList<String> listRow = list.get(i);
+//                   String strText = listRow.get(0);
+//                   strText = strText.substring(strText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+//                   listRow.set(0, strText);
+//                   dataProvider.getList().add(list.get(i));
+//                   arrayListBackup.add(list.get(i));
+//               }
+//               initializeCellTableFundamental();
+//               
+//           }else if (curso.getEnsino().equals(Ensino.MEDIO)) {
+//               
+//               //Primeira Linha do Header Anos
+//               ArrayList<String> listColumns = list.get(0);
+//               for (int i = 1; i < listColumns.size(); i++) {
+//                   String header = listColumns.get(i);
+//                   arrayHeadersText.add(header);
+//                   arrayHeadersTextBackup.add(listColumns.get(i));                   
+//               }   
+//               
+//               
+//               for (int i = 1; i < list.size(); i++) {
+//                   ArrayList<String> listRow = list.get(i);
+//                   String strText = listRow.get(0);
+//                   strText = strText.substring(strText.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+//                   listRow.set(0, strText);
+//                   dataProvider.getList().add(list.get(i));
+//                   arrayListBackup.add(list.get(i));
+//               }
+//               
+//               initializeCellTableMedio();
+//           }
+           
+         
+           
 
        }
 

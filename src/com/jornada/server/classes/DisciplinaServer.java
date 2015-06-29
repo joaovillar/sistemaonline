@@ -270,9 +270,7 @@ public class DisciplinaServer {
 		return data;
 
 	}
-	
-
-		
+			
 	public static ArrayList<Disciplina> getDisciplinasPeloPeriodo(int id_periodo) {
 
 		ArrayList<Disciplina> data = new ArrayList<Disciplina>();
@@ -324,9 +322,8 @@ public class DisciplinaServer {
 		return data;
 
 	}		
-	
-	
-	   public static Disciplina getDisciplinaPeloPeriodo(int idPeriodo, String strSearchDisciplina) {
+		
+	public static Disciplina getDisciplinaPeloPeriodo(int idPeriodo, String strSearchDisciplina) {
 
            ArrayList<Disciplina> data = new ArrayList<Disciplina>();
            Connection conn = ConnectionManager.getConnection();
@@ -608,6 +605,8 @@ public class DisciplinaServer {
         return disciplina;
     }
 	
+    
+
 
 
 }

@@ -332,7 +332,7 @@ public class VisualizarPresencaAluno extends VerticalPanel {
     /*************************************** BEGIN CellTable Functions ***************************************/
 
     public void initializeCellTable() {
-        cellTable = new CellTable<PresencaUsuarioDisciplinaAluno>(10, GWT.<CellTableStyle> create(CellTableStyle.class));
+        cellTable = new CellTable<PresencaUsuarioDisciplinaAluno>(20, GWT.<CellTableStyle> create(CellTableStyle.class));
 
         cellTable.setWidth("100%");
         cellTable.setAutoHeaderRefreshDisabled(true);

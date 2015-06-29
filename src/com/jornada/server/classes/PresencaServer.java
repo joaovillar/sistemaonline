@@ -198,9 +198,9 @@ public class PresencaServer {
             ps.setInt(++count, idAluno);
 			ResultSet rs = ps.executeQuery();
 			object.setUsuario(UsuarioServer.getUsuarioPeloId(idAluno));
-			while (rs.next()){			    
-	            object.setIdDisciplina(disciplina.getIdDisciplina());	     
-	            object.setNomeDisciplina(disciplina.getNome());         
+            object.setIdDisciplina(disciplina.getIdDisciplina());        
+            object.setNomeDisciplina(disciplina.getNome());  
+			while (rs.next()){			  
 	            object.setNumeroAulas(rs.getInt("numero_total_aula"));
 	            object.setNumeroFaltas(rs.getInt("numero_falta"));	           
 	        }

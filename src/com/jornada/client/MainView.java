@@ -6,8 +6,13 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.InlineHTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jornada.client.ambiente.aluno.TelaInicialAluno;
 import com.jornada.client.ambiente.aluno.agenda.TelaInicialAlunoAgenda;
@@ -81,10 +86,7 @@ public class MainView extends Composite implements HistoryListener{
 	public MainView(Usuario usuarioLogado) {	
 		
 		this.usuarioLogado = usuarioLogado;
-		
-//		mpLoading.setTxtLoading(txtConstants.geralCarregando());
-//		mpLoading.show();
-//		mpLoading.setVisible(false);
+
 				
 		mainMenu = new MainMenu(this);
 		mainTitle = MainTitle.getInstance(this);
@@ -94,17 +96,10 @@ public class MainView extends Composite implements HistoryListener{
 //        vPanelBlankTop.setBorderWidth(2);
         vPanelBlankTop.setSize("15px", "40px");
 	
-//        HorizontalPanel hP = new HorizontalPanel();
-//
-//        
-//        final MultiSelectionModel<String> selectionModel = new MultiSelectionModel<String>(ContactDatabase.ContactInfo.KEY_PROVIDER);
-//        CellTree.Resources res = GWT.create(CellTree.BasicResources.class);
-//        CellTree cellTree = new CellTree(new TreeModelSideMenu(selectionModel), null, res);
-//        cellTree.setAnimationEnabled(true);
-       
 		vPanelTitle.add(mainTitle);		
 		vPanelMenu.add(mainMenu);		
 		vPanelBody.add(mainBody);
+		vPanelBody.add(new InlineHTML("HTML"));
 		vPanelFooter.add(mainFooter);
 		
 		vPanelPrincipal.add(vPanelTitle);
@@ -230,7 +225,7 @@ public class MainView extends Composite implements HistoryListener{
 
 		vPanelBody.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 
-		mainBody = MainBody.getInstance(this);
+		mainBody = MainBody.getInstance(this);	
 
 		this.vPanelBody.add(mainBody);
 		this.vPanelMenu.setVisible(true);
@@ -1286,7 +1281,69 @@ public class MainView extends Composite implements HistoryListener{
 	}
 
 
+	private Tree createStaticTree() {
+	    // Create the tree
+	    Tree staticTree = new Tree();
 
+	    // Add some of Beethoven's music
+	    TreeItem c1 = staticTree.addTextItem("Beethoven");
+	    TreeItem c1g1 = c1.addTextItem("Concertos");
+	    c1g1.addTextItem("No. 1 - C");
+	    c1g1.addTextItem("No. 2 - B-Flat Major");
+	    c1g1.addTextItem("No. 3 - C Minor");
+	    c1g1.addTextItem("No. 4 - G Major");
+	    c1g1.addTextItem("No. 5 - E-Flat Major");
+	    TreeItem c1g2 = c1.addTextItem("Quartets");
+	    c1g2.addTextItem("Six String Quartets");
+	    c1g2.addTextItem("Three String Quartets");
+	    c1g2.addTextItem("Grosse Fugue for String Quartets");
+	    TreeItem c1g3 = c1.addTextItem("Sonatas");
+	    c1g3.addTextItem("Sonata in A Minor");
+	    c1g3.addTextItem("Sonata in F Major");
+	    TreeItem c1g4 = c1.addTextItem("Symphonies");
+	    c1g4.addTextItem("No. 2 - D Major");
+	    c1g4.addTextItem("No. 2 - D Major");
+	    c1g4.addTextItem("No. 3 - E-Flat Major");
+	    c1g4.addTextItem("No. 4 - B-Flat Major");
+	    c1g4.addTextItem("No. 5 - C Minor");
+	    c1g4.addTextItem("No. 6 - F Major");
+	    c1g4.addTextItem("No. 7 - A Major");
+	    c1g4.addTextItem("No. 8 - F Major");
+	    c1g4.addTextItem("No. 9 - D Minor");
+
+	    // Add some of Brahms's music
+	    TreeItem c2 = staticTree.addTextItem("Brahms");
+	    TreeItem c2g1 = c2.addTextItem("Concertos");
+	    c2g1.addTextItem("Violin Concerto");
+	    c2g1.addTextItem("Double Concerto - A Minor");
+	    c2g1.addTextItem("Piano Concerto No. 1 - D Minor");
+	    c2g1.addTextItem("Piano Concerto No. 2 - B-Flat Major");
+	    TreeItem c2g2 = c2.addTextItem("Quartets");
+	    c2g2.addTextItem("Piano Quartet No. 1 - G Minor");
+	    c2g2.addTextItem("Piano Quartet No. 2 - A Major");
+	    c2g2.addTextItem("Piano Quartet No. 3 - C Minor");
+	    c2g2.addTextItem("String Quartet No. 3 - B-Flat Minor");
+	    TreeItem c2g3 = c2.addTextItem("Sonatas");
+	    c2g3.addTextItem("Two Sonatas for Clarinet - F Minor");
+	    c2g3.addTextItem("Two Sonatas for Clarinet - E-Flat Major");
+	    TreeItem c2g4 = c2.addTextItem("Symphonies");
+	    c2g4.addTextItem("No. 1 - C Minor");
+	    c2g4.addTextItem("No. 2 - D Minor");
+	    c2g4.addTextItem("No. 3 - F Major");
+	    c2g4.addTextItem("No. 4 - E Minor");
+
+	    // Add some of Mozart's music
+	    TreeItem c3 = staticTree.addTextItem("Mozart");
+	    TreeItem c3g1 = c3.addTextItem("Concertos");
+	    c3g1.addTextItem("Piano Concerto No. 12");
+	    c3g1.addTextItem("Piano Concerto No. 17");
+	    c3g1.addTextItem("Clarinet Concerto");
+	    c3g1.addTextItem("Violin Concerto No. 5");
+	    c3g1.addTextItem("Violin Concerto No. 4");
+
+	    // Return the tree
+	    return staticTree;
+	  }
 	
 	
 	
