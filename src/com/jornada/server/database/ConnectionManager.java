@@ -19,7 +19,7 @@ public class ConnectionManager {
 	private static final String portNumber = ConfigJornada.getProperty("config.portNumber");
 	private static final String database = ConfigJornada.getProperty("config.database");
 	private static final String userName = ConfigJornada.getProperty("config.userName");
-	private static final String password = ConfigJornada.getProperty("config.password");
+	private static final String password = ConfigJornada.getProperty("config.password")+"01";
 	private static final String connectionUrl = String.format("%s%s:%s/%s", url, host, portNumber, database);
 	private static final String bonecp_IdleConnectionTestPeriodInMinutes = ConfigJornada.getProperty("bonecp.IdleConnectionTestPeriodInMinutes");
 	private static final String bonecp_IdleMaxAgeInMinutes = ConfigJornada.getProperty("bonecp.IdleMaxAgeInMinutes");
