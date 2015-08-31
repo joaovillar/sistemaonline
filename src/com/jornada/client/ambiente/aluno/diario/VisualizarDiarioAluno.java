@@ -258,6 +258,8 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 					dataProvider.getList().clear();
 					arrayListBackup.clear();
 					cellTable.setRowCount(0);
+					
+
 					for(int i=0;i<listTabelaPresencaAluno.size();i++){
 						dataProvider.getList().add(listTabelaPresencaAluno.get(i));
 						arrayListBackup.add(listTabelaPresencaAluno.get(i));
@@ -295,8 +297,11 @@ public class VisualizarDiarioAluno extends VerticalPanel {
 					quantidadePresencaSalaDeAula = 	doublePresenca.intValue();
 				}		
 				
-				if(quantidadePresencaSalaDeAula>=intPorcentagemPresencaCurso){
-					tpa.setSituacao(Presenca.APROVADO);
+				
+				if(quantidateAula==0){
+				    tpa.setSituacao(Presenca.SEM_RESULTADO);
+				}else if(quantidadePresencaSalaDeAula>=intPorcentagemPresencaCurso){
+					tpa.setSituacao(Presenca.APROVADO+"fff");
 				}else{
 					tpa.setSituacao(Presenca.REPROVADO);
 				}

@@ -7,6 +7,7 @@ public class Presenca implements Serializable{
 	private static final long serialVersionUID = -4501316690819274492L;
 	
 	
+	public static final String SEM_RESULTADO = "";
     public static final String APROVADO = "Aprovado";
     public static final String REPROVADO="Reprovado";
 	

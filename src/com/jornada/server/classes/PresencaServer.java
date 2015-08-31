@@ -500,7 +500,9 @@ public class PresencaServer {
                 puda.setPorcentagemPresencaAula(quantidadePresencaSalaDeAula);
                  
                 
-                if(quantidadePresencaSalaDeAula>=intPorcentagemPresencaCurso){
+                if(pud.getNumeroAulas()==0){
+                    puda.setSituacao(Presenca.SEM_RESULTADO);
+                }else if(quantidadePresencaSalaDeAula>=intPorcentagemPresencaCurso){
                     puda.setSituacao(Presenca.APROVADO);
                 }else{
                     puda.setSituacao(Presenca.REPROVADO);

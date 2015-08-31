@@ -169,7 +169,14 @@ public class Periodo implements Serializable, Comparable<Periodo>  {
      public int getQuantidadeFalta(){  
           int intCountFaltas = 0;
           for (int cvDisciplina = 0; cvDisciplina < this.getListDisciplinas().size(); cvDisciplina++) {
-              Disciplina disciplina = this.getListDisciplinas().get(cvDisciplina);              
+              
+              Disciplina disciplina = this.getListDisciplinas().get(cvDisciplina);     
+              System.out.println(disciplina.getNome());
+              
+              if(disciplina.getNome().equals("Geografia")){
+                  int i=0;
+                  i++;
+              }
               intCountFaltas= intCountFaltas + disciplina.getQuantidadeFalta();
           }
           return intCountFaltas;

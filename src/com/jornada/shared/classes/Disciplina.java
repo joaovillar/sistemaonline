@@ -335,6 +335,7 @@ public class Disciplina implements Serializable {
     public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+    
 	
 
 	public String toString(){

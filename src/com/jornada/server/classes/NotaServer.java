@@ -35,6 +35,7 @@ import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.curso.Ano;
 import com.jornada.shared.classes.curso.AnoItem;
 import com.jornada.shared.classes.curso.Ensino;
+import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
 import com.jornada.shared.classes.relatorio.boletim.TabelaBoletim;
 //import com.jornada.shared.utility.MpUtilShared;
 
@@ -454,7 +455,7 @@ public class NotaServer {
             }
         }
 
-        System.out.println(listNotas.toString());
+//        System.out.println(listNotas.toString());
         return listNotas;
     }
 
@@ -729,7 +730,7 @@ public class NotaServer {
                         ArrayList<Disciplina> listDisciplinas = DisciplinaServer.getDisciplinas(periodoRow.getIdPeriodo());
                         for(Disciplina disciplinaRow : listDisciplinas){
                             hashDisciplinas.add(disciplinaRow.getNome().trim()+FieldVerifier.INI_SEPARATOR+disciplinaRow.isObrigatoria());
-                            System.out.println("Disciplina:"+disciplinaRow.getNome());
+//                            System.out.println("Disciplina:"+disciplinaRow.getNome());
                         }
                     }
                 }
@@ -902,7 +903,7 @@ public class NotaServer {
                                 if (strMedia == null || strMedia.isEmpty()) {
                                     strMedia = "-";
                                 } else {
-                                    System.out.println("Disciplina:"+disciplina.getNome());
+//                                    System.out.println("Disciplina:"+disciplina.getNome());
                                     double doubleMediaAluno = Double.parseDouble(strMedia);
                                     strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
                                 }
@@ -2495,21 +2496,46 @@ public class NotaServer {
         }
         
         
-        ArrayList<Periodo> listPeriodoFaltas = PresencaServer.getPresencaAluno(idAluno, idCurso);
-        row = sheet.createRow((short) intLine++);
+        ArrayList<Periodo> periodoList = PeriodoServer.getPeriodos(curso.getIdCurso());
         
         
+        
+//        System.out.println("Faltas Total:"+intNumeroTotalFaltas);
+        
+
+       
+//        ArrayList<Periodo> listPeriodoFaltas = PresencaServer.getPresencaAluno(idAluno, idCurso);
+//        row = sheet.createRow((short) intLine++);
+//        
+//        
         int intCountTotal = 0;
         for (int i = 0; i < listPeriodosNome.size(); i++) {
+//            for (int cvPeriodo = 0; cvPeriodo < listPeriodoFaltas.size(); cvPeriodo++) {
+//                Periodo periodo = listPeriodoFaltas.get(cvPeriodo);
+//                System.out.println(periodo.getNomePeriodo());
+//                if (periodo.getNomePeriodo().equals(listPeriodosNome.get(i))) {
+//                    intCountFaltas = intCountFaltas + periodo.getQuantidadeFalta();
+//                }
+//    
+//            }
+            
             int intCountFaltas = 0;
-            for (int cvPeriodo = 0; cvPeriodo < listPeriodoFaltas.size(); cvPeriodo++) {
-                Periodo periodo = listPeriodoFaltas.get(cvPeriodo);
+            for (Periodo periodo : periodoList) {
 
                 if (periodo.getNomePeriodo().equals(listPeriodosNome.get(i))) {
-                    intCountFaltas = intCountFaltas + periodo.getQuantidadeFalta();
+
+                    if (periodo.getNomePeriodo().equals(listPeriodosNome.get(i))) {
+                        ArrayList<Disciplina> disciplinaList = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+                        for (Disciplina disciplina : disciplinaList) {
+                            PresencaUsuarioDisciplina preUsuDisc = PresencaServer.getPresencaDisciplinaAluno(disciplina.getIdDisciplina(), idAluno);
+                            intCountFaltas = intCountFaltas + preUsuDisc.getNumeroFaltas();
+                        }
+                    }
+                    // System.out.println("Faltas:"+intCountTotal);
                 }
-    
+
             }
+            
             intCountTotal = intCountTotal + intCountFaltas;
             if(i==listPeriodosNome.size()-1){
                 String strFaltas = Integer.toString(intCountTotal);
