@@ -46,7 +46,7 @@ public class CursoServer{
 	
 	public static String DB_SELECT_CURSO_ID_ALUNO =  
 			"select * from curso where id_curso in " +
-			"( select id_curso from rel_curso_usuario where id_usuario = ? group by id_curso ) and status=?;";
+			"( select id_curso from rel_curso_usuario where id_usuario = ? group by id_curso ) and status=? order by id_curso asc;";
 	
 	public static String DB_SELECT_CURSO_ID_PROFESSOR = 
 		"select * from curso where id_curso in( "+

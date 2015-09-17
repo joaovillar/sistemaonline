@@ -695,12 +695,13 @@ public class DocumentoServer {
         ArrayList<Curso> listCurso = CursoServer.getCursosPorAlunoAmbienteAluno(usuario, true);
         
         String strCursos="";
+        
         for (int i = 0; i < listCurso.size(); i++) {
-            if(i==0){
+//            if(i==0){
                 strCursos=listCurso.get(i).getNome();
-            }else{
-                strCursos = strCursos+", "+listCurso.get(i).getNome();
-            }
+//            }else{
+//                strCursos = strCursos+", "+listCurso.get(i).getNome();
+//            }
         }        
         
         ArrayList<Usuario> listPais = UsuarioServer.getTodosOsPaisDoAluno(usuario.getIdUsuario());
