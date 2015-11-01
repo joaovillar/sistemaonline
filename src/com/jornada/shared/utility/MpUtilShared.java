@@ -12,9 +12,9 @@ public class MpUtilShared {
         int parteInteira = (int)doubleNumber;
         int parteDecimal = (int)Math.round((doubleNumber - (int)doubleNumber) * 100);
         
-        if(parteDecimal>=0 && parteDecimal<=25){
+        if(parteDecimal>=0 && parteDecimal<25){
             strNumber = Integer.toString(parteInteira);
-        }else if(parteDecimal>=25 && parteDecimal<=74){
+        }else if(parteDecimal>=25 && parteDecimal<75){
             double doubleTemp = ((double)parteInteira) + 0.5;
             strNumber = Double.toString(doubleTemp);
         }else if(parteDecimal>=75 && parteDecimal<=99){
