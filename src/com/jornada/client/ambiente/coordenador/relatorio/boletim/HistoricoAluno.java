@@ -31,6 +31,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.jornada.client.ambiente.coordenador.relatorio.boletim.customcell.CustomHeaderBuilderHistoricoAluno;
 import com.jornada.client.ambiente.coordenador.relatorio.boletim.dialog.DialogBoxHistoricoAluno;
 import com.jornada.client.ambiente.coordenador.relatorio.boletim.dialog.MpDialogBoxExcelHistoricoAluno;
+import com.jornada.client.ambiente.coordenador.relatorio.boletim.dialog.MpDialogBoxMultipleBoletimAluno;
 import com.jornada.client.classes.listBoxes.MpSelectionAlunosPorCurso;
 import com.jornada.client.classes.listBoxes.MpSelectionCurso;
 import com.jornada.client.classes.listBoxes.ambiente.coordenador.curso.MpListBoxStatusCurso;
@@ -257,6 +258,7 @@ public class HistoricoAluno extends VerticalPanel {
                         String strNomeCurso = listBoxCurso.getSelectedItemText();
                         int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
                         String strNomeDisciplina = object.get(0);
+                        strNomeDisciplina = strNomeDisciplina.substring(0,strNomeDisciplina.lastIndexOf("("));
 //                        strNomeDisciplina = strNomeDisciplina.substring(strNomeDisciplina.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
                         Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
 
@@ -285,12 +287,18 @@ public class HistoricoAluno extends VerticalPanel {
         imgExcel.addClickHandler(new ClickHandlerExcel());
         imgExcel.setStyleName("hand-over");
         imgExcel.setTitle(txtConstants.geralExcel());
+        
+        Image imgMultiple = new Image("images/table-multiple-icon-24.png");
+        imgMultiple.addClickHandler(new ClickHandlerMultipleExcel());
+        imgMultiple.setStyleName("hand-over");
+        imgMultiple.setTitle(txtConstants.geralMultipleExcel());  
 
         int columnImg = 0;
         FlexTable flexTableImg = new FlexTable();
         flexTableImg.setCellPadding(2);
         flexTableImg.setCellSpacing(2);
         flexTableImg.setWidget(0, columnImg++, imgExcel);
+        flexTableImg.setWidget(0, columnImg++, imgMultiple);
         flexTableImg.setBorderWidth(0);
         
 //        MpImageButton btnFiltrar = new MpImageButton(txtConstants.geralFiltrar(), "images/magnifier.png");
@@ -401,6 +409,10 @@ public class HistoricoAluno extends VerticalPanel {
                         String strNomeCurso = listBoxCurso.getSelectedItemText();
                         int idUsuario = Integer.parseInt(listBoxAlunosPorCurso.getSelectedValue());
                         String strNomeDisciplina = object.get(0);
+//                        strNomeDisciplina = strNomeDisciplina.substring(strNomeDisciplina.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
+
+                        strNomeDisciplina = strNomeDisciplina.substring(0, strNomeDisciplina.lastIndexOf(")"));
+                        strNomeDisciplina = strNomeDisciplina.substring(0, strNomeDisciplina.lastIndexOf("("));
 //                        strNomeDisciplina = strNomeDisciplina.substring(strNomeDisciplina.indexOf(FieldVerifier.INI_SEPARATOR)+FieldVerifier.INI_SEPARATOR.length());
                         Double mediaNotaCurso = Double.parseDouble(listBoxCurso.getListCurso().get(listBoxCurso.getSelectedIndex()).getMediaNota());
 
@@ -717,6 +729,14 @@ public class HistoricoAluno extends VerticalPanel {
            int idCurso = Integer.parseInt(listBoxCurso.getSelectedValue());
            listBoxAlunosPorCurso.populateComboBox(idCurso);
            flexTableNota.clear();
+       }
+   }
+   
+   
+   private class ClickHandlerMultipleExcel implements ClickHandler {
+       @Override
+       public void onClick(ClickEvent event) {
+           MpDialogBoxMultipleBoletimAluno.getInstance();
        }
    }
 

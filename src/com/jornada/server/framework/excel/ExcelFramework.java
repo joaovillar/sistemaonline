@@ -45,11 +45,17 @@ public class ExcelFramework {
     }
     
     
-    public static XSSFCellStyle getStyleHeaderBoletimRotation90Center(XSSFWorkbook wb){
+    public static XSSFCellStyle getStyleHeaderBoletimRotation90Center(XSSFWorkbook wb, boolean isBold){
         
         Font font = wb.createFont();
         font.setColor(IndexedColors.BLACK.getIndex());
-        font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        
+        if(isBold){
+            font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        }else{
+            font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        }
+        
         font.setFontName("Calibri");  
         font.setFontHeightInPoints((short)10);
 

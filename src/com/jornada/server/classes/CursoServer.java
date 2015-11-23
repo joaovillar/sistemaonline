@@ -44,6 +44,13 @@ public class CursoServer{
 			"   group by id_curso "+
 			")  and status=? ; ";
 	
+	   public static String DB_SELECT_TODOS_CURSOS_DO_ALUNO =  
+	           "select * from curso where id_curso in "+
+	           "( "+
+	           " select id_curso from rel_curso_usuario where id_usuario =  ? "+
+	           ") ";
+	    
+	
 	public static String DB_SELECT_CURSO_ID_ALUNO =  
 			"select * from curso where id_curso in " +
 			"( select id_curso from rel_curso_usuario where id_usuario = ? group by id_curso ) and status=? order by id_curso asc;";
@@ -437,6 +444,33 @@ public class CursoServer{
 		}
 		return data;
 	}		
+	
+	
+	   public static ArrayList<Curso> getTodosCursosDoAluno(Usuario usuario) {
+	        ArrayList<Curso> data = new ArrayList<Curso>();     
+//	      JornadaDataBase dataBase = new JornadaDataBase();
+	        Connection conn = ConnectionManager.getConnection();
+	        try 
+	        {
+//	          dataBase.createConnection();            
+//	          Connection connection = dataBase.getConnection();
+
+	            PreparedStatement ps = conn.prepareStatement(CursoServer.DB_SELECT_TODOS_CURSOS_DO_ALUNO);
+	            
+	            int count=0;
+	            ps.setInt(++count, usuario.getIdUsuario());
+	            
+	            data = getCursoParameters(ps.executeQuery());
+
+	        } catch (SQLException sqlex) {
+	            data=null;
+	            System.err.println(sqlex.getMessage());
+	        } finally {
+//	          dataBase.close();
+	            ConnectionManager.closeConnection(conn);
+	        }
+	        return data;
+	    }
 	
 
 	public static ArrayList<Curso> getCursosPorAlunoAmbienteAluno(Usuario usuario, Boolean status) {
