@@ -52,6 +52,7 @@ public interface GWTServiceNota extends RemoteService {
 	public String getExcelBoletimNotas(ArrayList<TableMultipleBoletimNotas> listTableMBD);
 	public ArrayList<ArrayList<String>> getHistoricoAluno(int idCurso, int idAluno);
 	public String getExcelHistoricoAluno(int idCurso, int idAluno);
+	public String getMultipleExcelHistoricoAluno(ArrayList<TableMultipleBoletimAluno> listTableMBD);
 
 	
 	

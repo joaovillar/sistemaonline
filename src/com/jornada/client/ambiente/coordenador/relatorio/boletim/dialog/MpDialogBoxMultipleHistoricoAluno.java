@@ -43,7 +43,7 @@ import com.jornada.client.service.GWTServiceNota;
 import com.jornada.shared.classes.relatorio.boletim.TableMultipleBoletimAluno;
 import com.jornada.shared.classes.utility.MpUtilClient;
 
-public class MpDialogBoxMultipleBoletimAluno extends DecoratedPopupPanel {
+public class MpDialogBoxMultipleHistoricoAluno extends DecoratedPopupPanel {
 	
 	TextConstants txtConstants = GWT.create(TextConstants.class);
 	
@@ -71,11 +71,11 @@ public class MpDialogBoxMultipleBoletimAluno extends DecoratedPopupPanel {
     
 
 	
-	private static MpDialogBoxMultipleBoletimAluno uniqueInstance;
+	private static MpDialogBoxMultipleHistoricoAluno uniqueInstance;
 	
-	public static MpDialogBoxMultipleBoletimAluno getInstance(){
+	public static MpDialogBoxMultipleHistoricoAluno getInstance(){
 		if(uniqueInstance==null){
-			uniqueInstance = new MpDialogBoxMultipleBoletimAluno();
+			uniqueInstance = new MpDialogBoxMultipleHistoricoAluno();
 			uniqueInstance.showDialog();
 			uniqueInstance.populateGrid();
 		}else{
@@ -89,7 +89,7 @@ public class MpDialogBoxMultipleBoletimAluno extends DecoratedPopupPanel {
 
 
 	
-	protected MpDialogBoxMultipleBoletimAluno(){
+	protected MpDialogBoxMultipleHistoricoAluno(){
 		
 
 		mpDialogBoxWarning.setTYPE_MESSAGE(MpDialogBox.TYPE_WARNING);
@@ -399,7 +399,9 @@ public class MpDialogBoxMultipleBoletimAluno extends DecoratedPopupPanel {
 
 //            GWTServiceNota.Util.getInstance().getExcelBoletimDisciplina(listTableMBD, new CallBackBoletim());
             
-            GWTServiceNota.Util.getInstance().getExcelBoletimAluno(listTableMBD, new CallBackBoletim());
+//            GWTServiceNota.Util.getInstance().getExcelBoletimAluno(listTableMBD, new CallBackBoletim());
+            GWTServiceNota.Util.getInstance().getMultipleExcelHistoricoAluno(listTableMBD, new CallBackBoletim());
+
 
            
 //           Window.alert(strTest);
@@ -408,7 +410,7 @@ public class MpDialogBoxMultipleBoletimAluno extends DecoratedPopupPanel {
 
     private class ClickHandlerFechar implements ClickHandler {
         public void onClick(ClickEvent event) {
-            MpDialogBoxMultipleBoletimAluno.this.hide();
+            MpDialogBoxMultipleHistoricoAluno.this.hide();
         }
     }
 
