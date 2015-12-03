@@ -991,7 +991,9 @@ public class NotaServer {
                 row.add("EX");
                 row.add("MFA");
             }else{
-                
+//                if(nomeDisciplina.equals("Matemática")){
+//                    System.out.println("Testing");
+//                }
                 String strMediaAnualDisciplina = getMediaAnualDisciplina(idAluno, idCurso, listPeriodo, nomeDisciplina);
                 if (strMediaAnualDisciplina == null || strMediaAnualDisciplina.isEmpty()) {
                     strMediaAnualDisciplina = "-";
@@ -1109,6 +1111,7 @@ public class NotaServer {
                     for (int i = 0; i < intPesoNotaPeriodo; i++) {
                         if (strMedia == null || strMedia.isEmpty()) {
                         } else {
+                            strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(Double.parseDouble(strMedia));
                             doubleMediaAluno = doubleMediaAluno + Double.parseDouble(strMedia);
                             countMedia++;
                             // break;
