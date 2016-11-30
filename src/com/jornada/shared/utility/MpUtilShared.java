@@ -20,6 +20,9 @@ public class MpUtilShared {
         }else if(parteDecimal>=75 && parteDecimal<=99){
             parteInteira++;
             strNumber = Integer.toString(parteInteira);
+        }else if(parteDecimal>99){
+            parteInteira++;
+            strNumber = Integer.toString(parteInteira);
         }
         
         return strNumber;

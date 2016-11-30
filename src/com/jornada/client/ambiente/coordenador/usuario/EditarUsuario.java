@@ -73,8 +73,7 @@ public class EditarUsuario extends VerticalPanel {
 //	private AsyncCallback<ArrayList<Usuario>> callbackGetUsuariosFiltro;	
 
 	private CellTable<Usuario> cellTable;
-	private  SelectionModel<Usuario> selectionModel;
-	
+	private  SelectionModel<Usuario> selectionModel;	
 	public String cellTableSelected="";
 
 

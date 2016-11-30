@@ -190,7 +190,7 @@ public class Disciplina implements Serializable {
             
             //Calcula Média Ponderada
             somaMediaPonderada = somaMediaPonderada / countPesoNota;
-            
+
             somaMediaPonderada = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(somaMediaPonderada));
             notaRecuperacao = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(notaRecuperacao));
             
@@ -200,36 +200,47 @@ public class Disciplina implements Serializable {
             if (calcularRecuperacao==true) {
                 // Media com Recuperação
                 if (notaRecuperacao > 0){
-                    if (somaMediaPonderada < Double.parseDouble(curso.getMediaNota())) {
-                                         
+                    
+                    
+                    //<BEGIN> Gambiarra truncar nota em 6 se a Media + recuperação for maior q 6 e não for p ultimo trimestre
+                    // Se for ultimo trimestre mantem nota
+                    //Requisito Integrado
+                    
+                    boolean isUltimoPeriodo=false;
+                    int intRecTrimestre=1;
+                    for(int i=0;i < listPeriodo.size();i++){
+                        if(this.getIdPeriodo()==listPeriodo.get(i).getIdPeriodo()){                                
+                            if(intRecTrimestre==3){
+                                isUltimoPeriodo=true;
+                            }
+                        }
+                        intRecTrimestre++;
+                    }
+
+                    if(isUltimoPeriodo==true){
                         //Caso o aluno faça a recuperação e tire uma nota pior que ele já tinha a media dele deve ser mantida
                         if (notaRecuperacao > somaMediaPonderada) {
                             somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
                         }
                         
+                    }else{
+                        if (somaMediaPonderada < Double.parseDouble(curso.getMediaNota())) {
+                            
+                            //Caso o aluno faça a recuperação e tire uma nota pior que ele já tinha a media dele deve ser mantida
+                            if (notaRecuperacao > somaMediaPonderada) {
+                                somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
+                            }
+                            
 
-                        //<BEGIN> Gambiarra truncar nota em 6 se a Media + recuperação for maior q 6 e não for p ultimo trimestre
-                        // Se for ultimo trimestre mantem o 6
-                        //Requisito Integrado
-                        boolean isUltimoPeriodo=false;
-                        int intRecTrimestre=1;
-                        for(int i=0;i< listPeriodo.size();i++){
-                            if(this.getIdPeriodo()==listPeriodo.get(i).getIdPeriodo()){
-                                if(intRecTrimestre==3){
-                                    isUltimoPeriodo=true;
+//                            if(isUltimoPeriodo==false){
+                                if(somaMediaPonderada>6){
+                                    somaMediaPonderada=6;
                                 }
-                            }
-                            intRecTrimestre++;
-                        }
-                        if(isUltimoPeriodo==false){
-                            if(somaMediaPonderada>6){
-                                somaMediaPonderada=6;
-                            }
-                        }
-                      //<END>                         
-                        
-                        
+//                            }
+                          //<END>                         
+                        }                        
                     }
+                    
                 }
                 
 
@@ -244,6 +255,10 @@ public class Disciplina implements Serializable {
             
             media = Double.toString(somaMediaPonderada);
         }
+        
+//        if(this.getNome().equals("Física ")){
+//            System.out.println("Media:"+media);
+//        }
         
         return media;
         
