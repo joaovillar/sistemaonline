@@ -9,6 +9,7 @@ import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
+import com.jornada.shared.classes.presenca.PresencaUsuarioPeriodo;
 
 public interface GWTServicePresencaAsync {
 		
@@ -22,7 +23,10 @@ public interface GWTServicePresencaAsync {
 	public void getPresencaAluno(int idUsuario, int idCurso, AsyncCallback<ArrayList<Periodo>> callback);	
 	public void getTipoPresencas(AsyncCallback<ArrayList<TipoPresenca>> callback);
     public void getAlunosDisciplina(int idCurso, int idDisciplina, AsyncCallback<ArrayList<PresencaUsuarioDisciplina>> callback);
+    public void getAlunosPeriodo(int idCurso, int idPeriodo, AsyncCallback<ArrayList<PresencaUsuarioPeriodo>> callback);
     public void AdicionarFaltaDisciplina(ArrayList<PresencaUsuarioDisciplina> listPresencaUsuarioDisciplina, AsyncCallback<String> callback);
     public void getPresencaUsuarioDisciplinaAluno(int idUsuario, int idCurso, AsyncCallback<ArrayList<PresencaUsuarioDisciplinaAluno>> callback);
+    
+    public void AdicionarFaltaPeriodo(ArrayList<PresencaUsuarioPeriodo> listPresencaUsuarioPeriodo, AsyncCallback<String> callback);
 
 }

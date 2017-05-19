@@ -7,32 +7,32 @@ import com.jornada.shared.classes.Usuario;
 
 public class PresencaUsuarioDisciplina implements Serializable{
 
-	private static final long serialVersionUID = -2874758914766643316L;
-	
-	private Usuario usuario;
-	private int idDisciplina;
-	private String nomeDisciplina;
-	private int numeroAulas;
-	private int numeroFaltas;
-	
-	public PresencaUsuarioDisciplina(){
-		usuario = new Usuario();
-//		presenca = new Presenca();
-		
-	}
-	
-	public Usuario getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-	
-	
+    private static final long serialVersionUID = -2874758914766643316L;
+    
+    private Usuario usuario;
+    private int idDisciplina;
+    private String nomeDisciplina;
+    private int numeroAulas;
+    private int numeroFaltas;
+    
+    public PresencaUsuarioDisciplina(){
+        usuario = new Usuario();
+//      presenca = new Presenca();
+        
+    }
+    
+    public Usuario getUsuario() {
+        return usuario;
+    }
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
+    
 
 
 
-	public String getNomeDisciplina() {
+    public String getNomeDisciplina() {
         return nomeDisciplina;
     }
 
@@ -67,14 +67,14 @@ public class PresencaUsuarioDisciplina implements Serializable{
     }
 
     @Override
-	public String toString() {
-		return "PresencaUsuarioAula [idUsuario=" + usuario.getIdUsuario() + ", idDisciplina="
-				+ idDisciplina + "]";
-	}
-	
-    public static final ProvidesKey<PresencaUsuarioDisciplina> KEY_PROVIDER = new ProvidesKey<PresencaUsuarioDisciplina>() {
+    public String toString() {
+        return "PresencaUsuarioAula [idUsuario=" + usuario.getIdUsuario() + ", idDisciplina="
+                + idDisciplina + "]";
+    }
+    
+    public static final ProvidesKey<PresencaUsuarioPeriodo> KEY_PROVIDER = new ProvidesKey<PresencaUsuarioPeriodo>() {
         @Override
-        public Object getKey(PresencaUsuarioDisciplina item) {
+        public Object getKey(PresencaUsuarioPeriodo item) {
             return item == null ? null : 
 //                Integer.toString(item.getAula().getIdAula())+
 //                Integer.toString(item.getPresenca().getIdPresenca())+

@@ -28,6 +28,7 @@ import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
+import com.jornada.shared.classes.presenca.PresencaUsuarioPeriodo;
 
 public class GWTServicePresencaImpl extends RemoteServiceServlet implements GWTServicePresenca {
 
@@ -104,6 +105,24 @@ public class GWTServicePresencaImpl extends RemoteServiceServlet implements GWTS
         if (PresencaServer.AdicionarFalta(listPresencaUsuarioDisciplina)) {
             isAdicionarNovaFaltaOk = "OK";
         } else if (PresencaServer.updateFalta(listPresencaUsuarioDisciplina)) {
+            isAdicionarNovaFaltaOk = "OK";
+        } else {
+            isAdicionarNovaFaltaOk = "erro:presenca";
+        }
+        return isAdicionarNovaFaltaOk;
+    }
+
+    @Override
+    public ArrayList<PresencaUsuarioPeriodo> getAlunosPeriodo(int idCurso, int idPeriodo) {
+         return PresencaServer.getAlunosPeriodo(idCurso, idPeriodo);
+    }
+
+    @Override
+    public String AdicionarFaltaPeriodo(ArrayList<PresencaUsuarioPeriodo> listPresencaUsuarioPeriodo) {
+        String isAdicionarNovaFaltaOk = "";
+        if (PresencaServer.AdicionarPresencaPeriodo(listPresencaUsuarioPeriodo)) {
+            isAdicionarNovaFaltaOk = "OK";
+        } else if (PresencaServer.updatePresencaPeriodo(listPresencaUsuarioPeriodo)) {
             isAdicionarNovaFaltaOk = "OK";
         } else {
             isAdicionarNovaFaltaOk = "erro:presenca";

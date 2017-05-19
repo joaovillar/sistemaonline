@@ -428,6 +428,7 @@ public class NotaServer {
                 int idAluno = Integer.parseInt(row.get(0));
                 Usuario aluno = UsuarioServer.getUsuarioPeloId(idAluno);
 
+//                aprovado
                 for (int column = 0; column < row.size(); column++) {
                     if (column > 1) {
                         try {
@@ -979,6 +980,7 @@ public class NotaServer {
 //                                    System.out.println("Disciplina:"+disciplina.getNome());
                                     double doubleMediaAluno = Double.parseDouble(strMedia);
                                     strMedia = MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno);
+//                                    System.out.println("Disciplina:"+disciplina.getNome()+"||Nota:"+strMedia);
                                 }
                                 row.add(strMedia);
                             }
@@ -993,7 +995,7 @@ public class NotaServer {
                 row.add("EX");
                 row.add("MFA");
             }else{
-//                if(nomeDisciplina.equals("Matemática")){
+//                if(nomeDisciplina.equals("Técnicas de Redação")){
 //                    System.out.println("Testing");
 //                }
                 String strMediaAnualDisciplina = getMediaAnualDisciplina(idAluno, idCurso, listPeriodo, nomeDisciplina, false);
@@ -1013,7 +1015,8 @@ public class NotaServer {
                     }else{
                         row.add("-");
                     }
-                   
+                    
+//                    System.out.println("Disciplina:"+nomeDisciplina+"||Nota:"+doubleMediaAlunoFinal);
                     row.add(MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAlunoFinal));
                 }
                 
@@ -1131,7 +1134,10 @@ public class NotaServer {
 
         if (countMedia != 0) {
 
-            doubleMediaAluno = doubleMediaAluno / countMedia;
+            doubleMediaAluno = doubleMediaAluno / countMedia;            
+       
+            //Arredondar medias 5.25 para 5.5 por exemplo
+            doubleMediaAluno = Double.parseDouble(MpUtilServer.getDecimalFormatedOneDecimalMultipleFive(doubleMediaAluno));
 
             if (strNotaRecuperacaoFinal.isEmpty()) {
                 strNotaRecuperacaoFinal = Double.toString(doubleMediaAluno);
@@ -1830,7 +1836,7 @@ public class NotaServer {
         
         for(int i = 1;i<listHeader.size();i++){
             String strHeader = listHeader.get(i);
-            System.out.println("Ano:"+strHeader);
+//            System.out.println("Ano:"+strHeader);
             //Andre
 //            sheet.getRow(intLine-2).getCell(intColumn+2+i).setCellValue("-");
             String strBNC = getCargaHorariaDoArray(listCargaHorariaDisciplinaObrigatoria, strHeader);
@@ -1884,7 +1890,7 @@ public class NotaServer {
         ExcelFramework.setMergeRegionAndSetBorders(wb, sheet, regionAno1);
         
         if(intBNC>0){
-            System.out.println("intRowMergeAno1:"+intRowMergeAno1);
+//            System.out.println("intRowMergeAno1:"+intRowMergeAno1);
             sheet.getRow(intRowMergeAno1).createCell(1).setCellValue("-");    
             sheet.getRow(intRowMergeAno1).getCell(1).setCellValue(texto12);
             sheet.getRow(intRowMergeAno1).getCell(1).setCellStyle(ExcelFramework.getStyleHeaderBoletimRotation90Center(wb, false));
@@ -2063,7 +2069,7 @@ public class NotaServer {
                 }
             }
             listCargaHoraria.add(curso.getAno() + FieldVerifier.INI_SEPARATOR + Integer.toString(cargaHoraria));
-            System.out.println(listCargaHoraria.get(iCurso));
+//            System.out.println(listCargaHoraria.get(iCurso));
             
         }
         return listCargaHoraria;
@@ -2521,7 +2527,7 @@ public class NotaServer {
         moveColumn=3;
         for (int i = 1; i < listHeader.size(); i++) {
             String strHeader = listHeader.get(i);
-            System.out.println("Ano:" + strHeader);
+//            System.out.println("Ano:" + strHeader);
 
             String strPD = getCargaHorariaDoArray(listCargaHorariaDisciplinaNaoObrigatoria, strHeader);
             
@@ -2905,12 +2911,15 @@ public class NotaServer {
             //
             intColumn++;
         }
+        
+        boolean booAprovado=true;
 
         for (int r = 1; r < listNotas.size(); r++) {
             ArrayList<String> listRow = listNotas.get(r);
             row = sheet.createRow((short) intLine++);
             for (int c = 0; c < listRow.size(); c++) {
                 String strText = listRow.get(c);
+//                System.out.println(strText);
                 row.createCell((short) c);
 
                 if (c == 0) {
@@ -2928,6 +2937,10 @@ public class NotaServer {
                             strSinal = "*";
                             row.getCell((short) c).setCellValue(strSinal + strText);
                             row.getCell((short) c).setCellType(Cell.CELL_TYPE_STRING);
+                            if(c==listRow.size()-1){
+                                booAprovado=false;
+                            }
+                            
                         } else {
                             row.getCell((short) c).setCellValue(nota);
                             row.getCell((short) c).setCellType(Cell.CELL_TYPE_NUMERIC);
@@ -2960,7 +2973,9 @@ public class NotaServer {
         int intEndFaltas = intLine;
         
         row = sheet.createRow((short) intLine++);
-        row.createCell(0).setCellValue((curso.isStatus()==true)?"EM CURSO":"CONCLUÍDO");
+//        row.createCell(0).setCellValue((curso.isStatus()==true)?"EM CURSO":"CONCLUÍDO");
+        row.createCell(0).setCellValue((booAprovado==true)?"Aprovado":"Reprovado");
+//        concluido
         row.getCell((short) 0).setCellStyle(ExcelFramework.getStyleCellFontBoldCenter(wb));
 
         for(int i = 0; i<listPeriodosNome.size();i++){
@@ -3047,7 +3062,7 @@ public class NotaServer {
         row = sheet.createRow((short) intLine++);
         row.createCell(0).setCellValue("MP : Média Trimestral Provisória");
         row.getCell((short) 0).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb));
-        row.createCell(3).setCellValue("1- Média mínima para aprovação............... "+curso.getMediaNota()+"%");
+        row.createCell(3).setCellValue("1- Média mínima para aprovação............... "+curso.getMediaNota()+"0%");
         row.getCell(3).setCellStyle(ExcelFramework.getStyleCellFontAtencao(wb));
         sheet.addMergedRegion(new CellRangeAddress(intLine-1, intLine-1, 3, 12));
         row = sheet.createRow((short) intLine++);
@@ -3059,7 +3074,7 @@ public class NotaServer {
         row = sheet.createRow((short) intLine++);
         row.createCell(0).setCellValue("MF : Média Final do Trimestre");
         row.getCell((short) 0).setCellStyle(ExcelFramework.getStyleCellLeftBoletim(wb));
-        row.createCell(3).setCellValue("3- As faltas são globalizadas, ou seja, 1 falta = 1 aula");
+        row.createCell(3).setCellValue("3- As faltas são globalizadas, ou seja, 1 falta = 1 dia");
         row.getCell(3).setCellStyle(ExcelFramework.getStyleCellFontAtencao(wb));
         sheet.addMergedRegion(new CellRangeAddress(intLine-1, intLine-1, 3, 12));
         row = sheet.createRow((short) intLine++);

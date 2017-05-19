@@ -25,6 +25,7 @@ import com.jornada.shared.classes.TipoPresenca;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
+import com.jornada.shared.classes.presenca.PresencaUsuarioPeriodo;
 
 @RemoteServiceRelativePath("GWTServicePresenca")
 public interface GWTServicePresenca extends RemoteService {
@@ -35,6 +36,7 @@ public interface GWTServicePresenca extends RemoteService {
 	public boolean updatePresencaRow(int idAula, int idUsuario, int idTipoPresenca);
 	public ArrayList<PresencaUsuarioAula> getAlunos(int idCurso);
 	public ArrayList<PresencaUsuarioDisciplina> getAlunosDisciplina(int idCurso, int idDisciplina);
+	public ArrayList<PresencaUsuarioPeriodo> getAlunosPeriodo(int idCurso, int idPeriodo);
 	public ArrayList<PresencaUsuarioAula> getAlunos(int idCurso, String strAluno);
 	public ArrayList<PresencaUsuarioAula> getListaPresencaAlunos(int idCurso, int idDisciplina);
 	public ArrayList<ArrayList<String>> getListaPresencaAlunosArrayList(int idCurso, int idDisciplina);
@@ -42,6 +44,8 @@ public interface GWTServicePresenca extends RemoteService {
 	public ArrayList<PresencaUsuarioDisciplinaAluno> getPresencaUsuarioDisciplinaAluno(int idUsuario, int idCurso);
 	
 	public ArrayList<TipoPresenca> getTipoPresencas();
+	
+	public String AdicionarFaltaPeriodo(ArrayList<PresencaUsuarioPeriodo> listPresencaUsuarioPeriodo);
 	
 	/**
 	 * Utility class for simplifying access to the instance of async service.

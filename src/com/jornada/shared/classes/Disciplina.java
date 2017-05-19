@@ -151,118 +151,121 @@ public class Disciplina implements Serializable {
         this.listAvaliacao = listAvaliacao;
     }
     
-    public String getMediaAlunoDisciplina(Curso curso, ArrayList<Periodo> listPeriodo, int idUsuario, boolean calcularRecuperacao){
-        String media = "";
-        double countPesoNota=0;
-        double somaMediaPonderada=0;
-        double notaRecuperacao=0;
-        double notaAdicional=0;
-        
-
-        for (Avaliacao avaliacao : getListAvaliacao()) {
-           
-            if (avaliacao.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO_FINAL) {
-                if (avaliacao.getIdDisciplina() == this.getIdDisciplina()) {
-
-                    for (Nota nota : avaliacao.getListNota()) {
-
-                        if (nota.getIdUsuario() == idUsuario) {
-
-                            if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
-                                notaRecuperacao = Double.parseDouble(nota.getNota());
-                            } else if(avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_ADICIONAL_NOTA){
-                                notaAdicional = notaAdicional + Double.parseDouble(nota.getNota());
+        public String getMediaAlunoDisciplina(Curso curso, ArrayList<Periodo> listPeriodo, int idUsuario, boolean calcularRecuperacao){
+            String media = "";
+            double countPesoNota=0;
+            double somaMediaPonderada=0;
+            double notaRecuperacao=0;
+            double notaAdicional=0;
+            
+    
+            for (Avaliacao avaliacao : getListAvaliacao()) {
+               
+                if (avaliacao.getIdTipoAvaliacao() != TipoAvaliacao.INT_RECUPERACAO_FINAL) {
+                    if (avaliacao.getIdDisciplina() == this.getIdDisciplina()) {
+    
+                        for (Nota nota : avaliacao.getListNota()) {
+    
+                            if (nota.getIdUsuario() == idUsuario) {
+    
+                                if (avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_RECUPERACAO) {
+                                    notaRecuperacao = Double.parseDouble(nota.getNota());
+                                } else if(avaliacao.getIdTipoAvaliacao() == TipoAvaliacao.INT_ADICIONAL_NOTA){
+                                    notaAdicional = notaAdicional + Double.parseDouble(nota.getNota());
+                                }
+                                else {
+                                    countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
+                                    somaMediaPonderada = somaMediaPonderada + (Double.parseDouble(nota.getNota()) * Double.parseDouble(avaliacao.getPesoNota()));
+                                }
                             }
-                            else {
-                                countPesoNota = countPesoNota + Double.parseDouble(avaliacao.getPesoNota());
-                                somaMediaPonderada = somaMediaPonderada + (Double.parseDouble(nota.getNota()) * Double.parseDouble(avaliacao.getPesoNota()));
-                            }
+    
                         }
-
+    
                     }
-
                 }
+    
             }
-
-        }
-        
-        if (countPesoNota != 0) {
             
-            //Calcula Média Ponderada
-            somaMediaPonderada = somaMediaPonderada / countPesoNota;
-
-            somaMediaPonderada = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(somaMediaPonderada));
-            notaRecuperacao = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(notaRecuperacao));
-            
-          //Adicionar Nota Adicional
-            somaMediaPonderada = somaMediaPonderada + notaAdicional;
-            
-            if (calcularRecuperacao==true) {
-                // Media com Recuperação
-                if (notaRecuperacao > 0){
-                    
-                    
-                    //<BEGIN> Gambiarra truncar nota em 6 se a Media + recuperação for maior q 6 e não for p ultimo trimestre
-                    // Se for ultimo trimestre mantem nota
-                    //Requisito Integrado
-                    
-                    boolean isUltimoPeriodo=false;
-                    int intRecTrimestre=1;
-                    for(int i=0;i < listPeriodo.size();i++){
-                        if(this.getIdPeriodo()==listPeriodo.get(i).getIdPeriodo()){                                
-                            if(intRecTrimestre==3){
-                                isUltimoPeriodo=true;
-                            }
-                        }
-                        intRecTrimestre++;
-                    }
-
-                    if(isUltimoPeriodo==true){
-                        //Caso o aluno faça a recuperação e tire uma nota pior que ele já tinha a media dele deve ser mantida
-                        if (notaRecuperacao > somaMediaPonderada) {
-                            somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
-                        }
+            if (countPesoNota != 0) {
+                
+                //Calcula Média Ponderada
+                somaMediaPonderada = somaMediaPonderada / countPesoNota;
+    
+//                System.out.print("Curso:"+curso.getNome());
+//                System.out.print(" : Disciplina:"+this.getNome());
+//                System.out.println(" : " + somaMediaPonderada);
+                somaMediaPonderada = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(somaMediaPonderada));
+                notaRecuperacao = Double.parseDouble(MpUtilShared.getDecimalFormatedOneDecimalMultipleFive(notaRecuperacao));
+                
+              //Adicionar Nota Adicional
+                somaMediaPonderada = somaMediaPonderada + notaAdicional;
+                
+                if (calcularRecuperacao==true) {
+                    // Media com Recuperação
+                    if (notaRecuperacao > 0){
                         
-                    }else{
-                        if (somaMediaPonderada < Double.parseDouble(curso.getMediaNota())) {
-                            
+                        
+                        //<BEGIN> Gambiarra truncar nota em 6 se a Media + recuperação for maior q 6 e não for p ultimo trimestre
+                        // Se for ultimo trimestre mantem nota
+                        //Requisito Integrado
+                        
+                        boolean isUltimoPeriodo=false;
+                        int intRecTrimestre=1;
+                        for(int i=0;i < listPeriodo.size();i++){
+                            if(this.getIdPeriodo()==listPeriodo.get(i).getIdPeriodo()){                                
+                                if(intRecTrimestre==3){
+                                    isUltimoPeriodo=true;
+                                }
+                            }
+                            intRecTrimestre++;
+                        }
+    
+                        if(isUltimoPeriodo==true){
                             //Caso o aluno faça a recuperação e tire uma nota pior que ele já tinha a media dele deve ser mantida
                             if (notaRecuperacao > somaMediaPonderada) {
                                 somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
                             }
                             
-
-//                            if(isUltimoPeriodo==false){
-                                if(somaMediaPonderada>6){
-                                    somaMediaPonderada=6;
+                        }else{
+                            if (somaMediaPonderada < Double.parseDouble(curso.getMediaNota())) {
+                                
+                                //Caso o aluno faça a recuperação e tire uma nota pior que ele já tinha a media dele deve ser mantida
+                                if (notaRecuperacao > somaMediaPonderada) {
+                                    somaMediaPonderada = (somaMediaPonderada + notaRecuperacao) / 2;
                                 }
-//                            }
-                          //<END>                         
-                        }                        
+                                
+    
+    //                            if(isUltimoPeriodo==false){
+                                    if(somaMediaPonderada>6){
+                                        somaMediaPonderada=6;
+                                    }
+    //                            }
+                              //<END>                         
+                            }                        
+                        }
+                        
                     }
                     
+    
                 }
                 
-
+                
+                
+                //Se o aluno tira 10 e é adicionado uma nota adicional, a gente fecha com 10.
+                if(somaMediaPonderada>10){
+                    somaMediaPonderada=10;
+                }
+                
+                media = Double.toString(somaMediaPonderada);
             }
             
+    //        if(this.getNome().equals("Física ")){
+    //            System.out.println("Media:"+media);
+    //        }
             
+            return media;
             
-            //Se o aluno tira 10 e é adicionado uma nota adicional, a gente fecha com 10.
-            if(somaMediaPonderada>10){
-                somaMediaPonderada=10;
-            }
-            
-            media = Double.toString(somaMediaPonderada);
         }
-        
-//        if(this.getNome().equals("Física ")){
-//            System.out.println("Media:"+media);
-//        }
-        
-        return media;
-        
-    }
     
     
     

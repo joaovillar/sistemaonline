@@ -18,7 +18,8 @@ public class TelaInicialPresenca extends Composite{
 	public static final int intHeightTable=550;
 	
 
-	private AdicionarPresenca adicionarDiarioProfessor;
+//	private AdicionarPresenca adicionarDiarioProfessor;
+	private AdicionarPresencaPorTrimestre adicionarPresencaPorTrimestre;
 //	private EditarPresenca editarDiarioProfessor;
 	private MainView mainView;
 
@@ -28,7 +29,8 @@ public class TelaInicialPresenca extends Composite{
 		if(uniqueInstance==null){
 			uniqueInstance = new TelaInicialPresenca(mainView);
 		}else{
-			uniqueInstance.adicionarDiarioProfessor.updateClientData();
+//			uniqueInstance.adicionarDiarioProfessor.updateClientData();
+			uniqueInstance.adicionarPresencaPorTrimestre.updateClientData();
 //			uniqueInstance.editarDiarioProfessor.updateClientData();
 		}
 		return uniqueInstance;
@@ -38,7 +40,8 @@ public class TelaInicialPresenca extends Composite{
 		
 		this.mainView = mainView;
 		
-		adicionarDiarioProfessor =  new AdicionarPresenca(this);
+//		adicionarDiarioProfessor =  new AdicionarPresenca(this);
+		adicionarPresencaPorTrimestre =  new AdicionarPresencaPorTrimestre(this);
 //		editarDiarioProfessor =  new EditarPresenca(this);
 //		editarNotaPorAluno = new EditarNotaPorAluno(this);
 		
@@ -52,8 +55,8 @@ public class TelaInicialPresenca extends Composite{
 		tabLayoutPanel.setAnimationEnabled(true);
 		tabLayoutPanel.setWidth("99%");
 		
-		tabLayoutPanel.add(adicionarDiarioProfessor, new MpHeaderWidget("Adicionar Faltas por Disciplina", "images/plus-circle.png"));
-//		tabLayoutPanel.add(editarDiarioProfessor, new MpHeaderWidget("Editar lista de Faltas", "images/comment_edit.png"));		
+//		tabLayoutPanel.add(adicionarDiarioProfessor, new MpHeaderWidget("Adicionar Faltas por Disciplina", "images/plus-circle.png"));
+		tabLayoutPanel.add(adicionarPresencaPorTrimestre, new MpHeaderWidget("Adicionar Faltas por Trimestre", "images/comment_edit.png"));		
 		tabLayoutPanel.selectTab(0);
 		
 //		VerticalPanel verticalPanelPage = new VerticalPanel();		

@@ -17,6 +17,7 @@ import com.jornada.shared.classes.Usuario;
 import com.jornada.shared.classes.presenca.PresencaUsuarioAula;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplinaAluno;
+import com.jornada.shared.classes.presenca.PresencaUsuarioPeriodo;
 
 public class PresencaServer {
 	
@@ -30,6 +31,9 @@ public class PresencaServer {
 	public static String DB_UPDATE_PRESENCA = "UPDATE presenca set id_tipo_presenca=? where id_aula=? and id_usuario=?;";
 	public static String DB_UPDATE_FALTA = "UPDATE presenca_disciplina set numero_falta=?, numero_total_aula=? where id_disciplina=? and id_usuario=?;";
 
+	public static final String DB_SELECT_PRESENCA_PERIODO = "SELECT * FROM presenca_periodo where id_periodo=? and id_usuario=? order by id_usuario asc;";
+	public static final String DB_INSERT_PRESENCA_PERIODO = "insert into presenca_periodo (id_periodo, id_usuario, numero_falta, numero_total_aula) values (?,?,?,?) returning id_presenca_periodo;";
+	public static String DB_UPDATE_PRESENCA_PERIODO = "UPDATE presenca_periodo set numero_falta=?, numero_total_aula=? where id_periodo=? and id_usuario=?;";
 	
 	
 	
@@ -108,6 +112,44 @@ public class PresencaServer {
 
 	    }   
 	   
+	   public static boolean AdicionarPresencaPeriodo(ArrayList<PresencaUsuarioPeriodo> listPup){
+           
+           boolean isOK=false;
+
+           Connection conn = ConnectionManager.getConnection();
+           try {
+
+               for(int i=0;i<listPup.size();i++){
+                   
+                   PresencaUsuarioPeriodo row = listPup.get(i);
+                   
+                   int count = 0;
+                   PreparedStatement insert = conn.prepareStatement(DB_INSERT_PRESENCA_PERIODO);
+                   insert.setInt(++count, row.getIdPeriodo());
+                   insert.setInt(++count, row.getUsuario().getIdUsuario());
+                   insert.setInt(++count, row.getNumeroFaltas());
+                   insert.setInt(++count, row.getNumeroAulas());
+                   
+                   ResultSet rs = insert.executeQuery();           
+                   rs.next();
+                   
+               }
+
+               
+               isOK = true;
+
+           } catch (SQLException sqlex) {
+               isOK=false;
+               System.err.println(sqlex.getMessage());
+           } finally {
+               // dataBase.close();
+               ConnectionManager.closeConnection(conn);
+           }
+           
+           return isOK;
+
+       }   	   
+	   
 	   
     public static boolean updateFalta(ArrayList<PresencaUsuarioDisciplina> listPud) {
         boolean success = false;
@@ -121,6 +163,37 @@ public class PresencaServer {
                 ps.setInt(++count, pud.getNumeroFaltas());
                 ps.setInt(++count, pud.getNumeroAulas());
                 ps.setInt(++count, pud.getIdDisciplina());
+                ps.setInt(++count, pud.getUsuario().getIdUsuario());
+
+                int numberUpdate = ps.executeUpdate();
+
+                if (numberUpdate == 1) {
+                    success = true;
+                }
+            }
+
+        } catch (SQLException sqlex) {
+            success = false;
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
+
+        return success;
+    }
+    
+    public static boolean updatePresencaPeriodo(ArrayList<PresencaUsuarioPeriodo> listPup) {
+        boolean success = false;
+
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            
+            for (PresencaUsuarioPeriodo pud : listPup) {
+                int count = 0;
+                PreparedStatement ps = conn.prepareStatement(DB_UPDATE_PRESENCA_PERIODO);
+                ps.setInt(++count, pud.getNumeroFaltas());
+                ps.setInt(++count, pud.getNumeroAulas());
+                ps.setInt(++count, pud.getIdPeriodo());
                 ps.setInt(++count, pud.getUsuario().getIdUsuario());
 
                 int numberUpdate = ps.executeUpdate();
@@ -213,6 +286,34 @@ public class PresencaServer {
 		return object;
 	}
 	
+	
+	public static PresencaUsuarioPeriodo getPresencaPeriodoAluno(int idPeriodo, int idAluno) {
+        PresencaUsuarioPeriodo object = new PresencaUsuarioPeriodo();       
+        Periodo periodo = PeriodoServer.getPeriodo(idPeriodo);
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            PreparedStatement ps = conn.prepareStatement(DB_SELECT_PRESENCA_PERIODO);
+            int count = 0;
+            ps.setInt(++count, idPeriodo);
+            ps.setInt(++count, idAluno);
+            ResultSet rs = ps.executeQuery();
+            object.setUsuario(UsuarioServer.getUsuarioPeloId(idAluno));
+            object.setIdPeriodo(periodo.getIdPeriodo());        
+            object.setNomePeriodo(periodo.getNomePeriodo());  
+            while (rs.next()){            
+                object.setNumeroAulas(rs.getInt("numero_total_aula"));
+                object.setNumeroFaltas(rs.getInt("numero_falta"));             
+            }
+        } catch (SQLException sqlex) {
+            object=null;
+            System.err.println(sqlex.getMessage());
+        } finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        return object;
+    }
+    
+	
 	public static Presenca getPresenca(int idPresenca) {
 		ArrayList<Presenca> data = new ArrayList<Presenca>();
 		Presenca presenca = null;
@@ -302,6 +403,21 @@ public class PresencaServer {
 
         for (Usuario user : arrayUsuario) {
             PresencaUsuarioDisciplina presencaUsuario = PresencaServer.getPresencaDisciplinaAluno(idDisciplina, user.getIdUsuario());
+//            presencaUsuario.setUsuario(user);
+            arrayPresencaUsuario.add(presencaUsuario);
+        }
+
+        return arrayPresencaUsuario;
+    }
+    
+    public static ArrayList<PresencaUsuarioPeriodo> getAlunosPeriodo(int idCurso, int idPeriodo) {
+
+        ArrayList<PresencaUsuarioPeriodo> arrayPresencaUsuario = new ArrayList<PresencaUsuarioPeriodo>();
+
+        ArrayList<Usuario> arrayUsuario = UsuarioServer.getAlunosPorCurso(idCurso);
+
+        for (Usuario user : arrayUsuario) {
+            PresencaUsuarioPeriodo presencaUsuario = PresencaServer.getPresencaPeriodoAluno(idPeriodo, user.getIdUsuario());
 //            presencaUsuario.setUsuario(user);
             arrayPresencaUsuario.add(presencaUsuario);
         }
