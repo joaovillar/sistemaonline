@@ -35,6 +35,7 @@ import com.jornada.shared.classes.curso.Ano;
 import com.jornada.shared.classes.curso.AnoItem;
 import com.jornada.shared.classes.curso.Ensino;
 import com.jornada.shared.classes.presenca.PresencaUsuarioDisciplina;
+import com.jornada.shared.classes.presenca.PresencaUsuarioPeriodo;
 import com.jornada.shared.classes.relatorio.boletim.TabelaBoletim;
 //import com.jornada.shared.utility.MpUtilShared;
 
@@ -3006,27 +3007,22 @@ public class NotaServer {
 //        
         int intCountTotal = 0;
         for (int i = 0; i < listPeriodosNome.size(); i++) {
-//            for (int cvPeriodo = 0; cvPeriodo < listPeriodoFaltas.size(); cvPeriodo++) {
-//                Periodo periodo = listPeriodoFaltas.get(cvPeriodo);
-//                System.out.println(periodo.getNomePeriodo());
-//                if (periodo.getNomePeriodo().equals(listPeriodosNome.get(i))) {
-//                    intCountFaltas = intCountFaltas + periodo.getQuantidadeFalta();
-//                }
-//    
-//            }
             
             int intCountFaltas = 0;
             for (Periodo periodo : periodoList) {
 
                 if (periodo.getNomePeriodo().equals(listPeriodosNome.get(i))) {
 
-                    if (periodo.getNomePeriodo().equals(listPeriodosNome.get(i))) {
-                        ArrayList<Disciplina> disciplinaList = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
-                        for (Disciplina disciplina : disciplinaList) {
-                            PresencaUsuarioDisciplina preUsuDisc = PresencaServer.getPresencaDisciplinaAluno(disciplina.getIdDisciplina(), idAluno);
-                            intCountFaltas = intCountFaltas + preUsuDisc.getNumeroFaltas();
-                        }
-                    }
+                    PresencaUsuarioPeriodo preUsuPeriodo = PresencaServer.getPresencaPeriodoAluno(periodo.getIdPeriodo(), idAluno);
+                    intCountFaltas = intCountFaltas + preUsuPeriodo.getNumeroFaltas();
+                    
+//                    if (periodo.getNomePeriodo().equals(listPeriodosNome.get(i))) {
+//                        ArrayList<Disciplina> disciplinaList = DisciplinaServer.getDisciplinas(periodo.getIdPeriodo());
+//                        for (Disciplina disciplina : disciplinaList) {
+//                            PresencaUsuarioDisciplina preUsuDisc = PresencaServer.getPresencaDisciplinaAluno(disciplina.getIdDisciplina(), idAluno);
+//                            intCountFaltas = intCountFaltas + preUsuDisc.getNumeroFaltas();
+//                        }
+//                    }
                     // System.out.println("Faltas:"+intCountTotal);
                 }
 
